@@ -39,4 +39,9 @@ class StorageKeys {
   // ==================================================
   static const String cachedTransactions = 'cached_transactions';
   static const String lastSyncTime = 'last_sync_time';
+
+  // ==================================================
+  // ONBOARDING
+  // ==================================================
+  static const String onboardingSeen = 'onboarding_seen';
 }
