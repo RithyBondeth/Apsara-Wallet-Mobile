@@ -3,6 +3,8 @@ import 'package:apsara_wallet_mobile/core/enums/environment_enum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfigService {
+  AppConfigService._();
+
   static Future<void> initialize(EEnvironmentType env) async {
     AppEnvironmentConfig.setEnvironment(env);
     await dotenv.load(fileName: AppEnvironmentConfig.envFileName);

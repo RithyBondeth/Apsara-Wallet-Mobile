@@ -1,6 +1,8 @@
 import 'package:apsara_wallet_mobile/core/enums/environment_enum.dart';
 
 class AppEnvironmentConfig {
+  AppEnvironmentConfig._();
+
   static EEnvironmentType _environment = EEnvironmentType.dev;
   static EEnvironmentType get environment => _environment;
 
