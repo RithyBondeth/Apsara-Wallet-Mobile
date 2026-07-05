@@ -1,4 +1,5 @@
-class AuthRouteConstant {
+class AppRouteConstant {
+  // Auth Routes
   static const String splashPath = '/splash';
   static const String onBoardingPath = '/onBoarding';
   static const String loginPath = '/login';
@@ -9,8 +10,7 @@ class AuthRouteConstant {
   static const String pinSetupPath = '/pinSetup';
   static const String pinLoginPath = '/pinLogin';
   static const String biometricPath = '/biometric';
-}
 
-class DashboardRouteConstant {
+  // Dashboard Routes
   static const String dashboardPath = '/dashboard';
 }

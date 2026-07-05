@@ -1,3 +1,4 @@
+import 'package:apsara_wallet_mobile/core/routes/app_routes_constant.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/biometric_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/login_screen.dart';
@@ -9,8 +10,8 @@ import 'package:apsara_wallet_mobile/features/auth/presentation/screens/register
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/splash_screen.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:apsara_wallet_mobile/shared/constants/route_constant.dart';
 import 'package:auto_route/auto_route.dart';
+
 part 'app_routes.gr.dart';
 
 @AutoRouterConfig()
@@ -21,31 +22,28 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: SplashRoute.page,
       initial: true,
-      path: AuthRouteConstant.splashPath,
+      path: AppRouteConstant.splashPath,
     ),
     AutoRoute(
       page: OnBoardingRoute.page,
-      path: AuthRouteConstant.onBoardingPath,
+      path: AppRouteConstant.onBoardingPath,
     ),
-    AutoRoute(page: LoginRoute.page, path: AuthRouteConstant.loginPath),
-    AutoRoute(page: RegisterRoute.page, path: AuthRouteConstant.registerPath),
-    AutoRoute(page: OtpRoute.page, path: AuthRouteConstant.otpPath),
+    AutoRoute(page: LoginRoute.page, path: AppRouteConstant.loginPath),
+    AutoRoute(page: RegisterRoute.page, path: AppRouteConstant.registerPath),
+    AutoRoute(page: OtpRoute.page, path: AppRouteConstant.otpPath),
     AutoRoute(
       page: ForgotPasswordRoute.page,
-      path: AuthRouteConstant.forgotPasswordPath,
+      path: AppRouteConstant.forgotPasswordPath,
     ),
     AutoRoute(
       page: ResetPasswordRoute.page,
-      path: AuthRouteConstant.resetPasswordPath,
+      path: AppRouteConstant.resetPasswordPath,
     ),
-    AutoRoute(page: PinSetupRoute.page, path: AuthRouteConstant.pinSetupPath),
-    AutoRoute(page: PinLoginRoute.page, path: AuthRouteConstant.pinLoginPath),
-    AutoRoute(page: BiometricRoute.page, path: AuthRouteConstant.biometricPath),
+    AutoRoute(page: PinSetupRoute.page, path: AppRouteConstant.pinSetupPath),
+    AutoRoute(page: PinLoginRoute.page, path: AppRouteConstant.pinLoginPath),
+    AutoRoute(page: BiometricRoute.page, path: AppRouteConstant.biometricPath),
 
     //Dashboard Routes
-    AutoRoute(
-      page: DashboardRoute.page,
-      path: DashboardRouteConstant.dashboardPath,
-    ),
+    AutoRoute(page: DashboardRoute.page, path: AppRouteConstant.dashboardPath),
   ];
 }

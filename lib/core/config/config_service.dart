@@ -1,4 +1,4 @@
-import 'package:apsara_wallet_mobile/configs/environment.dart';
+import 'package:apsara_wallet_mobile/core/config/environment.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfigService {

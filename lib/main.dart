@@ -1,6 +1,6 @@
 import 'package:apsara_wallet_mobile/app/app.dart';
-import 'package:apsara_wallet_mobile/configs/config_service.dart';
-import 'package:apsara_wallet_mobile/configs/environment.dart';
+import 'package:apsara_wallet_mobile/core/config/config_service.dart';
+import 'package:apsara_wallet_mobile/core/config/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
