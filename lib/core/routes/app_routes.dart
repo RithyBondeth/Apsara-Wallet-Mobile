@@ -18,7 +18,9 @@ part 'app_routes.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    //Auth Routes
+    // ==================================================
+    // AUTH ROUTES
+    // ==================================================
     AutoRoute(
       page: SplashRoute.page,
       initial: true,
@@ -43,7 +45,9 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: PinLoginRoute.page, path: AppRouteConstant.pinLoginPath),
     AutoRoute(page: BiometricRoute.page, path: AppRouteConstant.biometricPath),
 
-    //Dashboard Routes
+    // ==================================================
+    // DASHBOARD ROUTES
+    // ==================================================
     AutoRoute(page: DashboardRoute.page, path: AppRouteConstant.dashboardPath),
   ];
 }
