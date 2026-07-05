@@ -8,9 +8,9 @@ class StorageManager {
   final SecureStorageService _secureStorage;
   final SharedPrefsService _prefs;
 
-  // =====================
+  // ==========================================
   // TOKEN
-  // =====================
+  // ==========================================
   Future<void> saveToken(String token) async {
     await _secureStorage.write(StorageKeys.accessToken, token);
   }
@@ -23,9 +23,9 @@ class StorageManager {
     await _secureStorage.delete(StorageKeys.accessToken);
   }
 
-  // =====================
+  // ==========================================
   // PIN
-  // =====================
+  // ==========================================
   Future<void> savePin(String pin) async {
     await _secureStorage.write(StorageKeys.pinCode, pin);
   }
@@ -34,9 +34,9 @@ class StorageManager {
     return _secureStorage.read(StorageKeys.pinCode);
   }
 
-  // =====================
+  // ==========================================
   // BIOMETRIC
-  // =====================
+  // ==========================================
   Future<void> setBiometricEnabled(bool value) async {
     await _prefs.setBool(StorageKeys.biometricEnabled, value);
   }
@@ -45,9 +45,9 @@ class StorageManager {
     return _prefs.getBool(StorageKeys.biometricEnabled);
   }
 
-  // =====================
+  // ==========================================
   // ONBOARDING
-  // =====================
+  // ==========================================
   Future<void> setOnboardingSeen() async {
     await _prefs.setBool(StorageKeys.onboardingSeen, true);
   }
@@ -56,9 +56,9 @@ class StorageManager {
     return _prefs.getBool(StorageKeys.onboardingSeen);
   }
 
-  // =====================
-  // LOGOUT (IMPORTANT)
-  // =====================
+  // ==========================================
+  // LOGOUT
+  // ==========================================
   Future<void> clearAll() async {
     await _secureStorage.clear();
   }
