@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
-class LoginScreen extends ConsumerWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends ConsumerWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(appBar: AppBar(title: Text("Login Screen")));
+    return Scaffold(appBar: AppBar(title: Text("Forgot Password Screen")));
   }
 }
