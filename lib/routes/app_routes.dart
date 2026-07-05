@@ -8,6 +8,7 @@ import 'package:apsara_wallet_mobile/features/auth/presentation/screens/pin_setu
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/register_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/splash_screen.dart';
+import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:apsara_wallet_mobile/shared/constants/route_constant.dart';
 import 'package:auto_route/auto_route.dart';
 part 'app_routes.gr.dart';
@@ -16,6 +17,7 @@ part 'app_routes.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+    //Auth Routes
     AutoRoute(
       page: SplashRoute.page,
       initial: true,
@@ -39,5 +41,11 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: PinSetupRoute.page, path: AuthRouteConstant.pinSetupPath),
     AutoRoute(page: PinLoginRoute.page, path: AuthRouteConstant.pinLoginPath),
     AutoRoute(page: BiometricRoute.page, path: AuthRouteConstant.biometricPath),
+
+    //Dashboard Routes
+    AutoRoute(
+      page: DashboardRoute.page,
+      path: DashboardRouteConstant.dashboardPath,
+    ),
   ];
 }

@@ -10,3 +10,7 @@ class AuthRouteConstant {
   static const String pinLoginPath = '/pinLogin';
   static const String biometricPath = '/biometric';
 }
+
+class DashboardRouteConstant {
+  static const String dashboardPath = '/dashboard';
+}
