@@ -1,4 +1,6 @@
-class AppRouteConstant {
+class RoutesConstant {
+  RoutesConstant._();
+
   // ==================================================
   // AUTH ROUTES
   // ==================================================
