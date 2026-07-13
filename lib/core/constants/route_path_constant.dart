@@ -1,5 +1,5 @@
-class RoutesConstant {
-  RoutesConstant._();
+class RoutePathConstant {
+  RoutePathConstant._();
 
   // ==================================================
   // AUTH ROUTES
