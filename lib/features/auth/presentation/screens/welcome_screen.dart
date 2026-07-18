@@ -66,7 +66,11 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // --- Living backdrop -------------------------------------------
+          // --- Misty temple backdrop + living aurora ----------------------
+          const Image(
+            image: AssetImage(AssetPathConstant.authBackground),
+            fit: BoxFit.cover,
+          ),
           AnimatedBuilder(
             animation: _ambient,
             builder: (context, _) => AuroraBackground(t: _ambient.value),

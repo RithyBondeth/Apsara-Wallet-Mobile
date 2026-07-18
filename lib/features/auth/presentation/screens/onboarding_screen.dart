@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
-import 'package:apsara_wallet_mobile/shared/widgets/brand/aurora_background.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/brand/gold_medallion.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/indicators/page_indicator.dart';
@@ -22,11 +22,19 @@ class _OnboardingPageData {
     required this.icon,
     required this.title,
     required this.body,
+    required this.background,
+    this.dark = false,
   });
 
   final IconData icon;
   final String title;
   final String body;
+
+  /// Full-bleed page artwork, crossfaded while swiping.
+  final String background;
+
+  /// True when the artwork is deep emerald — flips the text to ivory.
+  final bool dark;
 }
 
 const _pages = <_OnboardingPageData>[
@@ -35,18 +43,22 @@ const _pages = <_OnboardingPageData>[
     title: 'All your money,\nbeautifully in one place',
     body:
         'Track balances, cards and spending across USD and KHR — with the elegance Apsara brings to every detail.',
+    background: AssetPathConstant.onBoarding1,
   ),
   _OnboardingPageData(
     icon: LucideIcons.arrowLeftRight,
     title: 'Send & receive\nin a few taps',
     body:
         'Instant transfers and QR payments across Cambodia. Fast, secure, and effortless — day or night.',
+    background: AssetPathConstant.onBoarding2,
   ),
   _OnboardingPageData(
     icon: LucideIcons.chartPie,
     title: 'Insights that\ngrow your wealth',
     body:
         'Smart budgets and clear analytics turn everyday spending into confident financial decisions.',
+    background: AssetPathConstant.onBoarding3,
+    dark: true,
   ),
 ];
 
@@ -115,11 +127,12 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // --- Living backdrop: aurora washes + rising gold motes --------
-          AnimatedBuilder(
-            animation: _ambient,
-            builder: (context, _) => AuroraBackground(t: _ambient.value),
-          ),
+          // --- Page artwork, crossfading with the swipe -------------------
+          for (var i = 0; i < _pages.length; i++)
+            Opacity(
+              opacity: (1 - (_page - i).abs()).clamp(0.0, 1.0),
+              child: _PageBackdrop(data: _pages[i]),
+            ),
 
           SafeArea(
             child: Column(
@@ -230,6 +243,41 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
   }
 }
 
+/// Full-bleed page artwork with a legibility scrim rising from the bottom —
+/// light wash for the bright scenes, deep emerald for the dark finale.
+class _PageBackdrop extends StatelessWidget {
+  const _PageBackdrop({required this.data});
+
+  final _OnboardingPageData data;
+
+  @override
+  Widget build(BuildContext context) {
+    final scrim = data.dark
+        ? AppGradients.emeraldDeep.withValues(alpha: 0.82)
+        : const Color(0xFFF8FAFC).withValues(alpha: 0.90);
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(data.background, fit: BoxFit.cover),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                scrim.withValues(alpha: 0),
+                scrim.withValues(alpha: 0),
+                scrim,
+              ],
+              stops: const [0.0, 0.38, 0.86],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// A single onboarding page with layered depth:
 /// * the medallion floats on an ambient bob, tilts in 3D while swiping and
 ///   is orbited by two slow counter-rotating gold arcs;
@@ -293,7 +341,9 @@ class _OnboardingPageView extends StatelessWidget {
                 data.title,
                 textAlign: TextAlign.center,
                 style: AppFont.headingMedium.copyWith(
-                  color: context.colors.onSurface,
+                  color: data.dark
+                      ? const Color(0xFFF8FAF5)
+                      : context.colors.onSurface,
                   height: 1.2,
                 ),
               ),
@@ -310,7 +360,9 @@ class _OnboardingPageView extends StatelessWidget {
                 data.body,
                 textAlign: TextAlign.center,
                 style: AppFont.bodyLarge.copyWith(
-                  color: context.colors.onSurfaceVariant,
+                  color: data.dark
+                      ? const Color(0xFFF8FAF5).withValues(alpha: 0.82)
+                      : context.colors.onSurfaceVariant,
                   height: 1.5,
                 ),
               ),

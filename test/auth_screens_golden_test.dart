@@ -14,6 +14,17 @@ Widget _wrap(Widget child) {
   );
 }
 
+/// Decode background assets (image decoding needs real async in tests).
+Future<void> _precache(WidgetTester tester, List<String> assets) async {
+  await tester.runAsync(() async {
+    final context = tester.element(find.byType(MaterialApp));
+    for (final asset in assets) {
+      await precacheImage(AssetImage(asset), context);
+    }
+  });
+  await tester.pump();
+}
+
 void main() {
   setUpAll(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -38,6 +49,11 @@ void main() {
   testWidgets('Onboarding renders mid-cascade and settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(_wrap(const OnBoardingScreen()));
+    await _precache(tester, const [
+      AssetPathConstant.onBoarding1,
+      AssetPathConstant.onBoarding2,
+      AssetPathConstant.onBoarding3,
+    ]);
     await tester.pump(const Duration(milliseconds: 700));
     await expectLater(
       find.byType(OnBoardingScreen),
@@ -48,11 +64,22 @@ void main() {
       find.byType(OnBoardingScreen),
       matchesGoldenFile('goldens/onboarding_settled.png'),
     );
+
+    // Swipe to the dark final page and confirm the ivory-text treatment.
+    for (var i = 0; i < 2; i++) {
+      await tester.drag(find.byType(PageView), const Offset(-390, 0));
+      await tester.pump(const Duration(milliseconds: 700));
+    }
+    await expectLater(
+      find.byType(OnBoardingScreen),
+      matchesGoldenFile('goldens/onboarding_page3.png'),
+    );
   });
 
   testWidgets('Login renders mid-cascade and settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(_wrap(const LoginScreen()));
+    await _precache(tester, const [AssetPathConstant.authBackground]);
     await tester.pump(const Duration(milliseconds: 500));
     await expectLater(
       find.byType(LoginScreen),

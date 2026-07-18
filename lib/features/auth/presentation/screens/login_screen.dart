@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
@@ -79,7 +80,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // --- Living backdrop: subtle aurora + rising gold motes --------
+          // --- Misty temple backdrop + living aurora ----------------------
+          const Image(
+            image: AssetImage(AssetPathConstant.authBackground),
+            fit: BoxFit.cover,
+          ),
           AnimatedBuilder(
             animation: _ambient,
             builder: (context, _) =>

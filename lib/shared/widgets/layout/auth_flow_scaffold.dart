@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -128,6 +129,11 @@ class _AuthFlowScaffoldState extends State<AuthFlowScaffold>
       body: Stack(
         fit: StackFit.expand,
         children: [
+          // Misty temple backdrop shared by the whole auth flow.
+          const Image(
+            image: AssetImage(AssetPathConstant.authBackground),
+            fit: BoxFit.cover,
+          ),
           AnimatedBuilder(
             animation: _ambient,
             builder: (context, _) =>

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/biometric_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/otp_screen.dart';
@@ -36,10 +37,15 @@ void main() {
     testWidgets('${entry.key} renders settled', (tester) async {
       await tester.binding.setSurfaceSize(const Size(390, 844));
       await tester.pumpWidget(_wrap(entry.value));
-      // Let the bundled Ubuntu fonts finish loading (real async).
-      await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 300)),
-      );
+      // Let fonts finish loading and decode the shared auth backdrop.
+      await tester.runAsync(() async {
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+        final context = tester.element(find.byType(MaterialApp));
+        await precacheImage(
+          const AssetImage(AssetPathConstant.authBackground),
+          context,
+        );
+      });
       await tester.pump(const Duration(milliseconds: 2600));
       await expectLater(
         find.byType(entry.value.runtimeType),

@@ -1,26 +1,30 @@
 class AssetPathConstant {
   AssetPathConstant._();
 
+  // ==================================================
+  // BRAND
+  // ==================================================
   static const String apsaraFigure = 'assets/logos/apsara_figure.png';
   static const String apsaraMark = 'assets/logos/apsara_mark.png';
 
-  static const String splashLogo = 'assets/images/splash_logo.png';
-  static const String splashBackground = 'assets/backgrounds/splash-screen-bg.png';
-  static const String onBoarding1 = 'assets/images/onboarding_1.png';
-  static const String onBoarding2 = 'assets/images/onboarding_2.png';
-  static const String onBoarding3 = 'assets/images/onboarding_3.png';
+  // ==================================================
+  // SCREEN BACKGROUNDS
+  // ==================================================
+  static const String splashBackground =
+      'assets/backgrounds/splash-screen-bg.png';
+  static const String authBackground = 'assets/backgrounds/auth-bg.png';
+  static const String dashboardBackground =
+      'assets/backgrounds/dashboard-bg.png';
+  static const String sideMenuBackground =
+      'assets/backgrounds/sidemenu-bg.png';
+  static const String transactionBackground =
+      'assets/backgrounds/transaction-bg.png';
 
-  static const String loginBackground = 'assets/images/login_background.png';
-  static const String registerBackground =
-      'assets/images/register_background.png';
-  static const String forgotPasswordBackground =
-      'assets/images/forgot_password_background.png';
-  static const String resetPasswordBackground =
-      'assets/images/reset_password_background.png';
-  static const String pinSetupBackground =
-      'assets/images/pin_setup_background.png';
-  static const String pinLoginBackground =
-      'assets/images/pin_login_background.png';
-  static const String biometricBackground =
-      'assets/images/biometric_background.png';
+  // Onboarding tour pages (1: temple scene, 2: cream lotus, 3: dark emerald)
+  static const String onBoarding1 =
+      'assets/backgrounds/onboardings/onboarding1.png';
+  static const String onBoarding2 =
+      'assets/backgrounds/onboardings/onboarding2.png';
+  static const String onBoarding3 =
+      'assets/backgrounds/onboardings/onboarding3.png';
 }
