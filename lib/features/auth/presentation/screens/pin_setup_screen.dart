@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/pin_pad.dart';
@@ -37,8 +38,8 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthFlowScaffold(
-      title: 'Set Your PIN',
-      subtitle: 'A 4-digit PIN keeps your wallet extra safe.',
+      title: context.l10n.pinSetupTitle,
+      subtitle: context.l10n.pinSetupSubtitle,
       showBack: true,
       scrollable: false,
       children: [

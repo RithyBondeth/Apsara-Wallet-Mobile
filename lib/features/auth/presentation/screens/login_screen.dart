@@ -107,7 +107,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     _enter(
                       0.0,
                       0.4,
-                      Text('Login', style: AppFont.headingLarge),
+                      Text(context.l10n.loginTitle,
+                          style: AppFont.headingLarge),
                       offset: const Offset(-24, 0),
                     ),
                     const SizedBox(height: AppSpacing.sm),
@@ -115,7 +116,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       0.08,
                       0.46,
                       Text(
-                        'Welcome back! Please login to continue.',
+                        context.l10n.loginSubtitle,
                         style: AppFont.bodyMedium.copyWith(
                           color: context.colors.onSurfaceVariant,
                         ),
@@ -128,8 +129,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       0.18,
                       0.54,
                       AppTextField(
-                        label: 'Email or Phone Number',
-                        hint: 'Enter email or phone number',
+                        label: context.l10n.authIdentifierLabel,
+                        hint: context.l10n.authIdentifierHint,
                         controller: _identifierController,
                         prefixIcon: LucideIcons.user,
                         keyboardType: TextInputType.emailAddress,
@@ -141,8 +142,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       0.26,
                       0.62,
                       AppTextField(
-                        label: 'Password',
-                        hint: 'Enter your password',
+                        label: context.l10n.loginPasswordLabel,
+                        hint: context.l10n.loginPasswordHint,
                         controller: _passwordController,
                         prefixIcon: LucideIcons.lock,
                         obscure: true,
@@ -161,7 +162,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           onPressed: () =>
                               context.router.push(const ForgotPasswordRoute()),
                           child: Text(
-                            'Forgot Password?',
+                            context.l10n.commonForgotPassword,
                             style: AppFont.labelLarge.copyWith(
                               color: AppColors.primary,
                             ),
@@ -174,7 +175,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     _enter(
                       0.42,
                       0.76,
-                      PrimaryButton(label: 'Login', onPressed: _login),
+                      PrimaryButton(
+                          label: context.l10n.commonLogin, onPressed: _login),
                     ),
                     const SizedBox(height: AppSpacing.xxl),
 
@@ -188,7 +190,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       0.88,
                       SocialButton(
                         svg: BrandSvg.google,
-                        label: 'Continue with Google',
+                        label: context.l10n.authContinueWithGoogle,
                         onPressed: _login,
                       ),
                     ),
@@ -198,7 +200,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       0.93,
                       SocialButton(
                         svg: BrandSvg.facebook,
-                        label: 'Continue with Facebook',
+                        label: context.l10n.authContinueWithFacebook,
                         onPressed: _login,
                       ),
                     ),
@@ -213,7 +215,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "Don't have an account? ",
+                              context.l10n.loginNoAccountPrompt,
                               style: AppFont.bodyMedium.copyWith(
                                 color: context.colors.onSurfaceVariant,
                               ),
@@ -222,7 +224,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               onTap: () =>
                                   context.router.push(const RegisterRoute()),
                               child: Text(
-                                'Sign up',
+                                context.l10n.loginSignUpCta,
                                 style: AppFont.labelLarge.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w700,

@@ -17,6 +17,7 @@ import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/brand/aurora_background.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/secondary_button.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/controls/language_switcher.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 
 /// First screen after the splash: the apsara welcomes the user and offers
@@ -245,7 +246,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
   }
 }
 
-/// The apsara illustration over a soft breathing gold halo.
+/// The brand logo over a soft breathing gold halo.
 class _ApsaraHero extends StatelessWidget {
   const _ApsaraHero({required this.ambient});
 
@@ -279,7 +280,7 @@ class _ApsaraHero extends StatelessWidget {
             },
           ),
           Image.asset(
-            AssetPathConstant.apsaraFigure,
+            AssetPathConstant.logo,
             height: 230,
             fit: BoxFit.contain,
           ),

@@ -4,8 +4,7 @@ class AssetPathConstant {
   // ==================================================
   // BRAND
   // ==================================================
-  static const String apsaraFigure = 'assets/logos/apsara_figure.png';
-  static const String apsaraMark = 'assets/logos/apsara_mark.png';
+  static const String logo = 'assets/logos/logo.png';
 
   // ==================================================
   // SCREEN BACKGROUNDS

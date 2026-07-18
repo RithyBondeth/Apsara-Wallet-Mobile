@@ -45,21 +45,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthFlowScaffold(
-      title: 'Create Account',
-      subtitle: 'Join Apsara Wallet in a few easy steps.',
+      title: context.l10n.registerTitle,
+      subtitle: context.l10n.registerSubtitle,
       showBack: true,
       children: [
         AppTextField(
-          label: 'Full Name',
-          hint: 'Enter your full name',
+          label: context.l10n.registerNameLabel,
+          hint: context.l10n.registerNameHint,
           controller: _nameController,
           prefixIcon: LucideIcons.userRound,
           textInputAction: TextInputAction.next,
         ),
         const SizedBox(height: AppSpacing.lg),
         AppTextField(
-          label: 'Email or Phone Number',
-          hint: 'Enter email or phone number',
+          label: context.l10n.authIdentifierLabel,
+          hint: context.l10n.authIdentifierHint,
           controller: _identifierController,
           prefixIcon: LucideIcons.mail,
           keyboardType: TextInputType.emailAddress,
@@ -67,8 +67,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         ),
         const SizedBox(height: AppSpacing.lg),
         AppTextField(
-          label: 'Password',
-          hint: 'Create a password',
+          label: context.l10n.registerPasswordLabel,
+          hint: context.l10n.registerPasswordHint,
           controller: _passwordController,
           prefixIcon: LucideIcons.lock,
           obscure: true,
@@ -76,8 +76,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         ),
         const SizedBox(height: AppSpacing.lg),
         AppTextField(
-          label: 'Confirm Password',
-          hint: 'Re-enter your password',
+          label: context.l10n.registerConfirmPasswordLabel,
+          hint: context.l10n.registerConfirmPasswordHint,
           controller: _confirmController,
           prefixIcon: LucideIcons.lockKeyhole,
           obscure: true,
@@ -85,19 +85,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           onSubmitted: (_) => _register(),
         ),
         const SizedBox(height: AppSpacing.xxl),
-        PrimaryButton(label: 'Create Account', onPressed: _register),
+        PrimaryButton(
+            label: context.l10n.registerTitle, onPressed: _register),
         const SizedBox(height: AppSpacing.xxl),
-        const OrDivider(label: 'or continue with'),
+        const OrDivider(),
         const SizedBox(height: AppSpacing.xl),
         SocialButton(
           svg: BrandSvg.google,
-          label: 'Continue with Google',
+          label: context.l10n.authContinueWithGoogle,
           onPressed: _register,
         ),
         const SizedBox(height: AppSpacing.lg),
         SocialButton(
           svg: BrandSvg.facebook,
-          label: 'Continue with Facebook',
+          label: context.l10n.authContinueWithFacebook,
           onPressed: _register,
         ),
         const SizedBox(height: AppSpacing.xxxl),
@@ -106,7 +107,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
-                'Already have an account? ',
+                context.l10n.registerHasAccountPrompt,
                 style: AppFont.bodyMedium.copyWith(
                   color: context.colors.onSurfaceVariant,
                 ),
@@ -114,7 +115,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               GestureDetector(
                 onTap: () => context.router.replace(const LoginRoute()),
                 child: Text(
-                  'Login',
+                  context.l10n.commonLogin,
                   style: AppFont.labelLarge.copyWith(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w700,

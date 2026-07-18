@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -39,8 +40,8 @@ class _PinLoginScreenState extends ConsumerState<PinLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthFlowScaffold(
-      title: 'Enter Your PIN',
-      subtitle: 'Welcome back — unlock your wallet.',
+      title: context.l10n.pinLoginTitle,
+      subtitle: context.l10n.pinLoginSubtitle,
       scrollable: false,
       children: [
         const SizedBox(height: AppSpacing.xl),
@@ -52,7 +53,7 @@ class _PinLoginScreenState extends ConsumerState<PinLoginScreen> {
           child: GestureDetector(
             onTap: () => context.router.replace(const LoginRoute()),
             child: Text(
-              'Use password instead',
+              context.l10n.pinLoginUsePasswordCta,
               style: AppFont.labelLarge.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w700,

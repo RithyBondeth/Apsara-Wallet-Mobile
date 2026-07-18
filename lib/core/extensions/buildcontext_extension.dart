@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
+
 extension BuildContextExtension on BuildContext {
+  // ==================================================
+  // Localization
+  // ==================================================
+  /// Localized strings for the current locale — `context.l10n.loginTitle`.
+  AppLocalizations get l10n => AppLocalizations.of(this);
+
   // ==================================================
   // Theme
   // ==================================================

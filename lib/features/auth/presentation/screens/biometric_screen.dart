@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/brand/gold_medallion.dart';
@@ -22,21 +23,20 @@ class BiometricScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AuthFlowScaffold(
-      title: 'Enable Biometric Login',
-      subtitle:
-          'Sign in with your fingerprint or face — fast, secure and effortless.',
+      title: context.l10n.biometricTitle,
+      subtitle: context.l10n.biometricSubtitle,
       showBack: true,
       children: [
         const SizedBox(height: AppSpacing.xl),
         const Center(child: GoldMedallion(icon: LucideIcons.fingerprint)),
         const SizedBox(height: AppSpacing.massive),
         PrimaryButton(
-          label: 'Enable Biometric',
+          label: context.l10n.biometricEnableCta,
           onPressed: () => _finish(context),
         ),
         const SizedBox(height: AppSpacing.lg),
         SecondaryButton(
-          label: 'Maybe Later',
+          label: context.l10n.biometricLaterCta,
           onPressed: () => _finish(context),
         ),
       ],

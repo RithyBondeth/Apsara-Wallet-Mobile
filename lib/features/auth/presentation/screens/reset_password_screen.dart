@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
@@ -37,13 +38,13 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthFlowScaffold(
-      title: 'Reset Password',
-      subtitle: 'Choose a new password for your account.',
+      title: context.l10n.resetPasswordTitle,
+      subtitle: context.l10n.resetPasswordSubtitle,
       showBack: true,
       children: [
         AppTextField(
-          label: 'New Password',
-          hint: 'Enter new password',
+          label: context.l10n.resetPasswordNewLabel,
+          hint: context.l10n.resetPasswordNewHint,
           controller: _passwordController,
           prefixIcon: LucideIcons.lock,
           obscure: true,
@@ -51,8 +52,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         ),
         const SizedBox(height: AppSpacing.lg),
         AppTextField(
-          label: 'Confirm New Password',
-          hint: 'Re-enter new password',
+          label: context.l10n.resetPasswordConfirmLabel,
+          hint: context.l10n.resetPasswordConfirmHint,
           controller: _confirmController,
           prefixIcon: LucideIcons.lockKeyhole,
           obscure: true,
@@ -60,7 +61,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           onSubmitted: (_) => _save(),
         ),
         const SizedBox(height: AppSpacing.xxl),
-        PrimaryButton(label: 'Save New Password', onPressed: _save),
+        PrimaryButton(
+            label: context.l10n.resetPasswordSaveCta, onPressed: _save),
       ],
     );
   }

@@ -11,7 +11,6 @@ import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
-import 'package:apsara_wallet_mobile/shared/widgets/brand/apsara_emblem.dart';
 
 @RoutePage()
 class SplashScreen extends ConsumerStatefulWidget {
@@ -148,17 +147,38 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Widget _buildEmblem() {
     return AnimatedBuilder(
       animation: Listenable.merge([_intro, _ambient]),
-      builder: (context, _) {
+      builder: (context, child) {
         final t = _ambient.value;
         final glowPulse = 0.72 + 0.28 * math.sin(t * 2 * math.pi * 3);
         return Opacity(
           opacity: _emblemOpacity.value,
           child: Transform.scale(
             scale: _emblemScale.value,
-            child: ApsaraEmblem(size: 116, ringTurns: t, glow: glowPulse),
+            child: DecoratedBox(
+              // Soft breathing gold halo behind the logo.
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    AppGradients.goldLight.withValues(alpha: 0.30 * glowPulse),
+                    AppGradients.goldLight.withValues(alpha: 0),
+                  ],
+                ),
+              ),
+              child: child,
+            ),
           ),
         );
       },
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Image.asset(
+          AssetPathConstant.logo,
+          width: 140,
+          height: 140,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 

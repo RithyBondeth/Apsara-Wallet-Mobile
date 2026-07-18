@@ -1,0 +1,78 @@
+{
+  "@@locale": "en",
+
+  "commonLogin": "Login",
+  "commonGetStarted": "Get Started",
+  "commonNext": "Next",
+  "commonSkip": "Skip",
+  "commonForgotPassword": "Forgot Password?",
+
+  "authIdentifierLabel": "Email or Phone Number",
+  "authIdentifierHint": "Enter email or phone number",
+  "authContinueWithGoogle": "Continue with Google",
+  "authContinueWithFacebook": "Continue with Facebook",
+  "authOrContinueWith": "or continue with",
+
+  "welcomeGreeting": "Welcome to",
+  "welcomeTagline": "Your smart companion for\nbetter financial management.",
+  "welcomeNewHerePrompt": "New here? ",
+  "welcomeCreateAccountCta": "Create an account",
+
+  "onboardingTitle1": "All your money,\nbeautifully in one place",
+  "onboardingBody1": "Track balances, cards and spending across USD and KHR — with the elegance Apsara brings to every detail.",
+  "onboardingTitle2": "Send & receive\nin a few taps",
+  "onboardingBody2": "Instant transfers and QR payments across Cambodia. Fast, secure, and effortless — day or night.",
+  "onboardingTitle3": "Insights that\ngrow your wealth",
+  "onboardingBody3": "Smart budgets and clear analytics turn everyday spending into confident financial decisions.",
+
+  "loginTitle": "Login",
+  "loginSubtitle": "Welcome back! Please login to continue.",
+  "loginPasswordLabel": "Password",
+  "loginPasswordHint": "Enter your password",
+  "loginNoAccountPrompt": "Don't have an account? ",
+  "loginSignUpCta": "Sign up",
+
+  "registerTitle": "Create Account",
+  "registerSubtitle": "Join Apsara Wallet in a few easy steps.",
+  "registerNameLabel": "Full Name",
+  "registerNameHint": "Enter your full name",
+  "registerPasswordLabel": "Password",
+  "registerPasswordHint": "Create a password",
+  "registerConfirmPasswordLabel": "Confirm Password",
+  "registerConfirmPasswordHint": "Re-enter your password",
+  "registerHasAccountPrompt": "Already have an account? ",
+
+  "forgotPasswordSubtitle": "Enter the email or phone linked to your account and we'll send you a reset code.",
+  "forgotPasswordSendCta": "Send Reset Code",
+  "forgotPasswordBackToLogin": "Back to Login",
+
+  "resetPasswordTitle": "Reset Password",
+  "resetPasswordSubtitle": "Choose a new password for your account.",
+  "resetPasswordNewLabel": "New Password",
+  "resetPasswordNewHint": "Enter new password",
+  "resetPasswordConfirmLabel": "Confirm New Password",
+  "resetPasswordConfirmHint": "Re-enter new password",
+  "resetPasswordSaveCta": "Save New Password",
+
+  "otpTitle": "Verification Code",
+  "otpSubtitle": "We've sent a 6-digit code to your email or phone. Enter it below to continue.",
+  "otpResendPrompt": "Didn't receive the code? ",
+  "otpResendCta": "Resend",
+  "otpVerifyCta": "Verify",
+
+  "pinLoginTitle": "Enter Your PIN",
+  "pinLoginSubtitle": "Welcome back — unlock your wallet.",
+  "pinLoginUsePasswordCta": "Use password instead",
+
+  "pinSetupTitle": "Set Your PIN",
+  "pinSetupSubtitle": "A 4-digit PIN keeps your wallet extra safe.",
+
+  "biometricTitle": "Enable Biometric Login",
+  "biometricSubtitle": "Sign in with your fingerprint or face — fast, secure and effortless.",
+  "biometricEnableCta": "Enable Biometric",
+  "biometricLaterCta": "Maybe Later",
+
+  "dashboardAppBarTitle": "Dashboard",
+
+  "settingsLanguageLabel": "Language"
+}

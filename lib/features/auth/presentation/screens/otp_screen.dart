@@ -30,9 +30,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthFlowScaffold(
-      title: 'Verification Code',
-      subtitle:
-          "We've sent a 6-digit code to your email or phone. Enter it below to continue.",
+      title: context.l10n.otpTitle,
+      subtitle: context.l10n.otpSubtitle,
       showBack: true,
       children: [
         OtpCodeField(
@@ -44,7 +43,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
-                "Didn't receive the code? ",
+                context.l10n.otpResendPrompt,
                 style: AppFont.bodyMedium.copyWith(
                   color: context.colors.onSurfaceVariant,
                 ),
@@ -52,7 +51,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               GestureDetector(
                 onTap: () {}, // UI-only
                 child: Text(
-                  'Resend',
+                  context.l10n.otpResendCta,
                   style: AppFont.labelLarge.copyWith(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w700,
@@ -64,7 +63,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         ),
         const SizedBox(height: AppSpacing.xxl),
         PrimaryButton(
-          label: 'Verify',
+          label: context.l10n.otpVerifyCta,
           onPressed: _complete ? _verify : null,
         ),
       ],

@@ -96,14 +96,10 @@ void main() {
   testWidgets('Welcome renders settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(_wrap(const WelcomeScreen()));
-    // Decode the apsara illustration (asset images need real async).
-    await tester.runAsync(() async {
-      final context = tester.element(find.byType(WelcomeScreen));
-      await precacheImage(
-        const AssetImage(AssetPathConstant.apsaraFigure),
-        context,
-      );
-    });
+    await _precache(tester, const [
+      AssetPathConstant.authBackground,
+      AssetPathConstant.logo,
+    ]);
     await tester.pump(const Duration(milliseconds: 2600));
     await expectLater(
       find.byType(WelcomeScreen),

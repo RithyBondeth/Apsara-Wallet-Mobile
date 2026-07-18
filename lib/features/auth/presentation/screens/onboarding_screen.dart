@@ -37,30 +37,10 @@ class _OnboardingPageData {
   final bool dark;
 }
 
-const _pages = <_OnboardingPageData>[
-  _OnboardingPageData(
-    icon: LucideIcons.walletMinimal,
-    title: 'All your money,\nbeautifully in one place',
-    body:
-        'Track balances, cards and spending across USD and KHR — with the elegance Apsara brings to every detail.',
-    background: AssetPathConstant.onBoarding1,
-  ),
-  _OnboardingPageData(
-    icon: LucideIcons.arrowLeftRight,
-    title: 'Send & receive\nin a few taps',
-    body:
-        'Instant transfers and QR payments across Cambodia. Fast, secure, and effortless — day or night.',
-    background: AssetPathConstant.onBoarding2,
-  ),
-  _OnboardingPageData(
-    icon: LucideIcons.chartPie,
-    title: 'Insights that\ngrow your wealth',
-    body:
-        'Smart budgets and clear analytics turn everyday spending into confident financial decisions.',
-    background: AssetPathConstant.onBoarding3,
-    dark: true,
-  ),
-];
+/// Number of onboarding pages. The page copy is built per-locale in
+/// [_OnBoardingScreenState.build]; the count is fixed so it can be referenced
+/// from state that runs before the first build.
+const _pageCount = 3;
 
 @RoutePage()
 class OnBoardingScreen extends ConsumerStatefulWidget {
@@ -103,7 +83,7 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
     super.dispose();
   }
 
-  bool get _isLast => _page.round() >= _pages.length - 1;
+  bool get _isLast => _page.round() >= _pageCount - 1;
 
   void _finish() {
     // "Get Started" is the new-user path: the tour hands off to sign-up.
@@ -123,15 +103,38 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final pages = <_OnboardingPageData>[
+      _OnboardingPageData(
+        icon: LucideIcons.walletMinimal,
+        title: l10n.onboardingTitle1,
+        body: l10n.onboardingBody1,
+        background: AssetPathConstant.onBoarding1,
+      ),
+      _OnboardingPageData(
+        icon: LucideIcons.arrowLeftRight,
+        title: l10n.onboardingTitle2,
+        body: l10n.onboardingBody2,
+        background: AssetPathConstant.onBoarding2,
+      ),
+      _OnboardingPageData(
+        icon: LucideIcons.chartPie,
+        title: l10n.onboardingTitle3,
+        body: l10n.onboardingBody3,
+        background: AssetPathConstant.onBoarding3,
+        dark: true,
+      ),
+    ];
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
           // --- Page artwork, crossfading with the swipe -------------------
-          for (var i = 0; i < _pages.length; i++)
+          for (var i = 0; i < pages.length; i++)
             Opacity(
               opacity: (1 - (_page - i).abs()).clamp(0.0, 1.0),
-              child: _PageBackdrop(data: _pages[i]),
+              child: _PageBackdrop(data: pages[i]),
             ),
 
           SafeArea(
@@ -151,7 +154,7 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
                       child: TextButton(
                         onPressed: _isLast ? null : _finish,
                         child: Text(
-                          'Skip',
+                          l10n.commonSkip,
                           style: AppFont.labelLarge.copyWith(
                             color: context.colors.onSurfaceVariant,
                           ),
@@ -172,11 +175,11 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
                       animation: _ambient,
                       builder: (context, _) => PageView.builder(
                         controller: _controller,
-                        itemCount: _pages.length,
+                        itemCount: pages.length,
                         itemBuilder: (context, index) {
                           final delta = index - _page; // -1..1 near neighbours
                           return _OnboardingPageView(
-                            data: _pages[index],
+                            data: pages[index],
                             delta: delta,
                             ambient: _ambient.value,
                           );
@@ -200,7 +203,7 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
                         controller: _intro,
                         start: 0.45,
                         end: 0.8,
-                        child: PageIndicator(count: _pages.length, page: _page),
+                        child: PageIndicator(count: pages.length, page: _page),
                       ),
                       const SizedBox(height: AppSpacing.xxl),
                       FadeSlideIn(
@@ -223,7 +226,9 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
                           ),
                           child: PrimaryButton(
                             key: ValueKey(_isLast),
-                            label: _isLast ? 'Get Started' : 'Next',
+                            label: _isLast
+                                ? l10n.commonGetStarted
+                                : l10n.commonNext,
                             trailingIcon: _isLast
                                 ? LucideIcons.sparkles
                                 : LucideIcons.arrowRight,

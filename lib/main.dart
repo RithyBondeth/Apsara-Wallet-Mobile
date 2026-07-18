@@ -1,6 +1,7 @@
 import 'package:apsara_wallet_mobile/app/app.dart';
 import 'package:apsara_wallet_mobile/core/configs/config_service.dart';
 import 'package:apsara_wallet_mobile/core/enums/environment_enum.dart';
+import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,5 +10,16 @@ void main() async {
 
   await AppConfigService.initialize(EEnvironmentType.dev);
 
-  runApp(const ProviderScope(child: MyApp()));
+  // Seed the locale from storage before the first frame so the app opens in
+  // the user's saved language.
+  final savedLanguage = await LocaleNotifier.loadSaved();
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        localeProvider.overrideWith((ref) => LocaleNotifier(savedLanguage)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }

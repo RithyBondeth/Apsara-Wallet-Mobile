@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -37,14 +38,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthFlowScaffold(
-      title: 'Forgot Password?',
-      subtitle:
-          "Enter the email or phone linked to your account and we'll send you a reset code.",
+      title: context.l10n.commonForgotPassword,
+      subtitle: context.l10n.forgotPasswordSubtitle,
       showBack: true,
       children: [
         AppTextField(
-          label: 'Email or Phone Number',
-          hint: 'Enter email or phone number',
+          label: context.l10n.authIdentifierLabel,
+          hint: context.l10n.authIdentifierHint,
           controller: _identifierController,
           prefixIcon: LucideIcons.mail,
           keyboardType: TextInputType.emailAddress,
@@ -52,13 +52,14 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           onSubmitted: (_) => _sendCode(),
         ),
         const SizedBox(height: AppSpacing.xxl),
-        PrimaryButton(label: 'Send Reset Code', onPressed: _sendCode),
+        PrimaryButton(
+            label: context.l10n.forgotPasswordSendCta, onPressed: _sendCode),
         const SizedBox(height: AppSpacing.xxl),
         Center(
           child: GestureDetector(
             onTap: () => context.router.maybePop(),
             child: Text(
-              'Back to Login',
+              context.l10n.forgotPasswordBackToLogin,
               style: AppFont.labelLarge.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w700,
