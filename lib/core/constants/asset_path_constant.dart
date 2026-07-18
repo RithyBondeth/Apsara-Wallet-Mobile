@@ -2,6 +2,7 @@ class AssetPathConstant {
   AssetPathConstant._();
 
   static const String splashLogo = 'assets/images/splash_logo.png';
+  static const String splashBackground = 'assets/backgrounds/splash-screen-bg.png';
   static const String onBoarding1 = 'assets/images/onboarding_1.png';
   static const String onBoarding2 = 'assets/images/onboarding_2.png';
   static const String onBoarding3 = 'assets/images/onboarding_3.png';

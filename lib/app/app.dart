@@ -1,6 +1,6 @@
 import 'package:apsara_wallet_mobile/core/configs/config_service.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
-import 'package:apsara_wallet_mobile/features/auth/presentation/screens/login_screen.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,13 +9,15 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    final appRouter = AppRouter();
+
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: AppConfigService.appName,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const LoginScreen(),
+      routerConfig: appRouter.config(),
     );
   }
 }
