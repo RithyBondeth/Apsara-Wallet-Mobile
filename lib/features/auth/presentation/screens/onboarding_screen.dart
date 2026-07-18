@@ -94,7 +94,8 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
   bool get _isLast => _page.round() >= _pages.length - 1;
 
   void _finish() {
-    context.router.replace(const LoginRoute());
+    // "Get Started" is the new-user path: the tour hands off to sign-up.
+    context.router.replace(const RegisterRoute());
   }
 
   void _next() {

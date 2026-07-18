@@ -5,6 +5,7 @@ class RoutePathConstant {
   // AUTH ROUTES
   // ==================================================
   static const String splashPath = '/splash';
+  static const String welcomePath = '/welcome';
   static const String onBoardingPath = '/onBoarding';
   static const String loginPath = '/login';
   static const String registerPath = '/register';

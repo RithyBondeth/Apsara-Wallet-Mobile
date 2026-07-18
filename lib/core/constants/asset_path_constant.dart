@@ -1,6 +1,9 @@
 class AssetPathConstant {
   AssetPathConstant._();
 
+  static const String apsaraFigure = 'assets/logos/apsara_figure.png';
+  static const String apsaraMark = 'assets/logos/apsara_mark.png';
+
   static const String splashLogo = 'assets/images/splash_logo.png';
   static const String splashBackground = 'assets/backgrounds/splash-screen-bg.png';
   static const String onBoarding1 = 'assets/images/onboarding_1.png';

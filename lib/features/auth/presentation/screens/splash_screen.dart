@@ -80,7 +80,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> _scheduleExit() async {
     await Future.delayed(AppDurations.splashIntro + AppDurations.splashHold);
     if (!mounted) return;
-    context.router.replace(const OnBoardingRoute());
+    context.router.replace(const WelcomeRoute());
   }
 
   @override

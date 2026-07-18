@@ -82,16 +82,21 @@ class _SocialButtonState extends State<SocialButton>
             borderRadius: BorderRadius.circular(AppRadius.lg),
             border: Border.all(color: border),
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.string(widget.svg, width: 20, height: 20),
               const SizedBox(width: 10),
-              Text(
-                widget.label,
-                style: AppFont.titleSmall.copyWith(
-                  color: context.colors.onSurface,
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  widget.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppFont.titleSmall.copyWith(
+                    color: context.colors.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],

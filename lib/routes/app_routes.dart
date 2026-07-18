@@ -9,6 +9,7 @@ import 'package:apsara_wallet_mobile/features/auth/presentation/screens/pin_setu
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/register_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/splash_screen.dart';
+import 'package:apsara_wallet_mobile/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -26,6 +27,7 @@ class AppRouter extends RootStackRouter {
       initial: true,
       path: RoutePathConstant.splashPath,
     ),
+    AutoRoute(page: WelcomeRoute.page, path: RoutePathConstant.welcomePath),
     AutoRoute(
       page: OnBoardingRoute.page,
       path: RoutePathConstant.onBoardingPath,
