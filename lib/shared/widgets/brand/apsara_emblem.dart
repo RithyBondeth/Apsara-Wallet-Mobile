@@ -3,17 +3,20 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/brand/apsara_mark_geometry.dart';
 
-/// The Apsara Wallet brand mark: a gold lotus-bud spire framed by a
-/// radiant ring of Khmer-inspired petals.
+/// The Apsara Wallet brand mark ("Gilded Poise"): three gold lotus spires —
+/// the apsara's mokot crown — over a cupped-hands crescent holding a
+/// coin-pearl, framed by a fine orbiting tick ring.
 ///
-/// Fully hand-painted with [CustomPainter] (no raster asset) so it stays
-/// razor-sharp at any size and can be reused for loaders, headers, empty
-/// states and the splash screen.
+/// Painted from generated vector outlines (see apsara_mark_geometry.dart, the
+/// same geometry as the exported logo PNGs) so it stays razor-sharp at any
+/// size and can be reused for loaders, headers, empty states and the splash
+/// screen.
 ///
 /// * [size]     — square edge length in logical pixels.
-/// * [ringTurns]— rotation of the petal ring (drive with an animation for
-///                a slow, living shimmer).
+/// * [ringTurns]— rotation of the outer tick ring (drive with an animation
+///                for a slow, living shimmer).
 /// * [glow]     — 0..1 intensity of the soft gold halo behind the mark.
 class ApsaraEmblem extends StatelessWidget {
   const ApsaraEmblem({
@@ -49,9 +52,6 @@ class _ApsaraEmblemPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final r = size.width / 2;
-    final goldShader = AppGradients.goldFoil.createShader(
-      Rect.fromCircle(center: center, radius: r),
-    );
 
     // --- Soft radial halo -------------------------------------------------
     if (glow > 0) {
@@ -66,73 +66,101 @@ class _ApsaraEmblemPainter extends CustomPainter {
       canvas.drawCircle(center, r, haloPaint);
     }
 
-    final stroke = Paint()
-      ..shader = goldShader
+    // --- Fine orbiting tick ring (quiet, systematic brand notation) ------
+    final ringColor = AppGradients.goldCore.withValues(alpha: 0.45);
+    final ringPaint = Paint()
+      ..color = ringColor
       ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+      ..strokeWidth = size.width * 0.005;
+    canvas.drawCircle(center, r * 0.96, ringPaint);
 
-    // --- Outer + inner guide rings ---------------------------------------
-    stroke.strokeWidth = size.width * 0.012;
-    canvas.drawCircle(center, r * 0.92, stroke);
-    stroke.strokeWidth = size.width * 0.010;
-    canvas.drawCircle(center, r * 0.50, stroke);
-
-    // --- Radiant petal ring (alternating long / short rays) --------------
     canvas.save();
     canvas.translate(center.dx, center.dy);
     canvas.rotate(ringTurns * 2 * math.pi);
-    const petals = 24;
-    for (var i = 0; i < petals; i++) {
-      final long = i.isEven;
-      final inner = r * 0.56;
-      final outer = r * (long ? 0.86 : 0.72);
-      final halfW = size.width * (long ? 0.022 : 0.013);
-
-      final petal = Path()
-        ..moveTo(0, -inner)
-        ..quadraticBezierTo(halfW, -(inner + outer) / 2, 0, -outer)
-        ..quadraticBezierTo(-halfW, -(inner + outer) / 2, 0, -inner)
-        ..close();
-      canvas.drawPath(
-        petal,
-        Paint()
-          ..shader = goldShader
-          ..style = PaintingStyle.fill,
-      );
-      canvas.rotate(2 * math.pi / petals);
+    const ticks = 36;
+    final tickPaint = Paint()
+      ..color = ringColor
+      ..strokeWidth = size.width * 0.005
+      ..strokeCap = StrokeCap.round;
+    for (var i = 0; i < ticks; i++) {
+      final long = i % 9 == 0;
+      final inner = r * (long ? 0.90 : 0.935);
+      canvas.drawLine(Offset(0, -inner), Offset(0, -r * 0.96), tickPaint);
+      canvas.rotate(2 * math.pi / ticks);
     }
     canvas.restore();
 
-    // --- Central lotus-bud spire -----------------------------------------
-    final h = r * 0.70;
-    final w = r * 0.52;
-    final tipY = center.dy - h * 0.5;
-    final baseY = center.dy + h * 0.45;
-    final spire = Path()
-      ..moveTo(center.dx, tipY)
-      ..cubicTo(
-        center.dx - w * 0.55, center.dy - h * 0.12,
-        center.dx - w * 0.42, center.dy + h * 0.22,
-        center.dx - w * 0.16, baseY,
-      )
-      ..quadraticBezierTo(center.dx, baseY + h * 0.16, center.dx + w * 0.16, baseY)
-      ..cubicTo(
-        center.dx + w * 0.42, center.dy + h * 0.22,
-        center.dx + w * 0.55, center.dy - h * 0.12,
-        center.dx, tipY,
-      )
-      ..close();
-    canvas.drawPath(spire, Paint()..shader = goldShader);
-
-    // Central seam highlight for a chiselled, foil-like read.
-    canvas.drawLine(
-      Offset(center.dx, tipY + h * 0.14),
-      Offset(center.dx, baseY - h * 0.10),
-      Paint()
-        ..color = AppGradients.emeraldDeep.withValues(alpha: 0.35)
-        ..strokeWidth = size.width * 0.008
-        ..strokeCap = StrokeCap.round,
+    // --- The mark: crown spires, crescent, coin ---------------------------
+    // Geometry is normalized to a unit square; scale into the ring interior.
+    final markSide = size.width * 0.70;
+    final origin = Offset(
+      center.dx - markSide / 2,
+      center.dy - markSide / 2,
     );
+    for (final element in apsaraMarkElements) {
+      final path = Path()..fillType = PathFillType.evenOdd;
+      for (final ring in element.rings) {
+        path.moveTo(
+          origin.dx + ring[0] * markSide,
+          origin.dy + ring[1] * markSide,
+        );
+        for (var i = 2; i < ring.length; i += 2) {
+          path.lineTo(
+            origin.dx + ring[i] * markSide,
+            origin.dy + ring[i + 1] * markSide,
+          );
+        }
+        path.close();
+      }
+      canvas.drawPath(path, Paint()..shader = _elementShader(element, origin, markSide));
+    }
+  }
+
+  /// Gradient per element, mapped over the element's own (uncarved) bounds —
+  /// mirrors the gradients of the exported logo assets.
+  Shader _elementShader(ApsaraMarkElement e, Offset origin, double side) {
+    final rect = Rect.fromLTRB(
+      origin.dx + e.bounds[0] * side,
+      origin.dy + e.bounds[1] * side,
+      origin.dx + e.bounds[2] * side,
+      origin.dy + e.bounds[3] * side,
+    );
+    switch (e.kind) {
+      case 'coin':
+        return RadialGradient(
+          center: const Alignment(-0.3, -0.4),
+          radius: 1.1,
+          colors: const [
+            AppGradients.goldLight,
+            AppGradients.goldCore,
+            AppGradients.goldDeep,
+          ],
+          stops: const [0.0, 0.6, 1.0],
+        ).createShader(rect);
+      case 'center':
+        return const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppGradients.goldLight,
+            AppGradients.goldCore,
+            AppGradients.goldDeep,
+          ],
+          stops: [0.0, 0.5, 1.0],
+        ).createShader(rect);
+      case 'crescent':
+        return const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppGradients.goldLight, AppGradients.goldDeep],
+        ).createShader(rect);
+      default: // side petals
+        return const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppGradients.goldCore, AppGradients.goldDeep],
+        ).createShader(rect);
+    }
   }
 
   @override
