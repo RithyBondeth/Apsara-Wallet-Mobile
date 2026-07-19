@@ -11,6 +11,73 @@
 part of 'app_routes.dart';
 
 /// generated route for
+/// [AddTransactionScreen]
+class AddTransactionRoute extends PageRouteInfo<AddTransactionRouteArgs> {
+  AddTransactionRoute({
+    Key? key,
+    ETransactionType initialType = ETransactionType.expense,
+    DateTime? initialDateTime,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AddTransactionRoute.name,
+         args: AddTransactionRouteArgs(
+           key: key,
+           initialType: initialType,
+           initialDateTime: initialDateTime,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'AddTransactionRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AddTransactionRouteArgs>(
+        orElse: () => const AddTransactionRouteArgs(),
+      );
+      return AddTransactionScreen(
+        key: args.key,
+        initialType: args.initialType,
+        initialDateTime: args.initialDateTime,
+      );
+    },
+  );
+}
+
+class AddTransactionRouteArgs {
+  const AddTransactionRouteArgs({
+    this.key,
+    this.initialType = ETransactionType.expense,
+    this.initialDateTime,
+  });
+
+  final Key? key;
+
+  final ETransactionType initialType;
+
+  final DateTime? initialDateTime;
+
+  @override
+  String toString() {
+    return 'AddTransactionRouteArgs{key: $key, initialType: $initialType, initialDateTime: $initialDateTime}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AddTransactionRouteArgs) return false;
+    return key == other.key &&
+        initialType == other.initialType &&
+        initialDateTime == other.initialDateTime;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ initialType.hashCode ^ initialDateTime.hashCode;
+}
+
+/// generated route for
 /// [AnalyticsScreen]
 class AnalyticsRoute extends PageRouteInfo<void> {
   const AnalyticsRoute({List<PageRouteInfo>? children})

@@ -197,6 +197,96 @@ class AppLocalizationsKm extends AppLocalizations {
   String get biometricLaterCta => 'ពេលក្រោយ';
 
   @override
+  String get addTxTitle => 'បន្ថែមប្រតិបត្តិការ';
+
+  @override
+  String get addTxAmount => 'ចំនួនទឹកប្រាក់';
+
+  @override
+  String get addTxCategory => 'ប្រភេទ';
+
+  @override
+  String get addTxWallet => 'កាបូប';
+
+  @override
+  String get addTxFromWallet => 'ពីកាបូប';
+
+  @override
+  String get addTxToWallet => 'ទៅកាបូប';
+
+  @override
+  String get addTxDateTime => 'កាលបរិច្ឆេទ និងម៉ោង';
+
+  @override
+  String get addTxNote => 'កំណត់ចំណាំ (ស្រេចចិត្ត)';
+
+  @override
+  String get addTxNoteHint => 'សម្រាប់អ្វី?';
+
+  @override
+  String get addTxReceipt => 'បន្ថែមវិក្កយបត្រ';
+
+  @override
+  String get addTxScanOrUpload => 'ស្កេន ឬបញ្ចូលវិក្កយបត្រ';
+
+  @override
+  String get addTxSave => 'រក្សាទុកប្រតិបត្តិការ';
+
+  @override
+  String get addTxSaved => 'បានរក្សាទុកប្រតិបត្តិការ';
+
+  @override
+  String get addTxChooseCategory => 'ជ្រើសរើសប្រភេទ';
+
+  @override
+  String get addTxChooseWallet => 'ជ្រើសរើសកាបូប';
+
+  @override
+  String get addTxChooseCurrency => 'រូបិយប័ណ្ណ';
+
+  @override
+  String get categoryFoodDining => 'អាហារ និងភោជនីយដ្ឋាន';
+
+  @override
+  String get categoryTransport => 'ការធ្វើដំណើរ';
+
+  @override
+  String get categoryShopping => 'ទិញទំនិញ';
+
+  @override
+  String get categoryBills => 'វិក្កយបត្រ និងសេវា';
+
+  @override
+  String get categoryHealth => 'សុខភាព';
+
+  @override
+  String get categoryEducation => 'ការអប់រំ';
+
+  @override
+  String get categoryEntertainment => 'កម្សាន្ត';
+
+  @override
+  String get categoryTravel => 'ដំណើរកម្សាន្ត';
+
+  @override
+  String get categoryPersonalCare => 'ថែទាំខ្លួន';
+
+  @override
+  String get categoryGifts => 'អំណោយ និងវិភាគទាន';
+
+  @override
+  String get categoryOthers => 'ផ្សេងៗ';
+
+  @override
+  String get categorySalary => 'ប្រាក់ខែ';
+
+  @override
+  String get categoryBusiness => 'អាជីវកម្ម';
+
+  @override
+  String get categoryInvestment => 'ការវិនិយោគ';
+
+  @override
   String get navHome => 'ទំព័រដើម';
 
   @override

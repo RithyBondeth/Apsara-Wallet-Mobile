@@ -193,6 +193,96 @@ class AppLocalizationsEn extends AppLocalizations {
   String get biometricLaterCta => 'Maybe Later';
 
   @override
+  String get addTxTitle => 'Add Transaction';
+
+  @override
+  String get addTxAmount => 'Amount';
+
+  @override
+  String get addTxCategory => 'Category';
+
+  @override
+  String get addTxWallet => 'Wallet';
+
+  @override
+  String get addTxFromWallet => 'From Wallet';
+
+  @override
+  String get addTxToWallet => 'To Wallet';
+
+  @override
+  String get addTxDateTime => 'Date & Time';
+
+  @override
+  String get addTxNote => 'Note (Optional)';
+
+  @override
+  String get addTxNoteHint => 'What was this for?';
+
+  @override
+  String get addTxReceipt => 'Add Receipt';
+
+  @override
+  String get addTxScanOrUpload => 'Scan or upload receipt';
+
+  @override
+  String get addTxSave => 'Save Transaction';
+
+  @override
+  String get addTxSaved => 'Transaction saved';
+
+  @override
+  String get addTxChooseCategory => 'Choose Category';
+
+  @override
+  String get addTxChooseWallet => 'Choose Wallet';
+
+  @override
+  String get addTxChooseCurrency => 'Currency';
+
+  @override
+  String get categoryFoodDining => 'Food & Dining';
+
+  @override
+  String get categoryTransport => 'Transport';
+
+  @override
+  String get categoryShopping => 'Shopping';
+
+  @override
+  String get categoryBills => 'Bills & Utilities';
+
+  @override
+  String get categoryHealth => 'Health';
+
+  @override
+  String get categoryEducation => 'Education';
+
+  @override
+  String get categoryEntertainment => 'Entertainment';
+
+  @override
+  String get categoryTravel => 'Travel';
+
+  @override
+  String get categoryPersonalCare => 'Personal Care';
+
+  @override
+  String get categoryGifts => 'Gifts & Donations';
+
+  @override
+  String get categoryOthers => 'Others';
+
+  @override
+  String get categorySalary => 'Salary';
+
+  @override
+  String get categoryBusiness => 'Business';
+
+  @override
+  String get categoryInvestment => 'Investment';
+
+  @override
   String get navHome => 'Home';
 
   @override

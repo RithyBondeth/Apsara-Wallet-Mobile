@@ -22,6 +22,7 @@ class RoutePathConstant {
   static const String dashboardPath = '/dashboard';
   static const String analyticsPath = '/analytics';
   static const String scanReceiptPath = '/scanReceipt';
+  static const String addTransactionPath = '/addTransaction';
   static const String walletsPath = '/wallets';
 
   // ==================================================

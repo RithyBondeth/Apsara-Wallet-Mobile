@@ -452,6 +452,186 @@ abstract class AppLocalizations {
   /// **'Maybe Later'**
   String get biometricLaterCta;
 
+  /// No description provided for @addTxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Transaction'**
+  String get addTxTitle;
+
+  /// No description provided for @addTxAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get addTxAmount;
+
+  /// No description provided for @addTxCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get addTxCategory;
+
+  /// No description provided for @addTxWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get addTxWallet;
+
+  /// No description provided for @addTxFromWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'From Wallet'**
+  String get addTxFromWallet;
+
+  /// No description provided for @addTxToWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'To Wallet'**
+  String get addTxToWallet;
+
+  /// No description provided for @addTxDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Date & Time'**
+  String get addTxDateTime;
+
+  /// No description provided for @addTxNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (Optional)'**
+  String get addTxNote;
+
+  /// No description provided for @addTxNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What was this for?'**
+  String get addTxNoteHint;
+
+  /// No description provided for @addTxReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Receipt'**
+  String get addTxReceipt;
+
+  /// No description provided for @addTxScanOrUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan or upload receipt'**
+  String get addTxScanOrUpload;
+
+  /// No description provided for @addTxSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Transaction'**
+  String get addTxSave;
+
+  /// No description provided for @addTxSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction saved'**
+  String get addTxSaved;
+
+  /// No description provided for @addTxChooseCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Category'**
+  String get addTxChooseCategory;
+
+  /// No description provided for @addTxChooseWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Wallet'**
+  String get addTxChooseWallet;
+
+  /// No description provided for @addTxChooseCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get addTxChooseCurrency;
+
+  /// No description provided for @categoryFoodDining.
+  ///
+  /// In en, this message translates to:
+  /// **'Food & Dining'**
+  String get categoryFoodDining;
+
+  /// No description provided for @categoryTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get categoryTransport;
+
+  /// No description provided for @categoryShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get categoryShopping;
+
+  /// No description provided for @categoryBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Bills & Utilities'**
+  String get categoryBills;
+
+  /// No description provided for @categoryHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get categoryHealth;
+
+  /// No description provided for @categoryEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get categoryEducation;
+
+  /// No description provided for @categoryEntertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get categoryEntertainment;
+
+  /// No description provided for @categoryTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get categoryTravel;
+
+  /// No description provided for @categoryPersonalCare.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Care'**
+  String get categoryPersonalCare;
+
+  /// No description provided for @categoryGifts.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts & Donations'**
+  String get categoryGifts;
+
+  /// No description provided for @categoryOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get categoryOthers;
+
+  /// No description provided for @categorySalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary'**
+  String get categorySalary;
+
+  /// No description provided for @categoryBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get categoryBusiness;
+
+  /// No description provided for @categoryInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment'**
+  String get categoryInvestment;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:

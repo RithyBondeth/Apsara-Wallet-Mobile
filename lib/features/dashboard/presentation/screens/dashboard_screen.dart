@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
@@ -118,42 +119,62 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // --- Header with floating quick actions -----------------
+                  // The action cards straddle the header's lower edge. The
+                  // 46px overhang is reserved INSIDE the stack (bottom
+                  // padding) so the cards stay hit-testable — Positioned
+                  // children outside a Stack's bounds never receive taps.
                   Stack(
-                    clipBehavior: Clip.none,
                     children: [
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.0,
-                        end: 0.5,
-                        offset: const Offset(0, 14),
-                        child: DashboardHeader(
-                          data: _data,
-                          ambient: _ambient,
-                          balanceHidden: _balanceHidden,
-                          onToggleBalance: () => setState(
-                            () => _balanceHidden = !_balanceHidden,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 46),
+                        child: FadeSlideIn(
+                          controller: _intro,
+                          start: 0.0,
+                          end: 0.5,
+                          offset: const Offset(0, 14),
+                          child: DashboardHeader(
+                            data: _data,
+                            ambient: _ambient,
+                            balanceHidden: _balanceHidden,
+                            onToggleBalance: () => setState(
+                              () => _balanceHidden = !_balanceHidden,
+                            ),
+                            onTapBell: () {},
                           ),
-                          onTapBell: () {},
                         ),
                       ),
                       Positioned(
                         left: AppSpacing.xxl,
                         right: AppSpacing.xxl,
-                        bottom: -46,
+                        bottom: 0,
                         child: FadeSlideIn(
                           controller: _intro,
                           start: 0.18,
                           end: 0.62,
                           offset: const Offset(0, 24),
                           scaleFrom: 0.94,
-                          child: const QuickActionsRow(),
+                          child: QuickActionsRow(
+                            onAddIncome: () => context.router.push(
+                              AddTransactionRoute(
+                                initialType: ETransactionType.income,
+                              ),
+                            ),
+                            onAddExpense: () => context.router.push(
+                              AddTransactionRoute(
+                                initialType: ETransactionType.expense,
+                              ),
+                            ),
+                            onTransfer: () => context.router.push(
+                              AddTransactionRoute(
+                                initialType: ETransactionType.transfer,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  // Reserve the portion of the action cards hanging below the
-                  // header, plus breathing room before the next block.
-                  const SizedBox(height: 46 + AppSpacing.xxl),
+                  const SizedBox(height: AppSpacing.xxl),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(
