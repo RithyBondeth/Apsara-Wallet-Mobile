@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/biometric_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/otp_screen.dart';
@@ -14,7 +15,12 @@ import 'package:apsara_wallet_mobile/features/auth/presentation/screens/reset_pa
 
 Widget _wrap(Widget child) {
   return ProviderScope(
-    child: MaterialApp(debugShowCheckedModeBanner: false, home: child),
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: child,
+    ),
   );
 }
 

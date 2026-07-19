@@ -1,0 +1,278 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
+import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
+
+/// The emerald hero at the top of the dashboard: greeting, notifications,
+/// the drifting apsara brand mark, and the total-balance readout with a
+/// privacy toggle.
+class DashboardHeader extends StatelessWidget {
+  const DashboardHeader({
+    super.key,
+    required this.data,
+    required this.ambient,
+    required this.balanceHidden,
+    required this.onToggleBalance,
+    required this.onTapBell,
+  });
+
+  final DashboardData data;
+  final AnimationController ambient;
+  final bool balanceHidden;
+  final VoidCallback onToggleBalance;
+  final VoidCallback onTapBell;
+
+  static const Color _ivory = Color(0xFFF3F1E7);
+
+  @override
+  Widget build(BuildContext context) {
+    final topInset = MediaQuery.of(context).padding.top;
+
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: AppGradients.emerald,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(AppRadius.xxl),
+          bottomRight: Radius.circular(AppRadius.xxl),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x330B5B3D),
+            blurRadius: 24,
+            offset: Offset(0, 12),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // --- Drifting apsara brand mark (soft, top-right) ----------------
+          Positioned(
+            top: topInset + 6,
+            right: -14,
+            child: _FloatingApsara(ambient: ambient),
+          ),
+
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.xxl,
+              topInset + AppSpacing.lg,
+              AppSpacing.xxl,
+              AppSpacing.xxl,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _greetingRow(),
+                const SizedBox(height: AppSpacing.xxl),
+                _balanceBlock(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _greetingRow() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Good morning!',
+                style: AppFont.bodyMedium.copyWith(
+                  color: _ivory.withValues(alpha: 0.82),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '${data.userName} 👋',
+                style: AppFont.headingSmall.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+        _BellButton(onTap: onTapBell),
+      ],
+    );
+  }
+
+  Widget _balanceBlock() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              'Total Balance',
+              style: AppFont.labelLarge.copyWith(
+                color: _ivory.withValues(alpha: 0.80),
+                letterSpacing: 0.4,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onToggleBalance,
+              child: Padding(
+                padding: const EdgeInsets.all(2),
+                child: Icon(
+                  balanceHidden ? LucideIcons.eyeOff : LucideIcons.eye,
+                  size: 18,
+                  color: _ivory.withValues(alpha: 0.80),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(
+              'KHR',
+              style: AppFont.titleMedium.copyWith(
+                color: AppGradients.goldLight,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Text(
+              balanceHidden ? '••••••••' : formatKhr(data.balanceKhr),
+              style: AppFont.headingLarge.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          balanceHidden
+              ? '≈ USD ••••••'
+              : '≈ USD ${formatUsd(data.balanceUsd)}',
+          style: AppFont.bodyMedium.copyWith(
+            color: _ivory.withValues(alpha: 0.75),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Circular translucent notification button with an unread dot.
+class _BellButton extends StatelessWidget {
+  const _BellButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.14),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Icon(LucideIcons.bell, size: 20, color: Colors.white),
+            Positioned(
+              top: 11,
+              right: 12,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: AppGradients.goldCore,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppGradients.emeraldCore,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The brand apsara mark, gently bobbing and breathing a gold halo — driven
+/// by the shared ambient loop so the header always feels alive.
+class _FloatingApsara extends StatelessWidget {
+  const _FloatingApsara({required this.ambient});
+
+  final AnimationController ambient;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: ambient,
+      builder: (context, child) {
+        final phase = ambient.value * 2 * math.pi;
+        final pulse = 0.75 + 0.25 * math.sin(phase * 2);
+        return Transform.translate(
+          offset: Offset(0, 4 * math.sin(phase)),
+          child: SizedBox(
+            width: 150,
+            height: 150,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        AppGradients.goldLight.withValues(alpha: 0.22 * pulse),
+                        AppGradients.goldLight.withValues(alpha: 0),
+                      ],
+                    ),
+                  ),
+                ),
+                child!,
+              ],
+            ),
+          ),
+        );
+      },
+      child: Opacity(
+        opacity: 0.92,
+        child: Image.asset(
+          AssetPathConstant.logo,
+          width: 118,
+          height: 118,
+          fit: BoxFit.contain,
+          semanticLabel: '${AppConstants.appName} emblem',
+        ),
+      ),
+    );
+  }
+}

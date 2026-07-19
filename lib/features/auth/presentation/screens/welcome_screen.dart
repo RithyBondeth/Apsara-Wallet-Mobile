@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
@@ -11,7 +10,6 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
-import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/brand/aurora_background.dart';
@@ -37,9 +35,6 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
 
   /// Endless ambient loop: aurora drift + floating apsara.
   late final AnimationController _ambient;
-
-  /// UI-only (Phase 1): selected language chip state.
-  String _language = 'English';
 
   @override
   void initState() {
@@ -100,13 +95,9 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
                     start: 0.6,
                     end: 0.9,
                     offset: const Offset(0, -10),
-                    child: Align(
+                    child: const Align(
                       alignment: Alignment.centerRight,
-                      child: _LanguageChip(
-                        language: _language,
-                        onChanged: (value) =>
-                            setState(() => _language = value),
-                      ),
+                      child: LanguageSwitcher(),
                     ),
                   ),
 
@@ -144,7 +135,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
                     child: Column(
                       children: [
                         Text(
-                          'Welcome to',
+                          context.l10n.welcomeGreeting,
                           textAlign: TextAlign.center,
                           style: AppFont.headingMedium.copyWith(
                             color: context.colors.onSurface,
@@ -167,7 +158,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
                     start: 0.25,
                     end: 0.62,
                     child: Text(
-                      'Your smart companion for\nbetter financial management.',
+                      context.l10n.welcomeTagline,
                       textAlign: TextAlign.center,
                       style: AppFont.bodyLarge.copyWith(
                         color: context.colors.onSurfaceVariant,
@@ -184,7 +175,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
                     start: 0.4,
                     end: 0.78,
                     child: PrimaryButton(
-                      label: 'Get Started',
+                      label: context.l10n.commonGetStarted,
                       onPressed: () =>
                           context.router.push(const OnBoardingRoute()),
                     ),
@@ -195,7 +186,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
                     start: 0.5,
                     end: 0.86,
                     child: SecondaryButton(
-                      label: 'Login',
+                      label: context.l10n.commonLogin,
                       onPressed: () =>
                           context.router.push(const LoginRoute()),
                     ),
@@ -212,7 +203,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            'New here? ',
+                            context.l10n.welcomeNewHerePrompt,
                             style: AppFont.bodyMedium.copyWith(
                               color: context.colors.onSurfaceVariant,
                             ),
@@ -221,7 +212,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
                             onTap: () =>
                                 context.router.push(const RegisterRoute()),
                             child: Text(
-                              'Create an account',
+                              context.l10n.welcomeCreateAccountCta,
                               style: AppFont.labelLarge.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w700,
@@ -285,59 +276,6 @@ class _ApsaraHero extends StatelessWidget {
             fit: BoxFit.contain,
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// UI-only language selector chip (English / ខ្មែរ).
-class _LanguageChip extends StatelessWidget {
-  const _LanguageChip({required this.language, required this.onChanged});
-
-  final String language;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final border = context.isDarkMode
-        ? Colors.white.withValues(alpha: 0.12)
-        : AppColors.textMuted.withValues(alpha: 0.35);
-
-    return PopupMenuButton<String>(
-      initialValue: language,
-      onSelected: onChanged,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.md),
-      ),
-      itemBuilder: (context) => const [
-        PopupMenuItem(value: 'English', child: Text('English')),
-        PopupMenuItem(value: 'ខ្មែរ', child: Text('ខ្មែរ (Khmer)')),
-      ],
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: context.isDarkMode ? context.colors.surface : Colors.white,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: border),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              language,
-              style: AppFont.labelLarge.copyWith(
-                color: context.colors.onSurface,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(width: 6),
-            Icon(
-              LucideIcons.chevronDown,
-              size: 16,
-              color: context.colors.onSurfaceVariant,
-            ),
-          ],
-        ),
       ),
     );
   }

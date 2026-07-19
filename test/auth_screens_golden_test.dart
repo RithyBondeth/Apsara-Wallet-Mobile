@@ -4,13 +4,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/login_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/onboarding_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/welcome_screen.dart';
 
 Widget _wrap(Widget child) {
   return ProviderScope(
-    child: MaterialApp(debugShowCheckedModeBanner: false, home: child),
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: child,
+    ),
   );
 }
 

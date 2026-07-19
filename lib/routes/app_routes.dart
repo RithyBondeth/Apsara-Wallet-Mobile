@@ -22,11 +22,7 @@ class AppRouter extends RootStackRouter {
     // ==================================================
     // AUTH ROUTES
     // ==================================================
-    AutoRoute(
-      page: SplashRoute.page,
-      initial: true,
-      path: RoutePathConstant.splashPath,
-    ),
+    AutoRoute(page: SplashRoute.page, path: RoutePathConstant.splashPath),
     AutoRoute(page: WelcomeRoute.page, path: RoutePathConstant.welcomePath),
     AutoRoute(
       page: OnBoardingRoute.page,
@@ -50,6 +46,10 @@ class AppRouter extends RootStackRouter {
     // ==================================================
     // DASHBOARD ROUTES
     // ==================================================
-    AutoRoute(page: DashboardRoute.page, path: RoutePathConstant.dashboardPath),
+    AutoRoute(
+      page: DashboardRoute.page,
+      path: RoutePathConstant.dashboardPath,
+      initial: true,
+    ),
   ];
 }
