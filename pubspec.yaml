@@ -50,7 +50,6 @@ dependencies:
   camera: ^0.12.0+2
   image_picker: ^1.2.3
   permission_handler: ^12.0.3
-  google_mlkit_text_recognition: ^0.16.0
 
 dev_dependencies:
   flutter_test:
@@ -86,7 +85,6 @@ flutter:
     - .env.dev
     - .env.staging
     - .env.prod
-    - assets/icons/
     - assets/animations/
     - assets/backgrounds/
     - assets/backgrounds/onboardings/

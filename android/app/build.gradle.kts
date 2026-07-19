@@ -44,3 +44,9 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // On-device Latin text recognition for the receipt scanner (Android side
+    // of the `apsara/ocr` channel; iOS uses Apple Vision).
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+}

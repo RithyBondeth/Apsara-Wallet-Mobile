@@ -69,32 +69,32 @@ class ScannedReceipt {
 
   /// A blank receipt used when OCR finds nothing usable — the user fills it in.
   factory ScannedReceipt.empty() => ScannedReceipt(
-        merchant: '',
-        dateLabel: '',
-        categoryLabel: 'Uncategorised',
-        categoryIcon: LucideIcons.receipt,
-        items: [],
-        total: 0,
-      );
+    merchant: '',
+    dateLabel: '',
+    categoryLabel: 'Uncategorised',
+    categoryIcon: LucideIcons.receipt,
+    items: [],
+    total: 0,
+  );
 
   /// A representative fixture used as a graceful fallback (e.g. when running
   /// without a camera) and in tests.
   static ScannedReceipt get sample => ScannedReceipt(
-        merchant: 'Lucky Supermarket',
-        location: 'Sihanouk Blvd, Phnom Penh',
-        dateLabel: '19 Jul 2026 · 14:32',
-        categoryLabel: 'Groceries',
-        categoryIcon: LucideIcons.shoppingCart,
-        items: [
-          ReceiptLineItem(name: 'Jasmine Rice 5kg', amount: 8.50),
-          ReceiptLineItem(name: 'Fresh Milk 1L', amount: 3.60, quantity: 2),
-          ReceiptLineItem(name: 'Angkor Beer 6-pack', amount: 6.00),
-          ReceiptLineItem(name: 'Fresh Vegetables', amount: 4.25),
-          ReceiptLineItem(name: 'Cooking Oil 2L', amount: 5.90),
-        ],
-        subtotal: 28.25,
-        tax: 2.83,
-        taxLabel: 'VAT (10%)',
-        total: 31.08,
-      );
+    merchant: 'Lucky Supermarket',
+    location: 'Sihanouk Blvd, Phnom Penh',
+    dateLabel: '19 Jul 2026 · 14:32',
+    categoryLabel: 'Groceries',
+    categoryIcon: LucideIcons.shoppingCart,
+    items: [
+      ReceiptLineItem(name: 'Jasmine Rice 5kg', amount: 8.50),
+      ReceiptLineItem(name: 'Fresh Milk 1L', amount: 3.60, quantity: 2),
+      ReceiptLineItem(name: 'Angkor Beer 6-pack', amount: 6.00),
+      ReceiptLineItem(name: 'Fresh Vegetables', amount: 4.25),
+      ReceiptLineItem(name: 'Cooking Oil 2L', amount: 5.90),
+    ],
+    subtotal: 28.25,
+    tax: 2.83,
+    taxLabel: 'VAT (10%)',
+    total: 31.08,
+  );
 }

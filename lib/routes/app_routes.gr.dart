@@ -251,6 +251,22 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [WalletsScreen]
+class WalletsRoute extends PageRouteInfo<void> {
+  const WalletsRoute({List<PageRouteInfo>? children})
+    : super(WalletsRoute.name, initialChildren: children);
+
+  static const String name = 'WalletsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const WalletsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [WelcomeScreen]
 class WelcomeRoute extends PageRouteInfo<void> {
   const WelcomeRoute({List<PageRouteInfo>? children})

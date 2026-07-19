@@ -10,11 +10,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 /// inside the frame to hint at how to align the paper. Phase 1 UI only: there
 /// is no live camera feed behind it.
 class ScanFrame extends StatelessWidget {
-  const ScanFrame({
-    super.key,
-    required this.ambient,
-    this.scanning = false,
-  });
+  const ScanFrame({super.key, required this.ambient, this.scanning = false});
 
   /// Looping 0..1 value driving the sweeping scan line.
   final Animation<double> ambient;
@@ -140,10 +136,7 @@ class _SpotlightPainter extends CustomPainter {
       ..addRect(Offset.zero & size)
       ..addRRect(rrect)
       ..fillType = PathFillType.evenOdd;
-    canvas.drawPath(
-      scrim,
-      Paint()..color = const Color(0xE6041A11),
-    );
+    canvas.drawPath(scrim, Paint()..color = const Color(0xE6041A11));
 
     // Thin frame outline.
     canvas.drawRRect(
@@ -223,7 +216,11 @@ class _GhostReceipt extends StatelessWidget {
     );
   }
 
-  Widget _bar({double widthFactor = 1, double height = 6, bool center = false}) {
+  Widget _bar({
+    double widthFactor = 1,
+    double height = 6,
+    bool center = false,
+  }) {
     final bar = Container(
       height: height,
       decoration: BoxDecoration(

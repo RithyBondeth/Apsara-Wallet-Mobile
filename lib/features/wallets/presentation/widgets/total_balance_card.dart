@@ -96,29 +96,38 @@ class TotalBalanceCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        'KHR',
-                        style: AppFont.titleMedium.copyWith(
-                          color: AppGradients.goldLight,
-                          fontWeight: FontWeight.w700,
-                        ),
+                  // Scale the balance down on narrow cards / large amounts so
+                  // the KHR readout never overflows.
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            'KHR',
+                            style: AppFont.titleMedium.copyWith(
+                              color: AppGradients.goldLight,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(
+                            balanceHidden
+                                ? '••••••••'
+                                : formatKhr(data.totalBalanceKhr),
+                            style: AppFont.headingLarge.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Text(
-                        balanceHidden
-                            ? '••••••••'
-                            : formatKhr(data.totalBalanceKhr),
-                        style: AppFont.headingLarge.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(

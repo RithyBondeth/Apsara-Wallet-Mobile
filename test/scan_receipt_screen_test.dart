@@ -37,31 +37,35 @@ void main() {
     addTearDown(() => FlutterError.onError = oldOnError);
   });
 
-  testWidgets('Scan simulates OCR and reveals the extracted receipt',
-      (tester) async {
+  testWidgets('Scan screen builds with the capture chrome', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(_wrap(const ScanReceiptScreen()));
-    await tester.pump(const Duration(milliseconds: 900)); // intro cascade
+    // No camera plugin in the test host — the screen must still build and show
+    // its controls rather than crashing.
+    await tester.pump(const Duration(milliseconds: 900));
 
-    // Capture phase: viewfinder chrome is present, no review sheet yet.
+    expect(find.byType(ScanReceiptScreen), findsOneWidget);
     expect(find.byType(ScanCaptureControls), findsOneWidget);
-    expect(find.text('Align the receipt within the frame'), findsOneWidget);
+    expect(find.text('Scan Receipt'), findsOneWidget);
+    expect(find.text('Gallery'), findsOneWidget);
+    expect(find.text('Manual'), findsOneWidget);
     expect(find.byType(ReceiptReviewSheet), findsNothing);
+  });
 
-    // Begin a scan (Gallery import runs the same extract flow as the shutter).
-    await tester.tap(find.text('Gallery'));
-    await tester.pump(); // -> analyzing
-    expect(find.text('Reading your receipt…'), findsOneWidget);
+  testWidgets('Manual entry opens the editable review sheet', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    await tester.pumpWidget(_wrap(const ScanReceiptScreen()));
+    await tester.pump(const Duration(milliseconds: 900));
 
-    // Let the simulated OCR finish and the sheet slide up.
-    await tester.pump(const Duration(milliseconds: 1800)); // OCR delay
-    await tester.pump(const Duration(milliseconds: 700)); // reveal animation
+    await tester.tap(find.text('Manual'));
+    await tester.pump(); // start reveal
+    await tester.pump(const Duration(milliseconds: 700)); // reveal animates in
 
-    // Review phase: extracted merchant + totals are shown.
     expect(find.byType(ReceiptReviewSheet), findsOneWidget);
-    expect(find.text('Receipt scanned'), findsOneWidget);
-    expect(find.text('Lucky Supermarket'), findsOneWidget);
+    expect(find.text('Review receipt'), findsOneWidget);
     expect(find.text('Save Expense'), findsOneWidget);
-    expect(find.text('\$31.08'), findsOneWidget); // total
+    // Editable form fields are present (merchant, date, items, total).
+    expect(find.byType(TextField), findsWidgets);
+    expect(find.text('Add item'), findsOneWidget);
   });
 }

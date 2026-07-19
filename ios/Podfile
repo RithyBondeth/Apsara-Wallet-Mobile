@@ -44,4 +44,7 @@ post_install do |installer|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.5'
     end
   end
+  # NOTE: Google ML Kit ships no iOS-Simulator framework slice, so this app
+  # cannot run on the iOS Simulator — test OCR on a physical iPhone (or use
+  # the Android emulator, which ML Kit does support). Device builds are fine.
 end

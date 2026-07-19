@@ -15,6 +15,7 @@ class ScanCaptureControls extends StatelessWidget {
     required this.onGallery,
     required this.onManual,
     this.busy = false,
+    this.captureEnabled = true,
   });
 
   final VoidCallback onCapture;
@@ -23,6 +24,10 @@ class ScanCaptureControls extends StatelessWidget {
 
   /// Disables the shutter while a scan is being processed.
   final bool busy;
+
+  /// Whether the camera is ready — dims the shutter when it isn't (the
+  /// gallery / manual paths still work).
+  final bool captureEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +40,11 @@ class ScanCaptureControls extends StatelessWidget {
           label: 'Gallery',
           onTap: onGallery,
         ),
-        _ShutterButton(onTap: busy ? null : onCapture, busy: busy),
+        _ShutterButton(
+          onTap: (busy || !captureEnabled) ? null : onCapture,
+          busy: busy,
+          enabled: captureEnabled,
+        ),
         _SideButton(
           icon: LucideIcons.pencilLine,
           label: 'Manual',
@@ -47,51 +56,59 @@ class ScanCaptureControls extends StatelessWidget {
 }
 
 class _ShutterButton extends StatelessWidget {
-  const _ShutterButton({required this.onTap, required this.busy});
+  const _ShutterButton({
+    required this.onTap,
+    required this.busy,
+    this.enabled = true,
+  });
 
   final VoidCallback? onTap;
   final bool busy;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    return PressScale(
-      onTap: onTap,
-      pressedScale: 0.92,
-      child: Container(
-        width: 78,
-        height: 78,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: AppGradients.goldCore, width: 3),
-          boxShadow: [
-            BoxShadow(
-              color: AppGradients.goldCore.withValues(alpha: 0.35),
-              blurRadius: 20,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.all(6),
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
+    return Opacity(
+      opacity: enabled ? 1 : 0.45,
+      child: PressScale(
+        onTap: onTap,
+        pressedScale: 0.92,
+        child: Container(
+          width: 78,
+          height: 78,
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: AppGradients.goldFoil,
+            border: Border.all(color: AppGradients.goldCore, width: 3),
+            boxShadow: [
+              BoxShadow(
+                color: AppGradients.goldCore.withValues(alpha: 0.35),
+                blurRadius: 20,
+                spreadRadius: 1,
+              ),
+            ],
           ),
-          child: Center(
-            child: busy
-                ? const SizedBox(
-                    width: 26,
-                    height: 26,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.6,
-                      valueColor: AlwaysStoppedAnimation(Color(0xFF063D28)),
+          padding: const EdgeInsets.all(6),
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: AppGradients.goldFoil,
+            ),
+            child: Center(
+              child: busy
+                  ? const SizedBox(
+                      width: 26,
+                      height: 26,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.6,
+                        valueColor: AlwaysStoppedAnimation(Color(0xFF063D28)),
+                      ),
+                    )
+                  : const Icon(
+                      LucideIcons.scanLine,
+                      color: Color(0xFF063D28),
+                      size: 30,
                     ),
-                  )
-                : const Icon(
-                    LucideIcons.scanLine,
-                    color: Color(0xFF063D28),
-                    size: 30,
-                  ),
+            ),
           ),
         ),
       ),
@@ -126,9 +143,7 @@ class _SideButton extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.10),
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.18),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
               ),
               child: Icon(
                 icon,

@@ -1,26 +1,33 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/scan/data/scan_receipt_mock_data.dart';
+import 'package:apsara_wallet_mobile/core/utils/logger.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_scanner_service.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/scanned_receipt.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/receipt_review_sheet.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_capture_controls.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_frame.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Scan Receipt — a camera-style viewfinder that (in Phase 1) simulates an
-/// OCR scan: tap the shutter, watch the reticle read the page, then review the
-/// extracted merchant, items and totals before saving as an expense.
+/// Scan Receipt — a live camera viewfinder that captures a receipt, runs
+/// on-device OCR (Google ML Kit) over the photo, parses the recognised text
+/// into a structured expense and lets the user review/edit it before saving.
 ///
-/// UI only — no real camera or OCR is wired; the shutter reveals mock data.
+/// Images can also be imported from the gallery, and the whole flow degrades
+/// gracefully when the camera is unavailable or permission is denied (import
+/// from gallery / enter manually still work).
 @RoutePage()
 class ScanReceiptScreen extends ConsumerStatefulWidget {
   const ScanReceiptScreen({super.key});
@@ -31,8 +38,10 @@ class ScanReceiptScreen extends ConsumerStatefulWidget {
 
 enum _ScanPhase { capture, analyzing, review }
 
+enum _CamStatus { initializing, ready, denied, unavailable }
+
 class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   /// Entrance cascade for the chrome (title, instruction, controls).
   late final AnimationController _intro;
 
@@ -42,14 +51,20 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
   /// Slides the review sheet up and dims the viewfinder behind it.
   late final AnimationController _reveal;
 
-  final ScannedReceipt _receipt = ScannedReceipt.sample;
+  final ReceiptScannerService _scanner = ReceiptScannerService();
+  final ImagePicker _picker = ImagePicker();
+
+  CameraController? _camera;
+  _CamStatus _camStatus = _CamStatus.initializing;
 
   _ScanPhase _phase = _ScanPhase.capture;
   bool _flashOn = false;
+  ScannedReceipt _receipt = ScannedReceipt.empty();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _intro = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
@@ -58,29 +73,145 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
       vsync: this,
       duration: const Duration(milliseconds: 2600),
     )..repeat();
-    _reveal = AnimationController(
-      vsync: this,
-      duration: AppDurations.slow,
-    );
+    _reveal = AnimationController(vsync: this, duration: AppDurations.slow);
+    _initCamera();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _intro.dispose();
     _ambient.dispose();
     _reveal.dispose();
+    _camera?.dispose();
+    _scanner.dispose();
     super.dispose();
   }
 
-  void _beginScan() {
-    if (_phase != _ScanPhase.capture) return;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final camera = _camera;
+    if (camera == null || !camera.value.isInitialized) return;
+    // Release the camera when backgrounded, re-acquire on resume.
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      camera.dispose();
+      _camera = null;
+    } else if (state == AppLifecycleState.resumed) {
+      _initCamera();
+    }
+  }
+
+  Future<void> _initCamera() async {
+    try {
+      final status = await Permission.camera.request();
+      if (!status.isGranted) {
+        if (mounted) setState(() => _camStatus = _CamStatus.denied);
+        return;
+      }
+
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        if (mounted) setState(() => _camStatus = _CamStatus.unavailable);
+        return;
+      }
+      final back = cameras.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.back,
+        orElse: () => cameras.first,
+      );
+
+      final controller = CameraController(
+        back,
+        ResolutionPreset.high,
+        enableAudio: false,
+        imageFormatGroup: ImageFormatGroup.jpeg,
+      );
+      await controller.initialize();
+      if (!mounted) {
+        await controller.dispose();
+        return;
+      }
+      setState(() {
+        _camera = controller;
+        _camStatus = _CamStatus.ready;
+      });
+    } catch (e) {
+      Logger.error('Camera init failed: $e');
+      if (mounted) setState(() => _camStatus = _CamStatus.unavailable);
+    }
+  }
+
+  Future<void> _capture() async {
+    final camera = _camera;
+    if (_phase != _ScanPhase.capture ||
+        camera == null ||
+        !camera.value.isInitialized ||
+        camera.value.isTakingPicture) {
+      return;
+    }
     setState(() => _phase = _ScanPhase.analyzing);
-    // Simulate the OCR read, then reveal the extracted result.
-    Future.delayed(const Duration(milliseconds: 1700), () {
-      if (!mounted || _phase != _ScanPhase.analyzing) return;
-      setState(() => _phase = _ScanPhase.review);
-      _reveal.forward();
+    try {
+      final shot = await camera.takePicture();
+      await _processImage(shot.path);
+    } catch (e) {
+      Logger.error('Capture failed: $e');
+      _failScan('Could not capture the photo. Please try again.');
+    }
+  }
+
+  Future<void> _pickFromGallery() async {
+    if (_phase == _ScanPhase.analyzing) return;
+    try {
+      final file = await _picker.pickImage(source: ImageSource.gallery);
+      if (file == null) return; // user cancelled
+      setState(() => _phase = _ScanPhase.analyzing);
+      await _processImage(file.path);
+    } catch (e) {
+      Logger.error('Gallery import failed: $e');
+      _failScan('Could not open that image. Please try another.');
+    }
+  }
+
+  Future<void> _processImage(String path) async {
+    try {
+      final receipt = await _scanner.scanImage(path);
+      if (!mounted) return;
+      setState(() {
+        _receipt = receipt;
+        _phase = _ScanPhase.review;
+      });
+      _reveal.forward(from: 0);
+    } catch (e) {
+      Logger.error('OCR failed: $e');
+      _failScan('Could not read the receipt. Try again or enter it manually.');
+    }
+  }
+
+  /// Open the review sheet with a blank receipt for hand entry.
+  void _manualEntry() {
+    setState(() {
+      _receipt = ScannedReceipt.empty();
+      _phase = _ScanPhase.review;
     });
+    _reveal.forward(from: 0);
+  }
+
+  void _failScan(String message) {
+    if (!mounted) return;
+    setState(() => _phase = _ScanPhase.capture);
+    _showSnack(message, AppGradients.emeraldDeep, LucideIcons.circleAlert);
+  }
+
+  Future<void> _toggleFlash() async {
+    final camera = _camera;
+    if (camera == null || !camera.value.isInitialized) return;
+    final next = !_flashOn;
+    try {
+      await camera.setFlashMode(next ? FlashMode.torch : FlashMode.off);
+      if (mounted) setState(() => _flashOn = next);
+    } catch (e) {
+      Logger.error('Flash toggle failed: $e');
+    }
   }
 
   void _retake() {
@@ -90,26 +221,32 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
     });
   }
 
-  void _save() {
+  void _save(ScannedReceipt receipt) {
+    _showSnack('Expense saved', AppGradients.emeraldCore, LucideIcons.check);
+    context.router.maybePop();
+  }
+
+  void _showSnack(String message, Color color, IconData icon) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          backgroundColor: AppGradients.emeraldCore,
+          backgroundColor: color,
           content: Row(
             children: [
-              const Icon(LucideIcons.check, color: Colors.white, size: 18),
+              Icon(icon, color: Colors.white, size: 18),
               const SizedBox(width: AppSpacing.sm),
-              Text(
-                'Expense saved',
-                style: AppFont.bodyMedium.copyWith(color: Colors.white),
+              Expanded(
+                child: Text(
+                  message,
+                  style: AppFont.bodyMedium.copyWith(color: Colors.white),
+                ),
               ),
             ],
           ),
         ),
       );
-    context.router.maybePop();
   }
 
   @override
@@ -123,16 +260,8 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
         body: Stack(
           fit: StackFit.expand,
           children: [
-            // --- Camera "feed" (dim emerald gradient stands in for the lens).
-            const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF0A2A1C), Color(0xFF041A11)],
-                ),
-              ),
-            ),
+            // --- Live camera feed (or a graceful fallback backdrop).
+            _CameraLayer(controller: _camera, status: _camStatus),
 
             // --- Viewfinder + chrome, faded and locked out during review.
             AnimatedBuilder(
@@ -148,13 +277,16 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
                 fit: StackFit.expand,
                 children: [
                   ScanFrame(ambient: _ambient, scanning: analyzing),
+                  if (_camStatus == _CamStatus.denied ||
+                      _camStatus == _CamStatus.unavailable)
+                    _CameraNotice(status: _camStatus),
                   SafeArea(
                     child: Column(
                       children: [
                         _TopBar(
                           flashOn: _flashOn,
-                          onToggleFlash: () =>
-                              setState(() => _flashOn = !_flashOn),
+                          flashEnabled: _camStatus == _CamStatus.ready,
+                          onToggleFlash: _toggleFlash,
                         ),
                         const Spacer(),
                         FadeSlideIn(
@@ -178,9 +310,10 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
                             ),
                             child: ScanCaptureControls(
                               busy: analyzing,
-                              onCapture: _beginScan,
-                              onGallery: _beginScan,
-                              onManual: () => context.router.maybePop(),
+                              captureEnabled: _camStatus == _CamStatus.ready,
+                              onCapture: _capture,
+                              onGallery: _pickFromGallery,
+                              onManual: _manualEntry,
                             ),
                           ),
                         ),
@@ -223,7 +356,7 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
                   ),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.86,
+                      maxHeight: MediaQuery.of(context).size.height * 0.9,
                     ),
                     child: ReceiptReviewSheet(
                       receipt: _receipt,
@@ -240,10 +373,125 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
   }
 }
 
+/// Paints the live camera preview (cover-fit) when ready, otherwise a dim
+/// emerald backdrop so the reticle still reads.
+class _CameraLayer extends StatelessWidget {
+  const _CameraLayer({required this.controller, required this.status});
+
+  final CameraController? controller;
+  final _CamStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final camera = controller;
+    if (status == _CamStatus.ready &&
+        camera != null &&
+        camera.value.isInitialized) {
+      final media = MediaQuery.of(context).size;
+      var scale = media.aspectRatio * camera.value.aspectRatio;
+      if (scale < 1) scale = 1 / scale;
+      return ClipRect(
+        child: Transform.scale(
+          scale: scale,
+          child: Center(child: CameraPreview(camera)),
+        ),
+      );
+    }
+    return const DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFF0A2A1C), Color(0xFF041A11)],
+        ),
+      ),
+    );
+  }
+}
+
+/// Message shown inside the frame when the camera can't be used, pointing the
+/// user at the still-working Gallery / Manual options.
+class _CameraNotice extends StatelessWidget {
+  const _CameraNotice({required this.status});
+
+  final _CamStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final denied = status == _CamStatus.denied;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.huge),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              denied ? LucideIcons.cameraOff : LucideIcons.circleAlert,
+              color: AppGradients.goldLight,
+              size: 34,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              denied ? 'Camera access needed' : 'Camera unavailable',
+              textAlign: TextAlign.center,
+              style: AppFont.titleSmall.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              denied
+                  ? 'Enable camera access in Settings, or import a receipt from your gallery.'
+                  : 'Import a receipt from your gallery or enter it manually.',
+              textAlign: TextAlign.center,
+              style: AppFont.bodySmall.copyWith(
+                color: Colors.white.withValues(alpha: 0.7),
+              ),
+            ),
+            if (denied) ...[
+              const SizedBox(height: AppSpacing.md),
+              PressScale(
+                onTap: openAppSettings,
+                pressedScale: 0.95,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.sm,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(AppRadius.full),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Text(
+                    'Open Settings',
+                    style: AppFont.labelLarge.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.flashOn, required this.onToggleFlash});
+  const _TopBar({
+    required this.flashOn,
+    required this.flashEnabled,
+    required this.onToggleFlash,
+  });
 
   final bool flashOn;
+  final bool flashEnabled;
   final VoidCallback onToggleFlash;
 
   @override
@@ -268,10 +516,13 @@ class _TopBar extends StatelessWidget {
               ),
             ),
           ),
-          _CircleIconButton(
-            icon: flashOn ? LucideIcons.zap : LucideIcons.zapOff,
-            active: flashOn,
-            onTap: onToggleFlash,
+          Opacity(
+            opacity: flashEnabled ? 1 : 0.4,
+            child: _CircleIconButton(
+              icon: flashOn ? LucideIcons.zap : LucideIcons.zapOff,
+              active: flashOn,
+              onTap: flashEnabled ? onToggleFlash : () {},
+            ),
           ),
         ],
       ),
@@ -305,9 +556,7 @@ class _CircleIconButton extends StatelessWidget {
                 ? AppGradients.goldCore.withValues(alpha: 0.9)
                 : Colors.white.withValues(alpha: 0.12),
             shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.18),
-            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
           ),
           child: Icon(
             icon,

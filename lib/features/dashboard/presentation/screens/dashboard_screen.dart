@@ -73,11 +73,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       context.router.push(const AnalyticsRoute());
       return;
     }
+    if (index == 2) {
+      context.router.push(const WalletsRoute());
+      return;
+    }
     if (index == 3) {
       context.router.push(const ProfileRoute());
       return;
     }
-    // Wallets screen lands in a later Phase 1 gate.
     setState(() => _navIndex = index);
   }
 

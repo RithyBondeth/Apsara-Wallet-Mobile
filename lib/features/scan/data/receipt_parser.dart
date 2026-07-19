@@ -69,7 +69,7 @@ class ReceiptParser {
     'qty',
   ];
 
-  static const Map<String, ({String label, dynamic icon})> _categoryRules = {
+  static const Map<String, ({String label, IconData icon})> _categoryRules = {
     'supermarket': (label: 'Groceries', icon: LucideIcons.shoppingCart),
     'market': (label: 'Groceries', icon: LucideIcons.shoppingCart),
     'grocery': (label: 'Groceries', icon: LucideIcons.shoppingCart),
@@ -128,9 +128,7 @@ class ReceiptParser {
 
   static ECurrencyType _detectCurrency(String text) {
     final lower = text.toLowerCase();
-    if (text.contains('៛') ||
-        lower.contains('khr') ||
-        lower.contains('riel')) {
+    if (text.contains('៛') || lower.contains('khr') || lower.contains('riel')) {
       // A '$' anywhere usually means the total is still in USD.
       if (!text.contains(r'$') && !lower.contains('usd')) {
         return ECurrencyType.khr;
@@ -162,9 +160,11 @@ class ReceiptParser {
     if (letters.isNotEmpty && upper == letters.length && s.length > 3) {
       return s
           .split(RegExp(r'\s+'))
-          .map((w) => w.isEmpty
-              ? w
-              : '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}')
+          .map(
+            (w) => w.isEmpty
+                ? w
+                : '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}',
+          )
           .join(' ');
     }
     return s;
@@ -205,8 +205,8 @@ class ReceiptParser {
           final label = lower.contains('vat')
               ? 'VAT'
               : lower.contains('gst')
-                  ? 'GST'
-                  : 'Tax';
+              ? 'GST'
+              : 'Tax';
           return (label: label, amount: amt);
         }
       }
@@ -219,19 +219,27 @@ class ReceiptParser {
     for (final line in lines) {
       final lower = line.toLowerCase();
       if (_excludeItemKeys.any((k) => lower.contains(k))) continue;
+      if (_looksLikePhone(line)) continue;
 
-      final amt = _lastAmountIn(line);
+      final matches = _amount.allMatches(line).toList();
+      if (matches.isEmpty) continue;
+      // The price is the last amount on the line; strip only that, so numbers
+      // inside the name ("6-pack", "1L") survive.
+      final price = matches.last;
+      final amt = _toDouble(price.group(1)!);
       if (amt == null || amt == 0) continue;
 
-      // Strip the trailing price to recover the item name.
-      var name = line.replaceAll(_amount, '').trim();
+      var name = line.substring(0, price.start).trim();
       name = name.replaceAll(RegExp(r'[\s.·:x*@-]+$'), '').trim();
-      // Detect a leading/embedded quantity like "2 x" or "x2".
+
+      // Detect a quantity like "2 x" or "x2" and lift it off the name.
       var quantity = 1;
-      final qtyMatch =
-          RegExp(r'(?:^|\s)(\d{1,2})\s*[xX*]\b|\b[xX](\d{1,2})\b').firstMatch(name);
+      final qtyMatch = RegExp(
+        r'(?:^|\s)(\d{1,2})\s*[xX*]\b|\b[xX](\d{1,2})\b',
+      ).firstMatch(name);
       if (qtyMatch != null) {
-        quantity = int.tryParse(qtyMatch.group(1) ?? qtyMatch.group(2) ?? '1') ?? 1;
+        quantity =
+            int.tryParse(qtyMatch.group(1) ?? qtyMatch.group(2) ?? '1') ?? 1;
         name = name.replaceAll(qtyMatch.group(0)!, '').trim();
       }
 
@@ -241,7 +249,13 @@ class ReceiptParser {
     return items;
   }
 
-  static ({String label, dynamic icon}) _inferCategory(
+  // A phone/reference number: a long run of digits (with spaces/dashes) that
+  // isn't a price. Keeps "Tel: 023 123 456" out of the item list.
+  static bool _looksLikePhone(String line) =>
+      RegExp(r'\d[\d\s.\-]{6,}\d').hasMatch(line) &&
+      !RegExp(r'\d[.,]\d{2}\b').hasMatch(line);
+
+  static ({String label, IconData icon}) _inferCategory(
     String? merchant,
     String fullText,
   ) {
@@ -259,7 +273,7 @@ class ReceiptParser {
     for (final line in lines) {
       for (final m in _amount.allMatches(line)) {
         final v = _toDouble(m.group(1)!);
-        if (v != null && (best == null || v > best!)) best = v;
+        if (v != null && (best == null || v > best)) best = v;
       }
     }
     return best;
