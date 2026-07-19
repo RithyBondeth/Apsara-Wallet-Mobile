@@ -10,7 +10,11 @@ import 'package:apsara_wallet_mobile/features/auth/presentation/screens/register
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/splash_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/welcome_screen.dart';
+import 'package:apsara_wallet_mobile/features/analytics/presentation/screens/analytics_screen.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:apsara_wallet_mobile/features/scan/presentation/screens/scan_receipt_screen.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:auto_route/auto_route.dart';
 
 part 'app_routes.gr.dart';
@@ -51,5 +55,16 @@ class AppRouter extends RootStackRouter {
       path: RoutePathConstant.dashboardPath,
       initial: true,
     ),
+    AutoRoute(page: AnalyticsRoute.page, path: RoutePathConstant.analyticsPath),
+    AutoRoute(
+      page: ScanReceiptRoute.page,
+      path: RoutePathConstant.scanReceiptPath,
+    ),
+
+    // ==================================================
+    // PROFILE ROUTES
+    // ==================================================
+    AutoRoute(page: ProfileRoute.page, path: RoutePathConstant.profilePath),
+    AutoRoute(page: SettingsRoute.page, path: RoutePathConstant.settingsPath),
   ];
 }

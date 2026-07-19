@@ -18,6 +18,7 @@ class AssetPathConstant {
       'assets/backgrounds/sidemenu-bg.png';
   static const String transactionBackground =
       'assets/backgrounds/transaction-bg.png';
+  static const String walletBackground = 'assets/backgrounds/wallet-bg.png';
 
   // Onboarding tour pages (1: temple scene, 2: cream lotus, 3: dark emerald)
   static const String onBoarding1 =

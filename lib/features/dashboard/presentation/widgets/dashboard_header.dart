@@ -10,6 +10,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/controls/language_switcher.dart';
 
 /// The emerald hero at the top of the dashboard: greeting, notifications,
 /// the drifting apsara brand mark, and the total-balance readout with a
@@ -108,6 +109,8 @@ class DashboardHeader extends StatelessWidget {
             ],
           ),
         ),
+        const LanguageSwitcher.compact(),
+        const SizedBox(width: AppSpacing.sm),
         _BellButton(onTap: onTapBell),
       ],
     );

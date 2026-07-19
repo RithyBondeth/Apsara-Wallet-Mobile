@@ -7,6 +7,7 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/brand/aurora_background.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/controls/language_switcher.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 
 /// The house chrome for every auth-flow screen: living aurora backdrop,
@@ -80,16 +81,21 @@ class _AuthFlowScaffoldState extends State<AuthFlowScaffold>
   Widget build(BuildContext context) {
     final blocks = <Widget>[
       const SizedBox(height: AppSpacing.lg),
-      if (widget.showBack)
-        _enter(
-          0.0,
-          0.35,
-          Align(
-            alignment: Alignment.centerLeft,
-            child: _CircleBackButton(onTap: () => context.router.maybePop()),
-          ),
-          offset: const Offset(-16, 0),
+      // Top bar: optional back button on the left, language switcher always on
+      // the right so every auth screen can change language.
+      _enter(
+        0.0,
+        0.35,
+        Row(
+          children: [
+            if (widget.showBack)
+              _CircleBackButton(onTap: () => context.router.maybePop()),
+            const Spacer(),
+            const LanguageSwitcher(),
+          ],
         ),
+        offset: const Offset(0, -12),
+      ),
       const SizedBox(height: AppSpacing.xl),
       _enter(
         0.04,

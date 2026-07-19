@@ -7,12 +7,13 @@ import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/dashboard_bottom_bar.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/dashboard_header.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/month_overview_card.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/quick_actions_row.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/recent_transactions_section.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 /// The home dashboard: emerald hero balance, quick actions, this-month
 /// overview and recent activity — all mock data for the Phase 1 UI build.
@@ -66,6 +67,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     super.dispose();
   }
 
+  void _onNavSelect(int index) {
+    if (index == _navIndex) return;
+    if (index == 1) {
+      context.router.push(const AnalyticsRoute());
+      return;
+    }
+    if (index == 3) {
+      context.router.push(const ProfileRoute());
+      return;
+    }
+    // Wallets screen lands in a later Phase 1 gate.
+    setState(() => _navIndex = index);
+  }
+
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
@@ -73,11 +88,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        floatingActionButton: DashboardCenterButton(onTap: () {}),
+        floatingActionButton: AppBottomBarCenterButton(
+          onTap: () => context.router.push(const ScanReceiptRoute()),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: DashboardBottomBar(
+        bottomNavigationBar: AppBottomBar(
           currentIndex: _navIndex,
-          onSelect: (i) => setState(() => _navIndex = i),
+          onSelect: _onNavSelect,
         ),
         body: Stack(
           fit: StackFit.expand,

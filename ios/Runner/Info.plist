@@ -4,6 +4,10 @@
 	<dict>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
+		<key>NSCameraUsageDescription</key>
+		<string>Apsara Wallet uses the camera to scan receipts and capture expenses.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Apsara Wallet needs access to your photos to import receipt images.</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

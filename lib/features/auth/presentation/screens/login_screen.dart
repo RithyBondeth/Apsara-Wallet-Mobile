@@ -12,6 +12,7 @@ import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/brand/aurora_background.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/social_button.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/controls/language_switcher.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/layout/or_divider.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
@@ -101,7 +102,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: AppSpacing.xxxl),
+                    const SizedBox(height: AppSpacing.xl),
+
+                    // --- Language switcher ---------------------------------
+                    _enter(
+                      0.0,
+                      0.35,
+                      const Align(
+                        alignment: Alignment.centerRight,
+                        child: LanguageSwitcher(),
+                      ),
+                      offset: const Offset(0, -12),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
 
                     // --- Heading -------------------------------------------
                     _enter(

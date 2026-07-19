@@ -7,11 +7,12 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 
 /// Frosted bottom navigation with a docked emerald action button.
 ///
-/// The centre "+" is supplied separately as the [Scaffold.floatingActionButton]
-/// (see [DashboardCenterButton]) so it can sit in the notch; this bar only
+/// Shared across the main tab screens (Dashboard, Analytics, …). The centre
+/// "+" is supplied separately as the [Scaffold.floatingActionButton]
+/// (see [AppBottomBarCenterButton]) so it can sit in the notch; this bar only
 /// paints the four tabs around it.
-class DashboardBottomBar extends StatelessWidget {
-  const DashboardBottomBar({
+class AppBottomBar extends StatelessWidget {
+  const AppBottomBar({
     super.key,
     required this.currentIndex,
     required this.onSelect,
@@ -111,8 +112,8 @@ class _NavItem extends StatelessWidget {
 }
 
 /// The raised emerald "+" that docks into the nav-bar notch.
-class DashboardCenterButton extends StatelessWidget {
-  const DashboardCenterButton({super.key, this.onTap});
+class AppBottomBarCenterButton extends StatelessWidget {
+  const AppBottomBarCenterButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 

@@ -20,4 +20,13 @@ class RoutePathConstant {
   // DASHBOARD ROUTES
   // ==================================================
   static const String dashboardPath = '/dashboard';
+  static const String analyticsPath = '/analytics';
+  static const String scanReceiptPath = '/scanReceipt';
+  static const String walletsPath = '/wallets';
+
+  // ==================================================
+  // PROFILE ROUTES
+  // ==================================================
+  static const String profilePath = '/profile';
+  static const String settingsPath = '/settings';
 }

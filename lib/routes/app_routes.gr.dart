@@ -11,6 +11,22 @@
 part of 'app_routes.dart';
 
 /// generated route for
+/// [AnalyticsScreen]
+class AnalyticsRoute extends PageRouteInfo<void> {
+  const AnalyticsRoute({List<PageRouteInfo>? children})
+    : super(AnalyticsRoute.name, initialChildren: children);
+
+  static const String name = 'AnalyticsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AnalyticsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [BiometricScreen]
 class BiometricRoute extends PageRouteInfo<void> {
   const BiometricRoute({List<PageRouteInfo>? children})
@@ -139,6 +155,22 @@ class PinSetupRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ProfileScreen]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+    : super(ProfileRoute.name, initialChildren: children);
+
+  static const String name = 'ProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfileScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [RegisterScreen]
 class RegisterRoute extends PageRouteInfo<void> {
   const RegisterRoute({List<PageRouteInfo>? children})
@@ -166,6 +198,38 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ResetPasswordScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [ScanReceiptScreen]
+class ScanReceiptRoute extends PageRouteInfo<void> {
+  const ScanReceiptRoute({List<PageRouteInfo>? children})
+    : super(ScanReceiptRoute.name, initialChildren: children);
+
+  static const String name = 'ScanReceiptRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ScanReceiptScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SettingsScreen]
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute({List<PageRouteInfo>? children})
+    : super(SettingsRoute.name, initialChildren: children);
+
+  static const String name = 'SettingsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingsScreen();
     },
   );
 }
