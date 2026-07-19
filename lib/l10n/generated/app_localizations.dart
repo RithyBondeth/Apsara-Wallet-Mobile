@@ -638,6 +638,30 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get commonSave;
 
+  /// No description provided for @analyticsRangeWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This Week'**
+  String get analyticsRangeWeek;
+
+  /// No description provided for @analyticsRangeMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This Month'**
+  String get analyticsRangeMonth;
+
+  /// No description provided for @analyticsRangeYear.
+  ///
+  /// In en, this message translates to:
+  /// **'This Year'**
+  String get analyticsRangeYear;
+
+  /// No description provided for @analyticsSelectRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Range'**
+  String get analyticsSelectRange;
+
   /// No description provided for @budgetTitle.
   ///
   /// In en, this message translates to:

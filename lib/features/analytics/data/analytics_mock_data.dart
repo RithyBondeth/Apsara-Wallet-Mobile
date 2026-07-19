@@ -37,8 +37,6 @@ class ExpenseCategory {
 /// Everything the Analytics tabs render.
 class AnalyticsData {
   const AnalyticsData({
-    required this.rangeLabel,
-    required this.periodLabel,
     required this.totalExpenseKhr,
     required this.categories,
     required this.dailyTrend,
@@ -46,8 +44,6 @@ class AnalyticsData {
     required this.trendAxisLabels,
   });
 
-  final String rangeLabel;
-  final String periodLabel;
   final int totalExpenseKhr;
   final List<ExpenseCategory> categories;
 
@@ -61,8 +57,6 @@ class AnalyticsData {
   final List<String> trendAxisLabels;
 
   static const AnalyticsData sample = AnalyticsData(
-    rangeLabel: 'This Month',
-    periodLabel: 'May 2024',
     totalExpenseKhr: 1265700,
     categories: [
       ExpenseCategory(

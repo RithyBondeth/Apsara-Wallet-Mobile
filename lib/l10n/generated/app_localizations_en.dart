@@ -286,6 +286,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonSave => 'Save';
 
   @override
+  String get analyticsRangeWeek => 'This Week';
+
+  @override
+  String get analyticsRangeMonth => 'This Month';
+
+  @override
+  String get analyticsRangeYear => 'This Year';
+
+  @override
+  String get analyticsSelectRange => 'Time Range';
+
+  @override
   String get budgetTitle => 'Budget';
 
   @override

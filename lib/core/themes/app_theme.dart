@@ -1,8 +1,127 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_font.dart';
+import 'app_gradients.dart';
 
 class AppTheme {
+  /// Branded Material date picker: emerald header, gold "today" ring,
+  /// soft rounded dialog — shared by light/dark with surface swaps.
+  static DatePickerThemeData _datePickerTheme({
+    required Color background,
+    required Color onSurface,
+    required Color muted,
+  }) {
+    return DatePickerThemeData(
+      backgroundColor: background,
+      surfaceTintColor: Colors.transparent,
+      elevation: 6,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      headerBackgroundColor: AppColors.primary,
+      headerForegroundColor: Colors.white,
+      headerHelpStyle: AppFont.labelMedium.copyWith(
+        color: const Color(0xCCF3F1E7),
+        letterSpacing: 0.4,
+      ),
+      headerHeadlineStyle: AppFont.headingSmall.copyWith(
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+      ),
+      weekdayStyle: AppFont.labelMedium.copyWith(
+        color: muted,
+        fontWeight: FontWeight.w700,
+      ),
+      dayStyle: AppFont.bodyMedium.copyWith(fontWeight: FontWeight.w600),
+      dayForegroundColor: WidgetStateProperty.resolveWith(
+        (states) =>
+            states.contains(WidgetState.selected) ? Colors.white : onSurface,
+      ),
+      dayBackgroundColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? AppColors.primary
+            : Colors.transparent,
+      ),
+      dayOverlayColor: WidgetStatePropertyAll(
+        AppColors.primary.withValues(alpha: 0.08),
+      ),
+      todayForegroundColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? Colors.white
+            : AppColors.primary,
+      ),
+      todayBackgroundColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? AppColors.primary
+            : Colors.transparent,
+      ),
+      todayBorder: const BorderSide(color: AppGradients.goldCore, width: 1.4),
+      yearStyle: AppFont.bodyMedium.copyWith(fontWeight: FontWeight.w600),
+      yearForegroundColor: WidgetStateProperty.resolveWith(
+        (states) =>
+            states.contains(WidgetState.selected) ? Colors.white : onSurface,
+      ),
+      yearBackgroundColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? AppColors.primary
+            : Colors.transparent,
+      ),
+      dividerColor: Colors.transparent,
+      cancelButtonStyle: TextButton.styleFrom(
+        foregroundColor: muted,
+        textStyle: AppFont.labelLarge.copyWith(fontWeight: FontWeight.w600),
+      ),
+      confirmButtonStyle: TextButton.styleFrom(
+        foregroundColor: AppColors.primary,
+        textStyle: AppFont.labelLarge.copyWith(fontWeight: FontWeight.w800),
+      ),
+    );
+  }
+
+  /// Matching time picker (used by Add Transaction's Date & Time row).
+  static TimePickerThemeData _timePickerTheme({
+    required Color background,
+    required Color onSurface,
+    required Color field,
+  }) {
+    return TimePickerThemeData(
+      backgroundColor: background,
+      elevation: 6,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      dialHandColor: AppColors.primary,
+      dialBackgroundColor: field,
+      hourMinuteShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+      ),
+      hourMinuteColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? AppColors.primary.withValues(alpha: 0.12)
+            : field,
+      ),
+      hourMinuteTextColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? AppColors.primary
+            : onSurface,
+      ),
+      dayPeriodColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? AppColors.primary
+            : Colors.transparent,
+      ),
+      dayPeriodTextColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? Colors.white
+            : onSurface,
+      ),
+      cancelButtonStyle: TextButton.styleFrom(
+        foregroundColor: AppColors.textMuted,
+        textStyle: AppFont.labelLarge.copyWith(fontWeight: FontWeight.w600),
+      ),
+      confirmButtonStyle: TextButton.styleFrom(
+        foregroundColor: AppColors.primary,
+        textStyle: AppFont.labelLarge.copyWith(fontWeight: FontWeight.w800),
+      ),
+    );
+  }
+
   // ==================================================
   // LIGHT THEME
   // ==================================================
@@ -66,6 +185,17 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         minimumSize: const Size(double.infinity, 48),
       ),
+    ),
+
+    datePickerTheme: _datePickerTheme(
+      background: AppColors.surface,
+      onSurface: AppColors.textPrimary,
+      muted: AppColors.textMuted,
+    ),
+    timePickerTheme: _timePickerTheme(
+      background: AppColors.surface,
+      onSurface: AppColors.textPrimary,
+      field: AppColors.surfaceVariant,
     ),
   );
 
@@ -132,6 +262,17 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         minimumSize: const Size(double.infinity, 48),
       ),
+    ),
+
+    datePickerTheme: _datePickerTheme(
+      background: const Color(0xFF1E293B),
+      onSurface: Colors.white,
+      muted: const Color(0xFF94A3B8),
+    ),
+    timePickerTheme: _timePickerTheme(
+      background: const Color(0xFF1E293B),
+      onSurface: Colors.white,
+      field: const Color(0xFF33415C),
     ),
   );
 }

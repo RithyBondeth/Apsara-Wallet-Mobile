@@ -290,6 +290,18 @@ class AppLocalizationsKm extends AppLocalizations {
   String get commonSave => 'រក្សាទុក';
 
   @override
+  String get analyticsRangeWeek => 'សប្តាហ៍នេះ';
+
+  @override
+  String get analyticsRangeMonth => 'ខែនេះ';
+
+  @override
+  String get analyticsRangeYear => 'ឆ្នាំនេះ';
+
+  @override
+  String get analyticsSelectRange => 'ជួរពេលវេលា';
+
+  @override
   String get budgetTitle => 'ថវិកា';
 
   @override

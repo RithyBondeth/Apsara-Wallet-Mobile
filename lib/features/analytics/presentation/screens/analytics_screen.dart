@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -39,6 +40,48 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
 
   final AnalyticsData _data = AnalyticsData.sample;
   int _tabIndex = 0;
+
+  /// Filter state (UI-only: changing it relabels the row; the mock series
+  /// stay the same). Anchored to the mock data's month, not "now", so
+  /// goldens don't drift with the test date.
+  _RangeFilter _range = _RangeFilter.month;
+  DateTime _period = DateTime(2024, 5);
+
+  String _rangeLabel(BuildContext context) => switch (_range) {
+        _RangeFilter.week => context.l10n.analyticsRangeWeek,
+        _RangeFilter.month => context.l10n.analyticsRangeMonth,
+        _RangeFilter.year => context.l10n.analyticsRangeYear,
+      };
+
+  String _periodLabel(BuildContext context) => DateFormat.yMMMM(
+        Localizations.localeOf(context).toString(),
+      ).format(_period);
+
+  /// Localized calendar picker — backs both the app-bar calendar button and
+  /// the "May 2024 ›" period stepper.
+  Future<void> _pickPeriod() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _period,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2035),
+    );
+    if (picked == null || !mounted) return;
+    setState(() => _period = picked);
+  }
+
+  Future<void> _pickRange() async {
+    final picked = await showModalBottomSheet<_RangeFilter>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (sheetContext) => _RangeSheet(selected: _range),
+    );
+    if (picked == null || !mounted) return;
+    setState(() => _range = picked);
+  }
 
   @override
   void initState() {
@@ -105,7 +148,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           bottom: false,
           child: Column(
             children: [
-              _AppBar(onTapCalendar: () {}),
+              _AppBar(onTapCalendar: _pickPeriod),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -135,10 +178,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                         start: 0.1,
                         end: 0.6,
                         child: PeriodSelectorRow(
-                          rangeLabel: _data.rangeLabel,
-                          periodLabel: _data.periodLabel,
-                          onTapRange: () {},
-                          onTapPeriod: () {},
+                          rangeLabel: _rangeLabel(context),
+                          periodLabel: _periodLabel(context),
+                          onTapRange: _pickRange,
+                          onTapPeriod: _pickPeriod,
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
@@ -260,6 +303,95 @@ class _AppBar extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// The relative window shown by the filter row's left dropdown.
+enum _RangeFilter { week, month, year }
+
+/// Bottom sheet listing the three range options with a check on the current.
+class _RangeSheet extends StatelessWidget {
+  const _RangeSheet({required this.selected});
+
+  final _RangeFilter selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final options = [
+      (_RangeFilter.week, l10n.analyticsRangeWeek),
+      (_RangeFilter.month, l10n.analyticsRangeMonth),
+      (_RangeFilter.year, l10n.analyticsRangeYear),
+    ];
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.xxl,
+          AppSpacing.lg,
+          AppSpacing.xxl,
+          AppSpacing.xxl,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceVariant,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Center(
+              child: Text(
+                l10n.analyticsSelectRange,
+                style: AppFont.titleMedium.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            for (final (value, label) in options)
+              InkWell(
+                borderRadius: BorderRadius.circular(14),
+                onTap: () => Navigator.of(context).pop(value),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                    vertical: AppSpacing.lg,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: AppFont.bodyLarge.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: value == selected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      if (value == selected)
+                        const Icon(
+                          LucideIcons.check,
+                          size: 18,
+                          color: AppColors.primary,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
