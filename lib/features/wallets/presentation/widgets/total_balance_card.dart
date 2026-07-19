@@ -30,6 +30,10 @@ class TotalBalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        // Emerald base fills the card edge-to-edge so the artwork's transparent
+        // margins/rounded corners read as part of the card instead of letting
+        // the page background show through as a lighter frame.
+        gradient: AppGradients.emerald,
         borderRadius: BorderRadius.circular(AppRadius.xxl),
         boxShadow: const [
           BoxShadow(
