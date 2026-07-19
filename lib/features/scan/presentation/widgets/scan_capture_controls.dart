@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -37,7 +38,7 @@ class ScanCaptureControls extends StatelessWidget {
       children: [
         _SideButton(
           icon: LucideIcons.images,
-          label: 'Gallery',
+          label: context.l10n.scanGallery,
           onTap: onGallery,
         ),
         _ShutterButton(
@@ -47,7 +48,7 @@ class ScanCaptureControls extends StatelessWidget {
         ),
         _SideButton(
           icon: LucideIcons.pencilLine,
-          label: 'Manual',
+          label: context.l10n.scanManual,
           onTap: onManual,
         ),
       ],

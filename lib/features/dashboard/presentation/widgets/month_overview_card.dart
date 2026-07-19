@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
@@ -45,7 +46,7 @@ class MonthOverviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'This Month Overview',
+                  context.l10n.dashboardMonthOverviewTitle,
                   style: AppFont.titleMedium.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
@@ -65,14 +66,14 @@ class MonthOverviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _Metric(
-                  label: 'Income',
+                  label: context.l10n.dashboardIncome,
                   amountKhr: data.monthIncomeKhr,
                   color: AppColors.income,
                 ),
               ),
               Expanded(
                 child: _Metric(
-                  label: 'Expense',
+                  label: context.l10n.dashboardExpense,
                   amountKhr: data.monthExpenseKhr,
                   color: AppColors.expense,
                 ),
@@ -90,7 +91,7 @@ class MonthOverviewCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Budget',
+                      context.l10n.dashboardBudget,
                       style: AppFont.labelMedium.copyWith(
                         color: AppColors.textMuted,
                       ),
@@ -178,10 +179,7 @@ class _BudgetBar extends StatelessWidget {
                 width: constraints.maxWidth * progress.clamp(0.0, 1.0),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      AppGradients.emeraldGlow,
-                      AppColors.primary,
-                    ],
+                    colors: [AppGradients.emeraldGlow, AppColors.primary],
                   ),
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -32,7 +33,7 @@ class RecentTransactionsSection extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Recent Transactions',
+                  context.l10n.dashboardRecentTransactions,
                   style: AppFont.titleMedium.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
@@ -45,7 +46,7 @@ class RecentTransactionsSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'See All',
+                      context.l10n.dashboardSeeAll,
                       style: AppFont.labelLarge.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

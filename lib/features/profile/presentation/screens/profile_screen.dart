@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -119,31 +120,33 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                       start: 0.30,
                       end: 0.78,
                       child: SettingsSection(
-                        title: 'Account',
+                        title: context.l10n.profileSectionAccount,
                         children: [
                           SettingsTile(
                             icon: LucideIcons.user,
-                            title: 'Personal Information',
-                            subtitle: 'Name, email & phone',
+                            title: context.l10n.profilePersonalInfo,
+                            subtitle: context.l10n.profilePersonalInfoSubtitle,
                             onTap: () {},
                           ),
                           SettingsTile(
                             icon: LucideIcons.wallet,
-                            title: 'My Wallets',
-                            subtitle: '${_data.walletCount} linked accounts',
+                            title: context.l10n.profileMyWallets,
+                            subtitle: context.l10n.profileLinkedAccounts(
+                              _data.walletCount,
+                            ),
                             iconColor: AppColors.info,
                             onTap: () {},
                           ),
                           SettingsTile(
                             icon: LucideIcons.shieldCheck,
-                            title: 'Security & Privacy',
-                            subtitle: 'PIN, biometrics & password',
+                            title: context.l10n.profileSecurityPrivacy,
+                            subtitle: context.l10n.profileSecuritySubtitle,
                             iconColor: AppColors.income,
                             onTap: () {},
                           ),
                           SettingsTile(
                             icon: LucideIcons.bell,
-                            title: 'Notifications',
+                            title: context.l10n.profileNotifications,
                             iconColor: AppColors.warning,
                             onTap: () {},
                           ),
@@ -156,17 +159,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                       start: 0.40,
                       end: 0.86,
                       child: SettingsSection(
-                        title: 'Preferences',
+                        title: context.l10n.profileSectionPreferences,
                         children: [
                           SettingsTile(
                             icon: LucideIcons.settings,
-                            title: 'Settings',
-                            subtitle: 'Language, currency & appearance',
+                            title: context.l10n.profileSettings,
+                            subtitle: context.l10n.profileSettingsSubtitle,
                             onTap: _openSettings,
                           ),
                           SettingsTile(
                             icon: LucideIcons.gift,
-                            title: 'Rewards & Offers',
+                            title: context.l10n.profileRewardsOffers,
                             iconColor: AppColors.accent,
                             onTap: () {},
                           ),
@@ -179,16 +182,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                       start: 0.50,
                       end: 0.94,
                       child: SettingsSection(
-                        title: 'Support',
+                        title: context.l10n.profileSectionSupport,
                         children: [
                           SettingsTile(
                             icon: LucideIcons.circleHelp,
-                            title: 'Help & Support',
+                            title: context.l10n.profileHelpSupport,
                             onTap: () {},
                           ),
                           SettingsTile(
                             icon: LucideIcons.info,
-                            title: 'About Apsara Wallet',
+                            title: context.l10n.profileAboutApp,
                             iconColor: AppColors.info,
                             onTap: () {},
                           ),
@@ -204,7 +207,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                         children: [
                           SettingsTile(
                             icon: LucideIcons.logOut,
-                            title: 'Sign Out',
+                            title: context.l10n.profileSignOut,
                             destructive: true,
                             showChevron: false,
                             onTap: _confirmSignOut,
@@ -283,20 +286,23 @@ class _SignOutSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          const Text(
-            'Sign out?',
+          Text(
+            context.l10n.profileSignOutConfirmTitle,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.textPrimary,
               fontSize: 20,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
-          const Text(
-            "You'll need to log in again to access your wallet.",
+          Text(
+            context.l10n.profileSignOutConfirmBody,
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: AppSpacing.xl),
           Row(
@@ -314,7 +320,7 @@ class _SignOutSheet extends StatelessWidget {
                     ),
                     foregroundColor: AppColors.textPrimary,
                   ),
-                  child: const Text('Cancel'),
+                  child: Text(context.l10n.commonCancel),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
@@ -329,7 +335,7 @@ class _SignOutSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Sign Out'),
+                  child: Text(context.l10n.profileSignOut),
                 ),
               ),
             ],

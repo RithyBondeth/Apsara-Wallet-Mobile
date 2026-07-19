@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
@@ -15,6 +16,7 @@ import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/dai
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/expense_breakdown_card.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/period_selector_row.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/trend_summary_row.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
@@ -30,8 +32,6 @@ class AnalyticsScreen extends ConsumerStatefulWidget {
 
 class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     with TickerProviderStateMixin {
-  static const List<String> _tabs = ['Overview', 'Categories', 'Trends'];
-
   /// Drives chart reveals + the entrance cascade; replayed on tab change so
   /// each tab's charts animate in.
   late final AnimationController _intro;
@@ -68,21 +68,35 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   void _onNavSelect(int index) {
-    if (index == 0) {
-      context.router.maybePop();
+    if (index == 1) return; // already on Analytics
+    switch (index) {
+      case 0:
+        // Home is the stack root — pop back to it rather than stacking.
+        context.router.maybePop();
+      case 2:
+        // Sibling tab: swap in place so the stack stays [Dashboard, tab].
+        context.router.replace(const WalletsRoute());
+      case 3:
+        context.router.push(const ProfileRoute());
     }
-    // Wallets / Profile arrive in later Phase 1 gates.
   }
 
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
+    final tabs = [
+      context.l10n.analyticsTabOverview,
+      context.l10n.analyticsTabCategories,
+      context.l10n.analyticsTabTrends,
+    ];
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
         backgroundColor: AppColors.background,
-        floatingActionButton: AppBottomBarCenterButton(onTap: () {}),
+        floatingActionButton: AppBottomBarCenterButton(
+          onTap: () => context.router.push(const ScanReceiptRoute()),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: AppBottomBar(currentIndex: 1, onSelect: _onNavSelect),
         body: SafeArea(
@@ -108,7 +122,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                         end: 0.5,
                         offset: const Offset(0, 10),
                         child: AnalyticsSegmentedTabs(
-                          labels: _tabs,
+                          labels: tabs,
                           currentIndex: _tabIndex,
                           onChanged: _onTab,
                         ),
@@ -130,7 +144,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                       // hand-painted charts receive the live reveal value.
                       AnimatedBuilder(
                         animation: _chart,
-                        builder: (context, _) => _buildTab(),
+                        builder: (context, _) => _buildTab(context),
                       ),
                     ],
                   ),
@@ -143,7 +157,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     );
   }
 
-  Widget _buildTab() {
+  Widget _buildTab(BuildContext context) {
     switch (_tabIndex) {
       case 1:
         return _cascade([
@@ -154,7 +168,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           DailyTrendCard(
             data: _data,
             progress: _chart.value,
-            title: 'Monthly Trend',
+            title: context.l10n.analyticsMonthlyTrend,
           ),
           TrendSummaryRow(data: _data),
         ]);
@@ -208,7 +222,7 @@ class _AppBar extends StatelessWidget {
           const SizedBox(width: 44),
           Expanded(
             child: Text(
-              'Analytics',
+              context.l10n.analyticsTitle,
               textAlign: TextAlign.center,
               style: AppFont.titleLarge.copyWith(
                 color: AppColors.textPrimary,

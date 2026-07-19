@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
@@ -155,7 +156,8 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
       await _processImage(shot.path);
     } catch (e) {
       Logger.error('Capture failed: $e');
-      _failScan('Could not capture the photo. Please try again.');
+      if (!mounted) return;
+      _failScan(context.l10n.scanErrorCapture);
     }
   }
 
@@ -168,7 +170,8 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
       await _processImage(file.path);
     } catch (e) {
       Logger.error('Gallery import failed: $e');
-      _failScan('Could not open that image. Please try another.');
+      if (!mounted) return;
+      _failScan(context.l10n.scanErrorGallery);
     }
   }
 
@@ -183,7 +186,8 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
       _reveal.forward(from: 0);
     } catch (e) {
       Logger.error('OCR failed: $e');
-      _failScan('Could not read the receipt. Try again or enter it manually.');
+      if (!mounted) return;
+      _failScan(context.l10n.scanErrorOcr);
     }
   }
 
@@ -222,7 +226,11 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
   }
 
   void _save(ScannedReceipt receipt) {
-    _showSnack('Expense saved', AppGradients.emeraldCore, LucideIcons.check);
+    _showSnack(
+      context.l10n.scanExpenseSaved,
+      AppGradients.emeraldCore,
+      LucideIcons.check,
+    );
     context.router.maybePop();
   }
 
@@ -432,7 +440,9 @@ class _CameraNotice extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              denied ? 'Camera access needed' : 'Camera unavailable',
+              denied
+                  ? context.l10n.scanCameraAccessNeeded
+                  : context.l10n.scanCameraUnavailable,
               textAlign: TextAlign.center,
               style: AppFont.titleSmall.copyWith(
                 color: Colors.white,
@@ -442,8 +452,8 @@ class _CameraNotice extends StatelessWidget {
             const SizedBox(height: AppSpacing.xs),
             Text(
               denied
-                  ? 'Enable camera access in Settings, or import a receipt from your gallery.'
-                  : 'Import a receipt from your gallery or enter it manually.',
+                  ? context.l10n.scanCameraDeniedBody
+                  : context.l10n.scanCameraUnavailableBody,
               textAlign: TextAlign.center,
               style: AppFont.bodySmall.copyWith(
                 color: Colors.white.withValues(alpha: 0.7),
@@ -467,7 +477,7 @@ class _CameraNotice extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Open Settings',
+                    context.l10n.scanOpenSettings,
                     style: AppFont.labelLarge.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -508,7 +518,7 @@ class _TopBar extends StatelessWidget {
           const SizedBox(width: 56),
           Expanded(
             child: Text(
-              'Scan Receipt',
+              context.l10n.scanReceiptTitle,
               textAlign: TextAlign.center,
               style: AppFont.titleMedium.copyWith(
                 color: Colors.white,
@@ -599,8 +609,8 @@ class _InstructionPill extends StatelessWidget {
           Flexible(
             child: Text(
               analyzing
-                  ? 'Reading your receipt…'
-                  : 'Align the receipt within the frame',
+                  ? context.l10n.scanReadingReceipt
+                  : context.l10n.scanAlignReceipt,
               style: AppFont.bodySmall.copyWith(
                 color: Colors.white.withValues(alpha: 0.9),
               ),

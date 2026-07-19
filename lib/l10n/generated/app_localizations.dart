@@ -458,6 +458,606 @@ abstract class AppLocalizations {
   /// **'Dashboard'**
   String get dashboardAppBarTitle;
 
+  /// No description provided for @commonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// No description provided for @dashboardGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning!'**
+  String get dashboardGreeting;
+
+  /// No description provided for @dashboardTotalBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Balance'**
+  String get dashboardTotalBalance;
+
+  /// No description provided for @dashboardMonthOverviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This Month Overview'**
+  String get dashboardMonthOverviewTitle;
+
+  /// No description provided for @dashboardIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get dashboardIncome;
+
+  /// No description provided for @dashboardExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get dashboardExpense;
+
+  /// No description provided for @dashboardBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get dashboardBudget;
+
+  /// No description provided for @dashboardAddIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Income'**
+  String get dashboardAddIncome;
+
+  /// No description provided for @dashboardAddExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Expense'**
+  String get dashboardAddExpense;
+
+  /// No description provided for @dashboardTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get dashboardTransfer;
+
+  /// No description provided for @dashboardRecentTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Transactions'**
+  String get dashboardRecentTransactions;
+
+  /// No description provided for @dashboardSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get dashboardSeeAll;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// No description provided for @profileSectionAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get profileSectionAccount;
+
+  /// No description provided for @profilePersonalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Information'**
+  String get profilePersonalInfo;
+
+  /// No description provided for @profilePersonalInfoSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Name, email & phone'**
+  String get profilePersonalInfoSubtitle;
+
+  /// No description provided for @profileMyWallets.
+  ///
+  /// In en, this message translates to:
+  /// **'My Wallets'**
+  String get profileMyWallets;
+
+  /// No description provided for @profileLinkedAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} linked accounts'**
+  String profileLinkedAccounts(int count);
+
+  /// No description provided for @profileSecurityPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Security & Privacy'**
+  String get profileSecurityPrivacy;
+
+  /// No description provided for @profileSecuritySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN, biometrics & password'**
+  String get profileSecuritySubtitle;
+
+  /// No description provided for @profileNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get profileNotifications;
+
+  /// No description provided for @profileSectionPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get profileSectionPreferences;
+
+  /// No description provided for @profileSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get profileSettings;
+
+  /// No description provided for @profileSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language, currency & appearance'**
+  String get profileSettingsSubtitle;
+
+  /// No description provided for @profileRewardsOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewards & Offers'**
+  String get profileRewardsOffers;
+
+  /// No description provided for @profileSectionSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get profileSectionSupport;
+
+  /// No description provided for @profileHelpSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get profileHelpSupport;
+
+  /// No description provided for @profileAboutApp.
+  ///
+  /// In en, this message translates to:
+  /// **'About Apsara Wallet'**
+  String get profileAboutApp;
+
+  /// No description provided for @profileSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get profileSignOut;
+
+  /// No description provided for @profileSignOutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get profileSignOutConfirmTitle;
+
+  /// No description provided for @profileSignOutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need to log in again to access your wallet.'**
+  String get profileSignOutConfirmBody;
+
+  /// No description provided for @profileStatsWallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets'**
+  String get profileStatsWallets;
+
+  /// No description provided for @profileStatsTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get profileStatsTransactions;
+
+  /// No description provided for @profileStatsBudgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get profileStatsBudgets;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsPrimaryCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Currency'**
+  String get settingsPrimaryCurrency;
+
+  /// No description provided for @settingsCurrencyKhr.
+  ///
+  /// In en, this message translates to:
+  /// **'KHR — Cambodian Riel'**
+  String get settingsCurrencyKhr;
+
+  /// No description provided for @settingsCurrencyUsd.
+  ///
+  /// In en, this message translates to:
+  /// **'USD — US Dollar'**
+  String get settingsCurrencyUsd;
+
+  /// No description provided for @settingsDarkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get settingsDarkMode;
+
+  /// No description provided for @settingsSectionNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsSectionNotifications;
+
+  /// No description provided for @settingsPushNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notifications'**
+  String get settingsPushNotifications;
+
+  /// No description provided for @settingsTransactionAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Alerts'**
+  String get settingsTransactionAlerts;
+
+  /// No description provided for @settingsBudgetWarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Warnings'**
+  String get settingsBudgetWarnings;
+
+  /// No description provided for @settingsPromotions.
+  ///
+  /// In en, this message translates to:
+  /// **'Promotions & Offers'**
+  String get settingsPromotions;
+
+  /// No description provided for @settingsSectionSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get settingsSectionSecurity;
+
+  /// No description provided for @settingsBiometricLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric Login'**
+  String get settingsBiometricLogin;
+
+  /// No description provided for @settingsBiometricSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Face ID / fingerprint'**
+  String get settingsBiometricSubtitle;
+
+  /// No description provided for @settingsChangePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Change PIN'**
+  String get settingsChangePin;
+
+  /// No description provided for @settingsChangePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get settingsChangePassword;
+
+  /// No description provided for @settingsSectionAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsSectionAbout;
+
+  /// No description provided for @settingsTermsOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get settingsTermsOfService;
+
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get settingsPrivacyPolicy;
+
+  /// No description provided for @settingsRateApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Apsara Wallet'**
+  String get settingsRateApp;
+
+  /// No description provided for @settingsAppVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'App Version'**
+  String get settingsAppVersion;
+
+  /// No description provided for @walletsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets'**
+  String get walletsTitle;
+
+  /// No description provided for @walletsCountTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} total'**
+  String walletsCountTotal(int count);
+
+  /// No description provided for @walletsWalletCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 wallet} other{{count} wallets}}'**
+  String walletsWalletCount(int count);
+
+  /// No description provided for @walletsAddWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Wallet'**
+  String get walletsAddWallet;
+
+  /// No description provided for @walletCardPrimaryBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary'**
+  String get walletCardPrimaryBadge;
+
+  /// No description provided for @analyticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analyticsTitle;
+
+  /// No description provided for @analyticsTabOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get analyticsTabOverview;
+
+  /// No description provided for @analyticsTabCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get analyticsTabCategories;
+
+  /// No description provided for @analyticsTabTrends.
+  ///
+  /// In en, this message translates to:
+  /// **'Trends'**
+  String get analyticsTabTrends;
+
+  /// No description provided for @analyticsMonthlyTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Trend'**
+  String get analyticsMonthlyTrend;
+
+  /// No description provided for @analyticsSpendingByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending by Category'**
+  String get analyticsSpendingByCategory;
+
+  /// No description provided for @analyticsDailyExpenseTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Expense Trend'**
+  String get analyticsDailyExpenseTrend;
+
+  /// No description provided for @analyticsExpenseBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense Breakdown'**
+  String get analyticsExpenseBreakdown;
+
+  /// No description provided for @analyticsTotalExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get analyticsTotalExpense;
+
+  /// No description provided for @analyticsAvgPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg / Day'**
+  String get analyticsAvgPerDay;
+
+  /// No description provided for @analyticsPeakDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Peak Day'**
+  String get analyticsPeakDay;
+
+  /// No description provided for @analyticsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get analyticsTotal;
+
+  /// No description provided for @scanReceiptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Receipt'**
+  String get scanReceiptTitle;
+
+  /// No description provided for @scanAlignReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Align the receipt within the frame'**
+  String get scanAlignReceipt;
+
+  /// No description provided for @scanReadingReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading your receipt…'**
+  String get scanReadingReceipt;
+
+  /// No description provided for @scanGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get scanGallery;
+
+  /// No description provided for @scanManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get scanManual;
+
+  /// No description provided for @scanErrorCapture.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not capture the photo. Please try again.'**
+  String get scanErrorCapture;
+
+  /// No description provided for @scanErrorGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open that image. Please try another.'**
+  String get scanErrorGallery;
+
+  /// No description provided for @scanErrorOcr.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read the receipt. Try again or enter it manually.'**
+  String get scanErrorOcr;
+
+  /// No description provided for @scanExpenseSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense saved'**
+  String get scanExpenseSaved;
+
+  /// No description provided for @scanCameraAccessNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access needed'**
+  String get scanCameraAccessNeeded;
+
+  /// No description provided for @scanCameraUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera unavailable'**
+  String get scanCameraUnavailable;
+
+  /// No description provided for @scanCameraDeniedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable camera access in Settings, or import a receipt from your gallery.'**
+  String get scanCameraDeniedBody;
+
+  /// No description provided for @scanCameraUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a receipt from your gallery or enter it manually.'**
+  String get scanCameraUnavailableBody;
+
+  /// No description provided for @scanOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get scanOpenSettings;
+
+  /// No description provided for @scanReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review receipt'**
+  String get scanReviewTitle;
+
+  /// No description provided for @scanReviewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the details, edit anything, then save'**
+  String get scanReviewSubtitle;
+
+  /// No description provided for @scanFieldMerchant.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant'**
+  String get scanFieldMerchant;
+
+  /// No description provided for @scanFieldMerchantHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Merchant name'**
+  String get scanFieldMerchantHint;
+
+  /// No description provided for @scanFieldDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get scanFieldDate;
+
+  /// No description provided for @scanFieldDateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 19 Jul 2026'**
+  String get scanFieldDateHint;
+
+  /// No description provided for @scanFieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get scanFieldCategory;
+
+  /// No description provided for @scanSaveExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Expense'**
+  String get scanSaveExpense;
+
+  /// No description provided for @scanRetake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get scanRetake;
+
+  /// No description provided for @scanItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get scanItemsTitle;
+
+  /// No description provided for @scanSumToTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Sum → Total'**
+  String get scanSumToTotal;
+
+  /// No description provided for @scanNoItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No items detected — add them manually if needed.'**
+  String get scanNoItems;
+
+  /// No description provided for @scanItemNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Item name'**
+  String get scanItemNameHint;
+
+  /// No description provided for @scanAddItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get scanAddItem;
+
+  /// No description provided for @scanTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get scanTotalLabel;
+
   /// No description provided for @settingsLanguageLabel.
   ///
   /// In en, this message translates to:

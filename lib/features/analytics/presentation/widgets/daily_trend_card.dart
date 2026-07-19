@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -13,12 +14,12 @@ class DailyTrendCard extends StatelessWidget {
     super.key,
     required this.data,
     required this.progress,
-    this.title = 'Daily Expense Trend',
+    this.title,
   });
 
   final AnalyticsData data;
   final double progress;
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class DailyTrendCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            title ?? context.l10n.analyticsDailyExpenseTrend,
             style: AppFont.titleMedium.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,

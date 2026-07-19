@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -72,7 +73,7 @@ class TotalBalanceCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'Total Balance',
+                        context.l10n.dashboardTotalBalance,
                         style: AppFont.labelLarge.copyWith(
                           color: _ivory.withValues(alpha: 0.85),
                           letterSpacing: 0.4,
@@ -174,7 +175,7 @@ class _WalletCountChip extends StatelessWidget {
           const Icon(LucideIcons.wallet, size: 14, color: Colors.white),
           const SizedBox(width: 6),
           Text(
-            count == 1 ? '1 wallet' : '$count wallets',
+            context.l10n.walletsWalletCount(count),
             style: AppFont.labelMedium.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w600,

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -54,9 +55,11 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
     if (index == 2) return; // already on Wallets
     switch (index) {
       case 0:
+        // Home is the stack root — pop back to it rather than stacking.
         context.router.maybePop();
       case 1:
-        context.router.push(const AnalyticsRoute());
+        // Sibling tab: swap in place so the stack stays [Dashboard, tab].
+        context.router.replace(const AnalyticsRoute());
       case 3:
         context.router.push(const ProfileRoute());
     }
@@ -71,7 +74,9 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
         backgroundColor: AppColors.background,
-        floatingActionButton: AppBottomBarCenterButton(onTap: () {}),
+        floatingActionButton: AppBottomBarCenterButton(
+          onTap: () => context.router.push(const ScanReceiptRoute()),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar:
             AppBottomBar(currentIndex: 2, onSelect: _onNavSelect),
@@ -166,7 +171,7 @@ class _AppBar extends StatelessWidget {
           const SizedBox(width: 44),
           Expanded(
             child: Text(
-              'Wallets',
+              context.l10n.walletsTitle,
               textAlign: TextAlign.center,
               style: AppFont.titleLarge.copyWith(
                 color: AppColors.textPrimary,
@@ -212,7 +217,7 @@ class _SectionHeader extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              'My Wallets',
+              context.l10n.profileMyWallets,
               style: AppFont.titleMedium.copyWith(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
@@ -220,7 +225,7 @@ class _SectionHeader extends StatelessWidget {
             ),
           ),
           Text(
-            '$count total',
+            context.l10n.walletsCountTotal(count),
             style: AppFont.bodySmall.copyWith(color: AppColors.textSecondary),
           ),
         ],
@@ -253,7 +258,7 @@ class _AddWalletCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'Add Wallet',
+                context.l10n.walletsAddWallet,
                 style: AppFont.titleSmall.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,

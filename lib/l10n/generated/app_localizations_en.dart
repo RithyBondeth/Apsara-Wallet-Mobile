@@ -196,5 +196,324 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardAppBarTitle => 'Dashboard';
 
   @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get dashboardGreeting => 'Good morning!';
+
+  @override
+  String get dashboardTotalBalance => 'Total Balance';
+
+  @override
+  String get dashboardMonthOverviewTitle => 'This Month Overview';
+
+  @override
+  String get dashboardIncome => 'Income';
+
+  @override
+  String get dashboardExpense => 'Expense';
+
+  @override
+  String get dashboardBudget => 'Budget';
+
+  @override
+  String get dashboardAddIncome => 'Add Income';
+
+  @override
+  String get dashboardAddExpense => 'Add Expense';
+
+  @override
+  String get dashboardTransfer => 'Transfer';
+
+  @override
+  String get dashboardRecentTransactions => 'Recent Transactions';
+
+  @override
+  String get dashboardSeeAll => 'See All';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profileSectionAccount => 'Account';
+
+  @override
+  String get profilePersonalInfo => 'Personal Information';
+
+  @override
+  String get profilePersonalInfoSubtitle => 'Name, email & phone';
+
+  @override
+  String get profileMyWallets => 'My Wallets';
+
+  @override
+  String profileLinkedAccounts(int count) {
+    return '$count linked accounts';
+  }
+
+  @override
+  String get profileSecurityPrivacy => 'Security & Privacy';
+
+  @override
+  String get profileSecuritySubtitle => 'PIN, biometrics & password';
+
+  @override
+  String get profileNotifications => 'Notifications';
+
+  @override
+  String get profileSectionPreferences => 'Preferences';
+
+  @override
+  String get profileSettings => 'Settings';
+
+  @override
+  String get profileSettingsSubtitle => 'Language, currency & appearance';
+
+  @override
+  String get profileRewardsOffers => 'Rewards & Offers';
+
+  @override
+  String get profileSectionSupport => 'Support';
+
+  @override
+  String get profileHelpSupport => 'Help & Support';
+
+  @override
+  String get profileAboutApp => 'About Apsara Wallet';
+
+  @override
+  String get profileSignOut => 'Sign Out';
+
+  @override
+  String get profileSignOutConfirmTitle => 'Sign out?';
+
+  @override
+  String get profileSignOutConfirmBody =>
+      'You\'ll need to log in again to access your wallet.';
+
+  @override
+  String get profileStatsWallets => 'Wallets';
+
+  @override
+  String get profileStatsTransactions => 'Transactions';
+
+  @override
+  String get profileStatsBudgets => 'Budgets';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsPrimaryCurrency => 'Primary Currency';
+
+  @override
+  String get settingsCurrencyKhr => 'KHR — Cambodian Riel';
+
+  @override
+  String get settingsCurrencyUsd => 'USD — US Dollar';
+
+  @override
+  String get settingsDarkMode => 'Dark Mode';
+
+  @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
+  String get settingsPushNotifications => 'Push Notifications';
+
+  @override
+  String get settingsTransactionAlerts => 'Transaction Alerts';
+
+  @override
+  String get settingsBudgetWarnings => 'Budget Warnings';
+
+  @override
+  String get settingsPromotions => 'Promotions & Offers';
+
+  @override
+  String get settingsSectionSecurity => 'Security';
+
+  @override
+  String get settingsBiometricLogin => 'Biometric Login';
+
+  @override
+  String get settingsBiometricSubtitle => 'Face ID / fingerprint';
+
+  @override
+  String get settingsChangePin => 'Change PIN';
+
+  @override
+  String get settingsChangePassword => 'Change Password';
+
+  @override
+  String get settingsSectionAbout => 'About';
+
+  @override
+  String get settingsTermsOfService => 'Terms of Service';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsRateApp => 'Rate Apsara Wallet';
+
+  @override
+  String get settingsAppVersion => 'App Version';
+
+  @override
+  String get walletsTitle => 'Wallets';
+
+  @override
+  String walletsCountTotal(int count) {
+    return '$count total';
+  }
+
+  @override
+  String walletsWalletCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count wallets',
+      one: '1 wallet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get walletsAddWallet => 'Add Wallet';
+
+  @override
+  String get walletCardPrimaryBadge => 'Primary';
+
+  @override
+  String get analyticsTitle => 'Analytics';
+
+  @override
+  String get analyticsTabOverview => 'Overview';
+
+  @override
+  String get analyticsTabCategories => 'Categories';
+
+  @override
+  String get analyticsTabTrends => 'Trends';
+
+  @override
+  String get analyticsMonthlyTrend => 'Monthly Trend';
+
+  @override
+  String get analyticsSpendingByCategory => 'Spending by Category';
+
+  @override
+  String get analyticsDailyExpenseTrend => 'Daily Expense Trend';
+
+  @override
+  String get analyticsExpenseBreakdown => 'Expense Breakdown';
+
+  @override
+  String get analyticsTotalExpense => 'Total Expense';
+
+  @override
+  String get analyticsAvgPerDay => 'Avg / Day';
+
+  @override
+  String get analyticsPeakDay => 'Peak Day';
+
+  @override
+  String get analyticsTotal => 'Total';
+
+  @override
+  String get scanReceiptTitle => 'Scan Receipt';
+
+  @override
+  String get scanAlignReceipt => 'Align the receipt within the frame';
+
+  @override
+  String get scanReadingReceipt => 'Reading your receipt…';
+
+  @override
+  String get scanGallery => 'Gallery';
+
+  @override
+  String get scanManual => 'Manual';
+
+  @override
+  String get scanErrorCapture =>
+      'Could not capture the photo. Please try again.';
+
+  @override
+  String get scanErrorGallery =>
+      'Could not open that image. Please try another.';
+
+  @override
+  String get scanErrorOcr =>
+      'Could not read the receipt. Try again or enter it manually.';
+
+  @override
+  String get scanExpenseSaved => 'Expense saved';
+
+  @override
+  String get scanCameraAccessNeeded => 'Camera access needed';
+
+  @override
+  String get scanCameraUnavailable => 'Camera unavailable';
+
+  @override
+  String get scanCameraDeniedBody =>
+      'Enable camera access in Settings, or import a receipt from your gallery.';
+
+  @override
+  String get scanCameraUnavailableBody =>
+      'Import a receipt from your gallery or enter it manually.';
+
+  @override
+  String get scanOpenSettings => 'Open Settings';
+
+  @override
+  String get scanReviewTitle => 'Review receipt';
+
+  @override
+  String get scanReviewSubtitle =>
+      'Check the details, edit anything, then save';
+
+  @override
+  String get scanFieldMerchant => 'Merchant';
+
+  @override
+  String get scanFieldMerchantHint => 'Merchant name';
+
+  @override
+  String get scanFieldDate => 'Date';
+
+  @override
+  String get scanFieldDateHint => 'e.g. 19 Jul 2026';
+
+  @override
+  String get scanFieldCategory => 'Category';
+
+  @override
+  String get scanSaveExpense => 'Save Expense';
+
+  @override
+  String get scanRetake => 'Retake';
+
+  @override
+  String get scanItemsTitle => 'Items';
+
+  @override
+  String get scanSumToTotal => 'Sum → Total';
+
+  @override
+  String get scanNoItems => 'No items detected — add them manually if needed.';
+
+  @override
+  String get scanItemNameHint => 'Item name';
+
+  @override
+  String get scanAddItem => 'Add item';
+
+  @override
+  String get scanTotalLabel => 'Total';
+
+  @override
   String get settingsLanguageLabel => 'Language';
 }

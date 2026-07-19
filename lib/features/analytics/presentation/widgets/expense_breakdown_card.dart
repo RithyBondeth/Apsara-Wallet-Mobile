@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -25,7 +26,7 @@ class ExpenseBreakdownCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Expense Breakdown',
+            context.l10n.analyticsExpenseBreakdown,
             style: AppFont.titleMedium.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
@@ -42,7 +43,7 @@ class ExpenseBreakdownCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Total Expense',
+                      context.l10n.analyticsTotalExpense,
                       textAlign: TextAlign.center,
                       style: AppFont.labelSmall.copyWith(
                         color: AppColors.textMuted,

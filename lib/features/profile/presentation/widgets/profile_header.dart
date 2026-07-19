@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -54,7 +55,7 @@ class ProfileHeader extends StatelessWidget {
         ),
         child: Column(
           children: [
-            _topBar(),
+            _topBar(context),
             const SizedBox(height: AppSpacing.lg),
             _Avatar(initials: data.initials),
             const SizedBox(height: AppSpacing.md),
@@ -80,13 +81,13 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 
-  Widget _topBar() {
+  Widget _topBar(BuildContext context) {
     return Row(
       children: [
         _CircleIconButton(icon: LucideIcons.arrowLeft, onTap: onBack),
         const Spacer(),
         Text(
-          'Profile',
+          context.l10n.profileTitle,
           style: AppFont.titleMedium.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w700,

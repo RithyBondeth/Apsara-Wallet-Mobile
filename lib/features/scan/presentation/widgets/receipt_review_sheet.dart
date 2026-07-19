@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -188,21 +189,21 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
                 children: [
                   _Header(currency: _currency, onCurrency: _setCurrency),
                   const SizedBox(height: AppSpacing.xl),
-                  _fieldLabel('Merchant'),
+                  _fieldLabel(context.l10n.scanFieldMerchant),
                   _TextField(
                     controller: _merchant,
-                    hint: 'Merchant name',
+                    hint: context.l10n.scanFieldMerchantHint,
                     icon: LucideIcons.store,
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  _fieldLabel('Date'),
+                  _fieldLabel(context.l10n.scanFieldDate),
                   _TextField(
                     controller: _date,
-                    hint: 'e.g. 19 Jul 2026',
+                    hint: context.l10n.scanFieldDateHint,
                     icon: LucideIcons.calendar,
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  _fieldLabel('Category'),
+                  _fieldLabel(context.l10n.scanFieldCategory),
                   _CategoryPicker(
                     selected: _categoryLabel,
                     onSelect: (c) => setState(() {
@@ -229,7 +230,7 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
             child: Column(
               children: [
                 PrimaryButton(
-                  label: 'Save Expense',
+                  label: context.l10n.scanSaveExpense,
                   trailingIcon: LucideIcons.check,
                   onPressed: _save,
                 ),
@@ -251,7 +252,7 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
                         ),
                         const SizedBox(width: AppSpacing.sm),
                         Text(
-                          'Retake',
+                          context.l10n.scanRetake,
                           style: AppFont.titleSmall.copyWith(
                             color: AppColors.textSecondary,
                             fontWeight: FontWeight.w600,
@@ -324,7 +325,7 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Review receipt',
+                context.l10n.scanReviewTitle,
                 style: AppFont.titleMedium.copyWith(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w700,
@@ -332,7 +333,7 @@ class _Header extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Check the details, edit anything, then save',
+                context.l10n.scanReviewSubtitle,
                 style: AppFont.bodySmall.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -497,7 +498,7 @@ class _ItemsEditor extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Items',
+                context.l10n.scanItemsTitle,
                 style: AppFont.titleSmall.copyWith(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w700,
@@ -514,7 +515,7 @@ class _ItemsEditor extends StatelessWidget {
                   onTap: onSumItems,
                   pressedScale: 0.92,
                   child: Text(
-                    'Sum → Total',
+                    context.l10n.scanSumToTotal,
                     style: AppFont.labelMedium.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -528,7 +529,7 @@ class _ItemsEditor extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
               child: Text(
-                'No items detected — add them manually if needed.',
+                context.l10n.scanNoItems,
                 style: AppFont.bodySmall.copyWith(color: AppColors.textMuted),
               ),
             ),
@@ -540,7 +541,7 @@ class _ItemsEditor extends StatelessWidget {
                   Expanded(
                     child: _BareField(
                       controller: items[i].name,
-                      hint: 'Item name',
+                      hint: context.l10n.scanItemNameHint,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -592,7 +593,7 @@ class _ItemsEditor extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'Add item',
+                    context.l10n.scanAddItem,
                     style: AppFont.labelLarge.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -629,7 +630,7 @@ class _TotalField extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'Total',
+            context.l10n.scanTotalLabel,
             style: AppFont.titleMedium.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,

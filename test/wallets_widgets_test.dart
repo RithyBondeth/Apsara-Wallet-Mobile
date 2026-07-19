@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/total_balance_card.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/wallet_card.dart';
+import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
 /// Component-level render tests for the wallets building blocks. These import
 /// only the widgets + data (not the screen, which pulls in the full router),
@@ -28,6 +29,8 @@ void main() {
   });
 
   Widget wrap(Widget child) => MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),

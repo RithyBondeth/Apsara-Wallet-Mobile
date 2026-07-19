@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/language_enum.dart';
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
@@ -60,7 +61,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => _OptionSheet<ELanguage>(
-        title: 'Language',
+        title: context.l10n.settingsLanguageLabel,
         options: [
           for (final language in ELanguage.values)
             _Option(value: language, label: language.nativeName),
@@ -79,10 +80,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => _OptionSheet<String>(
-        title: 'Primary Currency',
-        options: const [
-          _Option(value: 'KHR', label: 'KHR — Cambodian Riel'),
-          _Option(value: 'USD', label: 'USD — US Dollar'),
+        title: context.l10n.settingsPrimaryCurrency,
+        options: [
+          _Option(value: 'KHR', label: context.l10n.settingsCurrencyKhr),
+          _Option(value: 'USD', label: context.l10n.settingsCurrencyUsd),
         ],
         selected: _currency,
         onSelected: (value) {
@@ -128,24 +129,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       start: 0.14,
                       end: 0.6,
                       child: SettingsSection(
-                        title: 'Preferences',
+                        title: context.l10n.profileSectionPreferences,
                         children: [
                           SettingsTile(
                             icon: LucideIcons.globe,
-                            title: 'Language',
+                            title: context.l10n.settingsLanguageLabel,
                             value: language.nativeName,
                             onTap: _pickLanguage,
                           ),
                           SettingsTile(
                             icon: LucideIcons.banknote,
-                            title: 'Primary Currency',
+                            title: context.l10n.settingsPrimaryCurrency,
                             iconColor: AppColors.income,
                             value: _currency,
                             onTap: _pickCurrency,
                           ),
                           SettingsTile(
                             icon: LucideIcons.moon,
-                            title: 'Dark Mode',
+                            title: context.l10n.settingsDarkMode,
                             iconColor: AppColors.info,
                             showChevron: false,
                             trailing: _Toggle(
@@ -162,11 +163,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       start: 0.26,
                       end: 0.72,
                       child: SettingsSection(
-                        title: 'Notifications',
+                        title: context.l10n.settingsSectionNotifications,
                         children: [
                           SettingsTile(
                             icon: LucideIcons.bell,
-                            title: 'Push Notifications',
+                            title: context.l10n.settingsPushNotifications,
                             iconColor: AppColors.warning,
                             showChevron: false,
                             trailing: _Toggle(
@@ -177,7 +178,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           ),
                           SettingsTile(
                             icon: LucideIcons.arrowRightLeft,
-                            title: 'Transaction Alerts',
+                            title: context.l10n.settingsTransactionAlerts,
                             showChevron: false,
                             trailing: _Toggle(
                               value: _transactionAlerts,
@@ -187,7 +188,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           ),
                           SettingsTile(
                             icon: LucideIcons.chartPie,
-                            title: 'Budget Warnings',
+                            title: context.l10n.settingsBudgetWarnings,
                             iconColor: AppColors.expense,
                             showChevron: false,
                             trailing: _Toggle(
@@ -198,7 +199,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           ),
                           SettingsTile(
                             icon: LucideIcons.tag,
-                            title: 'Promotions & Offers',
+                            title: context.l10n.settingsPromotions,
                             iconColor: AppColors.accent,
                             showChevron: false,
                             trailing: _Toggle(
@@ -215,12 +216,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       start: 0.38,
                       end: 0.84,
                       child: SettingsSection(
-                        title: 'Security',
+                        title: context.l10n.settingsSectionSecurity,
                         children: [
                           SettingsTile(
                             icon: LucideIcons.fingerprint,
-                            title: 'Biometric Login',
-                            subtitle: 'Face ID / fingerprint',
+                            title: context.l10n.settingsBiometricLogin,
+                            subtitle: context.l10n.settingsBiometricSubtitle,
                             iconColor: AppColors.income,
                             showChevron: false,
                             trailing: _Toggle(
@@ -231,12 +232,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           ),
                           SettingsTile(
                             icon: LucideIcons.lockKeyhole,
-                            title: 'Change PIN',
+                            title: context.l10n.settingsChangePin,
                             onTap: () {},
                           ),
                           SettingsTile(
                             icon: LucideIcons.keyRound,
-                            title: 'Change Password',
+                            title: context.l10n.settingsChangePassword,
                             onTap: () {},
                           ),
                         ],
@@ -248,28 +249,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       start: 0.50,
                       end: 0.96,
                       child: SettingsSection(
-                        title: 'About',
+                        title: context.l10n.settingsSectionAbout,
                         children: [
                           SettingsTile(
                             icon: LucideIcons.fileText,
-                            title: 'Terms of Service',
+                            title: context.l10n.settingsTermsOfService,
                             onTap: () {},
                           ),
                           SettingsTile(
                             icon: LucideIcons.shield,
-                            title: 'Privacy Policy',
+                            title: context.l10n.settingsPrivacyPolicy,
                             iconColor: AppColors.info,
                             onTap: () {},
                           ),
                           SettingsTile(
                             icon: LucideIcons.star,
-                            title: 'Rate Apsara Wallet',
+                            title: context.l10n.settingsRateApp,
                             iconColor: AppColors.accent,
                             onTap: () {},
                           ),
-                          const SettingsTile(
+                          SettingsTile(
                             icon: LucideIcons.info,
-                            title: 'App Version',
+                            title: context.l10n.settingsAppVersion,
                             value: 'v1.0.0',
                             showChevron: false,
                           ),
@@ -340,7 +341,7 @@ class _SettingsHeader extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            'Settings',
+            context.l10n.settingsTitle,
             style: AppFont.titleMedium.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w700,

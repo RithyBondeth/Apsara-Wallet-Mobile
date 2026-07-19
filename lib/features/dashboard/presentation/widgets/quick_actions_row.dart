@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
@@ -29,7 +30,7 @@ class QuickActionsRow extends StatelessWidget {
         Expanded(
           child: _QuickAction(
             icon: LucideIcons.plus,
-            label: 'Add Income',
+            label: context.l10n.dashboardAddIncome,
             color: AppColors.income,
             onTap: onAddIncome,
           ),
@@ -38,7 +39,7 @@ class QuickActionsRow extends StatelessWidget {
         Expanded(
           child: _QuickAction(
             icon: LucideIcons.minus,
-            label: 'Add Expense',
+            label: context.l10n.dashboardAddExpense,
             color: AppColors.expense,
             onTap: onAddExpense,
           ),
@@ -47,7 +48,7 @@ class QuickActionsRow extends StatelessWidget {
         Expanded(
           child: _QuickAction(
             icon: LucideIcons.arrowRightLeft,
-            label: 'Transfer',
+            label: context.l10n.dashboardTransfer,
             color: AppGradients.goldCore,
             onTap: onTransfer,
           ),

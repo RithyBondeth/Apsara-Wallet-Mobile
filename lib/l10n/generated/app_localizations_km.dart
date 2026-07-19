@@ -200,5 +200,323 @@ class AppLocalizationsKm extends AppLocalizations {
   String get dashboardAppBarTitle => 'ផ្ទាំងគ្រប់គ្រង';
 
   @override
+  String get commonCancel => 'បោះបង់';
+
+  @override
+  String get dashboardGreeting => 'អរុណសួស្តី!';
+
+  @override
+  String get dashboardTotalBalance => 'សមតុល្យសរុប';
+
+  @override
+  String get dashboardMonthOverviewTitle => 'ទិដ្ឋភាពរួមខែនេះ';
+
+  @override
+  String get dashboardIncome => 'ចំណូល';
+
+  @override
+  String get dashboardExpense => 'ចំណាយ';
+
+  @override
+  String get dashboardBudget => 'ថវិកា';
+
+  @override
+  String get dashboardAddIncome => 'បន្ថែមចំណូល';
+
+  @override
+  String get dashboardAddExpense => 'បន្ថែមចំណាយ';
+
+  @override
+  String get dashboardTransfer => 'ផ្ទេរប្រាក់';
+
+  @override
+  String get dashboardRecentTransactions => 'ប្រតិបត្តិការថ្មីៗ';
+
+  @override
+  String get dashboardSeeAll => 'មើលទាំងអស់';
+
+  @override
+  String get profileTitle => 'ប្រវត្តិរូប';
+
+  @override
+  String get profileSectionAccount => 'គណនី';
+
+  @override
+  String get profilePersonalInfo => 'ព័ត៌មានផ្ទាល់ខ្លួន';
+
+  @override
+  String get profilePersonalInfoSubtitle => 'ឈ្មោះ អ៊ីមែល និងទូរស័ព្ទ';
+
+  @override
+  String get profileMyWallets => 'កាបូបរបស់ខ្ញុំ';
+
+  @override
+  String profileLinkedAccounts(int count) {
+    return 'គណនីភ្ជាប់ចំនួន $count';
+  }
+
+  @override
+  String get profileSecurityPrivacy => 'សុវត្ថិភាព និងឯកជនភាព';
+
+  @override
+  String get profileSecuritySubtitle => 'PIN ជីវមាត្រ និងពាក្យសម្ងាត់';
+
+  @override
+  String get profileNotifications => 'ការជូនដំណឹង';
+
+  @override
+  String get profileSectionPreferences => 'ចំណូលចិត្ត';
+
+  @override
+  String get profileSettings => 'ការកំណត់';
+
+  @override
+  String get profileSettingsSubtitle => 'ភាសា រូបិយប័ណ្ណ និងរូបរាង';
+
+  @override
+  String get profileRewardsOffers => 'រង្វាន់ និងការផ្តល់ជូន';
+
+  @override
+  String get profileSectionSupport => 'ជំនួយ';
+
+  @override
+  String get profileHelpSupport => 'ជំនួយ និងការគាំទ្រ';
+
+  @override
+  String get profileAboutApp => 'អំពី Apsara Wallet';
+
+  @override
+  String get profileSignOut => 'ចាកចេញ';
+
+  @override
+  String get profileSignOutConfirmTitle => 'ចាកចេញ?';
+
+  @override
+  String get profileSignOutConfirmBody =>
+      'អ្នកនឹងត្រូវចូលគណនីម្តងទៀត ដើម្បីចូលប្រើកាបូបរបស់អ្នក។';
+
+  @override
+  String get profileStatsWallets => 'កាបូប';
+
+  @override
+  String get profileStatsTransactions => 'ប្រតិបត្តិការ';
+
+  @override
+  String get profileStatsBudgets => 'ថវិកា';
+
+  @override
+  String get settingsTitle => 'ការកំណត់';
+
+  @override
+  String get settingsPrimaryCurrency => 'រូបិយប័ណ្ណចម្បង';
+
+  @override
+  String get settingsCurrencyKhr => 'KHR — រៀលកម្ពុជា';
+
+  @override
+  String get settingsCurrencyUsd => 'USD — ដុល្លារអាមេរិក';
+
+  @override
+  String get settingsDarkMode => 'របៀបងងឹត';
+
+  @override
+  String get settingsSectionNotifications => 'ការជូនដំណឹង';
+
+  @override
+  String get settingsPushNotifications => 'ការជូនដំណឹងផុស';
+
+  @override
+  String get settingsTransactionAlerts => 'ការជូនដំណឹងប្រតិបត្តិការ';
+
+  @override
+  String get settingsBudgetWarnings => 'ការព្រមានអំពីថវិកា';
+
+  @override
+  String get settingsPromotions => 'ការផ្សព្វផ្សាយ និងការផ្តល់ជូន';
+
+  @override
+  String get settingsSectionSecurity => 'សុវត្ថិភាព';
+
+  @override
+  String get settingsBiometricLogin => 'ការចូលដោយជីវមាត្រ';
+
+  @override
+  String get settingsBiometricSubtitle => 'Face ID / ស្នាមម្រាមដៃ';
+
+  @override
+  String get settingsChangePin => 'ប្តូរ PIN';
+
+  @override
+  String get settingsChangePassword => 'ប្តូរពាក្យសម្ងាត់';
+
+  @override
+  String get settingsSectionAbout => 'អំពី';
+
+  @override
+  String get settingsTermsOfService => 'លក្ខខណ្ឌនៃការប្រើប្រាស់';
+
+  @override
+  String get settingsPrivacyPolicy => 'គោលការណ៍ឯកជនភាព';
+
+  @override
+  String get settingsRateApp => 'វាយតម្លៃ Apsara Wallet';
+
+  @override
+  String get settingsAppVersion => 'កំណែកម្មវិធី';
+
+  @override
+  String get walletsTitle => 'កាបូប';
+
+  @override
+  String walletsCountTotal(int count) {
+    return 'សរុប $count';
+  }
+
+  @override
+  String walletsWalletCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'កាបូប $count',
+      one: 'កាបូប ១',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get walletsAddWallet => 'បន្ថែមកាបូប';
+
+  @override
+  String get walletCardPrimaryBadge => 'ចម្បង';
+
+  @override
+  String get analyticsTitle => 'ការវិភាគ';
+
+  @override
+  String get analyticsTabOverview => 'ទិដ្ឋភាពរួម';
+
+  @override
+  String get analyticsTabCategories => 'ប្រភេទ';
+
+  @override
+  String get analyticsTabTrends => 'និន្នាការ';
+
+  @override
+  String get analyticsMonthlyTrend => 'និន្នាការប្រចាំខែ';
+
+  @override
+  String get analyticsSpendingByCategory => 'ការចំណាយតាមប្រភេទ';
+
+  @override
+  String get analyticsDailyExpenseTrend => 'និន្នាការចំណាយប្រចាំថ្ងៃ';
+
+  @override
+  String get analyticsExpenseBreakdown => 'ការវិភាគចំណាយ';
+
+  @override
+  String get analyticsTotalExpense => 'ចំណាយសរុប';
+
+  @override
+  String get analyticsAvgPerDay => 'មធ្យម / ថ្ងៃ';
+
+  @override
+  String get analyticsPeakDay => 'ថ្ងៃខ្ពស់បំផុត';
+
+  @override
+  String get analyticsTotal => 'សរុប';
+
+  @override
+  String get scanReceiptTitle => 'ស្កេនវិក្កយបត្រ';
+
+  @override
+  String get scanAlignReceipt => 'តម្រឹមវិក្កយបត្រនៅក្នុងស៊ុម';
+
+  @override
+  String get scanReadingReceipt => 'កំពុងអានវិក្កយបត្ររបស់អ្នក…';
+
+  @override
+  String get scanGallery => 'វិចិត្រសាល';
+
+  @override
+  String get scanManual => 'បញ្ចូលដោយដៃ';
+
+  @override
+  String get scanErrorCapture => 'មិនអាចថតរូបបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get scanErrorGallery =>
+      'មិនអាចបើករូបភាពនោះបានទេ។ សូមជ្រើសរើសរូបផ្សេង។';
+
+  @override
+  String get scanErrorOcr =>
+      'មិនអាចអានវិក្កយបត្របានទេ។ សូមព្យាយាមម្តងទៀត ឬបញ្ចូលដោយដៃ។';
+
+  @override
+  String get scanExpenseSaved => 'បានរក្សាទុកចំណាយ';
+
+  @override
+  String get scanCameraAccessNeeded => 'ត្រូវការការអនុញ្ញាតកាមេរ៉ា';
+
+  @override
+  String get scanCameraUnavailable => 'កាមេរ៉ាមិនអាចប្រើបានទេ';
+
+  @override
+  String get scanCameraDeniedBody =>
+      'សូមបើកការអនុញ្ញាតកាមេរ៉ានៅក្នុងការកំណត់ ឬនាំចូលវិក្កយបត្រពីវិចិត្រសាលរបស់អ្នក។';
+
+  @override
+  String get scanCameraUnavailableBody =>
+      'នាំចូលវិក្កយបត្រពីវិចិត្រសាល ឬបញ្ចូលដោយដៃ។';
+
+  @override
+  String get scanOpenSettings => 'បើកការកំណត់';
+
+  @override
+  String get scanReviewTitle => 'ពិនិត្យវិក្កយបត្រ';
+
+  @override
+  String get scanReviewSubtitle =>
+      'ពិនិត្យព័ត៌មានលម្អិត កែប្រែអ្វីៗ រួចរក្សាទុក';
+
+  @override
+  String get scanFieldMerchant => 'អ្នកលក់';
+
+  @override
+  String get scanFieldMerchantHint => 'ឈ្មោះអ្នកលក់';
+
+  @override
+  String get scanFieldDate => 'កាលបរិច្ឆេទ';
+
+  @override
+  String get scanFieldDateHint => 'ឧ. 19 Jul 2026';
+
+  @override
+  String get scanFieldCategory => 'ប្រភេទ';
+
+  @override
+  String get scanSaveExpense => 'រក្សាទុកចំណាយ';
+
+  @override
+  String get scanRetake => 'ថតឡើងវិញ';
+
+  @override
+  String get scanItemsTitle => 'ទំនិញ';
+
+  @override
+  String get scanSumToTotal => 'បូកសរុប → សរុប';
+
+  @override
+  String get scanNoItems => 'រកមិនឃើញទំនិញទេ — សូមបន្ថែមដោយដៃប្រសិនបើចាំបាច់។';
+
+  @override
+  String get scanItemNameHint => 'ឈ្មោះទំនិញ';
+
+  @override
+  String get scanAddItem => 'បន្ថែមទំនិញ';
+
+  @override
+  String get scanTotalLabel => 'សរុប';
+
+  @override
   String get settingsLanguageLabel => 'ភាសា';
 }

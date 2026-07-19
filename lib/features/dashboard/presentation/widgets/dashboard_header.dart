@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -73,9 +74,9 @@ class DashboardHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _greetingRow(),
+                _greetingRow(context),
                 const SizedBox(height: AppSpacing.xxl),
-                _balanceBlock(),
+                _balanceBlock(context),
               ],
             ),
           ),
@@ -84,7 +85,7 @@ class DashboardHeader extends StatelessWidget {
     );
   }
 
-  Widget _greetingRow() {
+  Widget _greetingRow(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -93,7 +94,7 @@ class DashboardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Good morning!',
+                context.l10n.dashboardGreeting,
                 style: AppFont.bodyMedium.copyWith(
                   color: _ivory.withValues(alpha: 0.82),
                 ),
@@ -116,14 +117,14 @@ class DashboardHeader extends StatelessWidget {
     );
   }
 
-  Widget _balanceBlock() {
+  Widget _balanceBlock(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Text(
-              'Total Balance',
+              context.l10n.dashboardTotalBalance,
               style: AppFont.labelLarge.copyWith(
                 color: _ivory.withValues(alpha: 0.80),
                 letterSpacing: 0.4,
