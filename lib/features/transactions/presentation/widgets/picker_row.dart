@@ -58,7 +58,7 @@ class PickerRow extends StatelessWidget {
               ),
             ),
             trailing ??
-                const Icon(
+                Icon(
                   LucideIcons.chevronRight,
                   size: 18,
                   color: AppColors.textMuted,

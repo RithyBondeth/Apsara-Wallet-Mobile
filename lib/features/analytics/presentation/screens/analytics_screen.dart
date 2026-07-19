@@ -295,7 +295,7 @@ class _AppBar extends StatelessWidget {
               width: 44,
               height: 44,
               alignment: Alignment.center,
-              child: const Icon(
+              child: Icon(
                 LucideIcons.calendar,
                 size: 22,
                 color: AppColors.textPrimary,

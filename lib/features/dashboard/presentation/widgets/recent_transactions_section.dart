@@ -81,7 +81,7 @@ class RecentTransactionsSection extends StatelessWidget {
             children: [
               for (var i = 0; i < transactions.length; i++) ...[
                 if (i > 0)
-                  const Divider(
+                  Divider(
                     height: 1,
                     thickness: 1,
                     indent: AppSpacing.lg + 48 + AppSpacing.md,
@@ -113,7 +113,8 @@ class _TransactionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tx = transaction;
     final sign = tx.isIncome ? '+' : '-';
-    final amountColor = tx.isIncome ? AppColors.income : AppColors.textPrimary;
+    final amountColor =
+        tx.isIncome ? AppColors.income : AppColors.textPrimary;
 
     return PressScale(
       onTap: onTap,

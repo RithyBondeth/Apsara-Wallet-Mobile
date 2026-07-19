@@ -78,7 +78,9 @@ class _Stat extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           label,
-          style: AppFont.bodySmall.copyWith(color: AppColors.textSecondary),
+          style: AppFont.bodySmall.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
       ],
     );

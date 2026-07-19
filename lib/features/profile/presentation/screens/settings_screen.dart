@@ -402,9 +402,9 @@ class _OptionSheet<T> extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.only(bottom: bottomSafe + AppSpacing.md),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

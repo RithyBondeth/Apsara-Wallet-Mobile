@@ -36,13 +36,13 @@ class TxTypeToggle extends StatelessWidget {
       children: [
         for (final (i, (type, label)) in items.indexed) ...[
           if (i > 0) const SizedBox(width: 10),
-          Expanded(child: _pill(type, label)),
+          Expanded(child: _pill(context, type, label)),
         ],
       ],
     );
   }
 
-  Widget _pill(ETransactionType type, String label) {
+  Widget _pill(BuildContext context, ETransactionType type, String label) {
     final selected = type == value;
     final color = colorOf(type);
     return PressScale(
@@ -53,7 +53,9 @@ class TxTypeToggle extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? color.withValues(alpha: 0.08) : AppColors.surface,
+          color: selected
+              ? color.withValues(alpha: 0.08)
+              : AppColors.surface,
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(
             color: selected ? color : AppColors.surfaceVariant,

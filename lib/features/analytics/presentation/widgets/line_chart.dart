@@ -32,6 +32,9 @@ class LineChart extends StatelessWidget {
           maxValue: maxValue,
           axisLabels: axisLabels,
           progress: progress,
+          gridColor: AppColors.surfaceVariant,
+          labelColor: AppColors.textMuted,
+          dotRingColor: AppColors.surface,
         ),
       ),
     );
@@ -44,12 +47,18 @@ class _LinePainter extends CustomPainter {
     required this.maxValue,
     required this.axisLabels,
     required this.progress,
+    required this.gridColor,
+    required this.labelColor,
+    required this.dotRingColor,
   });
 
   final List<double> values;
   final double maxValue;
   final List<String> axisLabels;
   final double progress;
+  final Color gridColor;
+  final Color labelColor;
+  final Color dotRingColor;
 
   static const double _leftPad = 38;
   static const double _rightPad = 10;
@@ -123,7 +132,7 @@ class _LinePainter extends CustomPainter {
     final dotRing = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2
-      ..color = AppColors.surface;
+      ..color = dotRingColor;
     for (final p in pts) {
       canvas.drawCircle(p, 3.5, dotFill);
       canvas.drawCircle(p, 3.5, dotRing);

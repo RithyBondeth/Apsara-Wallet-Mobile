@@ -260,9 +260,9 @@ class _SignOutSheet extends StatelessWidget {
         AppSpacing.xxl,
         bottomSafe + AppSpacing.xxl,
       ),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -297,7 +297,7 @@ class _SignOutSheet extends StatelessWidget {
           Text(
             context.l10n.profileSignOutConfirmTitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -307,7 +307,7 @@ class _SignOutSheet extends StatelessWidget {
           Text(
             context.l10n.profileSignOutConfirmBody,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 14,
             ),

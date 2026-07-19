@@ -27,8 +27,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       title: AppConfigService.appName,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      // Light-only by design: the app's premium emerald/ivory look is a
+      // single appearance; no dark mode (and no following the OS setting).
+      themeMode: ThemeMode.light,
 
       // Localization — changing `locale` rebuilds the whole tree (incl. every
       // pushed route) in the new language.

@@ -53,7 +53,7 @@ class SettingsSection extends StatelessWidget {
             children: [
               for (var i = 0; i < children.length; i++) ...[
                 if (i > 0)
-                  const Divider(
+                  Divider(
                     height: 1,
                     thickness: 1,
                     indent: AppSpacing.lg + 40 + AppSpacing.md,

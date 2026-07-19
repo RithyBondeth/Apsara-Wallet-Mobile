@@ -108,7 +108,8 @@ class _AppTextFieldState extends State<AppTextField> {
                 vertical: 18,
               ),
               hintText: widget.hint,
-              hintStyle: AppFont.bodyLarge.copyWith(color: AppColors.textMuted),
+              hintStyle:
+                  AppFont.bodyLarge.copyWith(color: AppColors.textMuted),
               filled: false,
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
