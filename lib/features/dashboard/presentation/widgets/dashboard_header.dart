@@ -61,11 +61,13 @@ class DashboardHeader extends StatelessWidget {
           ),
 
           Padding(
+            // Extra bottom room so the USD line clears the action cards
+            // that float up over the header's lower edge.
             padding: EdgeInsets.fromLTRB(
               AppSpacing.xxl,
               topInset + AppSpacing.lg,
               AppSpacing.xxl,
-              AppSpacing.xxl,
+              AppSpacing.huge + AppSpacing.xxl,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
