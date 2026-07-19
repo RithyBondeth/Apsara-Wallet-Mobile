@@ -78,6 +78,22 @@ class AddTransactionRouteArgs {
 }
 
 /// generated route for
+/// [AiInsightsScreen]
+class AiInsightsRoute extends PageRouteInfo<void> {
+  const AiInsightsRoute({List<PageRouteInfo>? children})
+    : super(AiInsightsRoute.name, initialChildren: children);
+
+  static const String name = 'AiInsightsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AiInsightsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AnalyticsScreen]
 class AnalyticsRoute extends PageRouteInfo<void> {
   const AnalyticsRoute({List<PageRouteInfo>? children})
@@ -105,6 +121,38 @@ class BiometricRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const BiometricScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [BudgetScreen]
+class BudgetRoute extends PageRouteInfo<void> {
+  const BudgetRoute({List<PageRouteInfo>? children})
+    : super(BudgetRoute.name, initialChildren: children);
+
+  static const String name = 'BudgetRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BudgetScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [CategoriesScreen]
+class CategoriesRoute extends PageRouteInfo<void> {
+  const CategoriesRoute({List<PageRouteInfo>? children})
+    : super(CategoriesRoute.name, initialChildren: children);
+
+  static const String name = 'CategoriesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CategoriesScreen();
     },
   );
 }

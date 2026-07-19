@@ -12,6 +12,9 @@ import 'package:apsara_wallet_mobile/features/auth/presentation/screens/splash_s
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/screens/analytics_screen.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:apsara_wallet_mobile/features/budget/presentation/screens/budget_screen.dart';
+import 'package:apsara_wallet_mobile/features/categories/presentation/screens/categories_screen.dart';
+import 'package:apsara_wallet_mobile/features/insights/presentation/screens/ai_insights_screen.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/screens/scan_receipt_screen.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
@@ -193,6 +196,15 @@ class AppRouter extends RootStackRouter {
       page: AddTransactionRoute.page,
       path: RoutePathConstant.addTransactionPath,
       type: _modalTransition,
+    ),
+    AutoRoute(page: BudgetRoute.page, path: RoutePathConstant.budgetPath),
+    AutoRoute(
+      page: CategoriesRoute.page,
+      path: RoutePathConstant.categoriesPath,
+    ),
+    AutoRoute(
+      page: AiInsightsRoute.page,
+      path: RoutePathConstant.aiInsightsPath,
     ),
     AutoRoute(
       page: WalletsRoute.page,

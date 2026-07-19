@@ -287,6 +287,101 @@ class AppLocalizationsKm extends AppLocalizations {
   String get categoryInvestment => 'ការវិនិយោគ';
 
   @override
+  String get commonSave => 'រក្សាទុក';
+
+  @override
+  String get budgetTitle => 'ថវិកា';
+
+  @override
+  String get budgetAdd => 'បន្ថែមថវិកា';
+
+  @override
+  String get budgetProgress => 'វឌ្ឍនភាពថវិកា';
+
+  @override
+  String get budgetSpent => 'បានចំណាយ';
+
+  @override
+  String get budgetByCategory => 'ថវិកាតាមប្រភេទ';
+
+  @override
+  String get budgetMonthlyLimit => 'ដែនកំណត់ប្រចាំខែ';
+
+  @override
+  String get budgetAdded => 'បានបន្ថែមថវិកា';
+
+  @override
+  String get categoriesTitle => 'ប្រភេទ';
+
+  @override
+  String get categoriesSearchHint => 'ស្វែងរកប្រភេទ';
+
+  @override
+  String get categoriesEditTitle => 'កែប្រែប្រភេទ';
+
+  @override
+  String get categoriesNewTitle => 'ប្រភេទថ្មី';
+
+  @override
+  String get categoriesNameLabel => 'ឈ្មោះ';
+
+  @override
+  String get categoriesIconLabel => 'រូបតំណាង';
+
+  @override
+  String get categoriesColorLabel => 'ពណ៌';
+
+  @override
+  String get categoriesSaved => 'បានរក្សាទុកប្រភេទ';
+
+  @override
+  String get profileCategories => 'ប្រភេទ';
+
+  @override
+  String get profileCategoriesSubtitle => 'គ្រប់គ្រងរូបតំណាង និងពណ៌';
+
+  @override
+  String get insightsTitle => 'ការយល់ដឹងពី AI';
+
+  @override
+  String get insightsToday => 'ការយល់ដឹងថ្ងៃនេះ';
+
+  @override
+  String get insightsTodayBody1 =>
+      'អ្នកបានចំណាយលើអាហារ និងភោជនីយដ្ឋានច្រើនជាងខែមុន 18%។';
+
+  @override
+  String get insightsTodayBody2 =>
+      'សាកល្បងចម្អិនអាហារនៅផ្ទះឱ្យបានច្រើន ដើម្បីសន្សំប្រហែល 200,000 រៀលក្នុងខែនេះ។';
+
+  @override
+  String get insightsHealthScore => 'ពិន្ទុសុខភាពហិរញ្ញវត្ថុ';
+
+  @override
+  String get insightsScoreGood => 'ល្អ';
+
+  @override
+  String get insightsHealthBody1 => 'អ្នកកំពុងដើរលើផ្លូវត្រឹមត្រូវ!';
+
+  @override
+  String get insightsHealthBody2 => 'បន្តទៀត ហើយអ្នកនឹងសម្រេចគោលដៅឆាប់ៗ។';
+
+  @override
+  String get insightsMore => 'ការយល់ដឹងបន្ថែម';
+
+  @override
+  String get insightsWeekendTip =>
+      'ការចំណាយរបស់អ្នកខ្ពស់បំផុតនៅថ្ងៃអាទិត្យ។ សាកល្បងរៀបចំថវិកាសម្រាប់ចុងសប្តាហ៍។';
+
+  @override
+  String get insightsSubscriptionsTip =>
+      'ការជាវចំនួន 3 នឹងបន្តនៅសប្តាហ៍នេះ — សរុប 62,000 រៀល។';
+
+  @override
+  String get insightsSavingTip =>
+      'ការញែកទុក 50,000 រៀលរៀងរាល់សប្តាហ៍ នឹងសម្រេចគោលដៅសន្សំរបស់អ្នកនៅខែតុលា។';
+
+  @override
   String get navHome => 'ទំព័រដើម';
 
   @override

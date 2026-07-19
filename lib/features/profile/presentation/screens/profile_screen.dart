@@ -168,6 +168,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                             onTap: _openSettings,
                           ),
                           SettingsTile(
+                            icon: LucideIcons.shapes,
+                            title: context.l10n.profileCategories,
+                            subtitle: context.l10n.profileCategoriesSubtitle,
+                            onTap: () => context.router.push(
+                              const CategoriesRoute(),
+                            ),
+                          ),
+                          SettingsTile(
                             icon: LucideIcons.gift,
                             title: context.l10n.profileRewardsOffers,
                             iconColor: AppColors.accent,

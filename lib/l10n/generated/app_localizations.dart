@@ -632,6 +632,186 @@ abstract class AppLocalizations {
   /// **'Investment'**
   String get categoryInvestment;
 
+  /// No description provided for @commonSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// No description provided for @budgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get budgetTitle;
+
+  /// No description provided for @budgetAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Budget'**
+  String get budgetAdd;
+
+  /// No description provided for @budgetProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Progress'**
+  String get budgetProgress;
+
+  /// No description provided for @budgetSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent'**
+  String get budgetSpent;
+
+  /// No description provided for @budgetByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget by Category'**
+  String get budgetByCategory;
+
+  /// No description provided for @budgetMonthlyLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Limit'**
+  String get budgetMonthlyLimit;
+
+  /// No description provided for @budgetAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget added'**
+  String get budgetAdded;
+
+  /// No description provided for @categoriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoriesTitle;
+
+  /// No description provided for @categoriesSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search categories'**
+  String get categoriesSearchHint;
+
+  /// No description provided for @categoriesEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get categoriesEditTitle;
+
+  /// No description provided for @categoriesNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Category'**
+  String get categoriesNewTitle;
+
+  /// No description provided for @categoriesNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get categoriesNameLabel;
+
+  /// No description provided for @categoriesIconLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get categoriesIconLabel;
+
+  /// No description provided for @categoriesColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get categoriesColorLabel;
+
+  /// No description provided for @categoriesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Category saved'**
+  String get categoriesSaved;
+
+  /// No description provided for @profileCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get profileCategories;
+
+  /// No description provided for @profileCategoriesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage icons & colors'**
+  String get profileCategoriesSubtitle;
+
+  /// No description provided for @insightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Insights'**
+  String get insightsTitle;
+
+  /// No description provided for @insightsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Insight'**
+  String get insightsToday;
+
+  /// No description provided for @insightsTodayBody1.
+  ///
+  /// In en, this message translates to:
+  /// **'You spent 18% more on Food & Dining compared to last month.'**
+  String get insightsTodayBody1;
+
+  /// No description provided for @insightsTodayBody2.
+  ///
+  /// In en, this message translates to:
+  /// **'Try cooking at home more to save around KHR 200,000 this month.'**
+  String get insightsTodayBody2;
+
+  /// No description provided for @insightsHealthScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Financial Health Score'**
+  String get insightsHealthScore;
+
+  /// No description provided for @insightsScoreGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get insightsScoreGood;
+
+  /// No description provided for @insightsHealthBody1.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re on the right track!'**
+  String get insightsHealthBody1;
+
+  /// No description provided for @insightsHealthBody2.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it up and you will reach your goals soon.'**
+  String get insightsHealthBody2;
+
+  /// No description provided for @insightsMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More Insights'**
+  String get insightsMore;
+
+  /// No description provided for @insightsWeekendTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Your spending is highest on Sunday. Try planning your budget for weekends.'**
+  String get insightsWeekendTip;
+
+  /// No description provided for @insightsSubscriptionsTip.
+  ///
+  /// In en, this message translates to:
+  /// **'3 subscriptions renew this week — totalling KHR 62,000.'**
+  String get insightsSubscriptionsTip;
+
+  /// No description provided for @insightsSavingTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting aside KHR 50,000 weekly would reach your savings goal by October.'**
+  String get insightsSavingTip;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:

@@ -283,6 +283,102 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryInvestment => 'Investment';
 
   @override
+  String get commonSave => 'Save';
+
+  @override
+  String get budgetTitle => 'Budget';
+
+  @override
+  String get budgetAdd => 'Add Budget';
+
+  @override
+  String get budgetProgress => 'Budget Progress';
+
+  @override
+  String get budgetSpent => 'Spent';
+
+  @override
+  String get budgetByCategory => 'Budget by Category';
+
+  @override
+  String get budgetMonthlyLimit => 'Monthly Limit';
+
+  @override
+  String get budgetAdded => 'Budget added';
+
+  @override
+  String get categoriesTitle => 'Category';
+
+  @override
+  String get categoriesSearchHint => 'Search categories';
+
+  @override
+  String get categoriesEditTitle => 'Edit Category';
+
+  @override
+  String get categoriesNewTitle => 'New Category';
+
+  @override
+  String get categoriesNameLabel => 'Name';
+
+  @override
+  String get categoriesIconLabel => 'Icon';
+
+  @override
+  String get categoriesColorLabel => 'Color';
+
+  @override
+  String get categoriesSaved => 'Category saved';
+
+  @override
+  String get profileCategories => 'Categories';
+
+  @override
+  String get profileCategoriesSubtitle => 'Manage icons & colors';
+
+  @override
+  String get insightsTitle => 'AI Insights';
+
+  @override
+  String get insightsToday => 'Today\'s Insight';
+
+  @override
+  String get insightsTodayBody1 =>
+      'You spent 18% more on Food & Dining compared to last month.';
+
+  @override
+  String get insightsTodayBody2 =>
+      'Try cooking at home more to save around KHR 200,000 this month.';
+
+  @override
+  String get insightsHealthScore => 'Financial Health Score';
+
+  @override
+  String get insightsScoreGood => 'Good';
+
+  @override
+  String get insightsHealthBody1 => 'You\'re on the right track!';
+
+  @override
+  String get insightsHealthBody2 =>
+      'Keep it up and you will reach your goals soon.';
+
+  @override
+  String get insightsMore => 'More Insights';
+
+  @override
+  String get insightsWeekendTip =>
+      'Your spending is highest on Sunday. Try planning your budget for weekends.';
+
+  @override
+  String get insightsSubscriptionsTip =>
+      '3 subscriptions renew this week — totalling KHR 62,000.';
+
+  @override
+  String get insightsSavingTip =>
+      'Setting aside KHR 50,000 weekly would reach your savings goal by October.';
+
+  @override
   String get navHome => 'Home';
 
   @override

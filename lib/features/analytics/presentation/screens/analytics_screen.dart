@@ -220,8 +220,21 @@ class _AppBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Balances the trailing button so the title stays centered.
-          const SizedBox(width: 44),
+          // AI Insights entry — balances the trailing calendar button.
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => context.router.push(const AiInsightsRoute()),
+            child: Container(
+              width: 44,
+              height: 44,
+              alignment: Alignment.center,
+              child: const Icon(
+                LucideIcons.sparkles,
+                size: 21,
+                color: Color(0xFF6C63D2),
+              ),
+            ),
+          ),
           Expanded(
             child: Text(
               context.l10n.analyticsTitle,

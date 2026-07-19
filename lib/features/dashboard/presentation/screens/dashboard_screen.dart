@@ -14,6 +14,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/qui
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/recent_transactions_section.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 /// The home dashboard: emerald hero balance, quick actions, this-month
@@ -187,11 +188,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                           controller: _intro,
                           start: 0.30,
                           end: 0.78,
-                          child: AnimatedBuilder(
-                            animation: _budget,
-                            builder: (context, _) => MonthOverviewCard(
-                              data: _data,
-                              progress: _budget.value,
+                          child: PressScale(
+                            pressedScale: 0.98,
+                            onTap: () =>
+                                context.router.push(const BudgetRoute()),
+                            child: AnimatedBuilder(
+                              animation: _budget,
+                              builder: (context, _) => MonthOverviewCard(
+                                data: _data,
+                                progress: _budget.value,
+                              ),
                             ),
                           ),
                         ),
