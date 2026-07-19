@@ -72,6 +72,12 @@
   "biometricEnableCta": "បើកជីវមាត្រ",
   "biometricLaterCta": "ពេលក្រោយ",
 
+  "navHome": "ទំព័រដើម",
+  "navAnalytics": "វិភាគ",
+  "navWallets": "កាបូប",
+  "navProfile": "គណនី",
+  "navScan": "ស្កេន",
+
   "dashboardAppBarTitle": "ផ្ទាំងគ្រប់គ្រង",
   "commonCancel": "បោះបង់",
 

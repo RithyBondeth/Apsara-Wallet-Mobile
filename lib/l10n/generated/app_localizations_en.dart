@@ -193,6 +193,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get biometricLaterCta => 'Maybe Later';
 
   @override
+  String get navHome => 'Home';
+
+  @override
+  String get navAnalytics => 'Analytics';
+
+  @override
+  String get navWallets => 'Wallets';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get navScan => 'Scan';
+
+  @override
   String get dashboardAppBarTitle => 'Dashboard';
 
   @override

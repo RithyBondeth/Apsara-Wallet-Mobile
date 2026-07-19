@@ -72,6 +72,12 @@
   "biometricEnableCta": "Enable Biometric",
   "biometricLaterCta": "Maybe Later",
 
+  "navHome": "Home",
+  "navAnalytics": "Analytics",
+  "navWallets": "Wallets",
+  "navProfile": "Profile",
+  "navScan": "Scan",
+
   "dashboardAppBarTitle": "Dashboard",
   "commonCancel": "Cancel",
 

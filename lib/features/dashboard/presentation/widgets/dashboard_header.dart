@@ -10,8 +10,11 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/controls/language_switcher.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/motion/count_up_text.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/motion/shimmer_sweep.dart';
 
 /// The emerald hero at the top of the dashboard: greeting, notifications,
 /// the drifting apsara brand mark, and the total-balance readout with a
@@ -117,6 +120,40 @@ class DashboardHeader extends StatelessWidget {
     );
   }
 
+  TextStyle get _khrStyle => AppFont.headingLarge.copyWith(
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.5,
+      );
+
+  TextStyle get _usdStyle =>
+      AppFont.bodyMedium.copyWith(color: _ivory.withValues(alpha: 0.75));
+
+  /// Cross-fades between the real amount and its privacy-dot stand-in with a
+  /// small vertical drift, so toggling the eye feels like a reveal.
+  Widget _revealSwitcher({
+    required bool hidden,
+    required Widget hiddenChild,
+    required Widget child,
+  }) {
+    return AnimatedSwitcher(
+      duration: AppDurations.medium,
+      switchInCurve: AppCurves.entrance,
+      switchOutCurve: Curves.easeIn,
+      transitionBuilder: (w, anim) => FadeTransition(
+        opacity: anim,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.35),
+            end: Offset.zero,
+          ).animate(anim),
+          child: w,
+        ),
+      ),
+      child: hidden ? hiddenChild : child,
+    );
+  }
+
   Widget _balanceBlock(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,23 +195,37 @@ class DashboardHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
-            Text(
-              balanceHidden ? '••••••••' : formatKhr(data.balanceKhr),
-              style: AppFont.headingLarge.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
+            _revealSwitcher(
+              hidden: balanceHidden,
+              hiddenChild: Text(
+                '••••••••',
+                key: const ValueKey('khr-hidden'),
+                style: _khrStyle,
+              ),
+              child: ShimmerSweep(
+                key: const ValueKey('khr-shown'),
+                child: CountUpText(
+                  value: data.balanceKhr,
+                  formatter: (v) => formatKhr(v.round()),
+                  style: _khrStyle,
+                ),
               ),
             ),
           ],
         ),
         const SizedBox(height: AppSpacing.xs),
-        Text(
-          balanceHidden
-              ? '≈ USD ••••••'
-              : '≈ USD ${formatUsd(data.balanceUsd)}',
-          style: AppFont.bodyMedium.copyWith(
-            color: _ivory.withValues(alpha: 0.75),
+        _revealSwitcher(
+          hidden: balanceHidden,
+          hiddenChild: Text(
+            '≈ USD ••••••',
+            key: const ValueKey('usd-hidden'),
+            style: _usdStyle,
+          ),
+          child: CountUpText(
+            key: const ValueKey('usd-shown'),
+            value: data.balanceUsd,
+            formatter: (v) => '≈ USD ${formatUsd(v)}',
+            style: _usdStyle,
           ),
         ),
       ],

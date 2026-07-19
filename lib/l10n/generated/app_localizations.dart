@@ -452,6 +452,36 @@ abstract class AppLocalizations {
   /// **'Maybe Later'**
   String get biometricLaterCta;
 
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get navAnalytics;
+
+  /// No description provided for @navWallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets'**
+  String get navWallets;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// No description provided for @navScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get navScan;
+
   /// No description provided for @dashboardAppBarTitle.
   ///
   /// In en, this message translates to:

@@ -8,6 +8,8 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/motion/count_up_text.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/motion/shimmer_sweep.dart';
 
 /// The emerald "Total Balance" hero at the top of the Wallets screen — an
 /// Angkor-temple card ([AssetPathConstant.walletBackground]) with the combined
@@ -120,16 +122,27 @@ class TotalBalanceCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: AppSpacing.sm),
-                          Text(
-                            balanceHidden
-                                ? '••••••••'
-                                : formatKhr(data.totalBalanceKhr),
-                            style: AppFont.headingLarge.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
+                          if (balanceHidden)
+                            Text(
+                              '••••••••',
+                              style: AppFont.headingLarge.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.5,
+                              ),
+                            )
+                          else
+                            ShimmerSweep(
+                              child: CountUpText(
+                                value: data.totalBalanceKhr,
+                                formatter: (v) => formatKhr(v.round()),
+                                style: AppFont.headingLarge.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),

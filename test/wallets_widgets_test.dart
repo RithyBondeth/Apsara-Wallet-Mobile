@@ -52,6 +52,8 @@ void main() {
       ),
     );
     await tester.pump();
+    // Let the balance count-up finish before asserting on the final amount.
+    await tester.pump(const Duration(milliseconds: 1200));
 
     expect(find.text('Total Balance'), findsOneWidget);
     expect(find.text('2,584,300'), findsOneWidget); // KHR total

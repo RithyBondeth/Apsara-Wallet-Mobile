@@ -91,6 +91,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
+        // Body flows under the floating nav capsule so its blur has content.
+        extendBody: true,
         floatingActionButton: AppBottomBarCenterButton(
           onTap: () => context.router.push(const ScanReceiptRoute()),
         ),
@@ -109,7 +111,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
             ),
             SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.only(bottom: bottomSafe + AppSpacing.xxxl),
+              padding: EdgeInsets.only(
+                bottom: bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

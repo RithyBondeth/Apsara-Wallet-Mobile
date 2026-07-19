@@ -197,6 +197,21 @@ class AppLocalizationsKm extends AppLocalizations {
   String get biometricLaterCta => 'ពេលក្រោយ';
 
   @override
+  String get navHome => 'ទំព័រដើម';
+
+  @override
+  String get navAnalytics => 'វិភាគ';
+
+  @override
+  String get navWallets => 'កាបូប';
+
+  @override
+  String get navProfile => 'គណនី';
+
+  @override
+  String get navScan => 'ស្កេន';
+
+  @override
   String get dashboardAppBarTitle => 'ផ្ទាំងគ្រប់គ្រង';
 
   @override

@@ -74,6 +74,8 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
         backgroundColor: AppColors.background,
+        // Body flows under the floating nav capsule so its blur has content.
+        extendBody: true,
         floatingActionButton: AppBottomBarCenterButton(
           onTap: () => context.router.push(const ScanReceiptRoute()),
         ),
@@ -92,7 +94,7 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                     AppSpacing.xxl,
                     AppSpacing.sm,
                     AppSpacing.xxl,
-                    bottomSafe + AppSpacing.xxxl,
+                    bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

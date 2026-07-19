@@ -94,6 +94,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
         backgroundColor: AppColors.background,
+        // Body flows under the floating nav capsule so its blur has content.
+        extendBody: true,
         floatingActionButton: AppBottomBarCenterButton(
           onTap: () => context.router.push(const ScanReceiptRoute()),
         ),
@@ -111,7 +113,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     AppSpacing.xxl,
                     AppSpacing.sm,
                     AppSpacing.xxl,
-                    bottomSafe + AppSpacing.xxxl,
+                    bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

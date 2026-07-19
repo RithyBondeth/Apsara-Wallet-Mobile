@@ -17,18 +17,138 @@ import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/walle
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+
+import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 
 part 'app_routes.gr.dart';
 
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
+  /// House transitions — three moves, matched to what the navigation means:
+  ///
+  /// * **Shared-axis slide** (default): the new page slides in from the right
+  ///   while the old one drifts left and dims underneath — pushes/pops read
+  ///   as travelling forward/back through a flow. Popping plays it in
+  ///   reverse automatically.
+  /// * **Fade-through lift** (bottom-bar tabs): sibling screens cross-fade
+  ///   with a soft rise, so tab hops don't imply a direction.
+  /// * **Modal slide-up** (scan): the camera rises over the app like a sheet.
+  @override
+  RouteType get defaultRouteType => RouteType.custom(
+        transitionsBuilder: _sharedAxisSlide,
+        duration: const Duration(milliseconds: 400),
+        reverseDuration: const Duration(milliseconds: 340),
+      );
+
+  static final RouteType _tabTransition = RouteType.custom(
+    transitionsBuilder: _fadeThroughLift,
+    duration: const Duration(milliseconds: 420),
+    reverseDuration: const Duration(milliseconds: 320),
+  );
+
+  static final RouteType _modalTransition = RouteType.custom(
+    transitionsBuilder: _modalSlideUp,
+    duration: const Duration(milliseconds: 420),
+    reverseDuration: const Duration(milliseconds: 340),
+  );
+
+  static Widget _sharedAxisSlide(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final incoming = CurvedAnimation(
+      parent: animation,
+      curve: AppCurves.entrance,
+      reverseCurve: Curves.easeInCubic,
+    );
+    final outgoing = CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: AppCurves.gentle,
+    );
+    return SlideTransition(
+      // This page while it is on top: enters from the right, exits back out.
+      position: Tween<Offset>(
+        begin: const Offset(0.28, 0),
+        end: Offset.zero,
+      ).animate(incoming),
+      child: FadeTransition(
+        opacity: incoming,
+        child: SlideTransition(
+          // This page while another is pushed over it: drift left and dim.
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(-0.12, 0),
+          ).animate(outgoing),
+          child: FadeTransition(
+            opacity: Tween<double>(begin: 1.0, end: 0.55).animate(outgoing),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget _fadeThroughLift(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final curved = CurvedAnimation(
+      parent: animation,
+      curve: AppCurves.entrance,
+      reverseCurve: Curves.easeIn,
+    );
+    return FadeTransition(
+      opacity: curved,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.035),
+          end: Offset.zero,
+        ).animate(curved),
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.985, end: 1.0).animate(curved),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  static Widget _modalSlideUp(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final curved = CurvedAnimation(
+      parent: animation,
+      curve: AppCurves.entrance,
+      reverseCurve: Curves.easeInCubic,
+    );
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(0, 1),
+        end: Offset.zero,
+      ).animate(curved),
+      child: child,
+    );
+  }
+
   @override
   List<AutoRoute> get routes => [
     // ==================================================
     // AUTH ROUTES
     // ==================================================
     AutoRoute(page: SplashRoute.page, path: RoutePathConstant.splashPath),
-    AutoRoute(page: WelcomeRoute.page, path: RoutePathConstant.welcomePath),
+    AutoRoute(
+      page: WelcomeRoute.page,
+      path: RoutePathConstant.welcomePath,
+      // Splash hands off with a calm cross-fade, not a lateral push.
+      type: _tabTransition,
+    ),
     AutoRoute(
       page: OnBoardingRoute.page,
       path: RoutePathConstant.onBoardingPath,
@@ -55,18 +175,32 @@ class AppRouter extends RootStackRouter {
       page: DashboardRoute.page,
       path: RoutePathConstant.dashboardPath,
       initial: true,
+      type: _tabTransition,
     ),
-    AutoRoute(page: AnalyticsRoute.page, path: RoutePathConstant.analyticsPath),
+    AutoRoute(
+      page: AnalyticsRoute.page,
+      path: RoutePathConstant.analyticsPath,
+      type: _tabTransition,
+    ),
     AutoRoute(
       page: ScanReceiptRoute.page,
       path: RoutePathConstant.scanReceiptPath,
+      type: _modalTransition,
     ),
-    AutoRoute(page: WalletsRoute.page, path: RoutePathConstant.walletsPath),
+    AutoRoute(
+      page: WalletsRoute.page,
+      path: RoutePathConstant.walletsPath,
+      type: _tabTransition,
+    ),
 
     // ==================================================
     // PROFILE ROUTES
     // ==================================================
-    AutoRoute(page: ProfileRoute.page, path: RoutePathConstant.profilePath),
+    AutoRoute(
+      page: ProfileRoute.page,
+      path: RoutePathConstant.profilePath,
+      type: _tabTransition,
+    ),
     AutoRoute(page: SettingsRoute.page, path: RoutePathConstant.settingsPath),
   ];
 }
