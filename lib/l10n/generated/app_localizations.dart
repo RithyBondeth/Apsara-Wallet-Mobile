@@ -788,41 +788,11 @@ abstract class AppLocalizations {
   /// **'Today\'s Insight'**
   String get insightsToday;
 
-  /// No description provided for @insightsTodayBody1.
-  ///
-  /// In en, this message translates to:
-  /// **'You spent 18% more on Food & Dining compared to last month.'**
-  String get insightsTodayBody1;
-
-  /// No description provided for @insightsTodayBody2.
-  ///
-  /// In en, this message translates to:
-  /// **'Try cooking at home more to save around KHR 200,000 this month.'**
-  String get insightsTodayBody2;
-
   /// No description provided for @insightsHealthScore.
   ///
   /// In en, this message translates to:
   /// **'Financial Health Score'**
   String get insightsHealthScore;
-
-  /// No description provided for @insightsScoreGood.
-  ///
-  /// In en, this message translates to:
-  /// **'Good'**
-  String get insightsScoreGood;
-
-  /// No description provided for @insightsHealthBody1.
-  ///
-  /// In en, this message translates to:
-  /// **'You\'re on the right track!'**
-  String get insightsHealthBody1;
-
-  /// No description provided for @insightsHealthBody2.
-  ///
-  /// In en, this message translates to:
-  /// **'Keep it up and you will reach your goals soon.'**
-  String get insightsHealthBody2;
 
   /// No description provided for @insightsMore.
   ///
@@ -830,23 +800,155 @@ abstract class AppLocalizations {
   /// **'More Insights'**
   String get insightsMore;
 
-  /// No description provided for @insightsWeekendTip.
+  /// No description provided for @insightsScoreNeedsWork.
   ///
   /// In en, this message translates to:
-  /// **'Your spending is highest on Sunday. Try planning your budget for weekends.'**
-  String get insightsWeekendTip;
+  /// **'Needs work'**
+  String get insightsScoreNeedsWork;
 
-  /// No description provided for @insightsSubscriptionsTip.
+  /// No description provided for @insightsScoreFair.
   ///
   /// In en, this message translates to:
-  /// **'3 subscriptions renew this week — totalling KHR 62,000.'**
-  String get insightsSubscriptionsTip;
+  /// **'Fair'**
+  String get insightsScoreFair;
 
-  /// No description provided for @insightsSavingTip.
+  /// No description provided for @insightsScoreGood.
   ///
   /// In en, this message translates to:
-  /// **'Setting aside KHR 50,000 weekly would reach your savings goal by October.'**
-  String get insightsSavingTip;
+  /// **'Good'**
+  String get insightsScoreGood;
+
+  /// No description provided for @insightsScoreExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
+  String get insightsScoreExcellent;
+
+  /// No description provided for @insightsHealthSavings.
+  ///
+  /// In en, this message translates to:
+  /// **'You saved {pct}% of your income this month.'**
+  String insightsHealthSavings(int pct);
+
+  /// No description provided for @insightsHealthOverspent.
+  ///
+  /// In en, this message translates to:
+  /// **'You spent {pct}% more than you earned this month.'**
+  String insightsHealthOverspent(int pct);
+
+  /// No description provided for @insightsEncourageNeedsWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s turn this around — small changes add up fast.'**
+  String get insightsEncourageNeedsWork;
+
+  /// No description provided for @insightsEncourageFair.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re getting there. A little more discipline goes a long way.'**
+  String get insightsEncourageFair;
+
+  /// No description provided for @insightsEncourageGood.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re on the right track — keep it up!'**
+  String get insightsEncourageGood;
+
+  /// No description provided for @insightsEncourageExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Outstanding money habits. Keep the momentum going!'**
+  String get insightsEncourageExcellent;
+
+  /// No description provided for @insightTopCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} was your biggest expense — {amount} ({pct}% of spending).'**
+  String insightTopCategory(String category, String amount, int pct);
+
+  /// No description provided for @insightBusiestDay.
+  ///
+  /// In en, this message translates to:
+  /// **'You spend the most on {day}s.'**
+  String insightBusiestDay(String day);
+
+  /// No description provided for @insightCategoryUp.
+  ///
+  /// In en, this message translates to:
+  /// **'You spent {pct}% more on {category} than last month.'**
+  String insightCategoryUp(int pct, String category);
+
+  /// No description provided for @insightCategoryDown.
+  ///
+  /// In en, this message translates to:
+  /// **'You spent {pct}% less on {category} than last month.'**
+  String insightCategoryDown(int pct, String category);
+
+  /// No description provided for @insightSavingsPositive.
+  ///
+  /// In en, this message translates to:
+  /// **'You saved {amount} this month — {pct}% of your income.'**
+  String insightSavingsPositive(String amount, int pct);
+
+  /// No description provided for @insightOverspend.
+  ///
+  /// In en, this message translates to:
+  /// **'You spent {amount} more than you earned this month.'**
+  String insightOverspend(String amount);
+
+  /// No description provided for @insightsCoachSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Great discipline — consider moving some into savings.'**
+  String get insightsCoachSaving;
+
+  /// No description provided for @insightsCoachOverspend.
+  ///
+  /// In en, this message translates to:
+  /// **'Try trimming non-essentials to get back in the green.'**
+  String get insightsCoachOverspend;
+
+  /// No description provided for @insightsCoachReduce.
+  ///
+  /// In en, this message translates to:
+  /// **'Small cuts here would make the biggest difference.'**
+  String get insightsCoachReduce;
+
+  /// No description provided for @insightsCoachKeepGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice progress — keep the good habit going.'**
+  String get insightsCoachKeepGoing;
+
+  /// No description provided for @insightsCoachTopCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch this category to keep your spending on track.'**
+  String get insightsCoachTopCategory;
+
+  /// No description provided for @insightsCoachDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep tracking to stay on top of your money.'**
+  String get insightsCoachDefault;
+
+  /// No description provided for @insightsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough data yet'**
+  String get insightsEmptyTitle;
+
+  /// No description provided for @insightsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a few transactions and I\'ll start spotting patterns in your spending.'**
+  String get insightsEmptyBody;
+
+  /// No description provided for @insightsFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights are generated on your device from your own transactions.'**
+  String get insightsFooter;
 
   /// No description provided for @commonComingSoon.
   ///

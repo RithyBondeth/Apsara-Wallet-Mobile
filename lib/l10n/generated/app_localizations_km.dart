@@ -365,39 +365,110 @@ class AppLocalizationsKm extends AppLocalizations {
   String get insightsToday => 'ការយល់ដឹងថ្ងៃនេះ';
 
   @override
-  String get insightsTodayBody1 =>
-      'អ្នកបានចំណាយលើអាហារ និងភោជនីយដ្ឋានច្រើនជាងខែមុន 18%។';
-
-  @override
-  String get insightsTodayBody2 =>
-      'សាកល្បងចម្អិនអាហារនៅផ្ទះឱ្យបានច្រើន ដើម្បីសន្សំប្រហែល 200,000 រៀលក្នុងខែនេះ។';
-
-  @override
   String get insightsHealthScore => 'ពិន្ទុសុខភាពហិរញ្ញវត្ថុ';
-
-  @override
-  String get insightsScoreGood => 'ល្អ';
-
-  @override
-  String get insightsHealthBody1 => 'អ្នកកំពុងដើរលើផ្លូវត្រឹមត្រូវ!';
-
-  @override
-  String get insightsHealthBody2 => 'បន្តទៀត ហើយអ្នកនឹងសម្រេចគោលដៅឆាប់ៗ។';
 
   @override
   String get insightsMore => 'ការយល់ដឹងបន្ថែម';
 
   @override
-  String get insightsWeekendTip =>
-      'ការចំណាយរបស់អ្នកខ្ពស់បំផុតនៅថ្ងៃអាទិត្យ។ សាកល្បងរៀបចំថវិកាសម្រាប់ចុងសប្តាហ៍។';
+  String get insightsScoreNeedsWork => 'ត្រូវកែលម្អ';
 
   @override
-  String get insightsSubscriptionsTip =>
-      'ការជាវចំនួន 3 នឹងបន្តនៅសប្តាហ៍នេះ — សរុប 62,000 រៀល។';
+  String get insightsScoreFair => 'មធ្យម';
 
   @override
-  String get insightsSavingTip =>
-      'ការញែកទុក 50,000 រៀលរៀងរាល់សប្តាហ៍ នឹងសម្រេចគោលដៅសន្សំរបស់អ្នកនៅខែតុលា។';
+  String get insightsScoreGood => 'ល្អ';
+
+  @override
+  String get insightsScoreExcellent => 'ល្អឥតខ្ចោះ';
+
+  @override
+  String insightsHealthSavings(int pct) {
+    return 'អ្នកបានសន្សំ $pct% នៃចំណូលរបស់អ្នកក្នុងខែនេះ។';
+  }
+
+  @override
+  String insightsHealthOverspent(int pct) {
+    return 'អ្នកបានចំណាយច្រើនជាងចំណូល $pct% ក្នុងខែនេះ។';
+  }
+
+  @override
+  String get insightsEncourageNeedsWork =>
+      'តោះកែប្រែ — ការផ្លាស់ប្តូរតូចៗនាំឱ្យលទ្ធផលធំ។';
+
+  @override
+  String get insightsEncourageFair =>
+      'អ្នកជិតដល់ហើយ។ ការប្រុងប្រយ័ត្នបន្ថែមបន្តិចនឹងជួយបានច្រើន។';
+
+  @override
+  String get insightsEncourageGood =>
+      'អ្នកកំពុងដើរលើផ្លូវត្រឹមត្រូវ — បន្តទៀត!';
+
+  @override
+  String get insightsEncourageExcellent =>
+      'ទម្លាប់គ្រប់គ្រងលុយល្អឥតខ្ចោះ។ បន្តរក្សាល្បឿននេះ!';
+
+  @override
+  String insightTopCategory(String category, String amount, int pct) {
+    return '$category គឺជាការចំណាយធំបំផុតរបស់អ្នក — $amount ($pct% នៃការចំណាយ)។';
+  }
+
+  @override
+  String insightBusiestDay(String day) {
+    return 'អ្នកចំណាយច្រើនបំផុតនៅថ្ងៃ$day។';
+  }
+
+  @override
+  String insightCategoryUp(int pct, String category) {
+    return 'អ្នកបានចំណាយលើ $category ច្រើនជាងខែមុន $pct%។';
+  }
+
+  @override
+  String insightCategoryDown(int pct, String category) {
+    return 'អ្នកបានចំណាយលើ $category តិចជាងខែមុន $pct%។';
+  }
+
+  @override
+  String insightSavingsPositive(String amount, int pct) {
+    return 'អ្នកបានសន្សំ $amount ក្នុងខែនេះ — $pct% នៃចំណូលរបស់អ្នក។';
+  }
+
+  @override
+  String insightOverspend(String amount) {
+    return 'អ្នកបានចំណាយច្រើនជាងចំណូល $amount ក្នុងខែនេះ។';
+  }
+
+  @override
+  String get insightsCoachSaving => 'វិន័យល្អ — ពិចារណាផ្ទេរខ្លះទៅសន្សំ។';
+
+  @override
+  String get insightsCoachOverspend =>
+      'សាកល្បងកាត់បន្ថយចំណាយមិនចាំបាច់ ដើម្បីត្រឡប់មករកតុល្យភាព។';
+
+  @override
+  String get insightsCoachReduce =>
+      'ការកាត់បន្ថយតិចៗនៅទីនេះនឹងធ្វើឱ្យមានភាពខុសគ្នាច្រើនបំផុត។';
+
+  @override
+  String get insightsCoachKeepGoing => 'វឌ្ឍនភាពល្អ — បន្តរក្សាទម្លាប់ល្អនេះ។';
+
+  @override
+  String get insightsCoachTopCategory =>
+      'តាមដានប្រភេទនេះ ដើម្បីរក្សាការចំណាយឱ្យស្ថិតក្នុងផែនការ។';
+
+  @override
+  String get insightsCoachDefault => 'បន្តតាមដាន ដើម្បីគ្រប់គ្រងលុយរបស់អ្នក។';
+
+  @override
+  String get insightsEmptyTitle => 'ទិន្នន័យមិនទាន់គ្រប់គ្រាន់';
+
+  @override
+  String get insightsEmptyBody =>
+      'បន្ថែមប្រតិបត្តិការមួយចំនួន ហើយខ្ញុំនឹងចាប់ផ្តើមស្វែងរកគំរូនៃការចំណាយរបស់អ្នក។';
+
+  @override
+  String get insightsFooter =>
+      'ការយល់ដឹងត្រូវបានបង្កើតនៅលើឧបករណ៍របស់អ្នក ពីប្រតិបត្តិការផ្ទាល់ខ្លួនរបស់អ្នក។';
 
   @override
   String get commonComingSoon => 'នឹងមានក្នុងពេលឆាប់ៗ';

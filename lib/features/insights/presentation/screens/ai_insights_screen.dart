@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -12,23 +13,26 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/insights/data/insights_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/insights/data/insights_engine.dart';
+import 'package:apsara_wallet_mobile/features/insights/data/insights_providers.dart';
+import 'package:apsara_wallet_mobile/features/insights/presentation/insight_presenter.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/count_up_text.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// AI Insights (Phase 1, UI-only): today's insight with the friendly bot,
-/// an animated Financial Health Score gauge and a list of further tips —
-/// per the design board mockup. All copy is mock and localized.
+/// AI Insights: a data-driven read of the user's own ledger. The financial
+/// health score and every tip are computed on-device by [InsightsEngine] from
+/// the live transactions (via [insightsReportProvider]); the presenter
+/// localizes them. Retains the design board's friendly bot + animated gauge.
 @RoutePage()
-class AiInsightsScreen extends StatefulWidget {
+class AiInsightsScreen extends ConsumerStatefulWidget {
   const AiInsightsScreen({super.key});
 
   @override
-  State<AiInsightsScreen> createState() => _AiInsightsScreenState();
+  ConsumerState<AiInsightsScreen> createState() => _AiInsightsScreenState();
 }
 
-class _AiInsightsScreenState extends State<AiInsightsScreen>
+class _AiInsightsScreenState extends ConsumerState<AiInsightsScreen>
     with TickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
@@ -47,8 +51,6 @@ class _AiInsightsScreenState extends State<AiInsightsScreen>
     curve: const Interval(0.3, 0.9, curve: AppCurves.decelerate),
   );
 
-  final InsightsData _data = InsightsData.sample;
-
   @override
   void dispose() {
     _intro.dispose();
@@ -58,8 +60,8 @@ class _AiInsightsScreenState extends State<AiInsightsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final bottomSafe = MediaQuery.of(context).padding.bottom;
+    final reportAsync = ref.watch(insightsReportProvider);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -85,55 +87,142 @@ class _AiInsightsScreenState extends State<AiInsightsScreen>
                     AppSpacing.xxl,
                     bottomSafe + AppSpacing.xxxl,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.08,
-                        end: 0.5,
-                        scaleFrom: 0.97,
-                        child: _TodayInsightCard(ambient: _ambient),
-                      ),
-                      const SizedBox(height: AppSpacing.xxl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.22,
-                        end: 0.65,
-                        child: _HealthScoreCard(
-                          score: _data.healthScore,
-                          gauge: _gauge,
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.xxl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.36,
-                        end: 0.8,
-                        child: _MoreInsightsCard(tips: _data.tips),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.5,
-                        end: 1.0,
-                        child: Center(
-                          child: Text(
-                            l10n.insightsHealthBody2,
-                            textAlign: TextAlign.center,
-                            style: AppFont.labelMedium.copyWith(
-                              color: AppColors.textMuted,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: reportAsync.when(
+                    loading: () => const Padding(
+                      padding: EdgeInsets.only(top: AppSpacing.xxxl),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (_, _) => _EmptyState(ambient: _ambient),
+                    data: (report) => report.hasEnoughData
+                        ? _ReportBody(
+                            report: report,
+                            intro: _intro,
+                            ambient: _ambient,
+                            gauge: _gauge,
+                          )
+                        : _EmptyState(ambient: _ambient),
                   ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The populated report: today's insight, the health gauge and more tips.
+class _ReportBody extends StatelessWidget {
+  const _ReportBody({
+    required this.report,
+    required this.intro,
+    required this.ambient,
+    required this.gauge,
+  });
+
+  final InsightsReport report;
+  final AnimationController intro;
+  final AnimationController ambient;
+  final Animation<double> gauge;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final presenter = InsightPresenter(
+      l10n,
+      Localizations.localeOf(context).toString(),
+    );
+    final headline = report.headline;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (headline != null)
+          FadeSlideIn(
+            controller: intro,
+            start: 0.08,
+            end: 0.5,
+            scaleFrom: 0.97,
+            child: _TodayInsightCard(
+              ambient: ambient,
+              body: presenter.headlineBody(headline),
+              coach: presenter.headlineCoach(headline),
+            ),
+          ),
+        const SizedBox(height: AppSpacing.xxl),
+        FadeSlideIn(
+          controller: intro,
+          start: 0.22,
+          end: 0.65,
+          child: _HealthScoreCard(
+            report: report,
+            presenter: presenter,
+            gauge: gauge,
+          ),
+        ),
+        if (report.more.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.xxl),
+          FadeSlideIn(
+            controller: intro,
+            start: 0.36,
+            end: 0.8,
+            child: _MoreInsightsCard(
+              views: [for (final i in report.more) presenter.view(i)],
+            ),
+          ),
+        ],
+        const SizedBox(height: AppSpacing.xl),
+        FadeSlideIn(
+          controller: intro,
+          start: 0.5,
+          end: 1.0,
+          child: Center(
+            child: Text(
+              l10n.insightsFooter,
+              textAlign: TextAlign.center,
+              style: AppFont.labelMedium.copyWith(color: AppColors.textMuted),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Shown when the current month has no expenses to reason about yet.
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.ambient});
+
+  final AnimationController ambient;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xxxl),
+      child: Column(
+        children: [
+          _BotAvatar(ambient: ambient),
+          const SizedBox(height: AppSpacing.xxl),
+          Text(
+            l10n.insightsEmptyTitle,
+            textAlign: TextAlign.center,
+            style: AppFont.titleMedium.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            l10n.insightsEmptyBody,
+            textAlign: TextAlign.center,
+            style: AppFont.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -198,9 +287,15 @@ class _AppBar extends StatelessWidget {
 
 /// Lavender "Today's Insight" card with the bobbing bot mascot.
 class _TodayInsightCard extends StatelessWidget {
-  const _TodayInsightCard({required this.ambient});
+  const _TodayInsightCard({
+    required this.ambient,
+    required this.body,
+    required this.coach,
+  });
 
   final AnimationController ambient;
+  final String body;
+  final String coach;
 
   static const Color _lavender = Color(0xFFEFF0FC);
   static const Color _indigo = Color(0xFF6C63D2);
@@ -231,7 +326,7 @@ class _TodayInsightCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  l10n.insightsTodayBody1,
+                  body,
                   style: AppFont.bodyMedium.copyWith(
                     color: AppColors.textPrimary,
                     height: 1.5,
@@ -239,7 +334,7 @@ class _TodayInsightCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  l10n.insightsTodayBody2,
+                  coach,
                   style: AppFont.bodyMedium.copyWith(
                     color: AppColors.textSecondary,
                     height: 1.5,
@@ -304,16 +399,23 @@ class _BotAvatar extends StatelessWidget {
   }
 }
 
-/// Arc gauge + counted-up score + encouragement copy.
+/// Arc gauge + counted-up score + band label and encouragement.
 class _HealthScoreCard extends StatelessWidget {
-  const _HealthScoreCard({required this.score, required this.gauge});
+  const _HealthScoreCard({
+    required this.report,
+    required this.presenter,
+    required this.gauge,
+  });
 
-  final int score;
+  final InsightsReport report;
+  final InsightPresenter presenter;
   final Animation<double> gauge;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final score = report.healthScore;
+    final bandColor = presenter.scoreColor(report.band);
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
@@ -348,6 +450,7 @@ class _HealthScoreCard extends StatelessWidget {
                   builder: (context, _) => CustomPaint(
                     painter: _GaugePainter(
                       progress: (score / 100) * gauge.value,
+                      color: bandColor,
                     ),
                     child: Center(
                       child: Column(
@@ -363,9 +466,9 @@ class _HealthScoreCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            l10n.insightsScoreGood,
+                            presenter.scoreLabel(report.band),
                             style: AppFont.labelLarge.copyWith(
-                              color: AppColors.income,
+                              color: bandColor,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -381,7 +484,7 @@ class _HealthScoreCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.insightsHealthBody1,
+                      presenter.healthSummary(report),
                       style: AppFont.bodyMedium.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
@@ -390,7 +493,7 @@ class _HealthScoreCard extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      l10n.insightsHealthBody2,
+                      presenter.healthEncouragement(report.band),
                       style: AppFont.bodyMedium.copyWith(
                         color: AppColors.textSecondary,
                         height: 1.45,
@@ -409,9 +512,10 @@ class _HealthScoreCard extends StatelessWidget {
 
 /// 270° arc: muted track + gradient sweep proportional to [progress].
 class _GaugePainter extends CustomPainter {
-  _GaugePainter({required this.progress});
+  _GaugePainter({required this.progress, required this.color});
 
   final double progress;
+  final Color color;
 
   static const double _start = 3 * math.pi / 4; // 135°
   static const double _span = 3 * math.pi / 2; // 270°
@@ -442,7 +546,7 @@ class _GaugePainter extends CustomPainter {
       ..shader = SweepGradient(
         startAngle: _start,
         endAngle: _start + _span,
-        colors: const [AppColors.primary, AppGradients.emeraldGlow],
+        colors: [color.withValues(alpha: 0.65), color],
         transform: const GradientRotation(-0.1),
       ).createShader(rect);
     canvas.drawArc(rect, _start, sweep, false, fill);
@@ -450,14 +554,14 @@ class _GaugePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _GaugePainter old) =>
-      old.progress != progress;
+      old.progress != progress || old.color != color;
 }
 
 /// Tip rows with icon tiles and dividers.
 class _MoreInsightsCard extends StatelessWidget {
-  const _MoreInsightsCard({required this.tips});
+  const _MoreInsightsCard({required this.views});
 
-  final List<InsightTip> tips;
+  final List<InsightView> views;
 
   @override
   Widget build(BuildContext context) {
@@ -486,47 +590,36 @@ class _MoreInsightsCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          for (final (i, tip) in tips.indexed) ...[
+          for (final (i, view) in views.indexed) ...[
             if (i > 0)
               Divider(
                 height: 1,
                 color: AppColors.surfaceVariant.withValues(alpha: 0.8),
               ),
-            PressScale(
-              onTap: () {},
-              pressedScale: 0.99,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 38,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        color: tip.color.withValues(alpha: 0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(tip.icon, size: 17, color: tip.color),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+              child: Row(
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: view.color.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
                     ),
-                    const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      child: Text(
-                        tip.bodyOf(l10n),
-                        style: AppFont.bodyMedium.copyWith(
-                          color: AppColors.textSecondary,
-                          height: 1.45,
-                        ),
+                    child: Icon(view.icon, size: 17, color: view.color),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text(
+                      view.text,
+                      style: AppFont.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                        height: 1.45,
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
-                    const Icon(
-                      LucideIcons.chevronRight,
-                      size: 16,
-                      color: AppColors.textMuted,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

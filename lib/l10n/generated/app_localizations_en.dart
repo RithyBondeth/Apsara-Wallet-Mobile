@@ -361,40 +361,113 @@ class AppLocalizationsEn extends AppLocalizations {
   String get insightsToday => 'Today\'s Insight';
 
   @override
-  String get insightsTodayBody1 =>
-      'You spent 18% more on Food & Dining compared to last month.';
-
-  @override
-  String get insightsTodayBody2 =>
-      'Try cooking at home more to save around KHR 200,000 this month.';
-
-  @override
   String get insightsHealthScore => 'Financial Health Score';
-
-  @override
-  String get insightsScoreGood => 'Good';
-
-  @override
-  String get insightsHealthBody1 => 'You\'re on the right track!';
-
-  @override
-  String get insightsHealthBody2 =>
-      'Keep it up and you will reach your goals soon.';
 
   @override
   String get insightsMore => 'More Insights';
 
   @override
-  String get insightsWeekendTip =>
-      'Your spending is highest on Sunday. Try planning your budget for weekends.';
+  String get insightsScoreNeedsWork => 'Needs work';
 
   @override
-  String get insightsSubscriptionsTip =>
-      '3 subscriptions renew this week — totalling KHR 62,000.';
+  String get insightsScoreFair => 'Fair';
 
   @override
-  String get insightsSavingTip =>
-      'Setting aside KHR 50,000 weekly would reach your savings goal by October.';
+  String get insightsScoreGood => 'Good';
+
+  @override
+  String get insightsScoreExcellent => 'Excellent';
+
+  @override
+  String insightsHealthSavings(int pct) {
+    return 'You saved $pct% of your income this month.';
+  }
+
+  @override
+  String insightsHealthOverspent(int pct) {
+    return 'You spent $pct% more than you earned this month.';
+  }
+
+  @override
+  String get insightsEncourageNeedsWork =>
+      'Let\'s turn this around — small changes add up fast.';
+
+  @override
+  String get insightsEncourageFair =>
+      'You\'re getting there. A little more discipline goes a long way.';
+
+  @override
+  String get insightsEncourageGood =>
+      'You\'re on the right track — keep it up!';
+
+  @override
+  String get insightsEncourageExcellent =>
+      'Outstanding money habits. Keep the momentum going!';
+
+  @override
+  String insightTopCategory(String category, String amount, int pct) {
+    return '$category was your biggest expense — $amount ($pct% of spending).';
+  }
+
+  @override
+  String insightBusiestDay(String day) {
+    return 'You spend the most on ${day}s.';
+  }
+
+  @override
+  String insightCategoryUp(int pct, String category) {
+    return 'You spent $pct% more on $category than last month.';
+  }
+
+  @override
+  String insightCategoryDown(int pct, String category) {
+    return 'You spent $pct% less on $category than last month.';
+  }
+
+  @override
+  String insightSavingsPositive(String amount, int pct) {
+    return 'You saved $amount this month — $pct% of your income.';
+  }
+
+  @override
+  String insightOverspend(String amount) {
+    return 'You spent $amount more than you earned this month.';
+  }
+
+  @override
+  String get insightsCoachSaving =>
+      'Great discipline — consider moving some into savings.';
+
+  @override
+  String get insightsCoachOverspend =>
+      'Try trimming non-essentials to get back in the green.';
+
+  @override
+  String get insightsCoachReduce =>
+      'Small cuts here would make the biggest difference.';
+
+  @override
+  String get insightsCoachKeepGoing =>
+      'Nice progress — keep the good habit going.';
+
+  @override
+  String get insightsCoachTopCategory =>
+      'Watch this category to keep your spending on track.';
+
+  @override
+  String get insightsCoachDefault =>
+      'Keep tracking to stay on top of your money.';
+
+  @override
+  String get insightsEmptyTitle => 'Not enough data yet';
+
+  @override
+  String get insightsEmptyBody =>
+      'Add a few transactions and I\'ll start spotting patterns in your spending.';
+
+  @override
+  String get insightsFooter =>
+      'Insights are generated on your device from your own transactions.';
 
   @override
   String get commonComingSoon => 'Coming soon';

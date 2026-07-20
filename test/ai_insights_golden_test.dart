@@ -12,10 +12,16 @@ import 'package:apsara_wallet_mobile/features/insights/presentation/screens/ai_i
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
+import 'support/test_database.dart';
+
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  setUp(() {
+  setUp(() async {
+    // The screen now derives its report from the live ledger, so seed a fresh
+    // in-memory database (with the Phase-1 sample) before each case.
+    await initTestDatabase();
+
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       final msg = details.exception.toString();
@@ -45,7 +51,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1600));
 
     expect(find.text('Financial Health Score'), findsOneWidget);
-    expect(find.text('78'), findsOneWidget); // counted-up score
+    // Computed from the seeded sample ledger (high income, low expenses).
+    expect(find.text('90'), findsOneWidget); // counted-up score
 
     await expectLater(
       find.byType(AiInsightsScreen),
