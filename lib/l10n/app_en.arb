@@ -79,6 +79,8 @@
   "addTxFromWallet": "From Wallet",
   "addTxToWallet": "To Wallet",
   "addTxDateTime": "Date & Time",
+  "addTxTitleLabel": "Title",
+  "addTxTitleHint": "e.g. Coffee, Groceries, Taxi",
   "addTxNote": "Note (Optional)",
   "addTxNoteHint": "What was this for?",
   "addTxReceipt": "Add Receipt",

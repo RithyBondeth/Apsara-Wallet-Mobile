@@ -214,6 +214,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addTxDateTime => 'Date & Time';
 
   @override
+  String get addTxTitleLabel => 'Title';
+
+  @override
+  String get addTxTitleHint => 'e.g. Coffee, Groceries, Taxi';
+
+  @override
   String get addTxNote => 'Note (Optional)';
 
   @override

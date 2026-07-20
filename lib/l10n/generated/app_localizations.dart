@@ -494,6 +494,18 @@ abstract class AppLocalizations {
   /// **'Date & Time'**
   String get addTxDateTime;
 
+  /// No description provided for @addTxTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get addTxTitleLabel;
+
+  /// No description provided for @addTxTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Coffee, Groceries, Taxi'**
+  String get addTxTitleHint;
+
   /// No description provided for @addTxNote.
   ///
   /// In en, this message translates to:

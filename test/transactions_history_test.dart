@@ -139,6 +139,43 @@ void main() {
     expect(find.text('Lunch delivery'), findsOneWidget);
   });
 
+  testWidgets('Manually adding a titled expense persists it to the list',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    final router = AppRouter();
+    await tester.pumpWidget(_router(router));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1600));
+
+    // Dashboard → Add Expense (no receipt).
+    await tester.tap(find.text('Add Expense'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 1400));
+
+    // Amount is the first field; Title is the second.
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '4500');
+    await tester.enterText(fields.at(1), 'Corner Coffee');
+    await tester.pump();
+
+    await tester.ensureVisible(find.text('Save Transaction'));
+    await tester.pump();
+    await tester.tap(find.text('Save Transaction'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 1400));
+
+    // Back on the dashboard → open the full history.
+    await tester.tap(find.text('See All'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 1400));
+
+    expect(find.byType(TransactionsListScreen), findsOneWidget);
+    expect(find.text('Corner Coffee'), findsOneWidget);
+  });
+
   testWidgets('Delete flow confirms and pops back to the list', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     final router = AppRouter();

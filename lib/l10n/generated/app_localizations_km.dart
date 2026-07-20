@@ -218,6 +218,12 @@ class AppLocalizationsKm extends AppLocalizations {
   String get addTxDateTime => 'កាលបរិច្ឆេទ និងម៉ោង';
 
   @override
+  String get addTxTitleLabel => 'ចំណងជើង';
+
+  @override
+  String get addTxTitleHint => 'ឧ. កាហ្វេ, គ្រឿងទេស, តាក់ស៊ី';
+
+  @override
   String get addTxNote => 'កំណត់ចំណាំ (ស្រេចចិត្ត)';
 
   @override

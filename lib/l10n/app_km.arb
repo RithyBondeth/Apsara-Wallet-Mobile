@@ -79,6 +79,8 @@
   "addTxFromWallet": "ពីកាបូប",
   "addTxToWallet": "ទៅកាបូប",
   "addTxDateTime": "កាលបរិច្ឆេទ និងម៉ោង",
+  "addTxTitleLabel": "ចំណងជើង",
+  "addTxTitleHint": "ឧ. កាហ្វេ, គ្រឿងទេស, តាក់ស៊ី",
   "addTxNote": "កំណត់ចំណាំ (ស្រេចចិត្ត)",
   "addTxNoteHint": "សម្រាប់អ្វី?",
   "addTxReceipt": "បន្ថែមវិក្កយបត្រ",

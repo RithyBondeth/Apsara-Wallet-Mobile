@@ -57,6 +57,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   )..forward();
 
   final TextEditingController _amount = TextEditingController();
+  final TextEditingController _title = TextEditingController();
   final TextEditingController _note = TextEditingController();
 
   late ETransactionType _type = widget.initialType;
@@ -71,6 +72,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   void dispose() {
     _intro.dispose();
     _amount.dispose();
+    _title.dispose();
     _note.dispose();
     super.dispose();
   }
@@ -145,9 +147,11 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     final amountKhr = int.tryParse(_amount.text.replaceAll(',', '')) ?? 0;
     final note = _note.text.trim();
     final category = _category;
-    // No dedicated merchant field in the form — title falls back to the note,
-    // else the category name.
-    final title = note.isNotEmpty ? note : category.labelOf(l10n);
+    // Prefer the title field; fall back to the note, then the category name.
+    final typed = _title.text.trim();
+    final title = typed.isNotEmpty
+        ? typed
+        : (note.isNotEmpty ? note : category.labelOf(l10n));
 
     ref.read(transactionsProvider.notifier).add(
           TransactionRecord(
@@ -244,8 +248,24 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
                       const SizedBox(height: AppSpacing.xl),
                       FadeSlideIn(
                         controller: _intro,
-                        start: 0.22,
-                        end: 0.65,
+                        start: 0.18,
+                        end: 0.6,
+                        child: _section(
+                          l10n.addTxTitleLabel,
+                          AppTextField(
+                            label: '',
+                            hint: l10n.addTxTitleHint,
+                            controller: _title,
+                            prefixIcon: LucideIcons.tag,
+                            textInputAction: TextInputAction.next,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xl),
+                      FadeSlideIn(
+                        controller: _intro,
+                        start: 0.24,
+                        end: 0.68,
                         child: _categoryAndWalletRows(l10n),
                       ),
                       const SizedBox(height: AppSpacing.xl),
