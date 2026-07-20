@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -49,8 +50,10 @@ class _BudgetScreenState extends State<BudgetScreen>
 
   final BudgetData _data = BudgetData.sample();
 
-  Future<void> _addBudget() async {
-    final added = await showModalBottomSheet<CategoryBudget>(
+  /// Opens the add/edit sheet. With [initial] it edits (and can delete) that
+  /// category's budget; without it, it adds a new one.
+  Future<void> _openSheet([CategoryBudget? initial]) async {
+    final result = await showModalBottomSheet<_BudgetSheetResult>(
       context: context,
       backgroundColor: AppColors.surface,
       isScrollControlled: true,
@@ -58,10 +61,35 @@ class _BudgetScreenState extends State<BudgetScreen>
         borderRadius:
             BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
       ),
-      builder: (context) => const _AddBudgetSheet(),
+      builder: (context) => _AddBudgetSheet(initial: initial),
     );
-    if (added == null || !mounted) return;
-    setState(() => _data.categories.add(added));
+    if (result == null || !mounted) return;
+    final l10n = context.l10n;
+
+    if (result.delete && initial != null) {
+      final index = _data.categories
+          .indexWhere((c) => c.category.id == initial.category.id);
+      if (index < 0) return;
+      final removed = _data.categories[index];
+      setState(() => _data.categories.removeAt(index));
+      _snack(l10n.budgetDeleted, undo: () {
+        setState(() => _data.categories.insert(index, removed));
+      });
+    } else if (result.budget != null) {
+      final budget = result.budget!;
+      final index = _data.categories
+          .indexWhere((c) => c.category.id == budget.category.id);
+      if (index >= 0) {
+        setState(() => _data.categories[index] = budget);
+        _snack(l10n.budgetUpdated);
+      } else {
+        setState(() => _data.categories.add(budget));
+        _snack(l10n.budgetAdded);
+      }
+    }
+  }
+
+  void _snack(String message, {VoidCallback? undo}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -70,12 +98,19 @@ class _BudgetScreenState extends State<BudgetScreen>
           borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         content: Text(
-          context.l10n.budgetAdded,
+          message,
           style: AppFont.bodyMedium.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
+        action: undo == null
+            ? null
+            : SnackBarAction(
+                label: context.l10n.commonUndo,
+                textColor: Colors.white,
+                onPressed: undo,
+              ),
       ),
     );
   }
@@ -104,7 +139,7 @@ class _BudgetScreenState extends State<BudgetScreen>
                 start: 0.0,
                 end: 0.35,
                 offset: const Offset(0, 10),
-                child: _AppBar(onAddBudget: _addBudget),
+                child: _AppBar(onAddBudget: () => _openSheet()),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -143,7 +178,11 @@ class _BudgetScreenState extends State<BudgetScreen>
                           controller: _intro,
                           start: (0.26 + 0.08 * i).clamp(0.0, 0.6),
                           end: (0.66 + 0.08 * i).clamp(0.0, 1.0),
-                          child: _CategoryBudgetRow(budget: cb, fill: _fill),
+                          child: _CategoryBudgetRow(
+                            budget: cb,
+                            fill: _fill,
+                            onTap: () => _openSheet(cb),
+                          ),
                         ),
                         const SizedBox(height: AppSpacing.md),
                       ],
@@ -344,16 +383,24 @@ class _MoneyReadout extends StatelessWidget {
 
 /// One category budget: icon tile, name, spent/limit, % and a gradient bar.
 class _CategoryBudgetRow extends StatelessWidget {
-  const _CategoryBudgetRow({required this.budget, required this.fill});
+  const _CategoryBudgetRow({
+    required this.budget,
+    required this.fill,
+    required this.onTap,
+  });
 
   final CategoryBudget budget;
   final Animation<double> fill;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final c = budget.category;
-    return Container(
+    return PressScale(
+      onTap: onTap,
+      pressedScale: 0.99,
+      child: Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -428,6 +475,7 @@ class _CategoryBudgetRow extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
 }
@@ -476,9 +524,24 @@ class _GradientBar extends StatelessWidget {
   }
 }
 
-/// Pick a category and a monthly limit; pops the new [CategoryBudget].
+/// Result of the budget add/edit sheet: a budget to save, or a delete request.
+class _BudgetSheetResult {
+  const _BudgetSheetResult.save(this.budget) : delete = false;
+  const _BudgetSheetResult.remove()
+      : budget = null,
+        delete = true;
+
+  final CategoryBudget? budget;
+  final bool delete;
+}
+
+/// Pick a category and a monthly limit. With [initial] it edits that budget
+/// (category locked, limit prefilled, delete available); pops a
+/// [_BudgetSheetResult].
 class _AddBudgetSheet extends StatefulWidget {
-  const _AddBudgetSheet();
+  const _AddBudgetSheet({this.initial});
+
+  final CategoryBudget? initial;
 
   @override
   State<_AddBudgetSheet> createState() => _AddBudgetSheetState();
@@ -486,7 +549,20 @@ class _AddBudgetSheet extends StatefulWidget {
 
 class _AddBudgetSheetState extends State<_AddBudgetSheet> {
   final TextEditingController _amount = TextEditingController();
-  TxCategory _category = expenseCategories.first;
+  late TxCategory _category =
+      widget.initial?.category ?? expenseCategories.first;
+
+  bool get _isEditing => widget.initial != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initial;
+    if (initial != null) {
+      _amount.text =
+          NumberFormat.decimalPattern('en_US').format(initial.limitKhr);
+    }
+  }
 
   @override
   void dispose() {
@@ -535,7 +611,7 @@ class _AddBudgetSheetState extends State<_AddBudgetSheet> {
             const SizedBox(height: AppSpacing.lg),
             Center(
               child: Text(
-                l10n.budgetAdd,
+                _isEditing ? l10n.budgetEditTitle : l10n.budgetAdd,
                 style: AppFont.titleMedium.copyWith(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w700,
@@ -557,7 +633,9 @@ class _AddBudgetSheetState extends State<_AddBudgetSheet> {
                 color: _category.color,
               ),
               label: _category.labelOf(l10n),
-              onTap: _pickCategory,
+              // Category is the budget's identity, so it's locked when editing.
+              onTap: _isEditing ? null : _pickCategory,
+              trailing: _isEditing ? const SizedBox.shrink() : null,
             ),
             const SizedBox(height: AppSpacing.xl),
             Text(
@@ -620,14 +698,30 @@ class _AddBudgetSheetState extends State<_AddBudgetSheet> {
                 onPressed: _limit <= 0
                     ? null
                     : () => Navigator.of(context).pop(
-                          CategoryBudget(
-                            category: _category,
-                            limitKhr: _limit,
-                            spentKhr: 0,
+                          _BudgetSheetResult.save(
+                            CategoryBudget(
+                              category: _category,
+                              limitKhr: _limit,
+                              spentKhr: widget.initial?.spentKhr ?? 0,
+                            ),
                           ),
                         ),
               ),
             ),
+            if (_isEditing) ...[
+              const SizedBox(height: AppSpacing.sm),
+              TextButton(
+                onPressed: () => Navigator.of(context)
+                    .pop(const _BudgetSheetResult.remove()),
+                child: Text(
+                  l10n.budgetDelete,
+                  style: AppFont.labelLarge.copyWith(
+                    color: AppColors.expense,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

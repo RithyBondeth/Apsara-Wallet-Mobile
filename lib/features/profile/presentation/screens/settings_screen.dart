@@ -33,7 +33,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
 
   // --- Local UI state (mock; no persistence in Phase 1) ------------------
   String _currency = 'KHR';
-  bool _darkMode = false;
   bool _pushNotifications = true;
   bool _transactionAlerts = true;
   bool _budgetWarnings = true;
@@ -94,6 +93,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     );
   }
 
+  /// Honest placeholder for actions without a destination yet, matching the
+  /// Security screen's convention instead of a silent no-op tap.
+  void _comingSoon() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.textPrimary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        content: Text(
+          context.l10n.commonComingSoon,
+          style: AppFont.bodyMedium.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final language = ref.watch(localeProvider);
@@ -143,16 +160,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             iconColor: AppColors.income,
                             value: _currency,
                             onTap: _pickCurrency,
-                          ),
-                          SettingsTile(
-                            icon: LucideIcons.moon,
-                            title: context.l10n.settingsDarkMode,
-                            iconColor: AppColors.info,
-                            showChevron: false,
-                            trailing: _Toggle(
-                              value: _darkMode,
-                              onChanged: (v) => setState(() => _darkMode = v),
-                            ),
                           ),
                         ],
                       ),
@@ -233,12 +240,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           SettingsTile(
                             icon: LucideIcons.lockKeyhole,
                             title: context.l10n.settingsChangePin,
-                            onTap: () {},
+                            onTap: _comingSoon,
                           ),
                           SettingsTile(
                             icon: LucideIcons.keyRound,
                             title: context.l10n.settingsChangePassword,
-                            onTap: () {},
+                            onTap: _comingSoon,
                           ),
                         ],
                       ),
@@ -254,19 +261,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           SettingsTile(
                             icon: LucideIcons.fileText,
                             title: context.l10n.settingsTermsOfService,
-                            onTap: () {},
+                            onTap: _comingSoon,
                           ),
                           SettingsTile(
                             icon: LucideIcons.shield,
                             title: context.l10n.settingsPrivacyPolicy,
                             iconColor: AppColors.info,
-                            onTap: () {},
+                            onTap: _comingSoon,
                           ),
                           SettingsTile(
                             icon: LucideIcons.star,
                             title: context.l10n.settingsRateApp,
                             iconColor: AppColors.accent,
-                            onTap: () {},
+                            onTap: _comingSoon,
                           ),
                           SettingsTile(
                             icon: LucideIcons.info,

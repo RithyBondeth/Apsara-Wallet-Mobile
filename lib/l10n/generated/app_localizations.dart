@@ -722,6 +722,30 @@ abstract class AppLocalizations {
   /// **'Budget added'**
   String get budgetAdded;
 
+  /// No description provided for @budgetEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Budget'**
+  String get budgetEditTitle;
+
+  /// No description provided for @budgetDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete budget'**
+  String get budgetDelete;
+
+  /// No description provided for @budgetUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget updated'**
+  String get budgetUpdated;
+
+  /// No description provided for @budgetDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget removed'**
+  String get budgetDeleted;
+
   /// No description provided for @categoriesTitle.
   ///
   /// In en, this message translates to:
@@ -769,6 +793,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category saved'**
   String get categoriesSaved;
+
+  /// No description provided for @categoriesDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete category'**
+  String get categoriesDelete;
+
+  /// No description provided for @categoriesDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Category removed'**
+  String get categoriesDeleted;
 
   /// No description provided for @profileCategories.
   ///
@@ -1334,11 +1370,41 @@ abstract class AppLocalizations {
   /// **'Add Recurring'**
   String get recurringAdd;
 
+  /// No description provided for @recurringEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Recurring'**
+  String get recurringEditTitle;
+
+  /// No description provided for @recurringDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get recurringDelete;
+
   /// No description provided for @recurringSaved.
   ///
   /// In en, this message translates to:
   /// **'Recurring entry added'**
   String get recurringSaved;
+
+  /// No description provided for @recurringUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring entry updated'**
+  String get recurringUpdated;
+
+  /// No description provided for @recurringDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring entry removed'**
+  String get recurringDeleted;
+
+  /// No description provided for @commonUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get commonUndo;
 
   /// No description provided for @recurringActiveCount.
   ///

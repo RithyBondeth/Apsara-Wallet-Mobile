@@ -13,6 +13,10 @@ class RecurringNotifier extends Notifier<List<RecurringRule>> {
 
   void add(RecurringRule rule) => state = [...state, rule];
 
+  /// Replaces the rule with the same id in place.
+  void update(RecurringRule rule) =>
+      state = [for (final r in state) if (r.id == rule.id) rule else r];
+
   void remove(String id) =>
       state = state.where((r) => r.id != id).toList();
 }

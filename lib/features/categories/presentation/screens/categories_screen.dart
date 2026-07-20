@@ -67,14 +67,32 @@ class _CategoriesScreenState extends State<CategoriesScreen>
   Future<void> _edit(EditableCategory? category) async {
     final result = await showCategoryEditorSheet(context, category: category);
     if (result == null || !mounted) return;
+    final list = _current;
+
+    if (result.delete && category != null) {
+      final index = list.indexOf(category);
+      if (index < 0) return;
+      setState(() => list.removeAt(index));
+      _snack(context.l10n.categoriesDeleted, undo: () {
+        setState(() => list.insert(index, category));
+      });
+      return;
+    }
+
+    final edited = result.category;
+    if (edited == null) return;
     setState(() {
       if (category == null) {
-        _current.add(result);
+        list.add(edited);
       } else {
-        final i = _current.indexOf(category);
-        if (i >= 0) _current[i] = result;
+        final i = list.indexOf(category);
+        if (i >= 0) list[i] = edited;
       }
     });
+    _snack(context.l10n.categoriesSaved);
+  }
+
+  void _snack(String message, {VoidCallback? undo}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -83,12 +101,19 @@ class _CategoriesScreenState extends State<CategoriesScreen>
           borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         content: Text(
-          context.l10n.categoriesSaved,
+          message,
           style: AppFont.bodyMedium.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
+        action: undo == null
+            ? null
+            : SnackBarAction(
+                label: context.l10n.commonUndo,
+                textColor: Colors.white,
+                onPressed: undo,
+              ),
       ),
     );
   }

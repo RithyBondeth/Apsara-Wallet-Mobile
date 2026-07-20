@@ -121,6 +121,10 @@
   "budgetByCategory": "ថវិកាតាមប្រភេទ",
   "budgetMonthlyLimit": "ដែនកំណត់ប្រចាំខែ",
   "budgetAdded": "បានបន្ថែមថវិកា",
+  "budgetEditTitle": "កែប្រែថវិកា",
+  "budgetDelete": "លុបថវិកា",
+  "budgetUpdated": "បានធ្វើបច្ចុប្បន្នភាពថវិកា",
+  "budgetDeleted": "បានលុបថវិកា",
 
   "categoriesTitle": "ប្រភេទ",
   "categoriesSearchHint": "ស្វែងរកប្រភេទ",
@@ -130,6 +134,8 @@
   "categoriesIconLabel": "រូបតំណាង",
   "categoriesColorLabel": "ពណ៌",
   "categoriesSaved": "បានរក្សាទុកប្រភេទ",
+  "categoriesDelete": "លុបប្រភេទ",
+  "categoriesDeleted": "បានលុបប្រភេទ",
   "profileCategories": "ប្រភេទ",
   "profileCategoriesSubtitle": "គ្រប់គ្រងរូបតំណាង និងពណ៌",
 
@@ -246,7 +252,12 @@
 
   "recurringTitle": "ប្រតិបត្តិការដដែលៗ",
   "recurringAdd": "បន្ថែមប្រតិបត្តិការដដែលៗ",
+  "recurringEditTitle": "កែប្រែប្រតិបត្តិការដដែលៗ",
+  "recurringDelete": "លុប",
   "recurringSaved": "បានបន្ថែមប្រតិបត្តិការដដែលៗ",
+  "recurringUpdated": "បានធ្វើបច្ចុប្បន្នភាពប្រតិបត្តិការដដែលៗ",
+  "recurringDeleted": "បានលុបប្រតិបត្តិការដដែលៗ",
+  "commonUndo": "ត្រឡប់វិញ",
   "recurringActiveCount": "{count, plural, =0{គ្មានប្រតិបត្តិការដដែលៗ} other{ប្រតិបត្តិការដដែលៗ {count}}}",
   "@recurringActiveCount": { "placeholders": { "count": { "type": "int" } } },
   "recurringMonthlyEstimate": "≈ {amount} / ខែ",

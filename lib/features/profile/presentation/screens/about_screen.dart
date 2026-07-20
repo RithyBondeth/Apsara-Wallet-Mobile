@@ -13,6 +13,23 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/setti
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_sub_scaffold.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
 
+/// Honest placeholder for links without a destination yet.
+void _comingSoon(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: AppColors.textPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      content: Text(
+        context.l10n.commonComingSoon,
+        style: AppFont.bodyMedium.copyWith(color: Colors.white),
+      ),
+    ),
+  );
+}
+
 /// About Apsara Wallet (Phase 1, UI-only): brand block, mission statement and
 /// legal / links list.
 @RoutePage()
@@ -59,13 +76,13 @@ class AboutScreen extends StatelessWidget {
             SettingsTile(
               icon: LucideIcons.fileText,
               title: l10n.aboutTerms,
-              onTap: () {},
+              onTap: () => _comingSoon(context),
             ),
             SettingsTile(
               icon: LucideIcons.shieldCheck,
               title: l10n.aboutPrivacy,
               iconColor: AppColors.income,
-              onTap: () {},
+              onTap: () => _comingSoon(context),
             ),
             SettingsTile(
               icon: LucideIcons.scale,
@@ -81,7 +98,7 @@ class AboutScreen extends StatelessWidget {
               icon: LucideIcons.star,
               title: l10n.aboutRate,
               iconColor: AppColors.warning,
-              onTap: () {},
+              onTap: () => _comingSoon(context),
             ),
           ],
         ),

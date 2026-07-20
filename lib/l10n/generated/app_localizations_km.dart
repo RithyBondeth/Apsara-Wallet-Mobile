@@ -332,6 +332,18 @@ class AppLocalizationsKm extends AppLocalizations {
   String get budgetAdded => 'បានបន្ថែមថវិកា';
 
   @override
+  String get budgetEditTitle => 'កែប្រែថវិកា';
+
+  @override
+  String get budgetDelete => 'លុបថវិកា';
+
+  @override
+  String get budgetUpdated => 'បានធ្វើបច្ចុប្បន្នភាពថវិកា';
+
+  @override
+  String get budgetDeleted => 'បានលុបថវិកា';
+
+  @override
   String get categoriesTitle => 'ប្រភេទ';
 
   @override
@@ -354,6 +366,12 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get categoriesSaved => 'បានរក្សាទុកប្រភេទ';
+
+  @override
+  String get categoriesDelete => 'លុបប្រភេទ';
+
+  @override
+  String get categoriesDeleted => 'បានលុបប្រភេទ';
 
   @override
   String get profileCategories => 'ប្រភេទ';
@@ -667,7 +685,22 @@ class AppLocalizationsKm extends AppLocalizations {
   String get recurringAdd => 'បន្ថែមប្រតិបត្តិការដដែលៗ';
 
   @override
+  String get recurringEditTitle => 'កែប្រែប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get recurringDelete => 'លុប';
+
+  @override
   String get recurringSaved => 'បានបន្ថែមប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get recurringUpdated => 'បានធ្វើបច្ចុប្បន្នភាពប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get recurringDeleted => 'បានលុបប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get commonUndo => 'ត្រឡប់វិញ';
 
   @override
   String recurringActiveCount(int count) {

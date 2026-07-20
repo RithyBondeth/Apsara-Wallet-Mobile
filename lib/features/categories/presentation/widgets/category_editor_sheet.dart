@@ -74,12 +74,23 @@ const List<Color> categoryColorChoices = [
   AppColors.textMuted,
 ];
 
-/// Opens the editor; resolves to the edited/new category, or null on dismiss.
-Future<EditableCategory?> showCategoryEditorSheet(
+/// Result of the editor: a category to save/add, or a request to delete it.
+class CategoryEditorResult {
+  const CategoryEditorResult.save(this.category) : delete = false;
+  const CategoryEditorResult.delete()
+      : category = null,
+        delete = true;
+
+  final EditableCategory? category;
+  final bool delete;
+}
+
+/// Opens the editor; resolves to the edit result, or null on dismiss.
+Future<CategoryEditorResult?> showCategoryEditorSheet(
   BuildContext context, {
   EditableCategory? category,
 }) {
-  return showModalBottomSheet<EditableCategory>(
+  return showModalBottomSheet<CategoryEditorResult>(
     context: context,
     backgroundColor: AppColors.surface,
     isScrollControlled: true,
@@ -126,11 +137,13 @@ class _CategoryEditorSheetState extends State<_CategoryEditorSheet> {
 
   void _save() {
     Navigator.of(context).pop(
-      EditableCategory(
-        base: widget.category?.base,
-        customName: _name.text.trim(),
-        icon: _icon,
-        color: _color,
+      CategoryEditorResult.save(
+        EditableCategory(
+          base: widget.category?.base,
+          customName: _name.text.trim(),
+          icon: _icon,
+          color: _color,
+        ),
       ),
     );
   }
@@ -266,6 +279,20 @@ class _CategoryEditorSheetState extends State<_CategoryEditorSheet> {
                 onPressed: _name.text.trim().isEmpty ? null : _save,
               ),
             ),
+            if (!isNew) ...[
+              const SizedBox(height: AppSpacing.sm),
+              TextButton(
+                onPressed: () => Navigator.of(context)
+                    .pop(const CategoryEditorResult.delete()),
+                child: Text(
+                  l10n.categoriesDelete,
+                  style: AppFont.labelLarge.copyWith(
+                    color: AppColors.expense,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

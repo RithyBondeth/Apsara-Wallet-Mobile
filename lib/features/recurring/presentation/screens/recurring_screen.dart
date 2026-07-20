@@ -52,18 +52,36 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
     super.dispose();
   }
 
-  Future<void> _openAddSheet() async {
-    final rule = await showModalBottomSheet<RecurringRule>(
+  /// Opens the add/edit sheet. With [initial] it edits (and can delete) that
+  /// rule; without it, it creates a new one.
+  Future<void> _openSheet([RecurringRule? initial]) async {
+    final result = await showModalBottomSheet<_SheetResult>(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
       ),
-      builder: (_) => const _AddRecurringSheet(),
+      builder: (_) => _AddRecurringSheet(initial: initial),
     );
-    if (rule == null || !mounted) return;
-    ref.read(recurringProvider.notifier).add(rule);
+    if (result == null || !mounted) return;
+    final notifier = ref.read(recurringProvider.notifier);
+    final l10n = context.l10n;
+    if (result.delete && initial != null) {
+      notifier.remove(initial.id);
+      _snack(l10n.recurringDeleted, undo: () => notifier.add(initial));
+    } else if (result.rule != null) {
+      if (initial != null) {
+        notifier.update(result.rule!);
+        _snack(l10n.recurringUpdated);
+      } else {
+        notifier.add(result.rule!);
+        _snack(l10n.recurringSaved);
+      }
+    }
+  }
+
+  void _snack(String message, {VoidCallback? undo}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -72,12 +90,19 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
           borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         content: Text(
-          context.l10n.recurringSaved,
+          message,
           style: AppFont.bodyMedium.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
+        action: undo == null
+            ? null
+            : SnackBarAction(
+                label: context.l10n.commonUndo,
+                textColor: Colors.white,
+                onPressed: undo,
+              ),
       ),
     );
   }
@@ -101,7 +126,7 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
                 start: 0.0,
                 end: 0.35,
                 offset: const Offset(0, 10),
-                child: _AppBar(onAdd: _openAddSheet),
+                child: _AppBar(onAdd: () => _openSheet()),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -142,7 +167,10 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
                             child: Padding(
                               padding:
                                   const EdgeInsets.only(bottom: AppSpacing.md),
-                              child: _RuleCard(rule: rule),
+                              child: _RuleCard(
+                                rule: rule,
+                                onTap: () => _openSheet(rule),
+                              ),
                             ),
                           ),
                       if (rules.isNotEmpty) ...[
@@ -152,7 +180,7 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
                           start: 0.6,
                           end: 1.0,
                           child: PressScale(
-                            onTap: _openAddSheet,
+                            onTap: () => _openSheet(),
                             child: _AddButton(label: context.l10n.recurringAdd),
                           ),
                         ),
@@ -291,9 +319,10 @@ class _SummaryCard extends StatelessWidget {
 }
 
 class _RuleCard extends StatelessWidget {
-  const _RuleCard({required this.rule});
+  const _RuleCard({required this.rule, required this.onTap});
 
   final RecurringRule rule;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +330,10 @@ class _RuleCard extends StatelessWidget {
     final localeTag = Localizations.localeOf(context).toString();
     final amountColor = rule.isIncome ? AppColors.income : AppColors.expense;
     final dueLabel = DateFormat.MMMd(localeTag).format(rule.nextDue);
-    return Container(
+    return PressScale(
+      onTap: onTap,
+      pressedScale: 0.99,
+      child: Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -343,8 +375,20 @@ class _RuleCard extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
+}
+
+/// Result of the add/edit sheet: a rule to save/add, or a delete request.
+class _SheetResult {
+  const _SheetResult.save(this.rule) : delete = false;
+  const _SheetResult.remove()
+      : rule = null,
+        delete = true;
+
+  final RecurringRule? rule;
+  final bool delete;
 }
 
 class _AddButton extends StatelessWidget {
@@ -433,7 +477,10 @@ class _EmptyState extends StatelessWidget {
 /// Bottom sheet to add a recurring entry: type, amount, title, category,
 /// wallet, frequency and start date.
 class _AddRecurringSheet extends StatefulWidget {
-  const _AddRecurringSheet();
+  const _AddRecurringSheet({this.initial});
+
+  /// When non-null the sheet edits this rule (prefilled, with a delete action).
+  final RecurringRule? initial;
 
   @override
   State<_AddRecurringSheet> createState() => _AddRecurringSheetState();
@@ -449,6 +496,30 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
   TxCategory? _expenseCategory;
   TxCategory? _incomeCategory;
   Wallet _wallet = WalletsData.sample.wallets.first;
+
+  bool get _isEditing => widget.initial != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final r = widget.initial;
+    if (r != null) {
+      _type = r.type;
+      _frequency = r.frequency;
+      _startDate = r.nextDue;
+      _amount.text = NumberFormat.decimalPattern('en_US').format(r.amountKhr);
+      _title.text = r.title;
+      if (r.isIncome) {
+        _incomeCategory = r.category;
+      } else {
+        _expenseCategory = r.category;
+      }
+      _wallet = WalletsData.sample.wallets.firstWhere(
+        (w) => w.name == r.walletName,
+        orElse: () => _wallet,
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -509,15 +580,17 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
     final typed = _title.text.trim();
     final title = typed.isNotEmpty ? typed : _category.labelOf(l10n);
     Navigator.of(context).pop(
-      RecurringRule(
-        id: UuidGenerator.generate(),
-        title: title,
-        category: _category,
-        walletName: _wallet.name,
-        amountKhr: amountKhr,
-        type: _type,
-        frequency: _frequency,
-        nextDue: _startDate,
+      _SheetResult.save(
+        RecurringRule(
+          id: widget.initial?.id ?? UuidGenerator.generate(),
+          title: title,
+          category: _category,
+          walletName: _wallet.name,
+          amountKhr: amountKhr,
+          type: _type,
+          frequency: _frequency,
+          nextDue: _startDate,
+        ),
       ),
     );
   }
@@ -546,7 +619,7 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
               const SizedBox(height: AppSpacing.lg),
               Center(
                 child: Text(
-                  l10n.recurringAdd,
+                  _isEditing ? l10n.recurringEditTitle : l10n.recurringAdd,
                   style: AppFont.titleMedium.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
@@ -611,6 +684,20 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
                   onPressed: _canSave ? _save : null,
                 ),
               ),
+              if (_isEditing) ...[
+                const SizedBox(height: AppSpacing.sm),
+                TextButton(
+                  onPressed: () =>
+                      Navigator.of(context).pop(const _SheetResult.remove()),
+                  child: Text(
+                    l10n.recurringDelete,
+                    style: AppFont.labelLarge.copyWith(
+                      color: AppColors.expense,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
         ),

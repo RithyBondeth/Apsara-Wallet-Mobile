@@ -81,6 +81,42 @@ void main() {
     expect(find.text('6 recurring entries'), findsOneWidget);
   });
 
+  testWidgets('tapping a rule edits it in place', (tester) async {
+    await pumpScreen(tester);
+
+    await tester.tap(find.text('House Rent'));
+    await tester.pumpAndSettle();
+    expect(find.text('Edit Recurring'), findsOneWidget);
+
+    final amountField = find.byWidgetPredicate(
+      (w) => w is TextField && w.decoration?.hintText == '0',
+    );
+    await tester.enterText(amountField, '500000');
+    await tester.pump();
+    await tester.ensureVisible(find.text('Save'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    // Still 5 entries (updated, not added), with the new amount on the card.
+    expect(find.text('5 recurring entries'), findsOneWidget);
+    expect(find.text('- KHR 500,000'), findsOneWidget);
+  });
+
+  testWidgets('editing a rule can delete it', (tester) async {
+    await pumpScreen(tester);
+
+    await tester.tap(find.text('House Rent'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Delete'));
+    await tester.pump();
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('House Rent'), findsNothing);
+    expect(find.text('4 recurring entries'), findsOneWidget);
+  });
+
   testWidgets('reachable from the Profile menu', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     final router = AppRouter();

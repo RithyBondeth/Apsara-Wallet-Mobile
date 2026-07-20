@@ -328,6 +328,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budgetAdded => 'Budget added';
 
   @override
+  String get budgetEditTitle => 'Edit Budget';
+
+  @override
+  String get budgetDelete => 'Delete budget';
+
+  @override
+  String get budgetUpdated => 'Budget updated';
+
+  @override
+  String get budgetDeleted => 'Budget removed';
+
+  @override
   String get categoriesTitle => 'Category';
 
   @override
@@ -350,6 +362,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoriesSaved => 'Category saved';
+
+  @override
+  String get categoriesDelete => 'Delete category';
+
+  @override
+  String get categoriesDeleted => 'Category removed';
 
   @override
   String get profileCategories => 'Categories';
@@ -665,7 +683,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recurringAdd => 'Add Recurring';
 
   @override
+  String get recurringEditTitle => 'Edit Recurring';
+
+  @override
+  String get recurringDelete => 'Delete';
+
+  @override
   String get recurringSaved => 'Recurring entry added';
+
+  @override
+  String get recurringUpdated => 'Recurring entry updated';
+
+  @override
+  String get recurringDeleted => 'Recurring entry removed';
+
+  @override
+  String get commonUndo => 'Undo';
 
   @override
   String recurringActiveCount(int count) {

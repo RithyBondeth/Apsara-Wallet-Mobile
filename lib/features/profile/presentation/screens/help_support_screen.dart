@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
@@ -11,6 +12,35 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_section.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_sub_scaffold.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
+
+const String _supportEmail = 'support@apsarawallet.com';
+const String _supportPhone = '+855 23 999 888';
+
+void _snack(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: AppColors.textPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      content: Text(
+        message,
+        style: AppFont.bodyMedium.copyWith(color: Colors.white),
+      ),
+    ),
+  );
+}
+
+/// Opens [uri] in the appropriate external app (mail client, dialer). Falls
+/// back to a snackbar if no handler is available.
+Future<void> _launch(BuildContext context, Uri uri) async {
+  final launched =
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!launched && context.mounted) {
+    _snack(context, context.l10n.commonComingSoon);
+  }
+}
 
 /// Help & Support (Phase 1, UI-only): contact channels and an expandable FAQ.
 @RoutePage()
@@ -36,21 +66,27 @@ class HelpSupportScreen extends StatelessWidget {
               icon: LucideIcons.messageCircle,
               title: l10n.helpChat,
               subtitle: l10n.helpChatSubtitle,
-              onTap: () {},
+              onTap: () => _snack(context, l10n.commonComingSoon),
             ),
             SettingsTile(
               icon: LucideIcons.mail,
               title: l10n.helpEmail,
-              subtitle: 'support@apsarawallet.com',
+              subtitle: _supportEmail,
               iconColor: AppColors.info,
-              onTap: () {},
+              onTap: () => _launch(
+                context,
+                Uri(scheme: 'mailto', path: _supportEmail),
+              ),
             ),
             SettingsTile(
               icon: LucideIcons.phone,
               title: l10n.helpCall,
-              subtitle: '+855 23 999 888',
+              subtitle: _supportPhone,
               iconColor: AppColors.income,
-              onTap: () {},
+              onTap: () => _launch(
+                context,
+                Uri(scheme: 'tel', path: _supportPhone.replaceAll(' ', '')),
+              ),
             ),
           ],
         ),
