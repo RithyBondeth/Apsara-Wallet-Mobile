@@ -4,11 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
-import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
@@ -47,17 +45,12 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
     super.dispose();
   }
 
-  Color get _amountColor => switch (_record.type) {
-        ETransactionType.income => AppColors.income,
-        ETransactionType.expense => AppColors.expense,
-        ETransactionType.transfer => AppGradients.goldDeep,
-      };
+  Color get _amountColor =>
+      _record.isIncome ? AppColors.income : AppColors.expense;
 
-  String _typeLabel(BuildContext context) => switch (_record.type) {
-        ETransactionType.income => context.l10n.dashboardIncome,
-        ETransactionType.expense => context.l10n.dashboardExpense,
-        ETransactionType.transfer => context.l10n.dashboardTransfer,
-      };
+  String _typeLabel(BuildContext context) => _record.isIncome
+      ? context.l10n.dashboardIncome
+      : context.l10n.dashboardExpense;
 
   void _edit() => context.router.push(
         AddTransactionRoute(initialType: _record.type),

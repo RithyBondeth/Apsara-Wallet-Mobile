@@ -26,7 +26,7 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/about
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/help_support_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
-import 'package:apsara_wallet_mobile/features/profile/presentation/screens/rewards_screen.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savings_goals_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/security_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:auto_route/auto_route.dart';
@@ -245,7 +245,10 @@ class AppRouter extends RootStackRouter {
       path: RoutePathConstant.notificationsPath,
     ),
     AutoRoute(page: SecurityRoute.page, path: RoutePathConstant.securityPath),
-    AutoRoute(page: RewardsRoute.page, path: RoutePathConstant.rewardsPath),
+    AutoRoute(
+      page: SavingsGoalsRoute.page,
+      path: RoutePathConstant.savingsGoalsPath,
+    ),
     AutoRoute(page: HelpSupportRoute.page, path: RoutePathConstant.helpPath),
     AutoRoute(page: AboutRoute.page, path: RoutePathConstant.aboutPath),
     AutoRoute(page: SettingsRoute.page, path: RoutePathConstant.settingsPath),

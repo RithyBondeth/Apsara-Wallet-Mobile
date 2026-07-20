@@ -382,17 +382,17 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RewardsScreen]
-class RewardsRoute extends PageRouteInfo<void> {
-  const RewardsRoute({List<PageRouteInfo>? children})
-    : super(RewardsRoute.name, initialChildren: children);
+/// [SavingsGoalsScreen]
+class SavingsGoalsRoute extends PageRouteInfo<void> {
+  const SavingsGoalsRoute({List<PageRouteInfo>? children})
+    : super(SavingsGoalsRoute.name, initialChildren: children);
 
-  static const String name = 'RewardsRoute';
+  static const String name = 'SavingsGoalsRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const RewardsScreen();
+      return const SavingsGoalsScreen();
     },
   );
 }

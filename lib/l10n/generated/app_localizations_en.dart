@@ -524,6 +524,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rewardsOffer3Body => 'Earn 2× points on all spending';
 
   @override
+  String get savingsTitle => 'Savings Goals';
+
+  @override
+  String get savingsAddGoal => 'Add Goal';
+
+  @override
+  String get savingsTotalSaved => 'Total Saved';
+
+  @override
+  String savingsTargetOf(String amount) {
+    return 'of KHR $amount target';
+  }
+
+  @override
+  String get savingsAddFunds => 'Add Funds';
+
+  @override
+  String get savingsGoalName => 'Goal Name';
+
+  @override
+  String get savingsGoalTarget => 'Target Amount';
+
+  @override
+  String get savingsGoalAdded => 'Goal added';
+
+  @override
+  String get savingsFundsAdded => 'Funds added';
+
+  @override
+  String get savingsGoalVacation => 'Vacation Fund';
+
+  @override
+  String get savingsGoalEmergency => 'Emergency Fund';
+
+  @override
+  String get savingsGoalLaptop => 'New Laptop';
+
+  @override
+  String get savingsGoalMotorbike => 'Motorbike';
+
+  @override
+  String get profileSavingsGoals => 'Savings Goals';
+
+  @override
+  String get profileSavingsGoalsSubtitle => 'Set targets & track progress';
+
+  @override
   String get helpTitle => 'Help & Support';
 
   @override
@@ -630,10 +677,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get notifTxTitle => 'Payment received';
+  String get notifTxTitle => 'Income recorded';
 
   @override
-  String get notifTxBody => 'You received KHR 3,500,000 from ABA Salary.';
+  String get notifTxBody => 'KHR 3,500,000 salary was added to your records.';
 
   @override
   String get notifBudgetTitle => 'Budget alert';
@@ -649,10 +696,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'A new device just signed in to your account.';
 
   @override
-  String get notifRewardTitle => 'Cashback earned';
+  String get notifRewardTitle => 'Savings milestone';
 
   @override
-  String get notifRewardBody => 'You earned KHR 12,000 cashback this week.';
+  String get notifRewardBody =>
+      'You\'ve reached 75% of your Motorbike goal — keep it up!';
 
   @override
   String get notifInsightTitle => 'Weekly insight ready';
@@ -715,6 +763,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashboardTransfer => 'Transfer';
+
+  @override
+  String get dashboardScan => 'Scan';
 
   @override
   String get dashboardRecentTransactions => 'Recent Transactions';

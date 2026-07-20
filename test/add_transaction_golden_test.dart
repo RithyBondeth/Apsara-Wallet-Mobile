@@ -62,12 +62,12 @@ void main() {
     );
   });
 
-  testWidgets('Add Transaction renders settled (transfer)', (tester) async {
+  testWidgets('Add Transaction renders settled (income)', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(
       _wrap(
         AddTransactionScreen(
-          initialType: ETransactionType.transfer,
+          initialType: ETransactionType.income,
           initialDateTime: _pinnedDate,
         ),
       ),
@@ -75,13 +75,12 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1400));
 
-    expect(find.text('From Wallet'), findsOneWidget);
-    expect(find.text('To Wallet'), findsOneWidget);
-    expect(find.text('ACLEDA Bank (5678)'), findsOneWidget);
+    // Income mode: category defaults to the first income category (Salary).
+    expect(find.text('Salary'), findsOneWidget);
 
     await expectLater(
       find.byType(AddTransactionScreen),
-      matchesGoldenFile('goldens/add_transaction_transfer.png'),
+      matchesGoldenFile('goldens/add_transaction_income.png'),
     );
   });
 

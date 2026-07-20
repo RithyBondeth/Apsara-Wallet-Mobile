@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/about_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/help_support_screen.dart';
-import 'package:apsara_wallet_mobile/features/profile/presentation/screens/rewards_screen.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savings_goals_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/security_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
@@ -57,17 +57,18 @@ void main() {
     );
   });
 
-  testWidgets('Rewards renders settled', (tester) async {
+  testWidgets('Savings Goals renders settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
-    await tester.pumpWidget(_wrap(const RewardsScreen()));
+    await tester.pumpWidget(_wrap(const SavingsGoalsScreen()));
     await settle(tester);
 
-    expect(find.text('2,450'), findsOneWidget);
-    expect(find.text('Available Offers'.toUpperCase()), findsOneWidget);
+    expect(find.text('Total Saved'), findsOneWidget);
+    expect(find.text('Motorbike'), findsOneWidget);
+    expect(find.text('75%'), findsOneWidget); // motorbike 4.5M/6M
 
     await expectLater(
-      find.byType(RewardsScreen),
-      matchesGoldenFile('goldens/rewards_settled.png'),
+      find.byType(SavingsGoalsScreen),
+      matchesGoldenFile('goldens/savings_goals_settled.png'),
     );
   });
 

@@ -1100,6 +1100,96 @@ abstract class AppLocalizations {
   /// **'Earn 2× points on all spending'**
   String get rewardsOffer3Body;
 
+  /// No description provided for @savingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings Goals'**
+  String get savingsTitle;
+
+  /// No description provided for @savingsAddGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Goal'**
+  String get savingsAddGoal;
+
+  /// No description provided for @savingsTotalSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Saved'**
+  String get savingsTotalSaved;
+
+  /// No description provided for @savingsTargetOf.
+  ///
+  /// In en, this message translates to:
+  /// **'of KHR {amount} target'**
+  String savingsTargetOf(String amount);
+
+  /// No description provided for @savingsAddFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Funds'**
+  String get savingsAddFunds;
+
+  /// No description provided for @savingsGoalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Name'**
+  String get savingsGoalName;
+
+  /// No description provided for @savingsGoalTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Amount'**
+  String get savingsGoalTarget;
+
+  /// No description provided for @savingsGoalAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal added'**
+  String get savingsGoalAdded;
+
+  /// No description provided for @savingsFundsAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Funds added'**
+  String get savingsFundsAdded;
+
+  /// No description provided for @savingsGoalVacation.
+  ///
+  /// In en, this message translates to:
+  /// **'Vacation Fund'**
+  String get savingsGoalVacation;
+
+  /// No description provided for @savingsGoalEmergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Fund'**
+  String get savingsGoalEmergency;
+
+  /// No description provided for @savingsGoalLaptop.
+  ///
+  /// In en, this message translates to:
+  /// **'New Laptop'**
+  String get savingsGoalLaptop;
+
+  /// No description provided for @savingsGoalMotorbike.
+  ///
+  /// In en, this message translates to:
+  /// **'Motorbike'**
+  String get savingsGoalMotorbike;
+
+  /// No description provided for @profileSavingsGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings Goals'**
+  String get profileSavingsGoals;
+
+  /// No description provided for @profileSavingsGoalsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set targets & track progress'**
+  String get profileSavingsGoalsSubtitle;
+
   /// No description provided for @helpTitle.
   ///
   /// In en, this message translates to:
@@ -1295,13 +1385,13 @@ abstract class AppLocalizations {
   /// No description provided for @notifTxTitle.
   ///
   /// In en, this message translates to:
-  /// **'Payment received'**
+  /// **'Income recorded'**
   String get notifTxTitle;
 
   /// No description provided for @notifTxBody.
   ///
   /// In en, this message translates to:
-  /// **'You received KHR 3,500,000 from ABA Salary.'**
+  /// **'KHR 3,500,000 salary was added to your records.'**
   String get notifTxBody;
 
   /// No description provided for @notifBudgetTitle.
@@ -1331,13 +1421,13 @@ abstract class AppLocalizations {
   /// No description provided for @notifRewardTitle.
   ///
   /// In en, this message translates to:
-  /// **'Cashback earned'**
+  /// **'Savings milestone'**
   String get notifRewardTitle;
 
   /// No description provided for @notifRewardBody.
   ///
   /// In en, this message translates to:
-  /// **'You earned KHR 12,000 cashback this week.'**
+  /// **'You\'ve reached 75% of your Motorbike goal — keep it up!'**
   String get notifRewardBody;
 
   /// No description provided for @notifInsightTitle.
@@ -1459,6 +1549,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transfer'**
   String get dashboardTransfer;
+
+  /// No description provided for @dashboardScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get dashboardScan;
 
   /// No description provided for @dashboardRecentTransactions.
   ///

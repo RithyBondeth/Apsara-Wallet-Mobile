@@ -32,14 +32,9 @@ class TransactionRecord {
   final String? note;
 
   bool get isIncome => type == ETransactionType.income;
-  bool get isTransfer => type == ETransactionType.transfer;
 
-  /// `+` / `-` / `` prefix for the amount.
-  String get sign => switch (type) {
-        ETransactionType.income => '+',
-        ETransactionType.expense => '-',
-        ETransactionType.transfer => '',
-      };
+  /// `+` / `-` prefix for the amount.
+  String get sign => isIncome ? '+' : '-';
 
   String timeLabel(String localeTag) => DateFormat.jm(localeTag).format(date);
 }
@@ -110,14 +105,14 @@ List<TransactionRecord> sampleTransactions() => [
         note: 'Morning coffee',
       ),
       TransactionRecord(
-        id: 'wing-topup',
-        title: 'Wing Top-up',
-        category: expenseCategories[10],
+        id: 'phone-topup',
+        title: 'Phone Top-up',
+        category: expenseCategories[3], // Bills & Utilities
         walletName: 'Wing',
         date: _at(1, 14, 0),
-        amountKhr: 100000,
-        type: ETransactionType.transfer,
-        note: 'Move to Wing wallet',
+        amountKhr: 20000,
+        type: ETransactionType.expense,
+        note: 'Cellcard mobile credit',
       ),
       TransactionRecord(
         id: 'electricity',

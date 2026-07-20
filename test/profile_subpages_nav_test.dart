@@ -8,7 +8,7 @@ import 'package:apsara_wallet_mobile/features/notifications/presentation/screens
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/about_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/help_support_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
-import 'package:apsara_wallet_mobile/features/profile/presentation/screens/rewards_screen.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savings_goals_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/security_screen.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/wallets_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
@@ -68,7 +68,7 @@ void main() {
     'My Wallets': WalletsScreen,
     'Security & Privacy': SecurityScreen,
     'Notifications': NotificationsScreen,
-    'Rewards & Offers': RewardsScreen,
+    'Savings Goals': SavingsGoalsScreen,
     'Help & Support': HelpSupportScreen,
     'About Apsara Wallet': AboutScreen,
   };

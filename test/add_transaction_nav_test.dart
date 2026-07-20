@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:apsara_wallet_mobile/features/scan/presentation/screens/scan_receipt_screen.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
@@ -65,15 +66,13 @@ void main() {
     expect(find.text('Food & Dining'), findsOneWidget);
   });
 
-  testWidgets('Transfer quick action opens transfer mode', (tester) async {
+  testWidgets('Scan quick action opens the receipt scanner', (tester) async {
     await bootToDashboard(tester);
 
-    await tester.tap(find.text('Transfer'));
+    await tester.tap(find.text('Scan'));
     await settleRoute(tester);
 
-    expect(find.byType(AddTransactionScreen), findsOneWidget);
-    expect(find.text('From Wallet'), findsOneWidget);
-    expect(find.text('To Wallet'), findsOneWidget);
+    expect(find.byType(ScanReceiptScreen), findsOneWidget);
   });
 
   testWidgets('Close returns to the dashboard', (tester) async {

@@ -5,13 +5,11 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
-import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Expense / Income / Transfer selector — outlined pills that tint to their
-/// semantic color when active (red spend, green earn, gold move), per the
-/// design board's Add Transaction mockup.
+/// Expense / Income selector — outlined pills that tint to their semantic
+/// color when active (red spend, green earn).
 class TxTypeToggle extends StatelessWidget {
   const TxTypeToggle({super.key, required this.value, required this.onChanged});
 
@@ -21,7 +19,6 @@ class TxTypeToggle extends StatelessWidget {
   static Color colorOf(ETransactionType type) => switch (type) {
         ETransactionType.expense => AppColors.expense,
         ETransactionType.income => AppColors.income,
-        ETransactionType.transfer => AppGradients.goldDeep,
       };
 
   @override
@@ -30,7 +27,6 @@ class TxTypeToggle extends StatelessWidget {
     final items = [
       (ETransactionType.expense, l10n.dashboardExpense),
       (ETransactionType.income, l10n.dashboardIncome),
-      (ETransactionType.transfer, l10n.dashboardTransfer),
     ];
     return Row(
       children: [

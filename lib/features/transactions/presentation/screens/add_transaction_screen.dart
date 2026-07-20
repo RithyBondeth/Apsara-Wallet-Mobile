@@ -8,7 +8,6 @@ import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
-import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -62,7 +61,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
   TxCategory? _expenseCategory;
   TxCategory? _incomeCategory;
   Wallet _wallet = WalletsData.sample.wallets.first;
-  late Wallet _toWallet = WalletsData.sample.wallets[1];
 
   @override
   void dispose() {
@@ -75,8 +73,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
   TxCategory get _category => _type == ETransactionType.income
       ? _incomeCategory ?? incomeCategories.first
       : _expenseCategory ?? expenseCategories.first;
-
-  bool get _isTransfer => _type == ETransactionType.transfer;
 
   Future<void> _pickCategory() async {
     final picked = await showCategoryPicker(
@@ -96,19 +92,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
     });
   }
 
-  Future<void> _pickWallet({required bool destination}) async {
+  Future<void> _pickWallet() async {
     final picked = await showWalletPicker(
       context,
       wallets: WalletsData.sample.wallets,
-      selected: destination ? _toWallet : _wallet,
-      title: !_isTransfer
-          ? null
-          : destination
-              ? context.l10n.addTxToWallet
-              : context.l10n.addTxFromWallet,
+      selected: _wallet,
     );
     if (picked == null || !mounted) return;
-    setState(() => destination ? _toWallet = picked : _wallet = picked);
+    setState(() => _wallet = picked);
   }
 
   Future<void> _pickDateTime() async {
@@ -230,14 +221,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
                         controller: _intro,
                         start: 0.22,
                         end: 0.65,
-                        child: AnimatedSwitcher(
-                          duration: AppDurations.medium,
-                          switchInCurve: AppCurves.entrance,
-                          switchOutCurve: Curves.easeIn,
-                          child: _isTransfer
-                              ? _transferRows(l10n)
-                              : _categoryAndWalletRows(l10n),
-                        ),
+                        child: _categoryAndWalletRows(l10n),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       FadeSlideIn(
@@ -273,25 +257,24 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      if (!_isTransfer)
-                        FadeSlideIn(
-                          controller: _intro,
-                          start: 0.44,
-                          end: 0.9,
-                          child: _section(
-                            l10n.addTxReceipt,
-                            PickerRow(
-                              leading: const PickerRowIconTile(
-                                icon: LucideIcons.camera,
-                                color: AppColors.textSecondary,
-                              ),
-                              label: l10n.addTxScanOrUpload,
-                              onTap: () => context.router.push(
-                                const ScanReceiptRoute(),
-                              ),
+                      FadeSlideIn(
+                        controller: _intro,
+                        start: 0.44,
+                        end: 0.9,
+                        child: _section(
+                          l10n.addTxReceipt,
+                          PickerRow(
+                            leading: const PickerRowIconTile(
+                              icon: LucideIcons.camera,
+                              color: AppColors.textSecondary,
+                            ),
+                            label: l10n.addTxScanOrUpload,
+                            onTap: () => context.router.push(
+                              const ScanReceiptRoute(),
                             ),
                           ),
                         ),
+                      ),
                       const SizedBox(height: AppSpacing.xxxl),
                       FadeSlideIn(
                         controller: _intro,
@@ -424,38 +407,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
             label: _wallet.maskedAccount == null
                 ? _wallet.name
                 : '${_wallet.name} (${_wallet.accountLast4})',
-            onTap: () => _pickWallet(destination: false),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// From → to wallets (transfer mode).
-  Widget _transferRows(AppLocalizations l10n) {
-    return Column(
-      key: const ValueKey('transfer-mode'),
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _section(
-          l10n.addTxFromWallet,
-          PickerRow(
-            leading: WalletBrandTile(wallet: _wallet),
-            label: _wallet.maskedAccount == null
-                ? _wallet.name
-                : '${_wallet.name} (${_wallet.accountLast4})',
-            onTap: () => _pickWallet(destination: false),
-          ),
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        _section(
-          l10n.addTxToWallet,
-          PickerRow(
-            leading: WalletBrandTile(wallet: _toWallet),
-            label: _toWallet.maskedAccount == null
-                ? _toWallet.name
-                : '${_toWallet.name} (${_toWallet.accountLast4})',
-            onTap: () => _pickWallet(destination: true),
+            onTap: _pickWallet,
           ),
         ),
       ],

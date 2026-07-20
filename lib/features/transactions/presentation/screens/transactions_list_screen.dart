@@ -8,7 +8,6 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
-import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
@@ -273,7 +272,7 @@ class _SearchField extends StatelessWidget {
   }
 }
 
-/// All / Income / Expense / Transfer chips.
+/// All / Income / Expense chips.
 class _FilterRow extends StatelessWidget {
   const _FilterRow({required this.selected, required this.onChanged});
 
@@ -287,7 +286,6 @@ class _FilterRow extends StatelessWidget {
       (null, l10n.txFilterAll),
       (ETransactionType.income, l10n.dashboardIncome),
       (ETransactionType.expense, l10n.dashboardExpense),
-      (ETransactionType.transfer, l10n.dashboardTransfer),
     ];
     return SizedBox(
       height: 36,
@@ -347,11 +345,8 @@ class _TxTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final t = record;
-    final amountColor = switch (t.type) {
-      ETransactionType.income => AppColors.income,
-      ETransactionType.expense => AppColors.textPrimary,
-      ETransactionType.transfer => AppGradients.goldDeep,
-    };
+    final amountColor =
+        t.isIncome ? AppColors.income : AppColors.textPrimary;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),

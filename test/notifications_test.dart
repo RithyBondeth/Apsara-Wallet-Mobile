@@ -46,7 +46,7 @@ void main() {
 
     expect(find.text('Today'), findsOneWidget);
     expect(find.text('Earlier'), findsOneWidget);
-    expect(find.text('Payment received'), findsOneWidget);
+    expect(find.text('Income recorded'), findsOneWidget);
     // 3 unread items in the sample → count pill + mark-all action visible.
     expect(find.text('Mark all read'), findsOneWidget);
 

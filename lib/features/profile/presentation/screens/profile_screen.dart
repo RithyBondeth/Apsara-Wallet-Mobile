@@ -181,11 +181,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                             ),
                           ),
                           SettingsTile(
-                            icon: LucideIcons.gift,
-                            title: context.l10n.profileRewardsOffers,
+                            icon: LucideIcons.target,
+                            title: context.l10n.profileSavingsGoals,
+                            subtitle:
+                                context.l10n.profileSavingsGoalsSubtitle,
                             iconColor: AppColors.accent,
-                            onTap: () =>
-                                context.router.push(const RewardsRoute()),
+                            onTap: () => context.router.push(
+                              const SavingsGoalsRoute(),
+                            ),
                           ),
                         ],
                       ),

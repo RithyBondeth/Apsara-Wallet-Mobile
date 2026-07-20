@@ -528,6 +528,53 @@ class AppLocalizationsKm extends AppLocalizations {
   String get rewardsOffer3Body => 'ទទួលបានពិន្ទុ 2× លើការចំណាយទាំងអស់';
 
   @override
+  String get savingsTitle => 'គោលដៅសន្សំ';
+
+  @override
+  String get savingsAddGoal => 'បន្ថែមគោលដៅ';
+
+  @override
+  String get savingsTotalSaved => 'សន្សំសរុប';
+
+  @override
+  String savingsTargetOf(String amount) {
+    return 'ក្នុងគោលដៅ KHR $amount';
+  }
+
+  @override
+  String get savingsAddFunds => 'បន្ថែមមូលនិធិ';
+
+  @override
+  String get savingsGoalName => 'ឈ្មោះគោលដៅ';
+
+  @override
+  String get savingsGoalTarget => 'ចំនួនគោលដៅ';
+
+  @override
+  String get savingsGoalAdded => 'បានបន្ថែមគោលដៅ';
+
+  @override
+  String get savingsFundsAdded => 'បានបន្ថែមមូលនិធិ';
+
+  @override
+  String get savingsGoalVacation => 'មូលនិធិវិស្សមកាល';
+
+  @override
+  String get savingsGoalEmergency => 'មូលនិធិបន្ទាន់';
+
+  @override
+  String get savingsGoalLaptop => 'កុំព្យូទ័រយួរដៃថ្មី';
+
+  @override
+  String get savingsGoalMotorbike => 'ម៉ូតូ';
+
+  @override
+  String get profileSavingsGoals => 'គោលដៅសន្សំ';
+
+  @override
+  String get profileSavingsGoalsSubtitle => 'កំណត់គោលដៅ និងតាមដានវឌ្ឍនភាព';
+
+  @override
   String get helpTitle => 'ជំនួយ និងការគាំទ្រ';
 
   @override
@@ -634,10 +681,11 @@ class AppLocalizationsKm extends AppLocalizations {
   }
 
   @override
-  String get notifTxTitle => 'បានទទួលការទូទាត់';
+  String get notifTxTitle => 'បានកត់ត្រាចំណូល';
 
   @override
-  String get notifTxBody => 'អ្នកបានទទួល KHR 3,500,000 ពីប្រាក់ខែ ABA។';
+  String get notifTxBody =>
+      'ប្រាក់ខែ KHR 3,500,000 ត្រូវបានបញ្ចូលទៅក្នុងកំណត់ត្រារបស់អ្នក។';
 
   @override
   String get notifBudgetTitle => 'ការជូនដំណឹងអំពីថវិកា';
@@ -652,11 +700,11 @@ class AppLocalizationsKm extends AppLocalizations {
   String get notifSecurityBody => 'ឧបករណ៍ថ្មីទើបតែបានចូលគណនីរបស់អ្នក។';
 
   @override
-  String get notifRewardTitle => 'បានទទួលសាច់ប្រាក់បង្វិល';
+  String get notifRewardTitle => 'សមិទ្ធផលនៃការសន្សំ';
 
   @override
   String get notifRewardBody =>
-      'អ្នកបានទទួលសាច់ប្រាក់បង្វិល KHR 12,000 សប្តាហ៍នេះ។';
+      'អ្នកបានសម្រេច 75% នៃគោលដៅម៉ូតូរបស់អ្នក — បន្តទៀត!';
 
   @override
   String get notifInsightTitle => 'របាយការណ៍ប្រចាំសប្តាហ៍រួចរាល់';
@@ -719,6 +767,9 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get dashboardTransfer => 'ផ្ទេរប្រាក់';
+
+  @override
+  String get dashboardScan => 'ស្កេន';
 
   @override
   String get dashboardRecentTransactions => 'ប្រតិបត្តិការថ្មីៗ';

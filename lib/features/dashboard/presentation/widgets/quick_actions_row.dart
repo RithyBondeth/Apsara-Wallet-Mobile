@@ -9,19 +9,19 @@ import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// The three floating shortcut cards that straddle the header's lower edge:
-/// Add Income · Add Expense · Transfer.
+/// The floating shortcut cards that straddle the header's lower edge:
+/// Add Income · Add Expense · Scan Receipt — the three fastest ways to log.
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({
     super.key,
     this.onAddIncome,
     this.onAddExpense,
-    this.onTransfer,
+    this.onScan,
   });
 
   final VoidCallback? onAddIncome;
   final VoidCallback? onAddExpense;
-  final VoidCallback? onTransfer;
+  final VoidCallback? onScan;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +47,10 @@ class QuickActionsRow extends StatelessWidget {
         const SizedBox(width: AppSpacing.md),
         Expanded(
           child: _QuickAction(
-            icon: LucideIcons.arrowRightLeft,
-            label: context.l10n.dashboardTransfer,
+            icon: LucideIcons.scanLine,
+            label: context.l10n.dashboardScan,
             color: AppGradients.goldCore,
-            onTap: onTransfer,
+            onTap: onScan,
           ),
         ),
       ],

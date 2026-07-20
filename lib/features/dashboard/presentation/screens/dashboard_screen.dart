@@ -167,10 +167,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                                 initialType: ETransactionType.expense,
                               ),
                             ),
-                            onTransfer: () => context.router.push(
-                              AddTransactionRoute(
-                                initialType: ETransactionType.transfer,
-                              ),
+                            onScan: () => context.router.push(
+                              const ScanReceiptRoute(),
                             ),
                           ),
                         ),

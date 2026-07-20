@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
-import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
 /// A single notification (Phase 1, UI-only). Title/body resolve their copy
@@ -77,8 +76,8 @@ List<AppNotification> sampleNotifications() => [
       ),
       AppNotification(
         id: 'reward',
-        icon: LucideIcons.gift,
-        color: AppGradients.goldCore,
+        icon: LucideIcons.piggyBank,
+        color: AppColors.income,
         minutesAgo: 1560, // yesterday
         titleOf: (l) => l.notifRewardTitle,
         bodyOf: (l) => l.notifRewardBody,
