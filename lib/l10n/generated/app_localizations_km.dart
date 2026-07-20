@@ -655,6 +655,61 @@ class AppLocalizationsKm extends AppLocalizations {
   String get profileSavingsGoalsSubtitle => 'កំណត់គោលដៅ និងតាមដានវឌ្ឍនភាព';
 
   @override
+  String get profileRecurring => 'ប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get profileRecurringSubtitle => 'វិក្កយបត្រ ការជាវ និងប្រាក់ខែ';
+
+  @override
+  String get recurringTitle => 'ប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get recurringAdd => 'បន្ថែមប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get recurringSaved => 'បានបន្ថែមប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String recurringActiveCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ប្រតិបត្តិការដដែលៗ $count',
+      zero: 'គ្មានប្រតិបត្តិការដដែលៗ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String recurringMonthlyEstimate(String amount) {
+    return '≈ $amount / ខែ';
+  }
+
+  @override
+  String recurringDue(String date) {
+    return 'ត្រូវបង់ $date';
+  }
+
+  @override
+  String get recurringWeekly => 'ប្រចាំសប្តាហ៍';
+
+  @override
+  String get recurringMonthly => 'ប្រចាំខែ';
+
+  @override
+  String get recurringFrequency => 'ភាពញឹកញាប់';
+
+  @override
+  String get recurringStarts => 'ចាប់ផ្តើម';
+
+  @override
+  String get recurringEmptyTitle => 'មិនទាន់មានប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String get recurringEmptyBody =>
+      'បន្ថែមវិក្កយបត្រ ការជាវ ឬប្រាក់ខែ ដែលកើតឡើងដដែលៗ ហើយវានឹងបង្ហាញនៅទីនេះ។';
+
+  @override
   String get helpTitle => 'ជំនួយ និងការគាំទ្រ';
 
   @override

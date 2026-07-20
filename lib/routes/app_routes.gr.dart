@@ -360,6 +360,22 @@ class ProfileRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [RecurringScreen]
+class RecurringRoute extends PageRouteInfo<void> {
+  const RecurringRoute({List<PageRouteInfo>? children})
+    : super(RecurringRoute.name, initialChildren: children);
+
+  static const String name = 'RecurringRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecurringScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [RegisterScreen]
 class RegisterRoute extends PageRouteInfo<void> {
   const RegisterRoute({List<PageRouteInfo>? children})

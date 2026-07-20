@@ -1310,6 +1310,90 @@ abstract class AppLocalizations {
   /// **'Set targets & track progress'**
   String get profileSavingsGoalsSubtitle;
 
+  /// No description provided for @profileRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring'**
+  String get profileRecurring;
+
+  /// No description provided for @profileRecurringSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bills, subscriptions & salary'**
+  String get profileRecurringSubtitle;
+
+  /// No description provided for @recurringTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring'**
+  String get recurringTitle;
+
+  /// No description provided for @recurringAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Recurring'**
+  String get recurringAdd;
+
+  /// No description provided for @recurringSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring entry added'**
+  String get recurringSaved;
+
+  /// No description provided for @recurringActiveCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No recurring entries} =1{1 recurring entry} other{{count} recurring entries}}'**
+  String recurringActiveCount(int count);
+
+  /// No description provided for @recurringMonthlyEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {amount} / month'**
+  String recurringMonthlyEstimate(String amount);
+
+  /// No description provided for @recurringDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {date}'**
+  String recurringDue(String date);
+
+  /// No description provided for @recurringWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get recurringWeekly;
+
+  /// No description provided for @recurringMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get recurringMonthly;
+
+  /// No description provided for @recurringFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get recurringFrequency;
+
+  /// No description provided for @recurringStarts.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts'**
+  String get recurringStarts;
+
+  /// No description provided for @recurringEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No recurring entries yet'**
+  String get recurringEmptyTitle;
+
+  /// No description provided for @recurringEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bills, subscriptions or salary that repeat, and they\'ll show up here.'**
+  String get recurringEmptyBody;
+
   /// No description provided for @helpTitle.
   ///
   /// In en, this message translates to:

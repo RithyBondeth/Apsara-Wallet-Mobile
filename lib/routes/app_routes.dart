@@ -29,6 +29,7 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/edit_
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/help_support_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savings_goals_screen.dart';
+import 'package:apsara_wallet_mobile/features/recurring/presentation/screens/recurring_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/security_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:auto_route/auto_route.dart';
@@ -258,6 +259,10 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: SavingsGoalsRoute.page,
       path: RoutePathConstant.savingsGoalsPath,
+    ),
+    AutoRoute(
+      page: RecurringRoute.page,
+      path: RoutePathConstant.recurringPath,
     ),
     AutoRoute(page: HelpSupportRoute.page, path: RoutePathConstant.helpPath),
     AutoRoute(page: AboutRoute.page, path: RoutePathConstant.aboutPath),

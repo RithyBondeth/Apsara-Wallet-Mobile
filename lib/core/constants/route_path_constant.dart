@@ -39,6 +39,7 @@ class RoutePathConstant {
   static const String notificationsPath = '/notifications';
   static const String securityPath = '/security';
   static const String savingsGoalsPath = '/savingsGoals';
+  static const String recurringPath = '/recurring';
   static const String helpPath = '/help';
   static const String aboutPath = '/about';
   static const String settingsPath = '/settings';

@@ -653,6 +653,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSavingsGoalsSubtitle => 'Set targets & track progress';
 
   @override
+  String get profileRecurring => 'Recurring';
+
+  @override
+  String get profileRecurringSubtitle => 'Bills, subscriptions & salary';
+
+  @override
+  String get recurringTitle => 'Recurring';
+
+  @override
+  String get recurringAdd => 'Add Recurring';
+
+  @override
+  String get recurringSaved => 'Recurring entry added';
+
+  @override
+  String recurringActiveCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recurring entries',
+      one: '1 recurring entry',
+      zero: 'No recurring entries',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String recurringMonthlyEstimate(String amount) {
+    return '≈ $amount / month';
+  }
+
+  @override
+  String recurringDue(String date) {
+    return 'Due $date';
+  }
+
+  @override
+  String get recurringWeekly => 'Weekly';
+
+  @override
+  String get recurringMonthly => 'Monthly';
+
+  @override
+  String get recurringFrequency => 'Frequency';
+
+  @override
+  String get recurringStarts => 'Starts';
+
+  @override
+  String get recurringEmptyTitle => 'No recurring entries yet';
+
+  @override
+  String get recurringEmptyBody =>
+      'Add bills, subscriptions or salary that repeat, and they\'ll show up here.';
+
+  @override
   String get helpTitle => 'Help & Support';
 
   @override

@@ -190,6 +190,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                               const SavingsGoalsRoute(),
                             ),
                           ),
+                          SettingsTile(
+                            icon: LucideIcons.repeat,
+                            title: context.l10n.profileRecurring,
+                            subtitle: context.l10n.profileRecurringSubtitle,
+                            onTap: () => context.router.push(
+                              const RecurringRoute(),
+                            ),
+                          ),
                         ],
                       ),
                     ),
