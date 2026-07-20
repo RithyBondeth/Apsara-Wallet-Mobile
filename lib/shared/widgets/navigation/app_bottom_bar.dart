@@ -133,10 +133,12 @@ class _NavItem extends StatelessWidget {
         curve: AppCurves.emphasized,
         builder: (context, v, _) {
           final t = v.clamp(0.0, 1.0);
-          final iconColor =
-              Color.lerp(AppColors.textMuted, Colors.white, t)!;
-          final labelColor =
-              Color.lerp(AppColors.textMuted, AppColors.primary, t)!;
+          final iconColor = Color.lerp(AppColors.textMuted, Colors.white, t)!;
+          final labelColor = Color.lerp(
+            AppColors.textMuted,
+            AppColors.primary,
+            t,
+          )!;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
