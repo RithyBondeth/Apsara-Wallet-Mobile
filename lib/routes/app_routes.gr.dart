@@ -11,6 +11,22 @@
 part of 'app_routes.dart';
 
 /// generated route for
+/// [AboutScreen]
+class AboutRoute extends PageRouteInfo<void> {
+  const AboutRoute({List<PageRouteInfo>? children})
+    : super(AboutRoute.name, initialChildren: children);
+
+  static const String name = 'AboutRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AboutScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AddTransactionScreen]
 class AddTransactionRoute extends PageRouteInfo<AddTransactionRouteArgs> {
   AddTransactionRoute({
@@ -206,6 +222,22 @@ class ForgotPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HelpSupportScreen]
+class HelpSupportRoute extends PageRouteInfo<void> {
+  const HelpSupportRoute({List<PageRouteInfo>? children})
+    : super(HelpSupportRoute.name, initialChildren: children);
+
+  static const String name = 'HelpSupportRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HelpSupportScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [LoginScreen]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
@@ -350,6 +382,22 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [RewardsScreen]
+class RewardsRoute extends PageRouteInfo<void> {
+  const RewardsRoute({List<PageRouteInfo>? children})
+    : super(RewardsRoute.name, initialChildren: children);
+
+  static const String name = 'RewardsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RewardsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ScanReceiptScreen]
 class ScanReceiptRoute extends PageRouteInfo<void> {
   const ScanReceiptRoute({List<PageRouteInfo>? children})
@@ -361,6 +409,22 @@ class ScanReceiptRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ScanReceiptScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SecurityScreen]
+class SecurityRoute extends PageRouteInfo<void> {
+  const SecurityRoute({List<PageRouteInfo>? children})
+    : super(SecurityRoute.name, initialChildren: children);
+
+  static const String name = 'SecurityRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SecurityScreen();
     },
   );
 }

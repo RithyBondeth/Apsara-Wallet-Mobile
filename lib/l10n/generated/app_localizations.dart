@@ -836,6 +836,306 @@ abstract class AppLocalizations {
   /// **'Setting aside KHR 50,000 weekly would reach your savings goal by October.'**
   String get insightsSavingTip;
 
+  /// No description provided for @commonComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get commonComingSoon;
+
+  /// No description provided for @securityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Security & Privacy'**
+  String get securityTitle;
+
+  /// No description provided for @securitySectionAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication'**
+  String get securitySectionAuth;
+
+  /// No description provided for @securityChangePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Change PIN'**
+  String get securityChangePin;
+
+  /// No description provided for @securityChangePinSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your 6-digit PIN'**
+  String get securityChangePinSubtitle;
+
+  /// No description provided for @securityBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric Login'**
+  String get securityBiometric;
+
+  /// No description provided for @securityBiometricSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use fingerprint or face to sign in'**
+  String get securityBiometricSubtitle;
+
+  /// No description provided for @securityTwoFactor.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-Factor Authentication'**
+  String get securityTwoFactor;
+
+  /// No description provided for @securityTwoFactorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an extra layer of security'**
+  String get securityTwoFactorSubtitle;
+
+  /// No description provided for @securitySectionPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get securitySectionPrivacy;
+
+  /// No description provided for @securityChangePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get securityChangePassword;
+
+  /// No description provided for @securityChangePasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your account password'**
+  String get securityChangePasswordSubtitle;
+
+  /// No description provided for @securityAppLock.
+  ///
+  /// In en, this message translates to:
+  /// **'App Lock'**
+  String get securityAppLock;
+
+  /// No description provided for @securityAppLockSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Require unlock when opening the app'**
+  String get securityAppLockSubtitle;
+
+  /// No description provided for @securityHideBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Balance by Default'**
+  String get securityHideBalance;
+
+  /// No description provided for @securityHideBalanceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep amounts hidden until revealed'**
+  String get securityHideBalanceSubtitle;
+
+  /// No description provided for @rewardsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewards & Offers'**
+  String get rewardsTitle;
+
+  /// No description provided for @rewardsPointsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Points'**
+  String get rewardsPointsLabel;
+
+  /// No description provided for @rewardsTier.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold Tier'**
+  String get rewardsTier;
+
+  /// No description provided for @rewardsRedeem.
+  ///
+  /// In en, this message translates to:
+  /// **'Redeem'**
+  String get rewardsRedeem;
+
+  /// No description provided for @rewardsSectionOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Offers'**
+  String get rewardsSectionOffers;
+
+  /// No description provided for @rewardsClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim'**
+  String get rewardsClaim;
+
+  /// No description provided for @rewardsClaimed.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer claimed'**
+  String get rewardsClaimed;
+
+  /// No description provided for @rewardsOffer1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'5% Cashback on Dining'**
+  String get rewardsOffer1Title;
+
+  /// No description provided for @rewardsOffer1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid until Aug 31'**
+  String get rewardsOffer1Body;
+
+  /// No description provided for @rewardsOffer2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Transfer Fees'**
+  String get rewardsOffer2Title;
+
+  /// No description provided for @rewardsOffer2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'For all local transfers this month'**
+  String get rewardsOffer2Body;
+
+  /// No description provided for @rewardsOffer3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Double Points Weekend'**
+  String get rewardsOffer3Title;
+
+  /// No description provided for @rewardsOffer3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn 2× points on all spending'**
+  String get rewardsOffer3Body;
+
+  /// No description provided for @helpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get helpTitle;
+
+  /// No description provided for @helpSectionContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Get in Touch'**
+  String get helpSectionContact;
+
+  /// No description provided for @helpChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Chat'**
+  String get helpChat;
+
+  /// No description provided for @helpChatSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with our team'**
+  String get helpChatSubtitle;
+
+  /// No description provided for @helpEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Us'**
+  String get helpEmail;
+
+  /// No description provided for @helpCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Center'**
+  String get helpCall;
+
+  /// No description provided for @helpSectionFaq.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently Asked'**
+  String get helpSectionFaq;
+
+  /// No description provided for @helpFaq1Q.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I add a new wallet?'**
+  String get helpFaq1Q;
+
+  /// No description provided for @helpFaq1A.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Wallets and tap “+ Add Wallet” to link a new bank or e-wallet account.'**
+  String get helpFaq1A;
+
+  /// No description provided for @helpFaq2Q.
+  ///
+  /// In en, this message translates to:
+  /// **'Is my financial data secure?'**
+  String get helpFaq2Q;
+
+  /// No description provided for @helpFaq2A.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes. Your data is encrypted and protected by your PIN and biometrics.'**
+  String get helpFaq2A;
+
+  /// No description provided for @helpFaq3Q.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I scan a receipt?'**
+  String get helpFaq3Q;
+
+  /// No description provided for @helpFaq3A.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the “+” button and choose Scan Receipt to capture and auto-fill a transaction.'**
+  String get helpFaq3A;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About Apsara Wallet'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Finance, Better Future'**
+  String get aboutTagline;
+
+  /// No description provided for @aboutMission.
+  ///
+  /// In en, this message translates to:
+  /// **'Empowering every Cambodian to build better financial habits with smart tracking and AI insights.'**
+  String get aboutMission;
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get aboutVersion;
+
+  /// No description provided for @aboutTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get aboutTerms;
+
+  /// No description provided for @aboutPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get aboutPrivacy;
+
+  /// No description provided for @aboutLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-Source Licenses'**
+  String get aboutLicenses;
+
+  /// No description provided for @aboutRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the App'**
+  String get aboutRate;
+
   /// No description provided for @notifTitle.
   ///
   /// In en, this message translates to:

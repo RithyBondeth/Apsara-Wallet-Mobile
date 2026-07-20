@@ -394,6 +394,162 @@ class AppLocalizationsKm extends AppLocalizations {
       'ការញែកទុក 50,000 រៀលរៀងរាល់សប្តាហ៍ នឹងសម្រេចគោលដៅសន្សំរបស់អ្នកនៅខែតុលា។';
 
   @override
+  String get commonComingSoon => 'នឹងមានក្នុងពេលឆាប់ៗ';
+
+  @override
+  String get securityTitle => 'សុវត្ថិភាព និងឯកជនភាព';
+
+  @override
+  String get securitySectionAuth => 'ការផ្ទៀងផ្ទាត់';
+
+  @override
+  String get securityChangePin => 'ប្តូរលេខ PIN';
+
+  @override
+  String get securityChangePinSubtitle => 'ធ្វើបច្ចុប្បន្នភាពលេខ PIN ៦ ខ្ទង់';
+
+  @override
+  String get securityBiometric => 'ការចូលដោយជីវមាត្រ';
+
+  @override
+  String get securityBiometricSubtitle => 'ប្រើស្នាមម្រាមដៃ ឬផ្ទៃមុខដើម្បីចូល';
+
+  @override
+  String get securityTwoFactor => 'ការផ្ទៀងផ្ទាត់ពីរជាន់';
+
+  @override
+  String get securityTwoFactorSubtitle => 'បន្ថែមស្រទាប់សុវត្ថិភាព';
+
+  @override
+  String get securitySectionPrivacy => 'ឯកជនភាព';
+
+  @override
+  String get securityChangePassword => 'ប្តូរពាក្យសម្ងាត់';
+
+  @override
+  String get securityChangePasswordSubtitle =>
+      'ធ្វើបច្ចុប្បន្នភាពពាក្យសម្ងាត់គណនី';
+
+  @override
+  String get securityAppLock => 'ការចាក់សោកម្មវិធី';
+
+  @override
+  String get securityAppLockSubtitle => 'តម្រូវឱ្យដោះសោពេលបើកកម្មវិធី';
+
+  @override
+  String get securityHideBalance => 'លាក់សមតុល្យតាមលំនាំដើម';
+
+  @override
+  String get securityHideBalanceSubtitle =>
+      'រក្សាចំនួនទឹកប្រាក់ឱ្យលាក់រហូតដល់បង្ហាញ';
+
+  @override
+  String get rewardsTitle => 'រង្វាន់ និងការផ្តល់ជូន';
+
+  @override
+  String get rewardsPointsLabel => 'ពិន្ទុរបស់អ្នក';
+
+  @override
+  String get rewardsTier => 'កម្រិតមាស';
+
+  @override
+  String get rewardsRedeem => 'ប្តូរយក';
+
+  @override
+  String get rewardsSectionOffers => 'ការផ្តល់ជូនដែលមាន';
+
+  @override
+  String get rewardsClaim => 'ទាមទារ';
+
+  @override
+  String get rewardsClaimed => 'បានទាមទារការផ្តល់ជូន';
+
+  @override
+  String get rewardsOffer1Title => 'សាច់ប្រាក់បង្វិល 5% លើអាហារ';
+
+  @override
+  String get rewardsOffer1Body => 'មានសុពលភាពដល់ថ្ងៃ 31 សីហា';
+
+  @override
+  String get rewardsOffer2Title => 'ថ្លៃផ្ទេរប្រាក់ឥតគិតថ្លៃ';
+
+  @override
+  String get rewardsOffer2Body => 'សម្រាប់ការផ្ទេរក្នុងស្រុកទាំងអស់ក្នុងខែនេះ';
+
+  @override
+  String get rewardsOffer3Title => 'ចុងសប្តាហ៍ពិន្ទុទ្វេ';
+
+  @override
+  String get rewardsOffer3Body => 'ទទួលបានពិន្ទុ 2× លើការចំណាយទាំងអស់';
+
+  @override
+  String get helpTitle => 'ជំនួយ និងការគាំទ្រ';
+
+  @override
+  String get helpSectionContact => 'ទាក់ទងមកយើង';
+
+  @override
+  String get helpChat => 'ជជែកផ្ទាល់';
+
+  @override
+  String get helpChatSubtitle => 'ជជែកជាមួយក្រុមការងាររបស់យើង';
+
+  @override
+  String get helpEmail => 'ផ្ញើអ៊ីមែលមកយើង';
+
+  @override
+  String get helpCall => 'មជ្ឈមណ្ឌលទូរស័ព្ទ';
+
+  @override
+  String get helpSectionFaq => 'សំណួរញឹកញាប់';
+
+  @override
+  String get helpFaq1Q => 'តើខ្ញុំបន្ថែមកាបូបថ្មីយ៉ាងដូចម្តេច?';
+
+  @override
+  String get helpFaq1A =>
+      'បើកកាបូប ហើយចុច “+ បន្ថែមកាបូប” ដើម្បីភ្ជាប់គណនីធនាគារ ឬកាបូបអេឡិចត្រូនិកថ្មី។';
+
+  @override
+  String get helpFaq2Q => 'តើទិន្នន័យហិរញ្ញវត្ថុរបស់ខ្ញុំមានសុវត្ថិភាពទេ?';
+
+  @override
+  String get helpFaq2A =>
+      'បាទ/ចាស។ ទិន្នន័យរបស់អ្នកត្រូវបានអ៊ិនគ្រីប និងការពារដោយលេខ PIN និងជីវមាត្រ។';
+
+  @override
+  String get helpFaq3Q => 'តើខ្ញុំស្កេនវិក្កយបត្រយ៉ាងដូចម្តេច?';
+
+  @override
+  String get helpFaq3A =>
+      'ចុចប៊ូតុង “+” ហើយជ្រើសរើសស្កេនវិក្កយបត្រ ដើម្បីថត និងបំពេញប្រតិបត្តិការដោយស្វ័យប្រវត្តិ។';
+
+  @override
+  String get aboutTitle => 'អំពី Apsara Wallet';
+
+  @override
+  String get aboutTagline => 'ហិរញ្ញវត្ថុឆ្លាតវៃ អនាគតកាន់តែប្រសើរ';
+
+  @override
+  String get aboutMission =>
+      'ផ្តល់សិទ្ធិអំណាចដល់ប្រជាជនកម្ពុជាគ្រប់រូបក្នុងការកសាងទម្លាប់ហិរញ្ញវត្ថុល្អប្រសើរ ជាមួយការតាមដានឆ្លាតវៃ និងការយល់ដឹងពី AI។';
+
+  @override
+  String get aboutVersion => 'កំណែ';
+
+  @override
+  String get aboutTerms => 'លក្ខខណ្ឌនៃការប្រើប្រាស់';
+
+  @override
+  String get aboutPrivacy => 'គោលការណ៍ឯកជនភាព';
+
+  @override
+  String get aboutLicenses => 'អាជ្ញាបណ្ណប្រភពបើកចំហ';
+
+  @override
+  String get aboutRate => 'វាយតម្លៃកម្មវិធី';
+
+  @override
   String get notifTitle => 'ការជូនដំណឹង';
 
   @override

@@ -391,6 +391,161 @@ class AppLocalizationsEn extends AppLocalizations {
       'Setting aside KHR 50,000 weekly would reach your savings goal by October.';
 
   @override
+  String get commonComingSoon => 'Coming soon';
+
+  @override
+  String get securityTitle => 'Security & Privacy';
+
+  @override
+  String get securitySectionAuth => 'Authentication';
+
+  @override
+  String get securityChangePin => 'Change PIN';
+
+  @override
+  String get securityChangePinSubtitle => 'Update your 6-digit PIN';
+
+  @override
+  String get securityBiometric => 'Biometric Login';
+
+  @override
+  String get securityBiometricSubtitle => 'Use fingerprint or face to sign in';
+
+  @override
+  String get securityTwoFactor => 'Two-Factor Authentication';
+
+  @override
+  String get securityTwoFactorSubtitle => 'Add an extra layer of security';
+
+  @override
+  String get securitySectionPrivacy => 'Privacy';
+
+  @override
+  String get securityChangePassword => 'Change Password';
+
+  @override
+  String get securityChangePasswordSubtitle => 'Update your account password';
+
+  @override
+  String get securityAppLock => 'App Lock';
+
+  @override
+  String get securityAppLockSubtitle => 'Require unlock when opening the app';
+
+  @override
+  String get securityHideBalance => 'Hide Balance by Default';
+
+  @override
+  String get securityHideBalanceSubtitle =>
+      'Keep amounts hidden until revealed';
+
+  @override
+  String get rewardsTitle => 'Rewards & Offers';
+
+  @override
+  String get rewardsPointsLabel => 'Your Points';
+
+  @override
+  String get rewardsTier => 'Gold Tier';
+
+  @override
+  String get rewardsRedeem => 'Redeem';
+
+  @override
+  String get rewardsSectionOffers => 'Available Offers';
+
+  @override
+  String get rewardsClaim => 'Claim';
+
+  @override
+  String get rewardsClaimed => 'Offer claimed';
+
+  @override
+  String get rewardsOffer1Title => '5% Cashback on Dining';
+
+  @override
+  String get rewardsOffer1Body => 'Valid until Aug 31';
+
+  @override
+  String get rewardsOffer2Title => 'Free Transfer Fees';
+
+  @override
+  String get rewardsOffer2Body => 'For all local transfers this month';
+
+  @override
+  String get rewardsOffer3Title => 'Double Points Weekend';
+
+  @override
+  String get rewardsOffer3Body => 'Earn 2× points on all spending';
+
+  @override
+  String get helpTitle => 'Help & Support';
+
+  @override
+  String get helpSectionContact => 'Get in Touch';
+
+  @override
+  String get helpChat => 'Live Chat';
+
+  @override
+  String get helpChatSubtitle => 'Chat with our team';
+
+  @override
+  String get helpEmail => 'Email Us';
+
+  @override
+  String get helpCall => 'Call Center';
+
+  @override
+  String get helpSectionFaq => 'Frequently Asked';
+
+  @override
+  String get helpFaq1Q => 'How do I add a new wallet?';
+
+  @override
+  String get helpFaq1A =>
+      'Open Wallets and tap “+ Add Wallet” to link a new bank or e-wallet account.';
+
+  @override
+  String get helpFaq2Q => 'Is my financial data secure?';
+
+  @override
+  String get helpFaq2A =>
+      'Yes. Your data is encrypted and protected by your PIN and biometrics.';
+
+  @override
+  String get helpFaq3Q => 'How do I scan a receipt?';
+
+  @override
+  String get helpFaq3A =>
+      'Tap the “+” button and choose Scan Receipt to capture and auto-fill a transaction.';
+
+  @override
+  String get aboutTitle => 'About Apsara Wallet';
+
+  @override
+  String get aboutTagline => 'Smart Finance, Better Future';
+
+  @override
+  String get aboutMission =>
+      'Empowering every Cambodian to build better financial habits with smart tracking and AI insights.';
+
+  @override
+  String get aboutVersion => 'Version';
+
+  @override
+  String get aboutTerms => 'Terms of Service';
+
+  @override
+  String get aboutPrivacy => 'Privacy Policy';
+
+  @override
+  String get aboutLicenses => 'Open-Source Licenses';
+
+  @override
+  String get aboutRate => 'Rate the App';
+
+  @override
   String get notifTitle => 'Notifications';
 
   @override

@@ -136,20 +136,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                               _data.walletCount,
                             ),
                             iconColor: AppColors.info,
-                            onTap: () {},
+                            onTap: () =>
+                                context.router.push(const WalletsRoute()),
                           ),
                           SettingsTile(
                             icon: LucideIcons.shieldCheck,
                             title: context.l10n.profileSecurityPrivacy,
                             subtitle: context.l10n.profileSecuritySubtitle,
                             iconColor: AppColors.income,
-                            onTap: () {},
+                            onTap: () =>
+                                context.router.push(const SecurityRoute()),
                           ),
                           SettingsTile(
                             icon: LucideIcons.bell,
                             title: context.l10n.profileNotifications,
                             iconColor: AppColors.warning,
-                            onTap: () {},
+                            onTap: () => context.router.push(
+                              const NotificationsRoute(),
+                            ),
                           ),
                         ],
                       ),
@@ -180,7 +184,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                             icon: LucideIcons.gift,
                             title: context.l10n.profileRewardsOffers,
                             iconColor: AppColors.accent,
-                            onTap: () {},
+                            onTap: () =>
+                                context.router.push(const RewardsRoute()),
                           ),
                         ],
                       ),
@@ -196,13 +201,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                           SettingsTile(
                             icon: LucideIcons.circleHelp,
                             title: context.l10n.profileHelpSupport,
-                            onTap: () {},
+                            onTap: () =>
+                                context.router.push(const HelpSupportRoute()),
                           ),
                           SettingsTile(
                             icon: LucideIcons.info,
                             title: context.l10n.profileAboutApp,
                             iconColor: AppColors.info,
-                            onTap: () {},
+                            onTap: () =>
+                                context.router.push(const AboutRoute()),
                           ),
                         ],
                       ),
