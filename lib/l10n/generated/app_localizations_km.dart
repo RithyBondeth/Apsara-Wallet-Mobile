@@ -200,6 +200,9 @@ class AppLocalizationsKm extends AppLocalizations {
   String get addTxTitle => 'បន្ថែមប្រតិបត្តិការ';
 
   @override
+  String get addTxEditTitle => 'កែប្រែប្រតិបត្តិការ';
+
+  @override
   String get addTxAmount => 'ចំនួនទឹកប្រាក់';
 
   @override

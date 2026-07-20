@@ -196,6 +196,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addTxTitle => 'Add Transaction';
 
   @override
+  String get addTxEditTitle => 'Edit Transaction';
+
+  @override
   String get addTxAmount => 'Amount';
 
   @override

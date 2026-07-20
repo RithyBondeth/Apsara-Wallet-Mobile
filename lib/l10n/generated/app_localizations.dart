@@ -458,6 +458,12 @@ abstract class AppLocalizations {
   /// **'Add Transaction'**
   String get addTxTitle;
 
+  /// No description provided for @addTxEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Transaction'**
+  String get addTxEditTitle;
+
   /// No description provided for @addTxAmount.
   ///
   /// In en, this message translates to:

@@ -73,6 +73,7 @@
   "biometricLaterCta": "Maybe Later",
 
   "addTxTitle": "Add Transaction",
+  "addTxEditTitle": "Edit Transaction",
   "addTxAmount": "Amount",
   "addTxCategory": "Category",
   "addTxWallet": "Wallet",

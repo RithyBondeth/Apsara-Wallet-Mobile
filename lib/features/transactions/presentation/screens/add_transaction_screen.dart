@@ -12,6 +12,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/core/utils/currency_converter.dart';
 import 'package:apsara_wallet_mobile/core/utils/uuid_generator.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
@@ -33,16 +34,22 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 ///
 /// Opened from the dashboard quick actions with a preselected [initialType].
 /// [initialDateTime] exists so tests (goldens) can pin the date readout.
+///
+/// When [initialRecord] is supplied the screen runs in **edit mode**: the form
+/// is prefilled from that record and saving reuses its id, so the write
+/// replaces the existing row instead of creating a duplicate.
 @RoutePage()
 class AddTransactionScreen extends ConsumerStatefulWidget {
   const AddTransactionScreen({
     super.key,
     this.initialType = ETransactionType.expense,
     this.initialDateTime,
+    this.initialRecord,
   });
 
   final ETransactionType initialType;
   final DateTime? initialDateTime;
+  final TransactionRecord? initialRecord;
 
   @override
   ConsumerState<AddTransactionScreen> createState() =>
@@ -67,6 +74,40 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   TxCategory? _expenseCategory;
   TxCategory? _incomeCategory;
   Wallet _wallet = WalletsData.sample.wallets.first;
+
+  /// The id being edited, or null when creating a new transaction. Reusing it
+  /// on save makes the DB write replace the existing row.
+  String? _editingId;
+
+  bool get _isEditing => _editingId != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final record = widget.initialRecord;
+    if (record != null) _prefillFrom(record);
+  }
+
+  /// Populates every field from an existing record for edit mode. Stored
+  /// amounts are always in riel, so the amount is shown (and re-saved) as KHR.
+  void _prefillFrom(TransactionRecord record) {
+    _editingId = record.id;
+    _type = record.type;
+    _currency = ECurrencyType.khr;
+    _dateTime = record.date;
+    _amount.text = NumberFormat.decimalPattern('en_US').format(record.amountKhr);
+    _title.text = record.title;
+    _note.text = record.note ?? '';
+    if (record.type == ETransactionType.income) {
+      _incomeCategory = record.category;
+    } else {
+      _expenseCategory = record.category;
+    }
+    _wallet = WalletsData.sample.wallets.firstWhere(
+      (w) => w.name == record.walletName,
+      orElse: () => _wallet,
+    );
+  }
 
   @override
   void dispose() {
@@ -144,7 +185,11 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
   void _save() {
     final l10n = context.l10n;
-    final amountKhr = int.tryParse(_amount.text.replaceAll(',', '')) ?? 0;
+    // Parse as a decimal (USD can have cents) and convert to the stored riel
+    // unit. Previously this used int.tryParse, so any USD/decimal amount fell
+    // through to 0 — silent data loss on every dollar entry.
+    final entered = double.tryParse(_amount.text.replaceAll(',', '')) ?? 0;
+    final amountKhr = CurrencyConverter.toKhr(entered, _currency);
     final note = _note.text.trim();
     final category = _category;
     // Prefer the title field; fall back to the note, then the category name.
@@ -155,7 +200,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
     ref.read(transactionsProvider.notifier).add(
           TransactionRecord(
-            id: UuidGenerator.generate(),
+            id: _editingId ?? UuidGenerator.generate(),
             title: title,
             category: category,
             walletName: _wallet.name,
@@ -215,7 +260,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
                 start: 0.0,
                 end: 0.35,
                 offset: const Offset(0, 10),
-                child: _Header(title: l10n.addTxTitle),
+                child: _Header(
+                  title: _isEditing ? l10n.addTxEditTitle : l10n.addTxTitle,
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(

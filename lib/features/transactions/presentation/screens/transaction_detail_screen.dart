@@ -55,7 +55,7 @@ class _TransactionDetailScreenState
       : context.l10n.dashboardExpense;
 
   void _edit(TransactionRecord r) => context.router.push(
-        AddTransactionRoute(initialType: r.type),
+        AddTransactionRoute(initialType: r.type, initialRecord: r),
       );
 
   Future<void> _confirmDelete() async {

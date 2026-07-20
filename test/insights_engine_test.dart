@@ -13,16 +13,15 @@ void main() {
     int amountKhr,
     ETransactionType type,
     DateTime date,
-  ) =>
-      TransactionRecord(
-        id: id,
-        title: id,
-        category: categoryById(categoryId),
-        walletName: 'Cash Wallet',
-        date: date,
-        amountKhr: amountKhr,
-        type: type,
-      );
+  ) => TransactionRecord(
+    id: id,
+    title: id,
+    category: categoryById(categoryId),
+    walletName: 'Cash Wallet',
+    date: date,
+    amountKhr: amountKhr,
+    type: type,
+  );
 
   test('empty ledger reports no data', () {
     final report = InsightsEngine.analyse(const []);
@@ -33,15 +32,33 @@ void main() {
 
   test('a month with income but no expenses is not enough data', () {
     final report = InsightsEngine.analyse([
-      tx('sal', 'salary', 1000000, ETransactionType.income, DateTime(2024, 5, 1)),
+      tx(
+        'sal',
+        'salary',
+        1000000,
+        ETransactionType.income,
+        DateTime(2024, 5, 1),
+      ),
     ]);
     expect(report.hasEnoughData, isFalse);
   });
 
   test('computes savings rate and a healthy score', () {
     final report = InsightsEngine.analyse([
-      tx('sal', 'salary', 1000000, ETransactionType.income, DateTime(2024, 5, 1)),
-      tx('food', 'food', 200000, ETransactionType.expense, DateTime(2024, 5, 2)),
+      tx(
+        'sal',
+        'salary',
+        1000000,
+        ETransactionType.income,
+        DateTime(2024, 5, 1),
+      ),
+      tx(
+        'food',
+        'food',
+        200000,
+        ETransactionType.expense,
+        DateTime(2024, 5, 2),
+      ),
     ]);
 
     expect(report.hasEnoughData, isTrue);
@@ -55,8 +72,20 @@ void main() {
 
   test('overspending surfaces a warning and drags the score down', () {
     final report = InsightsEngine.analyse([
-      tx('sal', 'salary', 100000, ETransactionType.income, DateTime(2024, 5, 1)),
-      tx('rent', 'bills', 300000, ETransactionType.expense, DateTime(2024, 5, 2)),
+      tx(
+        'sal',
+        'salary',
+        100000,
+        ETransactionType.income,
+        DateTime(2024, 5, 1),
+      ),
+      tx(
+        'rent',
+        'bills',
+        300000,
+        ETransactionType.expense,
+        DateTime(2024, 5, 2),
+      ),
     ]);
 
     expect(report.savingsRatePercent, lessThan(0));
@@ -67,12 +96,26 @@ void main() {
 
   test('identifies the top expense category and its share', () {
     final report = InsightsEngine.analyse([
-      tx('sal', 'salary', 1000000, ETransactionType.income, DateTime(2024, 5, 1)),
-      tx('a', 'shopping', 300000, ETransactionType.expense, DateTime(2024, 5, 2)),
+      tx(
+        'sal',
+        'salary',
+        1000000,
+        ETransactionType.income,
+        DateTime(2024, 5, 1),
+      ),
+      tx(
+        'a',
+        'shopping',
+        300000,
+        ETransactionType.expense,
+        DateTime(2024, 5, 2),
+      ),
       tx('b', 'food', 100000, ETransactionType.expense, DateTime(2024, 5, 3)),
     ]);
 
-    final top = report.more.firstWhere((i) => i.kind == InsightKind.topCategory);
+    final top = report.more.firstWhere(
+      (i) => i.kind == InsightKind.topCategory,
+    );
     expect(top.categoryId, 'shopping');
     expect(top.amountKhr, 300000);
     expect(top.percent, 75); // 300k of 400k total
@@ -81,10 +124,28 @@ void main() {
   test('flags a month-over-month rise in the top category', () {
     final report = InsightsEngine.analyse([
       // Previous month.
-      tx('p1', 'shopping', 100000, ETransactionType.expense, DateTime(2024, 4, 5)),
+      tx(
+        'p1',
+        'shopping',
+        100000,
+        ETransactionType.expense,
+        DateTime(2024, 4, 5),
+      ),
       // Current month (anchored to latest tx).
-      tx('sal', 'salary', 1000000, ETransactionType.income, DateTime(2024, 5, 1)),
-      tx('c1', 'shopping', 200000, ETransactionType.expense, DateTime(2024, 5, 6)),
+      tx(
+        'sal',
+        'salary',
+        1000000,
+        ETransactionType.income,
+        DateTime(2024, 5, 1),
+      ),
+      tx(
+        'c1',
+        'shopping',
+        200000,
+        ETransactionType.expense,
+        DateTime(2024, 5, 6),
+      ),
     ]);
 
     final up = report.headline!.kind == InsightKind.categoryUp

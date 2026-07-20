@@ -33,6 +33,7 @@ class AddTransactionRoute extends PageRouteInfo<AddTransactionRouteArgs> {
     Key? key,
     ETransactionType initialType = ETransactionType.expense,
     DateTime? initialDateTime,
+    TransactionRecord? initialRecord,
     List<PageRouteInfo>? children,
   }) : super(
          AddTransactionRoute.name,
@@ -40,6 +41,7 @@ class AddTransactionRoute extends PageRouteInfo<AddTransactionRouteArgs> {
            key: key,
            initialType: initialType,
            initialDateTime: initialDateTime,
+           initialRecord: initialRecord,
          ),
          initialChildren: children,
        );
@@ -56,6 +58,7 @@ class AddTransactionRoute extends PageRouteInfo<AddTransactionRouteArgs> {
         key: args.key,
         initialType: args.initialType,
         initialDateTime: args.initialDateTime,
+        initialRecord: args.initialRecord,
       );
     },
   );
@@ -66,6 +69,7 @@ class AddTransactionRouteArgs {
     this.key,
     this.initialType = ETransactionType.expense,
     this.initialDateTime,
+    this.initialRecord,
   });
 
   final Key? key;
@@ -74,9 +78,11 @@ class AddTransactionRouteArgs {
 
   final DateTime? initialDateTime;
 
+  final TransactionRecord? initialRecord;
+
   @override
   String toString() {
-    return 'AddTransactionRouteArgs{key: $key, initialType: $initialType, initialDateTime: $initialDateTime}';
+    return 'AddTransactionRouteArgs{key: $key, initialType: $initialType, initialDateTime: $initialDateTime, initialRecord: $initialRecord}';
   }
 
   @override
@@ -85,12 +91,16 @@ class AddTransactionRouteArgs {
     if (other is! AddTransactionRouteArgs) return false;
     return key == other.key &&
         initialType == other.initialType &&
-        initialDateTime == other.initialDateTime;
+        initialDateTime == other.initialDateTime &&
+        initialRecord == other.initialRecord;
   }
 
   @override
   int get hashCode =>
-      key.hashCode ^ initialType.hashCode ^ initialDateTime.hashCode;
+      key.hashCode ^
+      initialType.hashCode ^
+      initialDateTime.hashCode ^
+      initialRecord.hashCode;
 }
 
 /// generated route for
