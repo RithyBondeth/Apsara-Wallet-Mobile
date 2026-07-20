@@ -155,7 +155,12 @@ class AppRouter extends RootStackRouter {
     // ==================================================
     // AUTH ROUTES
     // ==================================================
-    AutoRoute(page: SplashRoute.page, path: RoutePathConstant.splashPath),
+    AutoRoute(
+      page: SplashRoute.page,
+      path: RoutePathConstant.splashPath,
+      // The app boots here; splash hands off to Welcome after its intro.
+      initial: true,
+    ),
     AutoRoute(
       page: WelcomeRoute.page,
       path: RoutePathConstant.welcomePath,
@@ -187,7 +192,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: DashboardRoute.page,
       path: RoutePathConstant.dashboardPath,
-      initial: true,
       type: _tabTransition,
     ),
     AutoRoute(

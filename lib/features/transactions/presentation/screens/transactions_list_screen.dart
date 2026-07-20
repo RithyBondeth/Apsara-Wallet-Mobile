@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
@@ -13,22 +14,25 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
     show formatKhr;
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// The full transaction history (Phase 1, UI-only) reached from the dashboard
-/// "See All": searchable, filterable by type, grouped by day. Tapping a row
-/// opens its detail.
+/// The full transaction history reached from the dashboard "See All":
+/// searchable, filterable by type, grouped by day, and backed by the live
+/// [transactionsProvider] (SQLite). Tapping a row opens its detail.
 @RoutePage()
-class TransactionsListScreen extends StatefulWidget {
+class TransactionsListScreen extends ConsumerStatefulWidget {
   const TransactionsListScreen({super.key});
 
   @override
-  State<TransactionsListScreen> createState() => _TransactionsListScreenState();
+  ConsumerState<TransactionsListScreen> createState() =>
+      _TransactionsListScreenState();
 }
 
-class _TransactionsListScreenState extends State<TransactionsListScreen>
+class _TransactionsListScreenState
+    extends ConsumerState<TransactionsListScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
@@ -36,7 +40,6 @@ class _TransactionsListScreenState extends State<TransactionsListScreen>
   )..forward();
 
   final TextEditingController _search = TextEditingController();
-  final List<TransactionRecord> _all = sampleTransactions();
 
   /// null = All; otherwise the single type shown.
   ETransactionType? _filter;
@@ -48,9 +51,9 @@ class _TransactionsListScreenState extends State<TransactionsListScreen>
     super.dispose();
   }
 
-  List<TransactionRecord> _filtered(String localeTag) {
+  List<TransactionRecord> _filtered(List<TransactionRecord> all) {
     final q = _search.text.trim().toLowerCase();
-    return _all.where((t) {
+    return all.where((t) {
       if (_filter != null && t.type != _filter) return false;
       if (q.isEmpty) return true;
       return t.title.toLowerCase().contains(q) ||
@@ -63,7 +66,10 @@ class _TransactionsListScreenState extends State<TransactionsListScreen>
     final l10n = context.l10n;
     final localeTag = Localizations.localeOf(context).toString();
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final items = _filtered(localeTag);
+    final txAsync = ref.watch(transactionsProvider);
+    final all = txAsync.valueOrNull ?? const <TransactionRecord>[];
+    final loading = txAsync.isLoading && all.isEmpty;
+    final items = _filtered(all);
 
     // Build day-grouped rows with staggered entrances.
     final rows = <Widget>[];
@@ -139,7 +145,9 @@ class _TransactionsListScreenState extends State<TransactionsListScreen>
               ),
               const SizedBox(height: AppSpacing.md),
               Expanded(
-                child: items.isEmpty
+                child: loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : items.isEmpty
                     ? _EmptyState(
                         title: l10n.txEmptyTitle,
                         body: l10n.txEmptyBody,

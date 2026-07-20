@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -12,32 +13,33 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
     show formatKhr;
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// A single transaction's detail (Phase 1, UI-only), looked up by [id] from
-/// the sample history. Edit re-opens Add Transaction; Delete confirms and pops.
+/// A single transaction's detail, looked up by [id] from the live
+/// [transactionsProvider]. Edit re-opens Add Transaction; Delete removes it
+/// from the database and pops.
 @RoutePage()
-class TransactionDetailScreen extends StatefulWidget {
+class TransactionDetailScreen extends ConsumerStatefulWidget {
   const TransactionDetailScreen({super.key, required this.id});
 
   final String id;
 
   @override
-  State<TransactionDetailScreen> createState() =>
+  ConsumerState<TransactionDetailScreen> createState() =>
       _TransactionDetailScreenState();
 }
 
-class _TransactionDetailScreenState extends State<TransactionDetailScreen>
+class _TransactionDetailScreenState
+    extends ConsumerState<TransactionDetailScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1100),
   )..forward();
-
-  late final TransactionRecord _record = findTransaction(widget.id);
 
   @override
   void dispose() {
@@ -45,15 +47,15 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
     super.dispose();
   }
 
-  Color get _amountColor =>
-      _record.isIncome ? AppColors.income : AppColors.expense;
+  Color _amountColor(TransactionRecord r) =>
+      r.isIncome ? AppColors.income : AppColors.expense;
 
-  String _typeLabel(BuildContext context) => _record.isIncome
+  String _typeLabel(BuildContext context, TransactionRecord r) => r.isIncome
       ? context.l10n.dashboardIncome
       : context.l10n.dashboardExpense;
 
-  void _edit() => context.router.push(
-        AddTransactionRoute(initialType: _record.type),
+  void _edit(TransactionRecord r) => context.router.push(
+        AddTransactionRoute(initialType: r.type),
       );
 
   Future<void> _confirmDelete() async {
@@ -72,6 +74,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
       ),
     );
     if (confirmed != true || !mounted) return;
+    await ref.read(transactionsProvider.notifier).remove(widget.id);
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -93,8 +97,37 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
     final l10n = context.l10n;
     final localeTag = Localizations.localeOf(context).toString();
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final dateText =
-        DateFormat.yMMMMd(localeTag).add_jm().format(_record.date);
+
+    // Resolve the record from the live list.
+    final all = ref.watch(transactionsProvider).valueOrNull;
+    TransactionRecord? record;
+    if (all != null) {
+      for (final t in all) {
+        if (t.id == widget.id) {
+          record = t;
+          break;
+        }
+      }
+    }
+
+    if (record == null) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Column(
+            children: [
+              _AppBar(title: l10n.txDetailTitle, onEdit: () {}),
+              const Expanded(
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final r = record;
+    final dateText = DateFormat.yMMMMd(localeTag).add_jm().format(r.date);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -109,7 +142,10 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
                 start: 0.0,
                 end: 0.4,
                 offset: const Offset(0, 10),
-                child: _AppBar(title: l10n.txDetailTitle, onEdit: _edit),
+                child: _AppBar(
+                  title: l10n.txDetailTitle,
+                  onEdit: () => _edit(r),
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -128,9 +164,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
                         start: 0.08,
                         end: 0.5,
                         child: _AmountHero(
-                          record: _record,
-                          amountColor: _amountColor,
-                          typeLabel: _typeLabel(context),
+                          record: r,
+                          amountColor: _amountColor(r),
+                          typeLabel: _typeLabel(context, r),
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
@@ -140,15 +176,15 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
                         end: 0.6,
                         child: _DetailCard(
                           rows: [
-                            (l10n.addTxCategory, _record.category.labelOf(l10n)),
-                            (l10n.addTxWallet, _record.walletName),
+                            (l10n.addTxCategory, r.category.labelOf(l10n)),
+                            (l10n.addTxWallet, r.walletName),
                             (l10n.addTxDateTime, dateText),
-                            (l10n.txDetailType, _typeLabel(context)),
+                            (l10n.txDetailType, _typeLabel(context, r)),
                             (l10n.txDetailStatus, l10n.txStatusCompleted),
                           ],
                         ),
                       ),
-                      if (_record.note != null) ...[
+                      if (r.note != null) ...[
                         const SizedBox(height: AppSpacing.xl),
                         FadeSlideIn(
                           controller: _intro,
@@ -156,7 +192,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
                           end: 0.7,
                           child: _NoteCard(
                             label: l10n.txDetailNote,
-                            note: _record.note!,
+                            note: r.note!,
                           ),
                         ),
                       ],
@@ -168,7 +204,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen>
                         child: PrimaryButton(
                           label: l10n.txEdit,
                           trailingIcon: LucideIcons.pencil,
-                          onPressed: _edit,
+                          onPressed: () => _edit(r),
                         ),
                       ),
                       const SizedBox(height: AppSpacing.md),

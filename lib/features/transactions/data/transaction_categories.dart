@@ -126,3 +126,12 @@ final List<TxCategory> incomeCategories = [
     labelOf: (l) => l.categoryOthers,
   ),
 ];
+
+/// Every category keyed by id, for reconstructing a [TxCategory] from a stored
+/// `categoryId`. Unknown ids fall back to the generic "Others" expense bucket.
+final Map<String, TxCategory> _categoriesById = {
+  for (final c in [...expenseCategories, ...incomeCategories]) c.id: c,
+};
+
+TxCategory categoryById(String id) =>
+    _categoriesById[id] ?? expenseCategories.last;

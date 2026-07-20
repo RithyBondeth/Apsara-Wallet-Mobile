@@ -37,6 +37,31 @@ class TransactionRecord {
   String get sign => isIncome ? '+' : '-';
 
   String timeLabel(String localeTag) => DateFormat.jm(localeTag).format(date);
+
+  /// Serializes to a `transactions` table row.
+  Map<String, Object?> toDbMap() => {
+        'id': id,
+        'title': title,
+        'categoryId': category.id,
+        'walletName': walletName,
+        'dateMillis': date.millisecondsSinceEpoch,
+        'amountKhr': amountKhr,
+        'type': type.name,
+        'note': note,
+      };
+
+  /// Rebuilds a record from a stored row (category resolved from the catalog).
+  factory TransactionRecord.fromDbMap(Map<String, Object?> m) =>
+      TransactionRecord(
+        id: m['id'] as String,
+        title: m['title'] as String,
+        category: categoryById(m['categoryId'] as String),
+        walletName: m['walletName'] as String,
+        date: DateTime.fromMillisecondsSinceEpoch(m['dateMillis'] as int),
+        amountKhr: m['amountKhr'] as int,
+        type: ETransactionType.values.byName(m['type'] as String),
+        note: m['note'] as String?,
+      );
 }
 
 /// The base "now" the sample is relative to (matches the mock "May 2024").

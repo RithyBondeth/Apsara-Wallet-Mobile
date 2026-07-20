@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -11,7 +12,10 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/core/utils/uuid_generator.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/add_tx_pickers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/picker_row.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/tx_type_toggle.dart';
@@ -23,14 +27,14 @@ import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Manual transaction entry (Phase 1, UI-only): Expense / Income / Transfer
-/// with amount, category or from→to wallets, date & time, note and a hook
-/// into the receipt scanner. "Save" just confirms and pops — no persistence.
+/// Manual transaction entry: Expense / Income with amount, category, wallet,
+/// date & time, note and a hook into the receipt scanner. "Save" writes the
+/// record to the database (via [transactionsProvider]) and pops.
 ///
 /// Opened from the dashboard quick actions with a preselected [initialType].
 /// [initialDateTime] exists so tests (goldens) can pin the date readout.
 @RoutePage()
-class AddTransactionScreen extends StatefulWidget {
+class AddTransactionScreen extends ConsumerStatefulWidget {
   const AddTransactionScreen({
     super.key,
     this.initialType = ETransactionType.expense,
@@ -41,10 +45,11 @@ class AddTransactionScreen extends StatefulWidget {
   final DateTime? initialDateTime;
 
   @override
-  State<AddTransactionScreen> createState() => _AddTransactionScreenState();
+  ConsumerState<AddTransactionScreen> createState() =>
+      _AddTransactionScreenState();
 }
 
-class _AddTransactionScreenState extends State<AddTransactionScreen>
+class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
@@ -137,6 +142,26 @@ class _AddTransactionScreenState extends State<AddTransactionScreen>
 
   void _save() {
     final l10n = context.l10n;
+    final amountKhr = int.tryParse(_amount.text.replaceAll(',', '')) ?? 0;
+    final note = _note.text.trim();
+    final category = _category;
+    // No dedicated merchant field in the form — title falls back to the note,
+    // else the category name.
+    final title = note.isNotEmpty ? note : category.labelOf(l10n);
+
+    ref.read(transactionsProvider.notifier).add(
+          TransactionRecord(
+            id: UuidGenerator.generate(),
+            title: title,
+            category: category,
+            walletName: _wallet.name,
+            date: _dateTime,
+            amountKhr: amountKhr,
+            type: _type,
+            note: note.isEmpty ? null : note,
+          ),
+        );
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,

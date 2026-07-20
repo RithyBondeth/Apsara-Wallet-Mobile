@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,6 +10,8 @@ import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/transactions_list_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+
+import 'support/test_database.dart';
 
 Widget _wrap(Widget child) {
   return ProviderScope(
@@ -29,7 +32,9 @@ Widget _router(AppRouter router) {
       theme: AppTheme.lightTheme,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: router.config(),
+      routerConfig: router.config(
+            deepLinkBuilder: (_) => DeepLink.single(const DashboardRoute()),
+          ),
     ),
   );
 }
@@ -37,7 +42,8 @@ Widget _router(AppRouter router) {
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  setUp(() {
+  setUp(() async {
+    await initTestDatabase(); // fresh, seeded in-memory db per test
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       final msg = details.exception.toString();
