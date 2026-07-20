@@ -168,6 +168,17 @@
   "profileSectionAccount": "គណនី",
   "profilePersonalInfo": "ព័ត៌មានផ្ទាល់ខ្លួន",
   "profilePersonalInfoSubtitle": "ឈ្មោះ អ៊ីមែល និងទូរស័ព្ទ",
+
+  "editProfileTitle": "កែសម្រួលប្រវត្តិរូប",
+  "editProfileChooseAvatar": "ជ្រើសរើសរូបតំណាង",
+  "editProfileNameLabel": "ឈ្មោះពេញ",
+  "editProfileEmailLabel": "អ៊ីមែល",
+  "editProfilePhoneLabel": "លេខទូរស័ព្ទ",
+  "editProfileSave": "រក្សាទុកការផ្លាស់ប្តូរ",
+  "editProfileSaved": "បានធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូប",
+  "editProfileNameRequired": "សូមបញ្ចូលឈ្មោះរបស់អ្នក",
+  "editProfileEmailInvalid": "បញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ",
+  "editProfilePhoneInvalid": "បញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ",
   "profileMyWallets": "កាបូបរបស់ខ្ញុំ",
   "profileLinkedAccounts": "គណនីភ្ជាប់ចំនួន {count}",
   "@profileLinkedAccounts": {

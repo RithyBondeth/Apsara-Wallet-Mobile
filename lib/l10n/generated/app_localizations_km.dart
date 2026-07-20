@@ -460,6 +460,36 @@ class AppLocalizationsKm extends AppLocalizations {
   String get profilePersonalInfoSubtitle => 'ឈ្មោះ អ៊ីមែល និងទូរស័ព្ទ';
 
   @override
+  String get editProfileTitle => 'កែសម្រួលប្រវត្តិរូប';
+
+  @override
+  String get editProfileChooseAvatar => 'ជ្រើសរើសរូបតំណាង';
+
+  @override
+  String get editProfileNameLabel => 'ឈ្មោះពេញ';
+
+  @override
+  String get editProfileEmailLabel => 'អ៊ីមែល';
+
+  @override
+  String get editProfilePhoneLabel => 'លេខទូរស័ព្ទ';
+
+  @override
+  String get editProfileSave => 'រក្សាទុកការផ្លាស់ប្តូរ';
+
+  @override
+  String get editProfileSaved => 'បានធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូប';
+
+  @override
+  String get editProfileNameRequired => 'សូមបញ្ចូលឈ្មោះរបស់អ្នក';
+
+  @override
+  String get editProfileEmailInvalid => 'បញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ';
+
+  @override
+  String get editProfilePhoneInvalid => 'បញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ';
+
+  @override
   String get profileMyWallets => 'កាបូបរបស់ខ្ញុំ';
 
   @override

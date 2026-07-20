@@ -126,7 +126,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                             icon: LucideIcons.user,
                             title: context.l10n.profilePersonalInfo,
                             subtitle: context.l10n.profilePersonalInfoSubtitle,
-                            onTap: () {},
+                            onTap: () =>
+                                context.router.push(const EditProfileRoute()),
                           ),
                           SettingsTile(
                             icon: LucideIcons.wallet,

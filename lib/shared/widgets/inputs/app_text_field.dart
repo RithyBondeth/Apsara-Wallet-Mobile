@@ -24,6 +24,8 @@ class AppTextField extends StatefulWidget {
     this.textInputAction,
     this.inputFormatters,
     this.onSubmitted,
+    this.onChanged,
+    this.errorText,
   });
 
   final String label;
@@ -35,6 +37,12 @@ class AppTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatters;
   final ValueChanged<String>? onSubmitted;
+  final ValueChanged<String>? onChanged;
+
+  /// Inline validation message shown below the field; a red ring is drawn
+  /// while it is non-null. Null (the default) renders nothing extra, so
+  /// existing call sites are visually unchanged.
+  final String? errorText;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -62,7 +70,10 @@ class _AppTextFieldState extends State<AppTextField> {
     final fill = context.isDarkMode
         ? context.colors.surface
         : AppColors.surfaceVariant;
-    final borderColor = _focused ? AppColors.primary : Colors.transparent;
+    final hasError = widget.errorText != null;
+    final borderColor = hasError
+        ? AppColors.error
+        : (_focused ? AppColors.primary : Colors.transparent);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,6 +110,7 @@ class _AppTextFieldState extends State<AppTextField> {
             textInputAction: widget.textInputAction,
             inputFormatters: widget.inputFormatters,
             onSubmitted: widget.onSubmitted,
+            onChanged: widget.onChanged,
             style: AppFont.bodyLarge.copyWith(color: context.colors.onSurface),
             cursorColor: AppColors.primary,
             decoration: InputDecoration(
@@ -136,6 +148,14 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
           ),
         ),
+        if (widget.errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 6, left: 4),
+            child: Text(
+              widget.errorText!,
+              style: AppFont.labelSmall.copyWith(color: AppColors.error),
+            ),
+          ),
       ],
     );
   }

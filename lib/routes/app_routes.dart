@@ -19,6 +19,7 @@ import 'package:apsara_wallet_mobile/features/scan/presentation/screens/scan_rec
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/wallets_screen.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:auto_route/auto_route.dart';
@@ -219,6 +220,10 @@ class AppRouter extends RootStackRouter {
       page: ProfileRoute.page,
       path: RoutePathConstant.profilePath,
       type: _tabTransition,
+    ),
+    AutoRoute(
+      page: EditProfileRoute.page,
+      path: RoutePathConstant.editProfilePath,
     ),
     AutoRoute(page: SettingsRoute.page, path: RoutePathConstant.settingsPath),
   ];

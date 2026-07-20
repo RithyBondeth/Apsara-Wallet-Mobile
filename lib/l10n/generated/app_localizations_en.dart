@@ -457,6 +457,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profilePersonalInfoSubtitle => 'Name, email & phone';
 
   @override
+  String get editProfileTitle => 'Edit Profile';
+
+  @override
+  String get editProfileChooseAvatar => 'Choose Avatar';
+
+  @override
+  String get editProfileNameLabel => 'Full Name';
+
+  @override
+  String get editProfileEmailLabel => 'Email';
+
+  @override
+  String get editProfilePhoneLabel => 'Phone Number';
+
+  @override
+  String get editProfileSave => 'Save Changes';
+
+  @override
+  String get editProfileSaved => 'Profile updated';
+
+  @override
+  String get editProfileNameRequired => 'Please enter your name';
+
+  @override
+  String get editProfileEmailInvalid => 'Enter a valid email';
+
+  @override
+  String get editProfilePhoneInvalid => 'Enter a valid phone number';
+
+  @override
   String get profileMyWallets => 'My Wallets';
 
   @override

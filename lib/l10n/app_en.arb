@@ -168,6 +168,17 @@
   "profileSectionAccount": "Account",
   "profilePersonalInfo": "Personal Information",
   "profilePersonalInfoSubtitle": "Name, email & phone",
+
+  "editProfileTitle": "Edit Profile",
+  "editProfileChooseAvatar": "Choose Avatar",
+  "editProfileNameLabel": "Full Name",
+  "editProfileEmailLabel": "Email",
+  "editProfilePhoneLabel": "Phone Number",
+  "editProfileSave": "Save Changes",
+  "editProfileSaved": "Profile updated",
+  "editProfileNameRequired": "Please enter your name",
+  "editProfileEmailInvalid": "Enter a valid email",
+  "editProfilePhoneInvalid": "Enter a valid phone number",
   "profileMyWallets": "My Wallets",
   "profileLinkedAccounts": "{count} linked accounts",
   "@profileLinkedAccounts": {

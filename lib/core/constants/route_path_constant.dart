@@ -32,5 +32,6 @@ class RoutePathConstant {
   // PROFILE ROUTES
   // ==================================================
   static const String profilePath = '/profile';
+  static const String editProfilePath = '/editProfile';
   static const String settingsPath = '/settings';
 }

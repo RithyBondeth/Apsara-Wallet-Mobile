@@ -968,6 +968,66 @@ abstract class AppLocalizations {
   /// **'Name, email & phone'**
   String get profilePersonalInfoSubtitle;
 
+  /// No description provided for @editProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfileTitle;
+
+  /// No description provided for @editProfileChooseAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Avatar'**
+  String get editProfileChooseAvatar;
+
+  /// No description provided for @editProfileNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get editProfileNameLabel;
+
+  /// No description provided for @editProfileEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get editProfileEmailLabel;
+
+  /// No description provided for @editProfilePhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get editProfilePhoneLabel;
+
+  /// No description provided for @editProfileSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get editProfileSave;
+
+  /// No description provided for @editProfileSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get editProfileSaved;
+
+  /// No description provided for @editProfileNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get editProfileNameRequired;
+
+  /// No description provided for @editProfileEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email'**
+  String get editProfileEmailInvalid;
+
+  /// No description provided for @editProfilePhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid phone number'**
+  String get editProfilePhoneInvalid;
+
   /// No description provided for @profileMyWallets.
   ///
   /// In en, this message translates to:
