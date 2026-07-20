@@ -397,6 +397,51 @@ class AppLocalizationsKm extends AppLocalizations {
   String get commonComingSoon => 'នឹងមានក្នុងពេលឆាប់ៗ';
 
   @override
+  String get txListTitle => 'ប្រតិបត្តិការ';
+
+  @override
+  String get txSearchHint => 'ស្វែងរកប្រតិបត្តិការ';
+
+  @override
+  String get txFilterAll => 'ទាំងអស់';
+
+  @override
+  String get txEmptyTitle => 'រកមិនឃើញប្រតិបត្តិការ';
+
+  @override
+  String get txEmptyBody => 'សាកល្បងស្វែងរក ឬតម្រងផ្សេង។';
+
+  @override
+  String get txDetailTitle => 'ព័ត៌មានលម្អិតប្រតិបត្តិការ';
+
+  @override
+  String get txDetailType => 'ប្រភេទ';
+
+  @override
+  String get txDetailStatus => 'ស្ថានភាព';
+
+  @override
+  String get txStatusCompleted => 'បានបញ្ចប់';
+
+  @override
+  String get txDetailNote => 'កំណត់ចំណាំ';
+
+  @override
+  String get txEdit => 'កែសម្រួល';
+
+  @override
+  String get txDelete => 'លុប';
+
+  @override
+  String get txDeleteTitle => 'លុបប្រតិបត្តិការ?';
+
+  @override
+  String get txDeleteBody => 'ប្រតិបត្តិការនេះនឹងត្រូវលុបជាអចិន្ត្រៃយ៍។';
+
+  @override
+  String get txDeleted => 'បានលុបប្រតិបត្តិការ';
+
+  @override
   String get securityTitle => 'សុវត្ថិភាព និងឯកជនភាព';
 
   @override

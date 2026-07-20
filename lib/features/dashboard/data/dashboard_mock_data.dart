@@ -25,7 +25,12 @@ class DashboardTransaction {
     required this.type,
     required this.icon,
     required this.tint,
+    this.id,
   });
+
+  /// Matches a [TransactionRecord.id] in the history sample so a tap on the
+  /// dashboard opens the same detail; null rows are non-navigable.
+  final String? id;
 
   final String title;
   final String time;
@@ -78,6 +83,7 @@ class DashboardData {
     budgetUsedFraction: 0.63,
     transactions: [
       DashboardTransaction(
+        id: 'grab-food',
         title: 'Grab Food',
         time: 'Today, 8:30 AM',
         amountKhr: 18000,
@@ -86,6 +92,7 @@ class DashboardData {
         tint: Color(0xFF00B14F),
       ),
       DashboardTransaction(
+        id: 'aba-salary',
         title: 'ABA Salary',
         time: 'Today, 8:00 AM',
         amountKhr: 3500000,
@@ -94,6 +101,7 @@ class DashboardData {
         tint: Color(0xFF1E4FA3),
       ),
       DashboardTransaction(
+        id: 'aeon-mall',
         title: 'AEON Mall',
         time: 'Yesterday, 6:20 PM',
         amountKhr: 45000,
@@ -102,6 +110,7 @@ class DashboardData {
         tint: Color(0xFF7C3AED),
       ),
       DashboardTransaction(
+        id: 'coffee-shop',
         title: 'Coffee Shop',
         time: 'Yesterday, 9:15 AM',
         amountKhr: 12000,

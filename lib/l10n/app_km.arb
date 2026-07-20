@@ -145,6 +145,22 @@
 
   "commonComingSoon": "នឹងមានក្នុងពេលឆាប់ៗ",
 
+  "txListTitle": "ប្រតិបត្តិការ",
+  "txSearchHint": "ស្វែងរកប្រតិបត្តិការ",
+  "txFilterAll": "ទាំងអស់",
+  "txEmptyTitle": "រកមិនឃើញប្រតិបត្តិការ",
+  "txEmptyBody": "សាកល្បងស្វែងរក ឬតម្រងផ្សេង។",
+  "txDetailTitle": "ព័ត៌មានលម្អិតប្រតិបត្តិការ",
+  "txDetailType": "ប្រភេទ",
+  "txDetailStatus": "ស្ថានភាព",
+  "txStatusCompleted": "បានបញ្ចប់",
+  "txDetailNote": "កំណត់ចំណាំ",
+  "txEdit": "កែសម្រួល",
+  "txDelete": "លុប",
+  "txDeleteTitle": "លុបប្រតិបត្តិការ?",
+  "txDeleteBody": "ប្រតិបត្តិការនេះនឹងត្រូវលុបជាអចិន្ត្រៃយ៍។",
+  "txDeleted": "បានលុបប្រតិបត្តិការ",
+
   "securityTitle": "សុវត្ថិភាព និងឯកជនភាព",
   "securitySectionAuth": "ការផ្ទៀងផ្ទាត់",
   "securityChangePin": "ប្តូរលេខ PIN",

@@ -394,6 +394,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonComingSoon => 'Coming soon';
 
   @override
+  String get txListTitle => 'Transactions';
+
+  @override
+  String get txSearchHint => 'Search transactions';
+
+  @override
+  String get txFilterAll => 'All';
+
+  @override
+  String get txEmptyTitle => 'No transactions found';
+
+  @override
+  String get txEmptyBody => 'Try a different search or filter.';
+
+  @override
+  String get txDetailTitle => 'Transaction Details';
+
+  @override
+  String get txDetailType => 'Type';
+
+  @override
+  String get txDetailStatus => 'Status';
+
+  @override
+  String get txStatusCompleted => 'Completed';
+
+  @override
+  String get txDetailNote => 'Note';
+
+  @override
+  String get txEdit => 'Edit';
+
+  @override
+  String get txDelete => 'Delete';
+
+  @override
+  String get txDeleteTitle => 'Delete transaction?';
+
+  @override
+  String get txDeleteBody => 'This transaction will be permanently removed.';
+
+  @override
+  String get txDeleted => 'Transaction deleted';
+
+  @override
   String get securityTitle => 'Security & Privacy';
 
   @override

@@ -145,6 +145,22 @@
 
   "commonComingSoon": "Coming soon",
 
+  "txListTitle": "Transactions",
+  "txSearchHint": "Search transactions",
+  "txFilterAll": "All",
+  "txEmptyTitle": "No transactions found",
+  "txEmptyBody": "Try a different search or filter.",
+  "txDetailTitle": "Transaction Details",
+  "txDetailType": "Type",
+  "txDetailStatus": "Status",
+  "txStatusCompleted": "Completed",
+  "txDetailNote": "Note",
+  "txEdit": "Edit",
+  "txDelete": "Delete",
+  "txDeleteTitle": "Delete transaction?",
+  "txDeleteBody": "This transaction will be permanently removed.",
+  "txDeleted": "Transaction deleted",
+
   "securityTitle": "Security & Privacy",
   "securitySectionAuth": "Authentication",
   "securityChangePin": "Change PIN",

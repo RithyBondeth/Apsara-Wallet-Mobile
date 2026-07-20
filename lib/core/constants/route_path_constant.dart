@@ -23,6 +23,8 @@ class RoutePathConstant {
   static const String analyticsPath = '/analytics';
   static const String scanReceiptPath = '/scanReceipt';
   static const String addTransactionPath = '/addTransaction';
+  static const String transactionsPath = '/transactions';
+  static const String transactionDetailPath = '/transactionDetail';
   static const String budgetPath = '/budget';
   static const String categoriesPath = '/categories';
   static const String aiInsightsPath = '/aiInsights';

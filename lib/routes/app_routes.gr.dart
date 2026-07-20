@@ -462,6 +462,69 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TransactionDetailScreen]
+class TransactionDetailRoute extends PageRouteInfo<TransactionDetailRouteArgs> {
+  TransactionDetailRoute({
+    Key? key,
+    required String id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TransactionDetailRoute.name,
+         args: TransactionDetailRouteArgs(key: key, id: id),
+         initialChildren: children,
+       );
+
+  static const String name = 'TransactionDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TransactionDetailRouteArgs>();
+      return TransactionDetailScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class TransactionDetailRouteArgs {
+  const TransactionDetailRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'TransactionDetailRouteArgs{key: $key, id: $id}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TransactionDetailRouteArgs) return false;
+    return key == other.key && id == other.id;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ id.hashCode;
+}
+
+/// generated route for
+/// [TransactionsListScreen]
+class TransactionsListRoute extends PageRouteInfo<void> {
+  const TransactionsListRoute({List<PageRouteInfo>? children})
+    : super(TransactionsListRoute.name, initialChildren: children);
+
+  static const String name = 'TransactionsListRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TransactionsListScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [WalletsScreen]
 class WalletsRoute extends PageRouteInfo<void> {
   const WalletsRoute({List<PageRouteInfo>? children})

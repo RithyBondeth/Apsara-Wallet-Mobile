@@ -842,6 +842,96 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get commonComingSoon;
 
+  /// No description provided for @txListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get txListTitle;
+
+  /// No description provided for @txSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search transactions'**
+  String get txSearchHint;
+
+  /// No description provided for @txFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get txFilterAll;
+
+  /// No description provided for @txEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions found'**
+  String get txEmptyTitle;
+
+  /// No description provided for @txEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different search or filter.'**
+  String get txEmptyBody;
+
+  /// No description provided for @txDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Details'**
+  String get txDetailTitle;
+
+  /// No description provided for @txDetailType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get txDetailType;
+
+  /// No description provided for @txDetailStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get txDetailStatus;
+
+  /// No description provided for @txStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get txStatusCompleted;
+
+  /// No description provided for @txDetailNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get txDetailNote;
+
+  /// No description provided for @txEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get txEdit;
+
+  /// No description provided for @txDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get txDelete;
+
+  /// No description provided for @txDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete transaction?'**
+  String get txDeleteTitle;
+
+  /// No description provided for @txDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This transaction will be permanently removed.'**
+  String get txDeleteBody;
+
+  /// No description provided for @txDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction deleted'**
+  String get txDeleted;
+
   /// No description provided for @securityTitle.
   ///
   /// In en, this message translates to:

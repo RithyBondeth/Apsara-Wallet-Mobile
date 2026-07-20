@@ -210,8 +210,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                           end: 0.92,
                           child: RecentTransactionsSection(
                             transactions: _data.transactions,
-                            onSeeAll: () {},
-                            onTapTransaction: (_) {},
+                            onSeeAll: () => context.router.push(
+                              const TransactionsListRoute(),
+                            ),
+                            onTapTransaction: (tx) {
+                              if (tx.id != null) {
+                                context.router.push(
+                                  TransactionDetailRoute(id: tx.id!),
+                                );
+                              }
+                            },
                           ),
                         ),
                       ],
