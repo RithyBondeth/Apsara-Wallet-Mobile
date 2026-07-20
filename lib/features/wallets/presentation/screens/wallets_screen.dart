@@ -10,6 +10,8 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/add_wallet_sheet.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/total_balance_card.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/wallet_card.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
@@ -32,9 +34,29 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
   /// One-shot entrance cascade.
   late final AnimationController _intro;
 
-  final WalletsData _data = WalletsData.sample;
-
   bool _balanceHidden = false;
+
+  Future<void> _addWallet() async {
+    final wallet = await showAddWalletSheet(context);
+    if (wallet == null || !mounted) return;
+    ref.read(walletsProvider.notifier).add(wallet);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        content: Text(
+          context.l10n.walletAdded,
+          style: AppFont.bodyMedium.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -68,7 +90,13 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final wallets = _data.wallets;
+    final wallets = ref.watch(walletsProvider);
+    final total = ref.watch(walletsTotalProvider);
+    final data = WalletsData(
+      totalBalanceKhr: total.khr,
+      totalBalanceUsd: total.usd,
+      wallets: wallets,
+    );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -86,7 +114,7 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
           bottom: false,
           child: Column(
             children: [
-              _AppBar(onAddWallet: () {}),
+              _AppBar(onAddWallet: _addWallet),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -105,7 +133,7 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                         end: 0.5,
                         offset: const Offset(0, 14),
                         child: TotalBalanceCard(
-                          data: _data,
+                          data: data,
                           balanceHidden: _balanceHidden,
                           onToggleBalance: () => setState(
                             () => _balanceHidden = !_balanceHidden,
@@ -130,7 +158,9 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                           child: WalletCard(
                             wallet: wallets[i],
                             balanceHidden: _balanceHidden,
-                            onTap: () {},
+                            onTap: () => context.router.push(
+                              WalletDetailRoute(index: i),
+                            ),
                           ),
                         ),
                       ],
@@ -139,7 +169,7 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                         controller: _intro,
                         start: 0.7,
                         end: 1.0,
-                        child: _AddWalletCard(onTap: () {}),
+                        child: _AddWalletCard(onTap: _addWallet),
                       ),
                     ],
                   ),

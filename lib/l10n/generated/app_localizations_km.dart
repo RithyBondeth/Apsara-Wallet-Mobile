@@ -968,6 +968,45 @@ class AppLocalizationsKm extends AppLocalizations {
   String get walletCardPrimaryBadge => 'ចម្បង';
 
   @override
+  String get walletBalanceLabel => 'សមតុល្យ';
+
+  @override
+  String get walletRecentActivity => 'សកម្មភាពថ្មីៗ';
+
+  @override
+  String get walletNoActivity => 'មិនទាន់មានប្រតិបត្តិការសម្រាប់កាបូបនេះទេ';
+
+  @override
+  String get walletNameLabel => 'ឈ្មោះកាបូប';
+
+  @override
+  String get walletNameHint => 'ឧ. ABA Bank, សាច់ប្រាក់';
+
+  @override
+  String get walletTypeLabel => 'ប្រភេទ';
+
+  @override
+  String get walletTypeBank => 'គណនីធនាគារ';
+
+  @override
+  String get walletTypeCash => 'សាច់ប្រាក់';
+
+  @override
+  String get walletTypeEwallet => 'កាបូបអេឡិចត្រូនិក';
+
+  @override
+  String get walletInitialBalance => 'សមតុល្យដំបូង';
+
+  @override
+  String get walletColorLabel => 'ពណ៌';
+
+  @override
+  String get walletAdded => 'បានបន្ថែមកាបូប';
+
+  @override
+  String get menuTitle => 'ម៉ឺនុយ';
+
+  @override
   String get analyticsTitle => 'ការវិភាគ';
 
   @override

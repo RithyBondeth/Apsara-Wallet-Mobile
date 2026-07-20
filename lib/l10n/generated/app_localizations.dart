@@ -1922,6 +1922,84 @@ abstract class AppLocalizations {
   /// **'Primary'**
   String get walletCardPrimaryBadge;
 
+  /// No description provided for @walletBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get walletBalanceLabel;
+
+  /// No description provided for @walletRecentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get walletRecentActivity;
+
+  /// No description provided for @walletNoActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions for this wallet yet'**
+  String get walletNoActivity;
+
+  /// No description provided for @walletNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Name'**
+  String get walletNameLabel;
+
+  /// No description provided for @walletNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. ABA Bank, Cash'**
+  String get walletNameHint;
+
+  /// No description provided for @walletTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get walletTypeLabel;
+
+  /// No description provided for @walletTypeBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Account'**
+  String get walletTypeBank;
+
+  /// No description provided for @walletTypeCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get walletTypeCash;
+
+  /// No description provided for @walletTypeEwallet.
+  ///
+  /// In en, this message translates to:
+  /// **'E-Wallet'**
+  String get walletTypeEwallet;
+
+  /// No description provided for @walletInitialBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial Balance'**
+  String get walletInitialBalance;
+
+  /// No description provided for @walletColorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get walletColorLabel;
+
+  /// No description provided for @walletAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet added'**
+  String get walletAdded;
+
+  /// No description provided for @menuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menuTitle;
+
   /// No description provided for @analyticsTitle.
   ///
   /// In en, this message translates to:

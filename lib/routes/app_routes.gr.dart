@@ -525,6 +525,53 @@ class TransactionsListRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [WalletDetailScreen]
+class WalletDetailRoute extends PageRouteInfo<WalletDetailRouteArgs> {
+  WalletDetailRoute({
+    Key? key,
+    required int index,
+    List<PageRouteInfo>? children,
+  }) : super(
+         WalletDetailRoute.name,
+         args: WalletDetailRouteArgs(key: key, index: index),
+         initialChildren: children,
+       );
+
+  static const String name = 'WalletDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<WalletDetailRouteArgs>();
+      return WalletDetailScreen(key: args.key, index: args.index);
+    },
+  );
+}
+
+class WalletDetailRouteArgs {
+  const WalletDetailRouteArgs({this.key, required this.index});
+
+  final Key? key;
+
+  final int index;
+
+  @override
+  String toString() {
+    return 'WalletDetailRouteArgs{key: $key, index: $index}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! WalletDetailRouteArgs) return false;
+    return key == other.key && index == other.index;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ index.hashCode;
+}
+
+/// generated route for
 /// [WalletsScreen]
 class WalletsRoute extends PageRouteInfo<void> {
   const WalletsRoute({List<PageRouteInfo>? children})

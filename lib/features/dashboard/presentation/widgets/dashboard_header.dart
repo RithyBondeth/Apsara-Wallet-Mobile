@@ -27,6 +27,7 @@ class DashboardHeader extends StatelessWidget {
     required this.balanceHidden,
     required this.onToggleBalance,
     required this.onTapBell,
+    required this.onOpenMenu,
   });
 
   final DashboardData data;
@@ -34,6 +35,7 @@ class DashboardHeader extends StatelessWidget {
   final bool balanceHidden;
   final VoidCallback onToggleBalance;
   final VoidCallback onTapBell;
+  final VoidCallback onOpenMenu;
 
   static const Color _ivory = Color(0xFFF3F1E7);
 
@@ -92,6 +94,8 @@ class DashboardHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _MenuButton(onTap: onOpenMenu),
+        const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,6 +238,31 @@ class DashboardHeader extends StatelessWidget {
 }
 
 /// Circular translucent notification button with an unread dot.
+/// Translucent circular hamburger that opens the side menu.
+class _MenuButton extends StatelessWidget {
+  const _MenuButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.14),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+        ),
+        child: const Icon(LucideIcons.menu, size: 20, color: Colors.white),
+      ),
+    );
+  }
+}
+
 class _BellButton extends StatelessWidget {
   const _BellButton({required this.onTap});
 

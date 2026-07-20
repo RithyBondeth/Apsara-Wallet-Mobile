@@ -29,6 +29,7 @@ class RoutePathConstant {
   static const String categoriesPath = '/categories';
   static const String aiInsightsPath = '/aiInsights';
   static const String walletsPath = '/wallets';
+  static const String walletDetailPath = '/walletDetail';
 
   // ==================================================
   // PROFILE ROUTES

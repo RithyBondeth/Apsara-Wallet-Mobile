@@ -964,6 +964,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletCardPrimaryBadge => 'Primary';
 
   @override
+  String get walletBalanceLabel => 'Balance';
+
+  @override
+  String get walletRecentActivity => 'Recent Activity';
+
+  @override
+  String get walletNoActivity => 'No transactions for this wallet yet';
+
+  @override
+  String get walletNameLabel => 'Wallet Name';
+
+  @override
+  String get walletNameHint => 'e.g. ABA Bank, Cash';
+
+  @override
+  String get walletTypeLabel => 'Type';
+
+  @override
+  String get walletTypeBank => 'Bank Account';
+
+  @override
+  String get walletTypeCash => 'Cash';
+
+  @override
+  String get walletTypeEwallet => 'E-Wallet';
+
+  @override
+  String get walletInitialBalance => 'Initial Balance';
+
+  @override
+  String get walletColorLabel => 'Color';
+
+  @override
+  String get walletAdded => 'Wallet added';
+
+  @override
+  String get menuTitle => 'Menu';
+
+  @override
   String get analyticsTitle => 'Analytics';
 
   @override

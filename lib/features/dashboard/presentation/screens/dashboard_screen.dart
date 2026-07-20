@@ -16,6 +16,7 @@ import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_side_menu.dart';
 
 /// The home dashboard: emerald hero balance, quick actions, this-month
 /// overview and recent activity — all mock data for the Phase 1 UI build.
@@ -39,6 +40,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   late final Animation<double> _budget;
 
   final DashboardData _data = DashboardData.sample;
+
+  /// Lets the header's menu button open the side drawer.
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _balanceHidden = false;
   int _navIndex = 0;
@@ -93,6 +97,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
+        key: _scaffoldKey,
+        drawer: const AppSideMenu(),
         // Body flows under the floating nav capsule so its blur has content.
         extendBody: true,
         floatingActionButton: AppBottomBarCenterButton(
@@ -143,6 +149,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             onTapBell: () => context.router.push(
                               const NotificationsRoute(),
                             ),
+                            onOpenMenu: () =>
+                                _scaffoldKey.currentState?.openDrawer(),
                           ),
                         ),
                       ),
