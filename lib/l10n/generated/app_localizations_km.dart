@@ -394,6 +394,84 @@ class AppLocalizationsKm extends AppLocalizations {
       'ការញែកទុក 50,000 រៀលរៀងរាល់សប្តាហ៍ នឹងសម្រេចគោលដៅសន្សំរបស់អ្នកនៅខែតុលា។';
 
   @override
+  String get notifTitle => 'ការជូនដំណឹង';
+
+  @override
+  String get notifMarkAllRead => 'សម្គាល់ថាបានអានទាំងអស់';
+
+  @override
+  String get notifAllRead => 'បានសម្គាល់ការជូនដំណឹងទាំងអស់ថាបានអាន';
+
+  @override
+  String get notifToday => 'ថ្ងៃនេះ';
+
+  @override
+  String get notifEarlier => 'មុននេះ';
+
+  @override
+  String get notifEmptyTitle => 'អ្នកបានអានទាំងអស់ហើយ';
+
+  @override
+  String get notifEmptyBody => 'ការជូនដំណឹងថ្មីនឹងបង្ហាញនៅទីនេះ។';
+
+  @override
+  String notifMinutesAgo(int count) {
+    return '$count នាទីមុន';
+  }
+
+  @override
+  String notifHoursAgo(int count) {
+    return '$count ម៉ោងមុន';
+  }
+
+  @override
+  String get notifYesterday => 'ម្សិលមិញ';
+
+  @override
+  String notifDaysAgo(int count) {
+    return '$count ថ្ងៃមុន';
+  }
+
+  @override
+  String get notifTxTitle => 'បានទទួលការទូទាត់';
+
+  @override
+  String get notifTxBody => 'អ្នកបានទទួល KHR 3,500,000 ពីប្រាក់ខែ ABA។';
+
+  @override
+  String get notifBudgetTitle => 'ការជូនដំណឹងអំពីថវិកា';
+
+  @override
+  String get notifBudgetBody => 'អ្នកបានប្រើ 63% នៃថវិកាប្រចាំខែរបស់អ្នក។';
+
+  @override
+  String get notifSecurityTitle => 'បានរកឃើញការចូលថ្មី';
+
+  @override
+  String get notifSecurityBody => 'ឧបករណ៍ថ្មីទើបតែបានចូលគណនីរបស់អ្នក។';
+
+  @override
+  String get notifRewardTitle => 'បានទទួលសាច់ប្រាក់បង្វិល';
+
+  @override
+  String get notifRewardBody =>
+      'អ្នកបានទទួលសាច់ប្រាក់បង្វិល KHR 12,000 សប្តាហ៍នេះ។';
+
+  @override
+  String get notifInsightTitle => 'របាយការណ៍ប្រចាំសប្តាហ៍រួចរាល់';
+
+  @override
+  String get notifInsightBody =>
+      'របាយការណ៍ចំណាយសប្តាហ៍នេះរបស់អ្នករួចរាល់សម្រាប់មើល។';
+
+  @override
+  String get notifBillTitle => 'វិក្កយបត្រនាពេលខាងមុខ';
+
+  @override
+  String get notifBillBody =>
+      'វិក្កយបត្រអគ្គិសនី KHR 85,000 នឹងដល់កំណត់ក្នុងរយៈពេល 3 ថ្ងៃ។';
+
+  @override
   String get navHome => 'ទំព័រដើម';
 
   @override

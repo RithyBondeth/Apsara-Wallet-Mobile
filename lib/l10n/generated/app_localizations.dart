@@ -836,6 +836,144 @@ abstract class AppLocalizations {
   /// **'Setting aside KHR 50,000 weekly would reach your savings goal by October.'**
   String get insightsSavingTip;
 
+  /// No description provided for @notifTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifTitle;
+
+  /// No description provided for @notifMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notifMarkAllRead;
+
+  /// No description provided for @notifAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up — everything\'s marked read'**
+  String get notifAllRead;
+
+  /// No description provided for @notifToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get notifToday;
+
+  /// No description provided for @notifEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get notifEarlier;
+
+  /// No description provided for @notifEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all caught up'**
+  String get notifEmptyTitle;
+
+  /// No description provided for @notifEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'New notifications will appear here.'**
+  String get notifEmptyBody;
+
+  /// No description provided for @notifMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String notifMinutesAgo(int count);
+
+  /// No description provided for @notifHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String notifHoursAgo(int count);
+
+  /// No description provided for @notifYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get notifYesterday;
+
+  /// No description provided for @notifDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}d ago'**
+  String notifDaysAgo(int count);
+
+  /// No description provided for @notifTxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received'**
+  String get notifTxTitle;
+
+  /// No description provided for @notifTxBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You received KHR 3,500,000 from ABA Salary.'**
+  String get notifTxBody;
+
+  /// No description provided for @notifBudgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget alert'**
+  String get notifBudgetTitle;
+
+  /// No description provided for @notifBudgetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used 63% of your monthly budget.'**
+  String get notifBudgetBody;
+
+  /// No description provided for @notifSecurityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New sign-in detected'**
+  String get notifSecurityTitle;
+
+  /// No description provided for @notifSecurityBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A new device just signed in to your account.'**
+  String get notifSecurityBody;
+
+  /// No description provided for @notifRewardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cashback earned'**
+  String get notifRewardTitle;
+
+  /// No description provided for @notifRewardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You earned KHR 12,000 cashback this week.'**
+  String get notifRewardBody;
+
+  /// No description provided for @notifInsightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly insight ready'**
+  String get notifInsightTitle;
+
+  /// No description provided for @notifInsightBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your spending report for this week is ready to view.'**
+  String get notifInsightBody;
+
+  /// No description provided for @notifBillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming bill'**
+  String get notifBillTitle;
+
+  /// No description provided for @notifBillBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your electricity bill of KHR 85,000 is due in 3 days.'**
+  String get notifBillBody;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:

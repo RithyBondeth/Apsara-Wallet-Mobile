@@ -391,6 +391,84 @@ class AppLocalizationsEn extends AppLocalizations {
       'Setting aside KHR 50,000 weekly would reach your savings goal by October.';
 
   @override
+  String get notifTitle => 'Notifications';
+
+  @override
+  String get notifMarkAllRead => 'Mark all read';
+
+  @override
+  String get notifAllRead => 'All caught up — everything\'s marked read';
+
+  @override
+  String get notifToday => 'Today';
+
+  @override
+  String get notifEarlier => 'Earlier';
+
+  @override
+  String get notifEmptyTitle => 'You\'re all caught up';
+
+  @override
+  String get notifEmptyBody => 'New notifications will appear here.';
+
+  @override
+  String notifMinutesAgo(int count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String notifHoursAgo(int count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String get notifYesterday => 'Yesterday';
+
+  @override
+  String notifDaysAgo(int count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String get notifTxTitle => 'Payment received';
+
+  @override
+  String get notifTxBody => 'You received KHR 3,500,000 from ABA Salary.';
+
+  @override
+  String get notifBudgetTitle => 'Budget alert';
+
+  @override
+  String get notifBudgetBody => 'You\'ve used 63% of your monthly budget.';
+
+  @override
+  String get notifSecurityTitle => 'New sign-in detected';
+
+  @override
+  String get notifSecurityBody =>
+      'A new device just signed in to your account.';
+
+  @override
+  String get notifRewardTitle => 'Cashback earned';
+
+  @override
+  String get notifRewardBody => 'You earned KHR 12,000 cashback this week.';
+
+  @override
+  String get notifInsightTitle => 'Weekly insight ready';
+
+  @override
+  String get notifInsightBody =>
+      'Your spending report for this week is ready to view.';
+
+  @override
+  String get notifBillTitle => 'Upcoming bill';
+
+  @override
+  String get notifBillBody =>
+      'Your electricity bill of KHR 85,000 is due in 3 days.';
+
+  @override
   String get navHome => 'Home';
 
   @override

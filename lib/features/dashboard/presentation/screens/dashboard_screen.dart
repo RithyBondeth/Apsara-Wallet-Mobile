@@ -140,7 +140,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             onToggleBalance: () => setState(
                               () => _balanceHidden = !_balanceHidden,
                             ),
-                            onTapBell: () {},
+                            onTapBell: () => context.router.push(
+                              const NotificationsRoute(),
+                            ),
                           ),
                         ),
                       ),
