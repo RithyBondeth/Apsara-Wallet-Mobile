@@ -91,6 +91,7 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
     final wallets = ref.watch(walletsProvider);
+    final balances = ref.watch(walletBalancesProvider);
     final total = ref.watch(walletsTotalProvider);
     final data = WalletsData(
       totalBalanceKhr: total.khr,
@@ -158,6 +159,8 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                           child: WalletCard(
                             wallet: wallets[i],
                             balanceHidden: _balanceHidden,
+                            balanceKhr: balances[wallets[i].name]?.khr,
+                            balanceUsd: balances[wallets[i].name]?.usd,
                             onTap: () => context.router.push(
                               WalletDetailRoute(index: i),
                             ),

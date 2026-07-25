@@ -5,9 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/dashboard_header.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/month_overview_card.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/quick_actions_row.dart';
@@ -36,10 +40,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   /// Endless ambient loop: aurora-style breathing behind the brand mark.
   late final AnimationController _ambient;
 
-  /// Budget bar fill, eased in on first paint.
+  /// Entrance easing for the budget bar (0→1); multiplied by the live fraction
+  /// at paint so the bar fills to this month's real spend.
   late final Animation<double> _budget;
 
-  final DashboardData _data = DashboardData.sample;
+  /// This month's budget target (KHR). Static for now — mirrors the Budget
+  /// screen's sample total so the two surfaces tell one story; the *spend*
+  /// against it is derived live from the ledger.
+  static const int _budgetTargetKhr = 2000000;
 
   /// Lets the header's menu button open the side drawer.
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -58,11 +66,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       vsync: this,
       duration: const Duration(milliseconds: 9000),
     )..repeat();
-    _budget = Tween<double>(begin: 0, end: _data.budgetUsedFraction).animate(
-      CurvedAnimation(
-        parent: _intro,
-        curve: const Interval(0.35, 0.9, curve: AppCurves.decelerate),
-      ),
+    _budget = CurvedAnimation(
+      parent: _intro,
+      curve: const Interval(0.35, 0.9, curve: AppCurves.decelerate),
     );
   }
 
@@ -93,6 +99,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
+
+    // Everything on screen is derived from the live ledger + wallet totals.
+    final total = ref.watch(walletsTotalProvider);
+    final ledger =
+        ref.watch(transactionsProvider).valueOrNull ?? const [];
+    final data = DashboardData.fromLedger(
+      ledger: ledger,
+      balanceKhr: total.khr,
+      balanceUsd: total.usd,
+      budgetKhr: _budgetTargetKhr,
+      l10n: context.l10n,
+      localeTag: Localizations.localeOf(context).toLanguageTag(),
+      now: ref.watch(nowProvider),
+    );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
@@ -140,7 +160,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                           end: 0.5,
                           offset: const Offset(0, 14),
                           child: DashboardHeader(
-                            data: _data,
+                            data: data,
                             ambient: _ambient,
                             balanceHidden: _balanceHidden,
                             onToggleBalance: () => setState(
@@ -203,8 +223,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             child: AnimatedBuilder(
                               animation: _budget,
                               builder: (context, _) => MonthOverviewCard(
-                                data: _data,
-                                progress: _budget.value,
+                                data: data,
+                                progress:
+                                    _budget.value * data.budgetUsedFraction,
                               ),
                             ),
                           ),
@@ -215,7 +236,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                           start: 0.42,
                           end: 0.92,
                           child: RecentTransactionsSection(
-                            transactions: _data.transactions,
+                            transactions: data.transactions,
                             onSeeAll: () => context.router.push(
                               const TransactionsListRoute(),
                             ),

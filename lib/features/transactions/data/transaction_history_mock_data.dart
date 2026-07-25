@@ -67,15 +67,17 @@ class TransactionRecord {
 /// The base "now" the sample is relative to (matches the mock "May 2024").
 final DateTime _baseDate = DateTime(2024, 5, 20);
 
-/// Group header for a record's day: Today / Yesterday / "17 May".
-/// [localeTag] comes from `Localizations.localeOf(context)` in the screen.
+/// Group header for a record's day: Today / Yesterday / "17 May", relative to
+/// [now] (the real clock in production; a fixed instant in tests). [localeTag]
+/// comes from `Localizations.localeOf(context)` in the screen.
 String transactionGroupLabel(
   AppLocalizations l10n,
   String localeTag,
   DateTime date,
+  DateTime now,
 ) {
   final d = DateTime(date.year, date.month, date.day);
-  final base = DateTime(_baseDate.year, _baseDate.month, _baseDate.day);
+  final base = DateTime(now.year, now.month, now.day);
   final diff = base.difference(d).inDays;
   if (diff <= 0) return l10n.notifToday;
   if (diff == 1) return l10n.notifYesterday;

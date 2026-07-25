@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
@@ -70,13 +71,14 @@ class _TransactionsListScreenState
     final all = txAsync.valueOrNull ?? const <TransactionRecord>[];
     final loading = txAsync.isLoading && all.isEmpty;
     final items = _filtered(all);
+    final now = ref.watch(nowProvider);
 
     // Build day-grouped rows with staggered entrances.
     final rows = <Widget>[];
     String? lastGroup;
     for (var i = 0; i < items.length; i++) {
       final t = items[i];
-      final group = transactionGroupLabel(l10n, localeTag, t.date);
+      final group = transactionGroupLabel(l10n, localeTag, t.date, now);
       if (group != lastGroup) {
         rows.add(_sectionHeader(group, topPad: lastGroup != null));
         lastGroup = group;

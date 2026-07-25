@@ -63,6 +63,7 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
       return const Scaffold(body: SizedBox.shrink());
     }
     final wallet = wallets[widget.index];
+    final balance = ref.watch(walletBalancesProvider)[wallet.name];
 
     final txs = (ref.watch(transactionsProvider).valueOrNull ?? [])
         .where((t) => t.walletName == wallet.name)
@@ -101,6 +102,8 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
                         end: 0.5,
                         child: _BalanceHero(
                           wallet: wallet,
+                          balanceKhr: balance?.khr ?? wallet.balanceKhr,
+                          balanceUsd: balance?.usd ?? wallet.balanceUsd,
                           kindLabel: _kindLabel(context, wallet.kind),
                           balanceLabel: l10n.walletBalanceLabel,
                           primaryLabel: l10n.walletCardPrimaryBadge,
@@ -208,12 +211,16 @@ class _AppBar extends StatelessWidget {
 class _BalanceHero extends StatelessWidget {
   const _BalanceHero({
     required this.wallet,
+    required this.balanceKhr,
+    required this.balanceUsd,
     required this.kindLabel,
     required this.balanceLabel,
     required this.primaryLabel,
   });
 
   final Wallet wallet;
+  final int balanceKhr;
+  final double balanceUsd;
   final String kindLabel;
   final String balanceLabel;
   final String primaryLabel;
@@ -303,7 +310,7 @@ class _BalanceHero extends StatelessWidget {
                 ),
               ),
               Text(
-                formatKhr(wallet.balanceKhr),
+                formatKhr(balanceKhr),
                 style: AppFont.headingMedium.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
@@ -313,7 +320,7 @@ class _BalanceHero extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            '≈ USD ${formatUsd(wallet.balanceUsd)}',
+            '≈ USD ${formatUsd(balanceUsd)}',
             style: AppFont.bodyMedium.copyWith(
               color: _ivory.withValues(alpha: 0.75),
             ),

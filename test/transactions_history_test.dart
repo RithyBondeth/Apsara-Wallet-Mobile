@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/transaction_detail_screen.dart';
@@ -13,8 +14,13 @@ import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
 import 'support/test_database.dart';
 
+/// Pin "now" to the seeded sample's base day so relative grouping
+/// (Today / Yesterday) stays deterministic regardless of the real date.
+final _fixedNow = DateTime(2024, 5, 20, 12);
+
 Widget _wrap(Widget child) {
   return ProviderScope(
+    overrides: [nowProvider.overrideWithValue(_fixedNow)],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -27,6 +33,7 @@ Widget _wrap(Widget child) {
 
 Widget _router(AppRouter router) {
   return ProviderScope(
+    overrides: [nowProvider.overrideWithValue(_fixedNow)],
     child: MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

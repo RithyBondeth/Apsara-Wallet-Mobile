@@ -17,14 +17,23 @@ class WalletCard extends StatelessWidget {
     required this.wallet,
     required this.balanceHidden,
     this.onTap,
+    this.balanceKhr,
+    this.balanceUsd,
   });
 
   final Wallet wallet;
   final bool balanceHidden;
   final VoidCallback? onTap;
 
+  /// Ledger-derived balance to show; falls back to the wallet's own seed
+  /// balance when not supplied.
+  final int? balanceKhr;
+  final double? balanceUsd;
+
   @override
   Widget build(BuildContext context) {
+    final khr = balanceKhr ?? wallet.balanceKhr;
+    final usd = balanceUsd ?? wallet.balanceUsd;
     final subtitle = wallet.maskedAccount == null
         ? wallet.kind.label
         : '${wallet.kind.label} · ${wallet.maskedAccount}';
@@ -86,9 +95,7 @@ class WalletCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  balanceHidden
-                      ? 'KHR ••••••'
-                      : 'KHR ${formatKhr(wallet.balanceKhr)}',
+                  balanceHidden ? 'KHR ••••••' : 'KHR ${formatKhr(khr)}',
                   style: AppFont.titleSmall.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
@@ -96,9 +103,7 @@ class WalletCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  balanceHidden
-                      ? '≈ ••••'
-                      : '≈ \$${formatUsd(wallet.balanceUsd)}',
+                  balanceHidden ? '≈ ••••' : '≈ \$${formatUsd(usd)}',
                   style: AppFont.bodySmall.copyWith(
                     color: AppColors.textSecondary,
                   ),

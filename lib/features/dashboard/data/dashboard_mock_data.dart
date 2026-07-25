@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
 /// UI-only mock data for the dashboard. No backend — Phase 1 is presentation
 /// only, so these fixtures drive every widget on the screen.
@@ -71,6 +73,86 @@ class DashboardData {
   final double budgetUsedFraction;
 
   final List<DashboardTransaction> transactions;
+
+  /// Derives the whole dashboard from the live ledger — the single source of
+  /// truth. [balanceKhr]/[balanceUsd] come from the wallet totals; the month
+  /// figures and recent list are computed from [ledger] (newest-first).
+  ///
+  /// The "current month" is anchored to the most recent transaction (mirroring
+  /// the Insights engine) rather than the wall clock, so both the seeded sample
+  /// and live data read meaningfully and stay deterministic under test. The
+  /// budget bar shows this month's real spend against the static [budgetKhr]
+  /// target. Day labels in the recent list are relativized against [now].
+  factory DashboardData.fromLedger({
+    required List<TransactionRecord> ledger,
+    required int balanceKhr,
+    required double balanceUsd,
+    required int budgetKhr,
+    required AppLocalizations l10n,
+    required String localeTag,
+    required DateTime now,
+    String userName = 'Sokunthea',
+    int recentCount = 4,
+  }) {
+    if (ledger.isEmpty) {
+      return DashboardData(
+        userName: userName,
+        balanceKhr: balanceKhr,
+        balanceUsd: balanceUsd,
+        monthLabel: DateFormat.yMMMM(localeTag).format(now),
+        monthIncomeKhr: 0,
+        monthExpenseKhr: 0,
+        budgetKhr: budgetKhr,
+        budgetUsedFraction: 0,
+        transactions: const [],
+      );
+    }
+
+    final anchor =
+        ledger.map((t) => t.date).reduce((a, b) => a.isAfter(b) ? a : b);
+    final monthStart = DateTime(anchor.year, anchor.month);
+    bool inMonth(DateTime d) =>
+        d.year == monthStart.year && d.month == monthStart.month;
+
+    final monthTxs = ledger.where((t) => inMonth(t.date));
+    final incomeKhr = monthTxs
+        .where((t) => t.isIncome)
+        .fold<int>(0, (s, t) => s + t.amountKhr);
+    final expenseKhr = monthTxs
+        .where((t) => !t.isIncome)
+        .fold<int>(0, (s, t) => s + t.amountKhr);
+
+    final fraction =
+        budgetKhr == 0 ? 0.0 : (expenseKhr / budgetKhr).clamp(0.0, 1.0);
+
+    final recent = ledger
+        .take(recentCount)
+        .map(
+          (t) => DashboardTransaction(
+            id: t.id,
+            title: t.title,
+            time: '${transactionGroupLabel(l10n, localeTag, t.date, now)}'
+                ', ${t.timeLabel(localeTag)}',
+            amountKhr: t.amountKhr,
+            type: t.type,
+            icon: t.category.icon,
+            tint: t.category.color,
+          ),
+        )
+        .toList();
+
+    return DashboardData(
+      userName: userName,
+      balanceKhr: balanceKhr,
+      balanceUsd: balanceUsd,
+      monthLabel: DateFormat.yMMMM(localeTag).format(monthStart),
+      monthIncomeKhr: incomeKhr,
+      monthExpenseKhr: expenseKhr,
+      budgetKhr: budgetKhr,
+      budgetUsedFraction: fraction.toDouble(),
+      transactions: recent,
+    );
+  }
 
   static const DashboardData sample = DashboardData(
     userName: 'Sokunthea',

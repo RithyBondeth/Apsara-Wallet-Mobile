@@ -14,8 +14,12 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/core/utils/logger.dart';
+import 'package:apsara_wallet_mobile/core/utils/uuid_generator.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/receipt_scanner_service.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_transaction_mapper.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/scanned_receipt.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/receipt_review_sheet.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_capture_controls.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_frame.dart';
@@ -226,6 +230,16 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
   }
 
   void _save(ScannedReceipt receipt) {
+    // Persist the reviewed receipt as an expense in the ledger. Defaults to the
+    // first wallet (the scanner has no wallet picker) and now for the date.
+    final record = ReceiptTransactionMapper.toTransaction(
+      receipt,
+      id: UuidGenerator.generate(),
+      walletName: WalletsData.sample.wallets.first.name,
+      date: DateTime.now(),
+    );
+    ref.read(transactionsProvider.notifier).add(record);
+
     _showSnack(
       context.l10n.scanExpenseSaved,
       AppGradients.emeraldCore,
