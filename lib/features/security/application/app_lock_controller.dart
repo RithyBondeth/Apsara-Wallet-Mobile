@@ -18,7 +18,7 @@ class AppLockState {
     this.isBiometricEnabled = false,
     this.isBiometricAvailable = false,
     this.isLocked = false,
-    this.backgroundTimeout = const Duration(seconds: 30),
+    this.backgroundTimeout = Duration.zero,
     this.failedAttempts = 0,
     this.lockedOutUntil,
   });
@@ -75,6 +75,11 @@ class AppLockController extends StateNotifier<AppLockState> {
   final BiometricService _biometric;
 
   DateTime? _backgroundedAt;
+
+  /// True while a biometric system prompt is on screen. The OS briefly
+  /// backgrounds the app to show it, which must NOT be treated as the user
+  /// leaving (or it would spuriously re-lock mid-scan).
+  bool _authInProgress = false;
 
   /// Loads persisted config. Does not change [AppLockState.isLocked] — the
   /// caller decides when to lock (see [lockIfEnabled]).
@@ -133,11 +138,21 @@ class AppLockController extends StateNotifier<AppLockState> {
       state = state.copyWith(isBiometricAvailable: available);
     }
     if (!available) return false;
-    final ok = await _biometric.authenticate(reason);
+    final ok = await _runBiometric(reason);
     if (!ok) return false;
     await _storage.setBiometricEnabled(true);
     state = state.copyWith(isBiometricEnabled: true);
     return true;
+  }
+
+  /// Runs a biometric scan while suppressing background-triggered locking.
+  Future<bool> _runBiometric(String reason) async {
+    _authInProgress = true;
+    try {
+      return await _biometric.authenticate(reason);
+    } finally {
+      _authInProgress = false;
+    }
   }
 
   Future<void> disableBiometric() async {
@@ -191,7 +206,7 @@ class AppLockController extends StateNotifier<AppLockState> {
 
   Future<bool> unlockWithBiometric(String reason) async {
     if (!state.canUseBiometric) return false;
-    final ok = await _biometric.authenticate(reason);
+    final ok = await _runBiometric(reason);
     if (ok) {
       state = state.copyWith(
         isLocked: false,
@@ -223,7 +238,17 @@ class AppLockController extends StateNotifier<AppLockState> {
 
   // --- Lifecycle, driven by AppLockGate ---------------------------------
 
-  void onBackgrounded() => _backgroundedAt = DateTime.now();
+  void onBackgrounded() {
+    if (!state.lockEnabled || _authInProgress) return;
+    // With no grace window (the default), lock the moment we're backgrounded
+    // so returning always requires the PIN/biometric — and the app-switcher
+    // snapshot shows the lock screen rather than the user's finances.
+    if (state.backgroundTimeout == Duration.zero) {
+      state = state.copyWith(isLocked: true);
+    } else {
+      _backgroundedAt = DateTime.now();
+    }
+  }
 
   void onForegrounded() {
     if (!state.lockEnabled) return;

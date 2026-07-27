@@ -35,10 +35,10 @@ class AppLockStorage {
       _storage.write(key: _kBiometric, value: enabled ? 'true' : 'false');
 
   /// Seconds the app may sit in the background before it re-locks. Defaults to
-  /// 30s when unset.
+  /// 0 (lock immediately on backgrounding) when unset.
   Future<int> readBackgroundTimeout() async {
     final raw = await _storage.read(key: _kTimeout);
-    return int.tryParse(raw ?? '') ?? 30;
+    return int.tryParse(raw ?? '') ?? 0;
   }
 
   Future<void> setBackgroundTimeout(int seconds) =>
