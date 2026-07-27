@@ -34,11 +34,15 @@ class ApiException implements Exception {
   }
 
   static String _handleError(int? statusCode, dynamic error) {
+    // Prefer the server's own message when present — NestJS returns
+    // `{ statusCode, message, error }` where `message` is a string (e.g.
+    // "Invalid email or password", "Email already registered") or, for
+    // validation failures, a list of strings.
+    final serverMessage = _extractMessage(error);
+    if (serverMessage != null) return serverMessage;
+
     switch (statusCode) {
       case 400:
-        if (error != null && error is Map && error.containsKey('message')) {
-          return error['message'].toString();
-        }
         return 'Bad request';
       case 401:
         return 'Unauthorized';
@@ -46,10 +50,9 @@ class ApiException implements Exception {
         return 'Forbidden';
       case 404:
         return 'Not found';
+      case 409:
+        return 'Conflict';
       case 422:
-        if (error != null && error is Map && error.containsKey('message')) {
-          return error['message'].toString();
-        }
         return 'Validation Error';
       case 500:
         return 'Internal server error';
@@ -58,5 +61,17 @@ class ApiException implements Exception {
       default:
         return 'Oops something went wrong';
     }
+  }
+
+  /// Pulls a human-readable message out of a NestJS error body, handling both
+  /// the string and string-list shapes of `message`.
+  static String? _extractMessage(dynamic error) {
+    if (error is! Map || !error.containsKey('message')) return null;
+    final message = error['message'];
+    if (message is String && message.isNotEmpty) return message;
+    if (message is List && message.isNotEmpty) {
+      return message.map((e) => e.toString()).join('\n');
+    }
+    return null;
   }
 }

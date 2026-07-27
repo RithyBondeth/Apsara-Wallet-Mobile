@@ -40,6 +40,16 @@
   "registerPasswordHint": "Create a password",
   "registerConfirmPasswordLabel": "Confirm Password",
   "registerConfirmPasswordHint": "Re-enter your password",
+
+  "authErrorNameRequired": "Please enter your name",
+  "authErrorEmailRequired": "Please enter your email",
+  "authErrorEmailInvalid": "Please enter a valid email address",
+  "authErrorPasswordRequired": "Please enter your password",
+  "authErrorPasswordTooShort": "Password must be at least 8 characters",
+  "authErrorPasswordMismatch": "Passwords don't match",
+  "authSessionExpired": "Your session has expired. Please sign in again.",
+  "authSocialComingSoon": "This sign-in method isn't available yet",
+
   "registerHasAccountPrompt": "Already have an account? ",
 
   "forgotPasswordSubtitle": "Enter the email or phone linked to your account and we'll send you a reset code.",

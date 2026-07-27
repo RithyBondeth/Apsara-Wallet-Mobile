@@ -115,6 +115,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerConfirmPasswordHint => 'Re-enter your password';
 
   @override
+  String get authErrorNameRequired => 'Please enter your name';
+
+  @override
+  String get authErrorEmailRequired => 'Please enter your email';
+
+  @override
+  String get authErrorEmailInvalid => 'Please enter a valid email address';
+
+  @override
+  String get authErrorPasswordRequired => 'Please enter your password';
+
+  @override
+  String get authErrorPasswordTooShort =>
+      'Password must be at least 8 characters';
+
+  @override
+  String get authErrorPasswordMismatch => 'Passwords don\'t match';
+
+  @override
+  String get authSessionExpired =>
+      'Your session has expired. Please sign in again.';
+
+  @override
+  String get authSocialComingSoon => 'This sign-in method isn\'t available yet';
+
+  @override
   String get registerHasAccountPrompt => 'Already have an account? ';
 
   @override

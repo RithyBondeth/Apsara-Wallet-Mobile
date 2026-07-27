@@ -8,6 +8,7 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/profile_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/profile_header.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/profile_stats_card.dart';
@@ -56,9 +57,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => _SignOutSheet(
-        onConfirm: () {
+        onConfirm: () async {
           Navigator.of(context).pop();
-          context.router.replaceAll([const WelcomeRoute()]);
+          await ref.read(authControllerProvider.notifier).logout();
+          if (!mounted) return;
+          this.context.router.replaceAll([const WelcomeRoute()]);
         },
       ),
     );

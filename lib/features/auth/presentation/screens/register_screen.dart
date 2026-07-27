@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/auth/presentation/auth_ui_helpers.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -28,6 +30,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
 
+  String? _nameError;
+  String? _identifierError;
+  String? _passwordError;
+  String? _confirmError;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -37,13 +44,59 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
-  void _register() {
-    // UI-only (Phase 1): continue to verification.
-    context.router.push(const OtpRoute());
+  Future<void> _register() async {
+    final name = _nameController.text.trim();
+    final email = _identifierController.text.trim();
+    final password = _passwordController.text;
+    final confirm = _confirmController.text;
+
+    setState(() {
+      _nameError = name.isEmpty ? context.l10n.authErrorNameRequired : null;
+      _identifierError = email.isEmpty
+          ? context.l10n.authErrorEmailRequired
+          : (!isValidEmail(email) ? context.l10n.authErrorEmailInvalid : null);
+      _passwordError = password.isEmpty
+          ? context.l10n.authErrorPasswordRequired
+          : (password.length < 8
+              ? context.l10n.authErrorPasswordTooShort
+              : null);
+      _confirmError =
+          confirm != password ? context.l10n.authErrorPasswordMismatch : null;
+    });
+    if (_nameError != null ||
+        _identifierError != null ||
+        _passwordError != null ||
+        _confirmError != null) {
+      return;
+    }
+
+    context.hideKeyboard();
+    final ok = await ref.read(authControllerProvider.notifier).register(
+          email: email,
+          fullName: name,
+          password: password,
+        );
+    if (!mounted) return;
+
+    if (ok) {
+      // Account created and a session issued — go straight into the app.
+      context.router.replaceAll([const DashboardRoute()]);
+    } else {
+      showAuthSnackBar(
+        context,
+        ref.read(authControllerProvider).errorMessage ??
+            context.l10n.authSessionExpired,
+      );
+    }
   }
+
+  void _socialUnavailable() =>
+      showAuthSnackBar(context, context.l10n.authSocialComingSoon);
 
   @override
   Widget build(BuildContext context) {
+    final submitting =
+        ref.watch(authControllerProvider.select((s) => s.isSubmitting));
     return AuthFlowScaffold(
       title: context.l10n.registerTitle,
       subtitle: context.l10n.registerSubtitle,
@@ -55,6 +108,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           controller: _nameController,
           prefixIcon: LucideIcons.userRound,
           textInputAction: TextInputAction.next,
+          errorText: _nameError,
+          onChanged: (_) {
+            if (_nameError != null) setState(() => _nameError = null);
+          },
         ),
         const SizedBox(height: AppSpacing.lg),
         AppTextField(
@@ -64,6 +121,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           prefixIcon: LucideIcons.mail,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
+          errorText: _identifierError,
+          onChanged: (_) {
+            if (_identifierError != null) {
+              setState(() => _identifierError = null);
+            }
+          },
         ),
         const SizedBox(height: AppSpacing.lg),
         AppTextField(
@@ -73,6 +136,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           prefixIcon: LucideIcons.lock,
           obscure: true,
           textInputAction: TextInputAction.next,
+          errorText: _passwordError,
+          onChanged: (_) {
+            if (_passwordError != null) setState(() => _passwordError = null);
+          },
         ),
         const SizedBox(height: AppSpacing.lg),
         AppTextField(
@@ -82,24 +149,31 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           prefixIcon: LucideIcons.lockKeyhole,
           obscure: true,
           textInputAction: TextInputAction.done,
+          errorText: _confirmError,
+          onChanged: (_) {
+            if (_confirmError != null) setState(() => _confirmError = null);
+          },
           onSubmitted: (_) => _register(),
         ),
         const SizedBox(height: AppSpacing.xxl),
         PrimaryButton(
-            label: context.l10n.registerTitle, onPressed: _register),
+          label: context.l10n.registerTitle,
+          loading: submitting,
+          onPressed: submitting ? null : _register,
+        ),
         const SizedBox(height: AppSpacing.xxl),
         const OrDivider(),
         const SizedBox(height: AppSpacing.xl),
         SocialButton(
           svg: BrandSvg.google,
           label: context.l10n.authContinueWithGoogle,
-          onPressed: _register,
+          onPressed: _socialUnavailable,
         ),
         const SizedBox(height: AppSpacing.lg),
         SocialButton(
           svg: BrandSvg.facebook,
           label: context.l10n.authContinueWithFacebook,
-          onPressed: _register,
+          onPressed: _socialUnavailable,
         ),
         const SizedBox(height: AppSpacing.xxxl),
         Center(

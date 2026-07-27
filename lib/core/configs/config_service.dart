@@ -10,8 +10,14 @@ class AppConfigService {
     await dotenv.load(fileName: AppEnvironmentConfig.envFileName);
   }
 
-  static String get appName => dotenv.get('APP_NAME', fallback: 'ApsaraWallet');
-  static String get apiBaseURL => dotenv.get('API_BASE_URL', fallback: '');
+  /// Reads a key, tolerating an uninitialized dotenv (e.g. in widget tests
+  /// that build screens without calling [initialize]) by returning [fallback]
+  /// instead of throwing a `NotInitializedError`.
+  static String _get(String key, String fallback) =>
+      dotenv.isInitialized ? dotenv.get(key, fallback: fallback) : fallback;
+
+  static String get appName => _get('APP_NAME', 'ApsaraWallet');
+  static String get apiBaseURL => _get('API_BASE_URL', '');
   static bool get debugMode =>
-      dotenv.get('DEBUG_MODE', fallback: 'false').toLowerCase() == 'true';
+      _get('DEBUG_MODE', 'false').toLowerCase() == 'true';
 }

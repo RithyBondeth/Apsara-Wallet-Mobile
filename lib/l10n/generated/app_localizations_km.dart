@@ -117,6 +117,30 @@ class AppLocalizationsKm extends AppLocalizations {
   String get registerConfirmPasswordHint => 'បញ្ចូលពាក្យសម្ងាត់ម្តងទៀត';
 
   @override
+  String get authErrorNameRequired => 'សូមបញ្ចូលឈ្មោះរបស់អ្នក';
+
+  @override
+  String get authErrorEmailRequired => 'សូមបញ្ចូលអ៊ីមែលរបស់អ្នក';
+
+  @override
+  String get authErrorEmailInvalid => 'សូមបញ្ចូលអ៊ីមែលឲ្យបានត្រឹមត្រូវ';
+
+  @override
+  String get authErrorPasswordRequired => 'សូមបញ្ចូលពាក្យសម្ងាត់របស់អ្នក';
+
+  @override
+  String get authErrorPasswordTooShort => 'ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៨ តួ';
+
+  @override
+  String get authErrorPasswordMismatch => 'ពាក្យសម្ងាត់មិនត្រូវគ្នា';
+
+  @override
+  String get authSessionExpired => 'សម័យរបស់អ្នកបានផុតកំណត់។ សូមចូលម្តងទៀត។';
+
+  @override
+  String get authSocialComingSoon => 'វិធីចូលនេះមិនទាន់មានទេ';
+
+  @override
   String get registerHasAccountPrompt => 'មានគណនីរួចហើយ? ';
 
   @override

@@ -3,6 +3,7 @@
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,6 +18,9 @@ void main() {
     // tests rather than hitting the network.
     GoogleFonts.config.allowRuntimeFetching = false;
     await dotenv.load(fileName: '.env.dev');
+    // The splash now restores any saved session on boot, which reads secure
+    // storage — give it an empty in-memory store so the app boots signed-out.
+    FlutterSecureStorage.setMockInitialValues({});
   });
 
   testWidgets('App boots to splash and hands off to welcome', (tester) async {

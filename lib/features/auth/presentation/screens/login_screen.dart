@@ -5,6 +5,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/auth/presentation/auth_ui_helpers.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -29,6 +31,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     with TickerProviderStateMixin {
   final _identifierController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  /// Inline validation messages for the two fields (null = no error).
+  String? _identifierError;
+  String? _passwordError;
 
   /// One-shot entrance cascade.
   late final AnimationController _intro;
@@ -58,10 +64,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     super.dispose();
   }
 
-  void _login() {
-    // UI-only (Phase 1): jump straight to the dashboard with mock data.
-    context.router.replace(const DashboardRoute());
+  Future<void> _login() async {
+    final email = _identifierController.text.trim();
+    final password = _passwordController.text;
+
+    setState(() {
+      _identifierError = email.isEmpty
+          ? context.l10n.authErrorEmailRequired
+          : (!isValidEmail(email) ? context.l10n.authErrorEmailInvalid : null);
+      _passwordError =
+          password.isEmpty ? context.l10n.authErrorPasswordRequired : null;
+    });
+    if (_identifierError != null || _passwordError != null) return;
+
+    context.hideKeyboard();
+    final ok = await ref
+        .read(authControllerProvider.notifier)
+        .login(email: email, password: password);
+    if (!mounted) return;
+
+    if (ok) {
+      context.router.replaceAll([const DashboardRoute()]);
+    } else {
+      showAuthSnackBar(
+        context,
+        ref.read(authControllerProvider).errorMessage ??
+            context.l10n.authSessionExpired,
+      );
+    }
   }
+
+  void _socialUnavailable() =>
+      showAuthSnackBar(context, context.l10n.authSocialComingSoon);
 
   /// Shorthand: each block enters on its own slice of the cascade.
   Widget _enter(double start, double end, Widget child,
@@ -77,6 +111,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    final submitting =
+        ref.watch(authControllerProvider.select((s) => s.isSubmitting));
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -148,6 +184,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         prefixIcon: LucideIcons.user,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
+                        errorText: _identifierError,
+                        onChanged: (_) {
+                          if (_identifierError != null) {
+                            setState(() => _identifierError = null);
+                          }
+                        },
                       ),
                     ),
                     const SizedBox(height: AppSpacing.lg),
@@ -161,6 +203,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         prefixIcon: LucideIcons.lock,
                         obscure: true,
                         textInputAction: TextInputAction.done,
+                        errorText: _passwordError,
+                        onChanged: (_) {
+                          if (_passwordError != null) {
+                            setState(() => _passwordError = null);
+                          }
+                        },
                         onSubmitted: (_) => _login(),
                       ),
                     ),
@@ -189,7 +237,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       0.42,
                       0.76,
                       PrimaryButton(
-                          label: context.l10n.commonLogin, onPressed: _login),
+                        label: context.l10n.commonLogin,
+                        loading: submitting,
+                        onPressed: submitting ? null : _login,
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.xxl),
 
@@ -204,7 +255,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       SocialButton(
                         svg: BrandSvg.google,
                         label: context.l10n.authContinueWithGoogle,
-                        onPressed: _login,
+                        onPressed: _socialUnavailable,
                       ),
                     ),
                     const SizedBox(height: AppSpacing.lg),
@@ -214,7 +265,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       SocialButton(
                         svg: BrandSvg.facebook,
                         label: context.l10n.authContinueWithFacebook,
-                        onPressed: _login,
+                        onPressed: _socialUnavailable,
                       ),
                     ),
                     const SizedBox(height: AppSpacing.xxxl),

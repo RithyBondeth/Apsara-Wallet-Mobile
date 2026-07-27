@@ -10,6 +10,7 @@ import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
 @RoutePage()
@@ -77,9 +78,22 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _scheduleExit() async {
-    await Future.delayed(AppDurations.splashIntro + AppDurations.splashHold);
+    // Restore any saved session while the branded intro plays, so there's no
+    // extra wait: whichever takes longer (the animation or the token check)
+    // gates the hand-off.
+    await Future.wait([
+      ref.read(authControllerProvider.notifier).restore(),
+      Future<void>.delayed(
+        AppDurations.splashIntro + AppDurations.splashHold,
+      ),
+    ]);
     if (!mounted) return;
-    context.router.replace(const WelcomeRoute());
+
+    final isAuthenticated =
+        ref.read(authControllerProvider).isAuthenticated;
+    context.router.replace(
+      isAuthenticated ? const DashboardRoute() : const WelcomeRoute(),
+    );
   }
 
   @override

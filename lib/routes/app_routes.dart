@@ -32,8 +32,10 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savin
 import 'package:apsara_wallet_mobile/features/recurring/presentation/screens/recurring_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/security_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/settings_screen.dart';
+import 'package:apsara_wallet_mobile/routes/guards/auth_guard.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 
@@ -41,6 +43,16 @@ part 'app_routes.gr.dart';
 
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
+  /// [ref] is optional so widget/navigation tests can build the router with no
+  /// DI (`AppRouter()`); the production app always passes it so the auth guard
+  /// can read the current session state.
+  AppRouter([this.ref]);
+
+  /// Kept so the [AuthGuard] can read the current auth state from Riverpod.
+  final WidgetRef? ref;
+
+  /// One guard instance, attached to every post-login route below.
+  late final AuthGuard _authGuard = AuthGuard(ref);
   /// House transitions — three moves, matched to what the navigation means:
   ///
   /// * **Shared-axis slide** (default): the new page slides in from the right
@@ -190,82 +202,117 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: BiometricRoute.page, path: RoutePathConstant.biometricPath),
 
     // ==================================================
-    // DASHBOARD ROUTES
+    // DASHBOARD ROUTES  (guarded — require an active session)
     // ==================================================
     AutoRoute(
       page: DashboardRoute.page,
       path: RoutePathConstant.dashboardPath,
       type: _tabTransition,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: AnalyticsRoute.page,
       path: RoutePathConstant.analyticsPath,
       type: _tabTransition,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: ScanReceiptRoute.page,
       path: RoutePathConstant.scanReceiptPath,
       type: _modalTransition,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: AddTransactionRoute.page,
       path: RoutePathConstant.addTransactionPath,
       type: _modalTransition,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: TransactionsListRoute.page,
       path: RoutePathConstant.transactionsPath,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: TransactionDetailRoute.page,
       path: RoutePathConstant.transactionDetailPath,
+      guards: [_authGuard],
     ),
-    AutoRoute(page: BudgetRoute.page, path: RoutePathConstant.budgetPath),
+    AutoRoute(
+      page: BudgetRoute.page,
+      path: RoutePathConstant.budgetPath,
+      guards: [_authGuard],
+    ),
     AutoRoute(
       page: CategoriesRoute.page,
       path: RoutePathConstant.categoriesPath,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: AiInsightsRoute.page,
       path: RoutePathConstant.aiInsightsPath,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: WalletsRoute.page,
       path: RoutePathConstant.walletsPath,
       type: _tabTransition,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: WalletDetailRoute.page,
       path: RoutePathConstant.walletDetailPath,
+      guards: [_authGuard],
     ),
 
     // ==================================================
-    // PROFILE ROUTES
+    // PROFILE ROUTES  (guarded — require an active session)
     // ==================================================
     AutoRoute(
       page: ProfileRoute.page,
       path: RoutePathConstant.profilePath,
       type: _tabTransition,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: EditProfileRoute.page,
       path: RoutePathConstant.editProfilePath,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: NotificationsRoute.page,
       path: RoutePathConstant.notificationsPath,
+      guards: [_authGuard],
     ),
-    AutoRoute(page: SecurityRoute.page, path: RoutePathConstant.securityPath),
+    AutoRoute(
+      page: SecurityRoute.page,
+      path: RoutePathConstant.securityPath,
+      guards: [_authGuard],
+    ),
     AutoRoute(
       page: SavingsGoalsRoute.page,
       path: RoutePathConstant.savingsGoalsPath,
+      guards: [_authGuard],
     ),
     AutoRoute(
       page: RecurringRoute.page,
       path: RoutePathConstant.recurringPath,
+      guards: [_authGuard],
     ),
-    AutoRoute(page: HelpSupportRoute.page, path: RoutePathConstant.helpPath),
-    AutoRoute(page: AboutRoute.page, path: RoutePathConstant.aboutPath),
-    AutoRoute(page: SettingsRoute.page, path: RoutePathConstant.settingsPath),
+    AutoRoute(
+      page: HelpSupportRoute.page,
+      path: RoutePathConstant.helpPath,
+      guards: [_authGuard],
+    ),
+    AutoRoute(
+      page: AboutRoute.page,
+      path: RoutePathConstant.aboutPath,
+      guards: [_authGuard],
+    ),
+    AutoRoute(
+      page: SettingsRoute.page,
+      path: RoutePathConstant.settingsPath,
+      guards: [_authGuard],
+    ),
   ];
 }

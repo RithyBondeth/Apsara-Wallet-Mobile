@@ -302,6 +302,54 @@ abstract class AppLocalizations {
   /// **'Re-enter your password'**
   String get registerConfirmPasswordHint;
 
+  /// No description provided for @authErrorNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get authErrorNameRequired;
+
+  /// No description provided for @authErrorEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get authErrorEmailRequired;
+
+  /// No description provided for @authErrorEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get authErrorEmailInvalid;
+
+  /// No description provided for @authErrorPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get authErrorPasswordRequired;
+
+  /// No description provided for @authErrorPasswordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get authErrorPasswordTooShort;
+
+  /// No description provided for @authErrorPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords don\'t match'**
+  String get authErrorPasswordMismatch;
+
+  /// No description provided for @authSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please sign in again.'**
+  String get authSessionExpired;
+
+  /// No description provided for @authSocialComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'This sign-in method isn\'t available yet'**
+  String get authSocialComingSoon;
+
   /// No description provided for @registerHasAccountPrompt.
   ///
   /// In en, this message translates to:
