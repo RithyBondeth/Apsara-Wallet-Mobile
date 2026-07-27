@@ -35,11 +35,16 @@ class Wallet {
     required this.balanceKhr,
     required this.balanceUsd,
     required this.brandColor,
+    this.id,
     this.accountLast4,
     this.shortCode,
     this.icon,
     this.isPrimary = false,
   });
+
+  /// Backend wallet id (UUID). Null for the Phase-1 sample wallets that were
+  /// never persisted; set for wallets loaded from the API.
+  final String? id;
 
   final String name;
   final WalletKind kind;

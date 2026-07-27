@@ -49,6 +49,10 @@
   "authErrorPasswordMismatch": "Passwords don't match",
   "authSessionExpired": "Your session has expired. Please sign in again.",
   "authSocialComingSoon": "This sign-in method isn't available yet",
+  "walletAddFailed": "Couldn't add the wallet. Please try again.",
+  "addTxNoWallet": "Add a wallet first to record a transaction",
+  "addTxNoWalletShort": "No wallet",
+  "addTxSaveFailed": "Couldn't save the transaction. Please try again.",
 
   "lockTitle": "Enter your PIN",
   "lockSubtitle": "Unlock to continue",
@@ -366,6 +370,7 @@
   "dashboardIncome": "Income",
   "dashboardExpense": "Expense",
   "dashboardBudget": "Budget",
+  "dashboardRemaining": "Remaining",
   "dashboardAddIncome": "Add Income",
   "dashboardAddExpense": "Add Expense",
   "dashboardTransfer": "Transfer",

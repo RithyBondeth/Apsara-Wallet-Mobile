@@ -1,67 +1,51 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
-import 'package:apsara_wallet_mobile/core/utils/currency_converter.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_api.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 
-/// The session's wallet list, seeded from the Phase-1 sample. UI-only for now
-/// (not persisted): adding a wallet appends here so the Wallets screen and
-/// Wallet Detail share one source. Identified by list index.
-class WalletsNotifier extends Notifier<List<Wallet>> {
-  @override
-  List<Wallet> build() => [...WalletsData.sample.wallets];
+/// The user's wallets, loaded from the backend. Adding a wallet POSTs to the
+/// API then refreshes so every surface (Wallets screen, dashboard totals)
+/// updates at once.
+class WalletsNotifier extends AsyncNotifier<List<Wallet>> {
+  WalletApi get _api => ref.read(walletApiProvider);
 
-  void add(Wallet wallet) => state = [...state, wallet];
+  @override
+  Future<List<Wallet>> build() async {
+    final apiWallets = await _api.list();
+    return apiWallets.map((w) => w.toWallet()).toList();
+  }
+
+  Future<void> add(Wallet wallet) async {
+    final ok = await _api.create(wallet);
+    if (!ok) throw StateError('wallet-create-failed');
+    await _reload();
+  }
+
+  Future<void> _reload() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(build);
+  }
 }
 
 final walletsProvider =
-    NotifierProvider<WalletsNotifier, List<Wallet>>(WalletsNotifier.new);
+    AsyncNotifierProvider<WalletsNotifier, List<Wallet>>(WalletsNotifier.new);
 
-/// Net movement (income − expense) in riel for [walletName] across [txs].
-int _netKhr(String walletName, List<TransactionRecord> txs) => txs
-    .where((t) => t.walletName == walletName)
-    .fold<int>(
-      0,
-      (sum, t) =>
-          sum + (t.type == ETransactionType.income ? t.amountKhr : -t.amountKhr),
-    );
-
-/// Live, ledger-derived balance for each wallet, keyed by wallet name.
-///
-/// The ledger is the single source of truth: a wallet's displayed balance
-/// moves as transactions against it are added or removed. Each wallet's seed
-/// [Wallet.balanceKhr] is treated as its balance at the seed moment, so the
-/// baseline is `seed − (movements already in the seeded ledger)`; adding the
-/// current ledger's movements back yields today's balance. This means the
-/// initial values exactly equal the seed (the seeded ledger and the seed
-/// baseline cancel), while later edits are reflected faithfully.
+/// Per-wallet balance keyed by name — taken straight from the backend wallet
+/// records (the server owns the balance figure; it is not derived from the
+/// transaction ledger).
 final walletBalancesProvider =
     Provider<Map<String, ({int khr, double usd})>>((ref) {
-  final wallets = ref.watch(walletsProvider);
-  final live = ref.watch(transactionsProvider).valueOrNull ?? const [];
-  final seed = sampleTransactions();
-
+  final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
   return {
-    for (final w in wallets)
-      w.name: () {
-        final seedNet = _netKhr(w.name, seed);
-        final liveNet = _netKhr(w.name, live);
-        final khr = w.balanceKhr - seedNet + liveNet;
-        final usd = w.balanceUsd -
-            CurrencyConverter.khrToUsd(seedNet) +
-            CurrencyConverter.khrToUsd(liveNet);
-        return (khr: khr, usd: usd);
-      }(),
+    for (final w in wallets) w.name: (khr: w.balanceKhr, usd: w.balanceUsd),
   };
 });
 
-/// Combined ledger-derived balance across every wallet.
+/// Combined balance across every wallet.
 final walletsTotalProvider = Provider<({int khr, double usd})>((ref) {
-  final balances = ref.watch(walletBalancesProvider).values;
+  final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
   return (
-    khr: balances.fold<int>(0, (sum, b) => sum + b.khr),
-    usd: balances.fold<double>(0, (sum, b) => sum + b.usd),
+    khr: wallets.fold<int>(0, (sum, w) => sum + w.balanceKhr),
+    usd: wallets.fold<double>(0, (sum, w) => sum + w.balanceUsd),
   );
 });

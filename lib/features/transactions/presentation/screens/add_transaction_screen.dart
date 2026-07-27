@@ -21,6 +21,7 @@ import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/picker_row.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/tx_type_toggle.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
@@ -73,7 +74,13 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
 
   TxCategory? _expenseCategory;
   TxCategory? _incomeCategory;
-  Wallet _wallet = WalletsData.sample.wallets.first;
+
+  /// The chosen wallet (null until one is picked or defaulted from the API
+  /// list). [_initialWalletName] carries an edit-mode selection until the
+  /// wallet list has loaded and it can be resolved.
+  Wallet? _wallet;
+  String? _initialWalletName;
+  bool _saving = false;
 
   /// The id being edited, or null when creating a new transaction. Reusing it
   /// on save makes the DB write replace the existing row.
@@ -103,10 +110,23 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     } else {
       _expenseCategory = record.category;
     }
-    _wallet = WalletsData.sample.wallets.firstWhere(
-      (w) => w.name == record.walletName,
-      orElse: () => _wallet,
-    );
+    // Resolve against the live wallet list once it's loaded (see build()).
+    _initialWalletName = record.walletName;
+  }
+
+  /// Picks the wallet to show: the explicit choice, else the edit-mode
+  /// original, else the first available. Null when the user has no wallets.
+  Wallet? _resolveWallet(List<Wallet> wallets) {
+    if (wallets.isEmpty) return null;
+    if (_wallet != null) {
+      final match = wallets.where((w) => w.name == _wallet!.name);
+      if (match.isNotEmpty) return match.first;
+    }
+    if (_initialWalletName != null) {
+      final match = wallets.where((w) => w.name == _initialWalletName);
+      if (match.isNotEmpty) return match.first;
+    }
+    return wallets.first;
   }
 
   @override
@@ -140,14 +160,24 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     });
   }
 
-  Future<void> _pickWallet() async {
+  Future<void> _pickWallet(List<Wallet> wallets, Wallet? current) async {
+    if (wallets.isEmpty) {
+      _toast(context.l10n.addTxNoWallet);
+      return;
+    }
     final picked = await showWalletPicker(
       context,
-      wallets: WalletsData.sample.wallets,
-      selected: _wallet,
+      wallets: wallets,
+      selected: current ?? wallets.first,
     );
     if (picked == null || !mounted) return;
     setState(() => _wallet = picked);
+  }
+
+  void _toast(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(behavior: SnackBarBehavior.floating, content: Text(message)),
+    );
   }
 
   Future<void> _pickDateTime() async {
@@ -183,8 +213,16 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     });
   }
 
-  void _save() {
+  Future<void> _save() async {
     final l10n = context.l10n;
+    // Resolve the wallet at save time (not from a build-captured value) so a
+    // still-loading wallet list at first build can't strand the save.
+    final wallet =
+        _resolveWallet(ref.read(walletsProvider).valueOrNull ?? const []);
+    if (wallet == null) {
+      _toast(l10n.addTxNoWallet);
+      return;
+    }
     // Parse as a decimal (USD can have cents) and convert to the stored riel
     // unit. Previously this used int.tryParse, so any USD/decimal amount fell
     // through to 0 — silent data loss on every dollar entry.
@@ -198,18 +236,32 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
         ? typed
         : (note.isNotEmpty ? note : category.labelOf(l10n));
 
-    ref.read(transactionsProvider.notifier).add(
-          TransactionRecord(
-            id: _editingId ?? UuidGenerator.generate(),
-            title: title,
-            category: category,
-            walletName: _wallet.name,
-            date: _dateTime,
-            amountKhr: amountKhr,
-            type: _type,
-            note: note.isEmpty ? null : note,
-          ),
-        );
+    setState(() => _saving = true);
+    try {
+      // Deleting + re-adding keeps edit working against the API (no PATCH yet).
+      if (_editingId != null) {
+        await ref.read(transactionsProvider.notifier).remove(_editingId!);
+      }
+      await ref.read(transactionsProvider.notifier).add(
+            TransactionRecord(
+              id: _editingId ?? UuidGenerator.generate(),
+              title: title,
+              category: category,
+              walletName: wallet.name,
+              date: _dateTime,
+              amountKhr: amountKhr,
+              type: _type,
+              note: note.isEmpty ? null : note,
+            ),
+          );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      _toast(l10n.addTxSaveFailed);
+      return;
+    }
+    if (!mounted) return;
+    setState(() => _saving = false);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -236,7 +288,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     context.router.maybePop();
   }
 
-  bool get _canSave => _amount.text.trim().isNotEmpty;
+  bool get _canSave => _amount.text.trim().isNotEmpty && !_saving;
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +298,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
       Localizations.localeOf(context).toString(),
     ).format(_dateTime);
     final timeLabel = TimeOfDay.fromDateTime(_dateTime).format(context);
+
+    final wallets = ref.watch(walletsProvider).valueOrNull ?? const <Wallet>[];
+    final wallet = _resolveWallet(wallets);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -313,7 +368,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
                         controller: _intro,
                         start: 0.24,
                         end: 0.68,
-                        child: _categoryAndWalletRows(l10n),
+                        child: _categoryAndWalletRows(l10n, wallets, wallet),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       FadeSlideIn(
@@ -377,6 +432,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
                           listenable: _amount,
                           builder: (context, _) => PrimaryButton(
                             label: l10n.addTxSave,
+                            loading: _saving,
                             onPressed: _canSave ? _save : null,
                           ),
                         ),
@@ -475,7 +531,19 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   }
 
   /// Category + source wallet (expense/income mode).
-  Widget _categoryAndWalletRows(AppLocalizations l10n) {
+  Widget _categoryAndWalletRows(
+    AppLocalizations l10n,
+    List<Wallet> wallets,
+    Wallet? wallet,
+  ) {
+    final displayWallet = wallet ??
+        Wallet(
+          name: l10n.addTxNoWalletShort,
+          kind: WalletKind.cash,
+          balanceKhr: 0,
+          balanceUsd: 0,
+          brandColor: AppColors.primary,
+        );
     return Column(
       key: const ValueKey('category-mode'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -495,11 +563,11 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
         _section(
           l10n.addTxWallet,
           PickerRow(
-            leading: WalletBrandTile(wallet: _wallet),
-            label: _wallet.maskedAccount == null
-                ? _wallet.name
-                : '${_wallet.name} (${_wallet.accountLast4})',
-            onTap: _pickWallet,
+            leading: WalletBrandTile(wallet: displayWallet),
+            label: displayWallet.maskedAccount == null
+                ? displayWallet.name
+                : '${displayWallet.name} (${displayWallet.accountLast4})',
+            onTap: () => _pickWallet(wallets, wallet),
           ),
         ),
       ],

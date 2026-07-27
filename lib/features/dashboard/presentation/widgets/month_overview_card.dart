@@ -91,14 +91,16 @@ class MonthOverviewCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      context.l10n.dashboardBudget,
+                      context.l10n.dashboardRemaining,
                       style: AppFont.labelMedium.copyWith(
                         color: AppColors.textMuted,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'KHR ${formatKhr(data.budgetKhr)}',
+                      // Budget target = this month's income; remaining is what
+                      // is left after this month's spend (floored at zero).
+                      'KHR ${formatKhr((data.budgetKhr - data.monthExpenseKhr).clamp(0, data.budgetKhr))}',
                       style: AppFont.titleSmall.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,

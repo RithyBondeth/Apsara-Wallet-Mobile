@@ -1,62 +1,55 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 
-import 'support/test_database.dart';
+import 'support/ledger_overrides.dart';
 
-/// B5: wallet balances are derived from the ledger (one source of truth). The
-/// initial values still equal the seed, and they move when transactions
-/// against a wallet are added or removed.
+/// Wallet balances now come straight from the (API-backed) wallet records —
+/// the server owns the figure. [walletBalancesProvider] exposes them per name
+/// and [walletsTotalProvider] sums across every wallet.
 void main() {
-  setUp(() async {
-    await initTestDatabase();
-  });
+  final sample = WalletsData.sample.wallets;
 
   Future<ProviderContainer> booted() async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(overrides: sampleLedgerOverrides());
     addTearDown(container.dispose);
-    await container.read(transactionsProvider.future); // load seeded ledger
+    await container.read(walletsProvider.future);
     return container;
   }
 
-  test('initial derived balances equal the seed', () async {
+  test('per-wallet balance matches the wallet record', () async {
     final container = await booted();
     final balances = container.read(walletBalancesProvider);
-    expect(balances['Cash Wallet']!.khr, 320000);
-    expect(balances['ABA Bank']!.khr, 1250000);
-    expect(balances['ACLEDA Bank']!.khr, 850000);
+    for (final w in sample) {
+      expect(balances[w.name]!.khr, w.balanceKhr);
+      expect(balances[w.name]!.usd, w.balanceUsd);
+    }
   });
 
-  test('adding an expense lowers only that wallet', () async {
+  test('total balance sums every wallet', () async {
     final container = await booted();
-    await container.read(transactionsProvider.notifier).add(
-          TransactionRecord(
-            id: 'new-cash-expense',
-            title: 'Snacks',
-            category: categoryById('food'),
-            walletName: 'Cash Wallet',
-            date: DateTime(2024, 5, 20),
-            amountKhr: 10000,
-            type: ETransactionType.expense,
+    final total = container.read(walletsTotalProvider);
+    final expectedKhr = sample.fold<int>(0, (s, w) => s + w.balanceKhr);
+    final expectedUsd = sample.fold<double>(0, (s, w) => s + w.balanceUsd);
+    expect(total.khr, expectedKhr);
+    expect(total.usd, expectedUsd);
+  });
+
+  test('adding a wallet raises the total', () async {
+    final container = await booted();
+    final before = container.read(walletsTotalProvider).khr;
+    await container.read(walletsProvider.notifier).add(
+          const Wallet(
+            name: 'New Wallet',
+            kind: WalletKind.cash,
+            balanceKhr: 100000,
+            balanceUsd: 25,
+            brandColor: Color(0xFF0B5B3D),
           ),
         );
-
-    final balances = container.read(walletBalancesProvider);
-    expect(balances['Cash Wallet']!.khr, 310000); // 320,000 − 10,000
-    expect(balances['ABA Bank']!.khr, 1250000); // untouched
-  });
-
-  test('deleting a seeded income drops that wallet', () async {
-    final container = await booted();
-    // Remove the ABA "freelance" income of 600,000.
-    await container.read(transactionsProvider.notifier).remove('freelance');
-
-    final balances = container.read(walletBalancesProvider);
-    expect(balances['ABA Bank']!.khr, 650000); // 1,250,000 − 600,000
+    expect(container.read(walletsTotalProvider).khr, before + 100000);
   });
 }

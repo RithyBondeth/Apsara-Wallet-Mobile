@@ -141,6 +141,20 @@ class AppLocalizationsKm extends AppLocalizations {
   String get authSocialComingSoon => 'វិធីចូលនេះមិនទាន់មានទេ';
 
   @override
+  String get walletAddFailed => 'មិនអាចបន្ថែមកាបូបបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get addTxNoWallet =>
+      'សូមបន្ថែមកាបូបជាមុនសិន ដើម្បីកត់ត្រាប្រតិបត្តិការ';
+
+  @override
+  String get addTxNoWalletShort => 'គ្មានកាបូប';
+
+  @override
+  String get addTxSaveFailed =>
+      'មិនអាចរក្សាទុកប្រតិបត្តិការបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
   String get lockTitle => 'បញ្ចូលកូដ PIN របស់អ្នក';
 
   @override
@@ -1001,6 +1015,9 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get dashboardBudget => 'ថវិកា';
+
+  @override
+  String get dashboardRemaining => 'នៅសល់';
 
   @override
   String get dashboardAddIncome => 'បន្ថែមចំណូល';

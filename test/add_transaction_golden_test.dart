@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'support/ledger_overrides.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
@@ -13,6 +14,7 @@ import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 /// the readout doesn't drift with the test run date.
 Widget _wrap(Widget child) {
   return ProviderScope(
+    overrides: sampleLedgerOverrides(),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -229,17 +230,28 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
     });
   }
 
-  void _save(ScannedReceipt receipt) {
-    // Persist the reviewed receipt as an expense in the ledger. Defaults to the
-    // first wallet (the scanner has no wallet picker) and now for the date.
+  Future<void> _save(ScannedReceipt receipt) async {
+    // Persist the reviewed receipt as an expense. The scanner has no wallet
+    // picker, so the provider defaults it to the user's first wallet; the
+    // placeholder name below is only used if a matching wallet exists.
     final record = ReceiptTransactionMapper.toTransaction(
       receipt,
       id: UuidGenerator.generate(),
       walletName: WalletsData.sample.wallets.first.name,
       date: DateTime.now(),
     );
-    ref.read(transactionsProvider.notifier).add(record);
-
+    try {
+      await ref.read(transactionsProvider.notifier).add(record);
+    } catch (_) {
+      if (!mounted) return;
+      _showSnack(
+        context.l10n.addTxSaveFailed,
+        AppColors.error,
+        LucideIcons.circleAlert,
+      );
+      return;
+    }
+    if (!mounted) return;
     _showSnack(
       context.l10n.scanExpenseSaved,
       AppGradients.emeraldCore,

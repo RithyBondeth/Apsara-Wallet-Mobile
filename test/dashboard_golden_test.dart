@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'support/ledger_overrides.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
@@ -17,7 +18,7 @@ final _fixedNow = DateTime(2024, 5, 20, 9, 0);
 
 Widget _wrap(Widget child) {
   return ProviderScope(
-    overrides: [nowProvider.overrideWithValue(_fixedNow)],
+    overrides: [nowProvider.overrideWithValue(_fixedNow), ...sampleLedgerOverrides()],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

@@ -39,7 +39,20 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
   Future<void> _addWallet() async {
     final wallet = await showAddWalletSheet(context);
     if (wallet == null || !mounted) return;
-    ref.read(walletsProvider.notifier).add(wallet);
+    try {
+      await ref.read(walletsProvider.notifier).add(wallet);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.error,
+          content: Text(context.l10n.walletAddFailed),
+        ),
+      );
+      return;
+    }
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -90,7 +103,7 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final wallets = ref.watch(walletsProvider);
+    final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
     final balances = ref.watch(walletBalancesProvider);
     final total = ref.watch(walletsTotalProvider);
     final data = WalletsData(

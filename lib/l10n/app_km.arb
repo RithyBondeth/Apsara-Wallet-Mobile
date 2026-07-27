@@ -49,6 +49,10 @@
   "authErrorPasswordMismatch": "ពាក្យសម្ងាត់មិនត្រូវគ្នា",
   "authSessionExpired": "សម័យរបស់អ្នកបានផុតកំណត់។ សូមចូលម្តងទៀត។",
   "authSocialComingSoon": "វិធីចូលនេះមិនទាន់មានទេ",
+  "walletAddFailed": "មិនអាចបន្ថែមកាបូបបានទេ។ សូមព្យាយាមម្តងទៀត។",
+  "addTxNoWallet": "សូមបន្ថែមកាបូបជាមុនសិន ដើម្បីកត់ត្រាប្រតិបត្តិការ",
+  "addTxNoWalletShort": "គ្មានកាបូប",
+  "addTxSaveFailed": "មិនអាចរក្សាទុកប្រតិបត្តិការបានទេ។ សូមព្យាយាមម្តងទៀត។",
 
   "lockTitle": "បញ្ចូលកូដ PIN របស់អ្នក",
   "lockSubtitle": "ដោះសោដើម្បីបន្ត",
@@ -366,6 +370,7 @@
   "dashboardIncome": "ចំណូល",
   "dashboardExpense": "ចំណាយ",
   "dashboardBudget": "ថវិកា",
+  "dashboardRemaining": "នៅសល់",
   "dashboardAddIncome": "បន្ថែមចំណូល",
   "dashboardAddExpense": "បន្ថែមចំណាយ",
   "dashboardTransfer": "ផ្ទេរប្រាក់",

@@ -4,28 +4,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:apsara_wallet_mobile/core/database/app_database.dart';
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/core/utils/currency_converter.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_repository.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-import 'support/test_database.dart';
+import 'support/ledger_overrides.dart';
 
 /// Covers the two Add-Transaction fixes: USD amounts no longer save as 0 (B1),
 /// and editing replaces the existing row instead of creating a duplicate (B2).
+/// Now that the ledger is API-backed, assertions read the (overridden,
+/// in-memory) [transactionsProvider] rather than the local database.
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  late TransactionRepository repo;
-
-  setUp(() async {
-    await initTestDatabase();
-    repo = TransactionRepository(AppDatabase.instance);
-
+  setUp(() {
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       final msg = details.exception.toString();
@@ -38,11 +35,17 @@ void main() {
     addTearDown(() => FlutterError.onError = oldOnError);
   });
 
-  Future<void> pumpAt(WidgetTester tester, PageRouteInfo route) async {
+  Future<ProviderContainer> pumpAt(
+    WidgetTester tester,
+    PageRouteInfo route,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
+    final container = ProviderContainer(overrides: sampleLedgerOverrides());
+    addTearDown(container.dispose);
     final router = AppRouter();
     await tester.pumpWidget(
-      ProviderScope(
+      UncontrolledProviderScope(
+        container: container,
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
@@ -57,6 +60,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1600));
     expect(find.byType(AddTransactionScreen), findsOneWidget);
+    return container;
   }
 
   final amountField = find.byWidgetPredicate(
@@ -72,7 +76,7 @@ void main() {
   });
 
   testWidgets('B1: a USD amount saves converted riel, not 0', (tester) async {
-    await pumpAt(tester, AddTransactionRoute());
+    final container = await pumpAt(tester, AddTransactionRoute());
 
     // Switch the currency chip to USD.
     await tester.tap(find.text('KHR'));
@@ -86,10 +90,9 @@ void main() {
     await tester.ensureVisible(find.text('Save Transaction'));
     await tester.pump();
     await tester.tap(find.text('Save Transaction'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
 
-    final all = await repo.getAll();
+    final all = container.read(transactionsProvider).valueOrNull ?? const [];
     // Before: int.tryParse('12.50') => null => stored 0. Now: 12.50 * 4100.
     expect(all.any((t) => t.amountKhr == 51250), isTrue);
     expect(all.any((t) => t.amountKhr == 0), isFalse);
@@ -97,11 +100,12 @@ void main() {
 
   testWidgets('B2: editing replaces the row instead of duplicating it',
       (tester) async {
-    final original = (await repo.getById('grab-food'))!;
-    final countBefore = (await repo.getAll()).length;
+    final original =
+        sampleTransactions().firstWhere((t) => t.id == 'grab-food');
+    final countBefore = sampleTransactions().length;
     expect(original.amountKhr, 18000);
 
-    await pumpAt(
+    final container = await pumpAt(
       tester,
       AddTransactionRoute(initialType: original.type, initialRecord: original),
     );
@@ -117,15 +121,13 @@ void main() {
     await tester.ensureVisible(find.text('Save Transaction'));
     await tester.pump();
     await tester.tap(find.text('Save Transaction'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
 
     // Same id updated, no new row created.
-    final after = await repo.getAll();
+    final after = container.read(transactionsProvider).valueOrNull ?? const [];
     expect(after.length, countBefore);
-    final updated = await repo.getById('grab-food');
-    expect(updated, isNotNull);
-    expect(updated!.amountKhr, 25000);
+    final updated = after.firstWhere((t) => t.id == 'grab-food');
+    expect(updated.amountKhr, 25000);
     expect(updated.title, 'Grab Food'); // untouched fields preserved
   });
 }

@@ -56,8 +56,19 @@ class AuthController extends StateNotifier<AuthState> {
         user: user,
         clearUser: user == null,
       );
+      if (user != null) await _refreshProfile();
     } catch (_) {
       state = state.copyWith(status: AuthStatus.unauthenticated, clearUser: true);
+    }
+  }
+
+  /// Pulls the authoritative profile (real name, phone) from the backend and
+  /// updates state if it succeeds. Best-effort — a failure leaves the
+  /// token-derived user in place.
+  Future<void> _refreshProfile() async {
+    final profile = await _repo.fetchProfile();
+    if (profile != null && state.status == AuthStatus.authenticated) {
+      state = state.copyWith(user: profile);
     }
   }
 
@@ -66,6 +77,7 @@ class AuthController extends StateNotifier<AuthState> {
     try {
       final user = await _repo.login(email: email, password: password);
       state = AuthState(status: AuthStatus.authenticated, user: user);
+      await _refreshProfile();
       return true;
     } on AuthException catch (e) {
       state = state.copyWith(isSubmitting: false, errorMessage: e.message);
@@ -91,6 +103,7 @@ class AuthController extends StateNotifier<AuthState> {
         phone: phone,
       );
       state = AuthState(status: AuthStatus.authenticated, user: user);
+      await _refreshProfile();
       return true;
     } on AuthException catch (e) {
       state = state.copyWith(isSubmitting: false, errorMessage: e.message);

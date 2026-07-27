@@ -1,32 +1,92 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:apsara_wallet_mobile/core/database/app_database.dart';
+import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
+import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_repository.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 
-final appDatabaseProvider = Provider<AppDatabase>((ref) => AppDatabase.instance);
-
-final transactionRepositoryProvider = Provider<TransactionRepository>(
-  (ref) => TransactionRepository(ref.watch(appDatabaseProvider)),
-);
-
-/// The live list of transactions, newest first. Screens watch this; the
-/// [add]/[remove] methods mutate the database and refresh the state so every
-/// surface updates at once.
+/// The live list of transactions, newest first, backed by the API.
+///
+/// Every surface (dashboard, history, detail, wallet detail) watches this;
+/// [add]/[remove] POST/DELETE to the backend and refresh so all update at
+/// once. Mapping backend UUIDs → app models needs the wallet list and the
+/// category index, which are awaited first.
 class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
-  TransactionRepository get _repo => ref.read(transactionRepositoryProvider);
+  TransactionApi get _api => ref.read(transactionApiProvider);
 
   @override
-  Future<List<TransactionRecord>> build() => _repo.getAll();
+  Future<List<TransactionRecord>> build() async {
+    final index = await ref.watch(categoryIndexProvider.future);
+    final wallets = await ref.watch(walletsProvider.future);
+    final nameById = {
+      for (final w in wallets)
+        if (w.id != null) w.id!: w.name,
+    };
+
+    final apiTxns = await _api.list();
+    final records = apiTxns
+        .map(
+          (t) => t.toRecord(
+            walletName: nameById[t.walletId] ?? '',
+            categorySlug: index.slugForUuid(t.categoryId),
+          ),
+        )
+        .toList()
+      // Newest first — every surface (dashboard, history, wallet detail)
+      // expects this ordering.
+      ..sort((a, b) => b.date.compareTo(a.date));
+    return records;
+  }
 
   Future<void> add(TransactionRecord record) async {
-    await _repo.insert(record);
-    state = AsyncData(await _repo.getAll());
+    final index = await ref.read(categoryIndexProvider.future);
+    final wallets = await ref.read(walletsProvider.future);
+    if (wallets.isEmpty) {
+      throw StateError('no-wallet');
+    }
+
+    // Resolve the backend ids. Fall back to the first wallet / an "Others"
+    // category so a stray name/slug never blocks the save.
+    final wallet = wallets.firstWhere(
+      (w) => w.name == record.walletName,
+      orElse: () => wallets.first,
+    );
+    final categoryId = index.uuidForSlug(record.category.id) ??
+        index.uuidForSlug(
+          record.type == ETransactionType.income
+              ? 'othersIncome'
+              : 'othersExpense',
+        );
+    if (wallet.id == null || categoryId == null) {
+      throw StateError('map-failed');
+    }
+
+    final ok = await _api.create(
+      title: record.title,
+      walletId: wallet.id!,
+      categoryId: categoryId,
+      amountKhr: record.amountKhr,
+      type: record.type,
+      date: record.date,
+      note: record.note,
+    );
+    if (!ok) throw StateError('create-failed');
+    // The backend moved the wallet balance too — refresh wallets so the
+    // dashboard total and wallet balances reflect it.
+    ref.invalidate(walletsProvider);
+    await _reload();
   }
 
   Future<void> remove(String id) async {
-    await _repo.delete(id);
-    state = AsyncData(await _repo.getAll());
+    await _api.delete(id);
+    ref.invalidate(walletsProvider);
+    await _reload();
+  }
+
+  Future<void> _reload() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(build);
   }
 }
 

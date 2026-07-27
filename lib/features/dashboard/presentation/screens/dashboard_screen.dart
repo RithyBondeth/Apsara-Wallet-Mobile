@@ -9,6 +9,8 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
@@ -43,11 +45,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   /// Entrance easing for the budget bar (0→1); multiplied by the live fraction
   /// at paint so the bar fills to this month's real spend.
   late final Animation<double> _budget;
-
-  /// This month's budget target (KHR). Static for now — mirrors the Budget
-  /// screen's sample total so the two surfaces tell one story; the *spend*
-  /// against it is derived live from the ledger.
-  static const int _budgetTargetKhr = 2000000;
 
   /// Lets the header's menu button open the side drawer.
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -96,6 +93,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     setState(() => _navIndex = index);
   }
 
+  /// Greeting name for the header: the signed-in user's first name, falling
+  /// back to the email handle, then empty (header shows just the wave).
+  String _greetingName(AuthUser? user) {
+    final full = user?.fullName?.trim();
+    if (full != null && full.isNotEmpty) return full.split(' ').first;
+    final email = user?.email;
+    if (email != null && email.contains('@')) return email.split('@').first;
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
@@ -104,14 +111,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final total = ref.watch(walletsTotalProvider);
     final ledger =
         ref.watch(transactionsProvider).valueOrNull ?? const [];
+    final user = ref.watch(authControllerProvider).user;
     final data = DashboardData.fromLedger(
       ledger: ledger,
       balanceKhr: total.khr,
       balanceUsd: total.usd,
-      budgetKhr: _budgetTargetKhr,
       l10n: context.l10n,
       localeTag: Localizations.localeOf(context).toLanguageTag(),
       now: ref.watch(nowProvider),
+      userName: _greetingName(user),
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(

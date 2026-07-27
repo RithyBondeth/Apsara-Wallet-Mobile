@@ -350,6 +350,30 @@ abstract class AppLocalizations {
   /// **'This sign-in method isn\'t available yet'**
   String get authSocialComingSoon;
 
+  /// No description provided for @walletAddFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t add the wallet. Please try again.'**
+  String get walletAddFailed;
+
+  /// No description provided for @addTxNoWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a wallet first to record a transaction'**
+  String get addTxNoWallet;
+
+  /// No description provided for @addTxNoWalletShort.
+  ///
+  /// In en, this message translates to:
+  /// **'No wallet'**
+  String get addTxNoWalletShort;
+
+  /// No description provided for @addTxSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the transaction. Please try again.'**
+  String get addTxSaveFailed;
+
   /// No description provided for @lockTitle.
   ///
   /// In en, this message translates to:
@@ -1945,6 +1969,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Budget'**
   String get dashboardBudget;
+
+  /// No description provided for @dashboardRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get dashboardRemaining;
 
   /// No description provided for @dashboardAddIncome.
   ///

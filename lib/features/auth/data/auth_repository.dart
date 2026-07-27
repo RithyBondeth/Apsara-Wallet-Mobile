@@ -60,6 +60,26 @@ class AuthRepository {
     return _persistSession(tokens);
   }
 
+  /// Fetches the authoritative profile from `/auth/me` (bearer attached by the
+  /// interceptor) and caches it. Returns null on failure — callers keep the
+  /// token-derived user in that case. This is what makes the real name show
+  /// after a plain login (the token alone carries only id + email).
+  Future<AuthUser?> fetchProfile() async {
+    final res = await _api.get<Map<String, dynamic>>('/auth/me');
+    if (!res.success || res.data == null) return null;
+    final data = res.data!;
+    final id = data['id'];
+    final email = data['email'];
+    if (id is! String || email is! String) return null;
+    final user = AuthUser(
+      id: id,
+      email: email,
+      fullName: data['fullName'] as String?,
+    );
+    await _storage.saveUser(jsonEncode(user.toJson()));
+    return user;
+  }
+
   /// Best-effort server-side revocation, then always clears local state so the
   /// user is signed out even if the network call fails.
   Future<void> logout() async {

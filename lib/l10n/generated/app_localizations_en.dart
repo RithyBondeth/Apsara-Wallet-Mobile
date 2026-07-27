@@ -141,6 +141,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authSocialComingSoon => 'This sign-in method isn\'t available yet';
 
   @override
+  String get walletAddFailed => 'Couldn\'t add the wallet. Please try again.';
+
+  @override
+  String get addTxNoWallet => 'Add a wallet first to record a transaction';
+
+  @override
+  String get addTxNoWalletShort => 'No wallet';
+
+  @override
+  String get addTxSaveFailed =>
+      'Couldn\'t save the transaction. Please try again.';
+
+  @override
   String get lockTitle => 'Enter your PIN';
 
   @override
@@ -1003,6 +1016,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashboardBudget => 'Budget';
+
+  @override
+  String get dashboardRemaining => 'Remaining';
 
   @override
   String get dashboardAddIncome => 'Add Income';

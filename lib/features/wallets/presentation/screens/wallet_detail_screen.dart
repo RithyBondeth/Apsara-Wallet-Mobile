@@ -58,7 +58,7 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
     final localeTag = Localizations.localeOf(context).toString();
     final bottomSafe = MediaQuery.of(context).padding.bottom;
 
-    final wallets = ref.watch(walletsProvider);
+    final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
     if (widget.index < 0 || widget.index >= wallets.length) {
       return const Scaffold(body: SizedBox.shrink());
     }

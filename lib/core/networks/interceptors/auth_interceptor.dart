@@ -16,7 +16,18 @@ class AuthInterceptor extends Interceptor {
   /// second `401` can't spin into an infinite refresh loop.
   static const _retriedFlag = 'auth_retried';
 
-  bool _isAuthPath(String path) => path.contains('/auth/');
+  /// The token endpoints that must NOT carry a bearer and must not trigger a
+  /// refresh-retry on 401 (a 401 there means bad credentials / bad refresh
+  /// token, not an expired access token). Note `/auth/me` is deliberately
+  /// excluded — it needs the bearer and should refresh like any other call.
+  static const _tokenPaths = {
+    '/auth/login',
+    '/auth/register',
+    '/auth/refresh',
+    '/auth/logout',
+  };
+
+  bool _isAuthPath(String path) => _tokenPaths.any(path.endsWith);
 
   TokenStorage get _storage => ref.read(tokenStorageProvider);
 

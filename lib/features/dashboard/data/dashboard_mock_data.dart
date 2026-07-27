@@ -81,13 +81,14 @@ class DashboardData {
   /// The "current month" is anchored to the most recent transaction (mirroring
   /// the Insights engine) rather than the wall clock, so both the seeded sample
   /// and live data read meaningfully and stay deterministic under test. The
-  /// budget bar shows this month's real spend against the static [budgetKhr]
-  /// target. Day labels in the recent list are relativized against [now].
+  /// budget bar shows this month's spend against this month's **income** (the
+  /// natural "don't spend more than you earn" target) — there is no separate
+  /// budget backend yet. Day labels in the recent list are relativized against
+  /// [now].
   factory DashboardData.fromLedger({
     required List<TransactionRecord> ledger,
     required int balanceKhr,
     required double balanceUsd,
-    required int budgetKhr,
     required AppLocalizations l10n,
     required String localeTag,
     required DateTime now,
@@ -102,7 +103,7 @@ class DashboardData {
         monthLabel: DateFormat.yMMMM(localeTag).format(now),
         monthIncomeKhr: 0,
         monthExpenseKhr: 0,
-        budgetKhr: budgetKhr,
+        budgetKhr: 0,
         budgetUsedFraction: 0,
         transactions: const [],
       );
@@ -122,8 +123,12 @@ class DashboardData {
         .where((t) => !t.isIncome)
         .fold<int>(0, (s, t) => s + t.amountKhr);
 
-    final fraction =
-        budgetKhr == 0 ? 0.0 : (expenseKhr / budgetKhr).clamp(0.0, 1.0);
+    // Budget target = this month's income. Fraction is spend ÷ income;
+    // spending with no income reads as fully used (100%).
+    final budgetKhr = incomeKhr;
+    final fraction = budgetKhr == 0
+        ? (expenseKhr > 0 ? 1.0 : 0.0)
+        : (expenseKhr / budgetKhr).clamp(0.0, 1.0);
 
     final recent = ledger
         .take(recentCount)
