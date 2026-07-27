@@ -53,6 +53,11 @@
   "addTxNoWallet": "Add a wallet first to record a transaction",
   "addTxNoWalletShort": "No wallet",
   "addTxSaveFailed": "Couldn't save the transaction. Please try again.",
+  "emptyWalletsTitle": "Create your first wallet",
+  "emptyWalletsBody": "Add a wallet to start tracking your income and expenses.",
+  "emptyWalletsCta": "Create wallet",
+  "emptyTransactionsTitle": "No transactions yet",
+  "emptyTransactionsBody": "Tap the + button to add your first one.",
 
   "lockTitle": "Enter your PIN",
   "lockSubtitle": "Unlock to continue",

@@ -154,6 +154,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t save the transaction. Please try again.';
 
   @override
+  String get emptyWalletsTitle => 'Create your first wallet';
+
+  @override
+  String get emptyWalletsBody =>
+      'Add a wallet to start tracking your income and expenses.';
+
+  @override
+  String get emptyWalletsCta => 'Create wallet';
+
+  @override
+  String get emptyTransactionsTitle => 'No transactions yet';
+
+  @override
+  String get emptyTransactionsBody => 'Tap the + button to add your first one.';
+
+  @override
   String get lockTitle => 'Enter your PIN';
 
   @override

@@ -155,6 +155,23 @@ class AppLocalizationsKm extends AppLocalizations {
       'មិនអាចរក្សាទុកប្រតិបត្តិការបានទេ។ សូមព្យាយាមម្តងទៀត។';
 
   @override
+  String get emptyWalletsTitle => 'បង្កើតកាបូបដំបូងរបស់អ្នក';
+
+  @override
+  String get emptyWalletsBody =>
+      'បន្ថែមកាបូបដើម្បីចាប់ផ្តើមតាមដានចំណូល និងចំណាយរបស់អ្នក។';
+
+  @override
+  String get emptyWalletsCta => 'បង្កើតកាបូប';
+
+  @override
+  String get emptyTransactionsTitle => 'មិនទាន់មានប្រតិបត្តិការ';
+
+  @override
+  String get emptyTransactionsBody =>
+      'ចុចប៊ូតុង + ដើម្បីបន្ថែមប្រតិបត្តិការដំបូង។';
+
+  @override
   String get lockTitle => 'បញ្ចូលកូដ PIN របស់អ្នក';
 
   @override

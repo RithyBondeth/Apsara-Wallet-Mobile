@@ -7,6 +7,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
 /// "Recent Transactions" header + a card listing the latest activity.
@@ -77,26 +78,33 @@ class RecentTransactionsSection extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            children: [
-              for (var i = 0; i < transactions.length; i++) ...[
-                if (i > 0)
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    indent: AppSpacing.lg + 48 + AppSpacing.md,
-                    endIndent: AppSpacing.lg,
-                    color: AppColors.surfaceVariant,
-                  ),
-                _TransactionTile(
-                  transaction: transactions[i],
-                  onTap: onTapTransaction == null
-                      ? null
-                      : () => onTapTransaction!(transactions[i]),
+          child: transactions.isEmpty
+              ? EmptyState(
+                  compact: true,
+                  icon: LucideIcons.receipt,
+                  title: context.l10n.emptyTransactionsTitle,
+                  message: context.l10n.emptyTransactionsBody,
+                )
+              : Column(
+                  children: [
+                    for (var i = 0; i < transactions.length; i++) ...[
+                      if (i > 0)
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                          indent: AppSpacing.lg + 48 + AppSpacing.md,
+                          endIndent: AppSpacing.lg,
+                          color: AppColors.surfaceVariant,
+                        ),
+                      _TransactionTile(
+                        transaction: transactions[i],
+                        onTap: onTapTransaction == null
+                            ? null
+                            : () => onTapTransaction!(transactions[i]),
+                      ),
+                    ],
+                  ],
                 ),
-              ],
-            ],
-          ),
         ),
       ],
     );

@@ -374,6 +374,36 @@ abstract class AppLocalizations {
   /// **'Couldn\'t save the transaction. Please try again.'**
   String get addTxSaveFailed;
 
+  /// No description provided for @emptyWalletsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first wallet'**
+  String get emptyWalletsTitle;
+
+  /// No description provided for @emptyWalletsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a wallet to start tracking your income and expenses.'**
+  String get emptyWalletsBody;
+
+  /// No description provided for @emptyWalletsCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Create wallet'**
+  String get emptyWalletsCta;
+
+  /// No description provided for @emptyTransactionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet'**
+  String get emptyTransactionsTitle;
+
+  /// No description provided for @emptyTransactionsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button to add your first one.'**
+  String get emptyTransactionsBody;
+
   /// No description provided for @lockTitle.
   ///
   /// In en, this message translates to:

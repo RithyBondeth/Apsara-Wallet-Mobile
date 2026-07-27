@@ -2,23 +2,28 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/add_wallet_sheet.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/dashboard_header.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/month_overview_card.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/quick_actions_row.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/recent_transactions_section.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
@@ -93,6 +98,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     setState(() => _navIndex = index);
   }
 
+  /// First-run: open the add-wallet sheet and create the wallet via the API.
+  Future<void> _addWallet() async {
+    final wallet = await showAddWalletSheet(context);
+    if (wallet == null || !mounted) return;
+    try {
+      await ref.read(walletsProvider.notifier).add(wallet);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.error,
+          content: Text(context.l10n.walletAddFailed),
+        ),
+      );
+    }
+  }
+
   /// Greeting name for the header: the signed-in user's first name, falling
   /// back to the email handle, then empty (header shows just the wave).
   String _greetingName(AuthUser? user) {
@@ -112,6 +135,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final ledger =
         ref.watch(transactionsProvider).valueOrNull ?? const [];
     final user = ref.watch(authControllerProvider).user;
+    final hasWallet =
+        (ref.watch(walletsProvider).valueOrNull ?? const []).isNotEmpty;
     final data = DashboardData.fromLedger(
       ledger: ledger,
       balanceKhr: total.khr,
@@ -217,54 +242,95 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.xxl,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        FadeSlideIn(
-                          controller: _intro,
-                          start: 0.30,
-                          end: 0.78,
-                          child: PressScale(
-                            pressedScale: 0.98,
-                            onTap: () =>
-                                context.router.push(const BudgetRoute()),
-                            child: AnimatedBuilder(
-                              animation: _budget,
-                              builder: (context, _) => MonthOverviewCard(
-                                data: data,
-                                progress:
-                                    _budget.value * data.budgetUsedFraction,
+                    child: hasWallet
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              FadeSlideIn(
+                                controller: _intro,
+                                start: 0.30,
+                                end: 0.78,
+                                child: PressScale(
+                                  pressedScale: 0.98,
+                                  onTap: () => context.router
+                                      .push(const BudgetRoute()),
+                                  child: AnimatedBuilder(
+                                    animation: _budget,
+                                    builder: (context, _) => MonthOverviewCard(
+                                      data: data,
+                                      progress: _budget.value *
+                                          data.budgetUsedFraction,
+                                    ),
+                                  ),
+                                ),
                               ),
+                              const SizedBox(height: AppSpacing.xxl),
+                              FadeSlideIn(
+                                controller: _intro,
+                                start: 0.42,
+                                end: 0.92,
+                                child: RecentTransactionsSection(
+                                  transactions: data.transactions,
+                                  onSeeAll: () => context.router.push(
+                                    const TransactionsListRoute(),
+                                  ),
+                                  onTapTransaction: (tx) {
+                                    if (tx.id != null) {
+                                      context.router.push(
+                                        TransactionDetailRoute(id: tx.id!),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        : FadeSlideIn(
+                            controller: _intro,
+                            start: 0.30,
+                            end: 0.82,
+                            child: _OnboardingCard(
+                              onCreateWallet: _addWallet,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.xxl),
-                        FadeSlideIn(
-                          controller: _intro,
-                          start: 0.42,
-                          end: 0.92,
-                          child: RecentTransactionsSection(
-                            transactions: data.transactions,
-                            onSeeAll: () => context.router.push(
-                              const TransactionsListRoute(),
-                            ),
-                            onTapTransaction: (tx) {
-                              if (tx.id != null) {
-                                context.router.push(
-                                  TransactionDetailRoute(id: tx.id!),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Shown on the dashboard when the account has no wallets yet — a white card
+/// carrying the create-first-wallet empty state.
+class _OnboardingCard extends StatelessWidget {
+  const _OnboardingCard({required this.onCreateWallet});
+
+  final VoidCallback onCreateWallet;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x12000000),
+            blurRadius: 20,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: EmptyState(
+        icon: LucideIcons.wallet,
+        title: context.l10n.emptyWalletsTitle,
+        message: context.l10n.emptyWalletsBody,
+        ctaLabel: context.l10n.emptyWalletsCta,
+        onCta: onCreateWallet,
       ),
     );
   }

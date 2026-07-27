@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'support/ledger_overrides.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
@@ -58,6 +59,7 @@ void main() {
     final router = AppRouter();
     await tester.pumpWidget(
       ProviderScope(
+        overrides: sampleLedgerOverrides(),
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
