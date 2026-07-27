@@ -50,6 +50,26 @@
   "authSessionExpired": "Your session has expired. Please sign in again.",
   "authSocialComingSoon": "This sign-in method isn't available yet",
 
+  "lockTitle": "Enter your PIN",
+  "lockSubtitle": "Unlock to continue",
+  "lockIncorrectPin": "Incorrect PIN. Please try again.",
+  "lockLockedOut": "Too many attempts. Try again in {seconds}s.",
+  "@lockLockedOut": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "lockUseBiometric": "Use biometric unlock",
+  "lockBiometricReason": "Unlock Apsara Wallet",
+  "lockUsePassword": "Use password instead",
+  "pinConfirmTitle": "Confirm your PIN",
+  "pinConfirmSubtitle": "Re-enter your PIN to confirm",
+  "pinMismatch": "PINs don't match. Start again.",
+  "pinUpdated": "App-lock PIN saved",
+  "securityBiometricUnavailable": "No biometrics enrolled on this device",
+  "securityNeedPinFirst": "Set an app-lock PIN first",
+  "securityEnableBiometricReason": "Confirm it's you to enable biometric unlock",
+  "securityAppLockOn": "App lock is on",
+  "securityAppLockOff": "App lock is off",
+
   "registerHasAccountPrompt": "Already have an account? ",
 
   "forgotPasswordSubtitle": "Enter the email or phone linked to your account and we'll send you a reset code.",

@@ -350,6 +350,102 @@ abstract class AppLocalizations {
   /// **'This sign-in method isn\'t available yet'**
   String get authSocialComingSoon;
 
+  /// No description provided for @lockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your PIN'**
+  String get lockTitle;
+
+  /// No description provided for @lockSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock to continue'**
+  String get lockSubtitle;
+
+  /// No description provided for @lockIncorrectPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect PIN. Please try again.'**
+  String get lockIncorrectPin;
+
+  /// No description provided for @lockLockedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Try again in {seconds}s.'**
+  String lockLockedOut(int seconds);
+
+  /// No description provided for @lockUseBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Use biometric unlock'**
+  String get lockUseBiometric;
+
+  /// No description provided for @lockBiometricReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Apsara Wallet'**
+  String get lockBiometricReason;
+
+  /// No description provided for @lockUsePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Use password instead'**
+  String get lockUsePassword;
+
+  /// No description provided for @pinConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your PIN'**
+  String get pinConfirmTitle;
+
+  /// No description provided for @pinConfirmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your PIN to confirm'**
+  String get pinConfirmSubtitle;
+
+  /// No description provided for @pinMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'PINs don\'t match. Start again.'**
+  String get pinMismatch;
+
+  /// No description provided for @pinUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'App-lock PIN saved'**
+  String get pinUpdated;
+
+  /// No description provided for @securityBiometricUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No biometrics enrolled on this device'**
+  String get securityBiometricUnavailable;
+
+  /// No description provided for @securityNeedPinFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Set an app-lock PIN first'**
+  String get securityNeedPinFirst;
+
+  /// No description provided for @securityEnableBiometricReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm it\'s you to enable biometric unlock'**
+  String get securityEnableBiometricReason;
+
+  /// No description provided for @securityAppLockOn.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock is on'**
+  String get securityAppLockOn;
+
+  /// No description provided for @securityAppLockOff.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock is off'**
+  String get securityAppLockOff;
+
   /// No description provided for @registerHasAccountPrompt.
   ///
   /// In en, this message translates to:

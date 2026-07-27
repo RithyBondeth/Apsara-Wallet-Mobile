@@ -11,6 +11,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
 @RoutePage()
@@ -91,6 +92,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     final isAuthenticated =
         ref.read(authControllerProvider).isAuthenticated;
+    if (isAuthenticated) {
+      // Cold start with a live session: engage app-lock (if the user set one)
+      // before the dashboard is shown, so the gate covers it immediately.
+      final appLock = ref.read(appLockControllerProvider.notifier);
+      await appLock.load();
+      if (!mounted) return;
+      appLock.lockIfEnabled();
+    }
     context.router.replace(
       isAuthenticated ? const DashboardRoute() : const WelcomeRoute(),
     );

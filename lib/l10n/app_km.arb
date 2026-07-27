@@ -50,6 +50,26 @@
   "authSessionExpired": "សម័យរបស់អ្នកបានផុតកំណត់។ សូមចូលម្តងទៀត។",
   "authSocialComingSoon": "វិធីចូលនេះមិនទាន់មានទេ",
 
+  "lockTitle": "បញ្ចូលកូដ PIN របស់អ្នក",
+  "lockSubtitle": "ដោះសោដើម្បីបន្ត",
+  "lockIncorrectPin": "កូដ PIN មិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។",
+  "lockLockedOut": "ព្យាយាមច្រើនដងពេក។ សូមព្យាយាមម្តងទៀតក្នុងរយៈពេល {seconds} វិនាទី។",
+  "@lockLockedOut": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "lockUseBiometric": "ប្រើការដោះសោដោយជីវមាត្រ",
+  "lockBiometricReason": "ដោះសោ Apsara Wallet",
+  "lockUsePassword": "ប្រើពាក្យសម្ងាត់ជំនួសវិញ",
+  "pinConfirmTitle": "បញ្ជាក់កូដ PIN របស់អ្នក",
+  "pinConfirmSubtitle": "បញ្ចូលកូដ PIN ម្តងទៀតដើម្បីបញ្ជាក់",
+  "pinMismatch": "កូដ PIN មិនត្រូវគ្នា។ សូមចាប់ផ្តើមម្តងទៀត។",
+  "pinUpdated": "បានរក្សាទុកកូដ PIN",
+  "securityBiometricUnavailable": "គ្មានជីវមាត្រនៅលើឧបករណ៍នេះទេ",
+  "securityNeedPinFirst": "សូមកំណត់កូដ PIN ជាមុនសិន",
+  "securityEnableBiometricReason": "បញ្ជាក់អត្តសញ្ញាណដើម្បីបើកការដោះសោដោយជីវមាត្រ",
+  "securityAppLockOn": "ការចាក់សោកម្មវិធីបានបើក",
+  "securityAppLockOff": "ការចាក់សោកម្មវិធីបានបិទ",
+
   "registerHasAccountPrompt": "មានគណនីរួចហើយ? ",
 
   "forgotPasswordSubtitle": "បញ្ចូលអ៊ីមែល ឬលេខទូរស័ព្ទដែលភ្ជាប់ជាមួយគណនីរបស់អ្នក រួចយើងនឹងផ្ញើលេខកូដកំណត់ឡើងវិញជូនអ្នក។",

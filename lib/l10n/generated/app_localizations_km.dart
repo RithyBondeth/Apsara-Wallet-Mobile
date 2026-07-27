@@ -141,6 +141,57 @@ class AppLocalizationsKm extends AppLocalizations {
   String get authSocialComingSoon => 'វិធីចូលនេះមិនទាន់មានទេ';
 
   @override
+  String get lockTitle => 'បញ្ចូលកូដ PIN របស់អ្នក';
+
+  @override
+  String get lockSubtitle => 'ដោះសោដើម្បីបន្ត';
+
+  @override
+  String get lockIncorrectPin => 'កូដ PIN មិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String lockLockedOut(int seconds) {
+    return 'ព្យាយាមច្រើនដងពេក។ សូមព្យាយាមម្តងទៀតក្នុងរយៈពេល $seconds វិនាទី។';
+  }
+
+  @override
+  String get lockUseBiometric => 'ប្រើការដោះសោដោយជីវមាត្រ';
+
+  @override
+  String get lockBiometricReason => 'ដោះសោ Apsara Wallet';
+
+  @override
+  String get lockUsePassword => 'ប្រើពាក្យសម្ងាត់ជំនួសវិញ';
+
+  @override
+  String get pinConfirmTitle => 'បញ្ជាក់កូដ PIN របស់អ្នក';
+
+  @override
+  String get pinConfirmSubtitle => 'បញ្ចូលកូដ PIN ម្តងទៀតដើម្បីបញ្ជាក់';
+
+  @override
+  String get pinMismatch => 'កូដ PIN មិនត្រូវគ្នា។ សូមចាប់ផ្តើមម្តងទៀត។';
+
+  @override
+  String get pinUpdated => 'បានរក្សាទុកកូដ PIN';
+
+  @override
+  String get securityBiometricUnavailable => 'គ្មានជីវមាត្រនៅលើឧបករណ៍នេះទេ';
+
+  @override
+  String get securityNeedPinFirst => 'សូមកំណត់កូដ PIN ជាមុនសិន';
+
+  @override
+  String get securityEnableBiometricReason =>
+      'បញ្ជាក់អត្តសញ្ញាណដើម្បីបើកការដោះសោដោយជីវមាត្រ';
+
+  @override
+  String get securityAppLockOn => 'ការចាក់សោកម្មវិធីបានបើក';
+
+  @override
+  String get securityAppLockOff => 'ការចាក់សោកម្មវិធីបានបិទ';
+
+  @override
   String get registerHasAccountPrompt => 'មានគណនីរួចហើយ? ';
 
   @override

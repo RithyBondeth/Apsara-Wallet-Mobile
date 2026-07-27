@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -11,25 +12,35 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/setti
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_sub_scaffold.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_toggle.dart';
+import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-/// Security & Privacy preferences (Phase 1, UI-only): authentication options
-/// and privacy switches. Toggles hold local state; the chevron rows show a
-/// "coming soon" note since PIN/password flows aren't built yet.
+/// Security & Privacy. The authentication rows are now live: the app-lock
+/// PIN and biometric unlock are backed by [AppLockController]; the remaining
+/// rows (2FA, change password) are still placeholders.
 @RoutePage()
-class SecurityScreen extends StatefulWidget {
+class SecurityScreen extends ConsumerStatefulWidget {
   const SecurityScreen({super.key});
 
   @override
-  State<SecurityScreen> createState() => _SecurityScreenState();
+  ConsumerState<SecurityScreen> createState() => _SecurityScreenState();
 }
 
-class _SecurityScreenState extends State<SecurityScreen> {
-  bool _biometric = true;
+class _SecurityScreenState extends ConsumerState<SecurityScreen> {
   bool _twoFactor = false;
-  bool _appLock = true;
   bool _hideBalance = false;
 
-  void _comingSoon() {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!ref.read(appLockControllerProvider).isLoaded) {
+        ref.read(appLockControllerProvider.notifier).load();
+      }
+    });
+  }
+
+  void _toast(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -38,16 +49,50 @@ class _SecurityScreenState extends State<SecurityScreen> {
           borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         content: Text(
-          context.l10n.commonComingSoon,
+          message,
           style: AppFont.bodyMedium.copyWith(color: Colors.white),
         ),
       ),
     );
   }
 
+  void _comingSoon() => _toast(context.l10n.commonComingSoon);
+
+  Future<void> _onAppLockChanged(bool wantOn) async {
+    final notifier = ref.read(appLockControllerProvider.notifier);
+    if (wantOn) {
+      // Enabling app-lock == setting a PIN.
+      await context.router.push(PinSetupRoute());
+    } else {
+      await notifier.disableLock();
+      if (mounted) _toast(context.l10n.securityAppLockOff);
+    }
+  }
+
+  Future<void> _onBiometricChanged(bool wantOn) async {
+    final notifier = ref.read(appLockControllerProvider.notifier);
+    final lock = ref.read(appLockControllerProvider);
+    if (wantOn) {
+      if (!lock.isPinSet) {
+        _toast(context.l10n.securityNeedPinFirst);
+        return;
+      }
+      if (!lock.isBiometricAvailable) {
+        _toast(context.l10n.securityBiometricUnavailable);
+        return;
+      }
+      final ok = await notifier
+          .enableBiometric(context.l10n.securityEnableBiometricReason);
+      if (!ok && mounted) _toast(context.l10n.securityBiometricUnavailable);
+    } else {
+      await notifier.disableBiometric();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final lock = ref.watch(appLockControllerProvider);
     return SettingsSubScaffold(
       title: l10n.securityTitle,
       children: [
@@ -58,7 +103,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
               icon: LucideIcons.lockKeyhole,
               title: l10n.securityChangePin,
               subtitle: l10n.securityChangePinSubtitle,
-              onTap: _comingSoon,
+              onTap: () => context.router.push(PinSetupRoute()),
             ),
             SettingsTile(
               icon: LucideIcons.fingerprint,
@@ -67,8 +112,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
               iconColor: AppColors.income,
               showChevron: false,
               trailing: SettingsToggle(
-                value: _biometric,
-                onChanged: (v) => setState(() => _biometric = v),
+                value: lock.isBiometricEnabled,
+                onChanged: _onBiometricChanged,
               ),
             ),
             SettingsTile(
@@ -100,8 +145,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
               iconColor: AppColors.warning,
               showChevron: false,
               trailing: SettingsToggle(
-                value: _appLock,
-                onChanged: (v) => setState(() => _appLock = v),
+                value: lock.isPinSet,
+                onChanged: _onAppLockChanged,
               ),
             ),
             SettingsTile(

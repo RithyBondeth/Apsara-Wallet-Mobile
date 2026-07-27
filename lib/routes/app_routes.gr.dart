@@ -137,18 +137,51 @@ class AnalyticsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [BiometricScreen]
-class BiometricRoute extends PageRouteInfo<void> {
-  const BiometricRoute({List<PageRouteInfo>? children})
-    : super(BiometricRoute.name, initialChildren: children);
+class BiometricRoute extends PageRouteInfo<BiometricRouteArgs> {
+  BiometricRoute({
+    Key? key,
+    bool isOnboarding = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+         BiometricRoute.name,
+         args: BiometricRouteArgs(key: key, isOnboarding: isOnboarding),
+         initialChildren: children,
+       );
 
   static const String name = 'BiometricRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const BiometricScreen();
+      final args = data.argsAs<BiometricRouteArgs>(
+        orElse: () => const BiometricRouteArgs(),
+      );
+      return BiometricScreen(key: args.key, isOnboarding: args.isOnboarding);
     },
   );
+}
+
+class BiometricRouteArgs {
+  const BiometricRouteArgs({this.key, this.isOnboarding = false});
+
+  final Key? key;
+
+  final bool isOnboarding;
+
+  @override
+  String toString() {
+    return 'BiometricRouteArgs{key: $key, isOnboarding: $isOnboarding}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! BiometricRouteArgs) return false;
+    return key == other.key && isOnboarding == other.isOnboarding;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ isOnboarding.hashCode;
 }
 
 /// generated route for
@@ -329,18 +362,51 @@ class PinLoginRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [PinSetupScreen]
-class PinSetupRoute extends PageRouteInfo<void> {
-  const PinSetupRoute({List<PageRouteInfo>? children})
-    : super(PinSetupRoute.name, initialChildren: children);
+class PinSetupRoute extends PageRouteInfo<PinSetupRouteArgs> {
+  PinSetupRoute({
+    Key? key,
+    bool isOnboarding = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+         PinSetupRoute.name,
+         args: PinSetupRouteArgs(key: key, isOnboarding: isOnboarding),
+         initialChildren: children,
+       );
 
   static const String name = 'PinSetupRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const PinSetupScreen();
+      final args = data.argsAs<PinSetupRouteArgs>(
+        orElse: () => const PinSetupRouteArgs(),
+      );
+      return PinSetupScreen(key: args.key, isOnboarding: args.isOnboarding);
     },
   );
+}
+
+class PinSetupRouteArgs {
+  const PinSetupRouteArgs({this.key, this.isOnboarding = false});
+
+  final Key? key;
+
+  final bool isOnboarding;
+
+  @override
+  String toString() {
+    return 'PinSetupRouteArgs{key: $key, isOnboarding: $isOnboarding}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PinSetupRouteArgs) return false;
+    return key == other.key && isOnboarding == other.isOnboarding;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ isOnboarding.hashCode;
 }
 
 /// generated route for

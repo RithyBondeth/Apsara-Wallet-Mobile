@@ -2,6 +2,7 @@ import 'package:apsara_wallet_mobile/core/configs/config_service.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/security/presentation/app_lock_gate.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,11 @@ class _MyAppState extends ConsumerState<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
 
       routerConfig: _appRouter.config(),
+
+      // App-lock overlay sits above the whole navigator so it can cover any
+      // screen and re-lock on resume.
+      builder: (context, child) =>
+          AppLockGate(child: child ?? const SizedBox.shrink()),
     );
   }
 }

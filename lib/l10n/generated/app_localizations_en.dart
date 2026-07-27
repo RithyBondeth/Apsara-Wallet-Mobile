@@ -141,6 +141,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authSocialComingSoon => 'This sign-in method isn\'t available yet';
 
   @override
+  String get lockTitle => 'Enter your PIN';
+
+  @override
+  String get lockSubtitle => 'Unlock to continue';
+
+  @override
+  String get lockIncorrectPin => 'Incorrect PIN. Please try again.';
+
+  @override
+  String lockLockedOut(int seconds) {
+    return 'Too many attempts. Try again in ${seconds}s.';
+  }
+
+  @override
+  String get lockUseBiometric => 'Use biometric unlock';
+
+  @override
+  String get lockBiometricReason => 'Unlock Apsara Wallet';
+
+  @override
+  String get lockUsePassword => 'Use password instead';
+
+  @override
+  String get pinConfirmTitle => 'Confirm your PIN';
+
+  @override
+  String get pinConfirmSubtitle => 'Re-enter your PIN to confirm';
+
+  @override
+  String get pinMismatch => 'PINs don\'t match. Start again.';
+
+  @override
+  String get pinUpdated => 'App-lock PIN saved';
+
+  @override
+  String get securityBiometricUnavailable =>
+      'No biometrics enrolled on this device';
+
+  @override
+  String get securityNeedPinFirst => 'Set an app-lock PIN first';
+
+  @override
+  String get securityEnableBiometricReason =>
+      'Confirm it\'s you to enable biometric unlock';
+
+  @override
+  String get securityAppLockOn => 'App lock is on';
+
+  @override
+  String get securityAppLockOff => 'App lock is off';
+
+  @override
   String get registerHasAccountPrompt => 'Already have an account? ';
 
   @override

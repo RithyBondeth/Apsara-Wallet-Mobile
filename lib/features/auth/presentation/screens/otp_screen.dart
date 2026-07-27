@@ -24,7 +24,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   void _verify() {
     // UI-only (Phase 1): continue to PIN setup.
-    context.router.push(const PinSetupRoute());
+    context.router.push(PinSetupRoute());
   }
 
   @override

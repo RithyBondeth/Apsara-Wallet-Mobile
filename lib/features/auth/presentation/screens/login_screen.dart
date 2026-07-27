@@ -7,6 +7,7 @@ import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/auth_ui_helpers.dart';
+import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
@@ -84,6 +85,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     if (!mounted) return;
 
     if (ok) {
+      // Fresh password login counts as an unlock — don't demand the PIN too.
+      ref.read(appLockControllerProvider.notifier).markUnlocked();
       context.router.replaceAll([const DashboardRoute()]);
     } else {
       showAuthSnackBar(
