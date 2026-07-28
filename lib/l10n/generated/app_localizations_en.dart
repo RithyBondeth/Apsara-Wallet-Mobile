@@ -1253,6 +1253,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileStatsBudgets => 'Budgets';
 
   @override
+  String profileMemberSince(int year) {
+    return 'Member since $year';
+  }
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

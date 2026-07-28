@@ -1252,6 +1252,11 @@ class AppLocalizationsKm extends AppLocalizations {
   String get profileStatsBudgets => 'ថវិកា';
 
   @override
+  String profileMemberSince(int year) {
+    return 'សមាជិកតាំងពីឆ្នាំ $year';
+  }
+
+  @override
   String get settingsTitle => 'ការកំណត់';
 
   @override

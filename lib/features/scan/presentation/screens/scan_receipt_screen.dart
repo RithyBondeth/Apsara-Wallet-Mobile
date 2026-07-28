@@ -20,7 +20,7 @@ import 'package:apsara_wallet_mobile/features/scan/data/receipt_scanner_service.
 import 'package:apsara_wallet_mobile/features/scan/data/receipt_transaction_mapper.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/scanned_receipt.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/receipt_review_sheet.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_capture_controls.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_frame.dart';
@@ -232,12 +232,13 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
 
   Future<void> _save(ScannedReceipt receipt) async {
     // Persist the reviewed receipt as an expense. The scanner has no wallet
-    // picker, so the provider defaults it to the user's first wallet; the
-    // placeholder name below is only used if a matching wallet exists.
+    // picker, so it lands in the user's first real wallet (the provider also
+    // falls back to the first wallet if the name doesn't resolve).
+    final wallets = ref.read(walletsProvider).valueOrNull ?? const [];
     final record = ReceiptTransactionMapper.toTransaction(
       receipt,
       id: UuidGenerator.generate(),
-      walletName: WalletsData.sample.wallets.first.name,
+      walletName: wallets.isNotEmpty ? wallets.first.name : '',
       date: DateTime.now(),
     );
     try {

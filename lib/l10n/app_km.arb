@@ -447,6 +447,8 @@
   "profileStatsWallets": "កាបូប",
   "profileStatsTransactions": "ប្រតិបត្តិការ",
   "profileStatsBudgets": "ថវិកា",
+  "profileMemberSince": "សមាជិកតាំងពីឆ្នាំ {year}",
+  "@profileMemberSince": { "placeholders": { "year": { "type": "int" } } },
 
   "settingsTitle": "ការកំណត់",
   "settingsPrimaryCurrency": "រូបិយប័ណ្ណចម្បង",

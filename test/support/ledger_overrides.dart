@@ -244,7 +244,12 @@ List<Override> sampleLedgerOverrides({
   final txs = transactions ?? sampleTransactions();
   final ws = wallets ?? WalletsData.sample.wallets;
   final u = user ??
-      const AuthUser(id: 'sample-user', email: 'sokunthea@example.com', fullName: 'Sokunthea');
+      AuthUser(
+        id: 'sample-user',
+        email: 'sokunthea@example.com',
+        fullName: 'Sokunthea',
+        createdAt: DateTime(2024, 1, 1),
+      );
   // Default to an empty budget so the dashboard keeps its income fallback
   // (goldens unchanged) and nothing hits the network.
   final b = budget ??

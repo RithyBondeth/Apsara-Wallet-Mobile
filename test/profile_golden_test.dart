@@ -8,8 +8,11 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profi
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/settings_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
+import 'support/ledger_overrides.dart';
+
 Widget _wrap(Widget child) {
   return ProviderScope(
+    overrides: sampleLedgerOverrides(),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

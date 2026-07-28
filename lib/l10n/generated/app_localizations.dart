@@ -2372,6 +2372,12 @@ abstract class AppLocalizations {
   /// **'Budgets'**
   String get profileStatsBudgets;
 
+  /// No description provided for @profileMemberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Member since {year}'**
+  String profileMemberSince(int year);
+
   /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:

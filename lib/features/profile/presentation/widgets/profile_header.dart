@@ -73,8 +73,10 @@ class ProfileHeader extends StatelessWidget {
                 color: _ivory.withValues(alpha: 0.78),
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
-            _membershipBadge(),
+            if (data.membership.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.md),
+              _membershipBadge(),
+            ],
           ],
         ),
       ),

@@ -76,6 +76,9 @@ class AuthRepository {
       email: email,
       fullName: data['fullName'] as String?,
       phone: data['phone'] as String?,
+      createdAt: data['createdAt'] != null
+          ? DateTime.tryParse(data['createdAt'] as String)
+          : null,
     );
     await _storage.saveUser(jsonEncode(user.toJson()));
     return user;

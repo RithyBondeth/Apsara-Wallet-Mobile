@@ -9,8 +9,11 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/profile_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/profile_header.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/profile_stats_card.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_section.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
@@ -34,22 +37,36 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   late final AnimationController _intro;
 
   /// Profile header/stats: identity (name/email/phone) comes from the
-  /// signed-in user; the membership + counts are still sample data.
+  /// Fully real now: identity (name/email/phone) from the signed-in user, the
+  /// counts from the live wallet/transaction/budget providers, and the badge
+  /// from the account's real creation date. Falls back gracefully while data
+  /// is still loading (0 counts, empty badge → badge hidden).
   ProfileData get _data {
     const sample = ProfileData.sample;
     final user = ref.watch(authControllerProvider).user;
     final name = (user?.fullName?.trim().isNotEmpty ?? false)
         ? user!.fullName!.trim()
         : (user?.email.split('@').first ?? sample.fullName);
+
+    final walletCount = ref.watch(walletsProvider).valueOrNull?.length ?? 0;
+    final transactionCount =
+        ref.watch(transactionsProvider).valueOrNull?.length ?? 0;
+    final budgetCount =
+        ref.watch(budgetDataProvider).valueOrNull?.categories.length ?? 0;
+
+    final createdAt = user?.createdAt;
+    final membership =
+        createdAt != null ? context.l10n.profileMemberSince(createdAt.year) : '';
+
     return ProfileData(
       fullName: name,
       email: user?.email ?? sample.email,
       phone: (user?.phone?.isNotEmpty ?? false) ? user!.phone! : sample.phone,
-      membership: sample.membership,
-      memberSince: sample.memberSince,
-      walletCount: sample.walletCount,
-      transactionCount: sample.transactionCount,
-      budgetCount: sample.budgetCount,
+      membership: membership,
+      memberSince: membership,
+      walletCount: walletCount,
+      transactionCount: transactionCount,
+      budgetCount: budgetCount,
     );
   }
 

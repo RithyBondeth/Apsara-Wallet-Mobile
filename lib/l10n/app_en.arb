@@ -447,6 +447,8 @@
   "profileStatsWallets": "Wallets",
   "profileStatsTransactions": "Transactions",
   "profileStatsBudgets": "Budgets",
+  "profileMemberSince": "Member since {year}",
+  "@profileMemberSince": { "placeholders": { "year": { "type": "int" } } },
 
   "settingsTitle": "Settings",
   "settingsPrimaryCurrency": "Primary Currency",
