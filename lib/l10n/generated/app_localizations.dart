@@ -1598,6 +1598,18 @@ abstract class AppLocalizations {
   /// **'Target Amount'**
   String get savingsGoalTarget;
 
+  /// No description provided for @savingsGoalIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get savingsGoalIcon;
+
+  /// No description provided for @savingsGoalColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get savingsGoalColor;
+
   /// No description provided for @savingsGoalAdded.
   ///
   /// In en, this message translates to:

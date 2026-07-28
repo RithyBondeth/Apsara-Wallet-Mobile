@@ -811,6 +811,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savingsGoalTarget => 'Target Amount';
 
   @override
+  String get savingsGoalIcon => 'Icon';
+
+  @override
+  String get savingsGoalColor => 'Color';
+
+  @override
   String get savingsGoalAdded => 'Goal added';
 
   @override

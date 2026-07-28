@@ -295,6 +295,8 @@
   "savingsAddFunds": "Add Funds",
   "savingsGoalName": "Goal Name",
   "savingsGoalTarget": "Target Amount",
+  "savingsGoalIcon": "Icon",
+  "savingsGoalColor": "Color",
   "savingsGoalAdded": "Goal added",
   "savingsFundsAdded": "Funds added",
   "savingsError": "Something went wrong. Please try again.",

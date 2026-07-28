@@ -813,6 +813,12 @@ class AppLocalizationsKm extends AppLocalizations {
   String get savingsGoalTarget => 'ចំនួនគោលដៅ';
 
   @override
+  String get savingsGoalIcon => 'រូបតំណាង';
+
+  @override
+  String get savingsGoalColor => 'ពណ៌';
+
+  @override
   String get savingsGoalAdded => 'បានបន្ថែមគោលដៅ';
 
   @override

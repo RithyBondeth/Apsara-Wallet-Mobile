@@ -295,6 +295,8 @@
   "savingsAddFunds": "បន្ថែមមូលនិធិ",
   "savingsGoalName": "ឈ្មោះគោលដៅ",
   "savingsGoalTarget": "ចំនួនគោលដៅ",
+  "savingsGoalIcon": "រូបតំណាង",
+  "savingsGoalColor": "ពណ៌",
   "savingsGoalAdded": "បានបន្ថែមគោលដៅ",
   "savingsFundsAdded": "បានបន្ថែមមូលនិធិ",
   "savingsError": "មានបញ្ហាបានកើតឡើង។ សូមព្យាយាមម្តងទៀត។",

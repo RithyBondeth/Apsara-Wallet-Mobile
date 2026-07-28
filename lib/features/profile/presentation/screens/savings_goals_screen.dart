@@ -14,6 +14,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data
     show formatKhr;
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_icon_choices.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart'
     show GroupedAmountFormatter;
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
@@ -593,7 +594,19 @@ class _AmountSheet extends StatelessWidget {
   }
 }
 
-/// New-goal sheet (name + target amount).
+/// Colour choices for a savings goal's icon tile.
+const List<Color> _savingsGoalColors = [
+  AppColors.primary,
+  AppColors.info,
+  AppGradients.goldCore,
+  Color(0xFF7C5CD6),
+  Color(0xFFE0507A),
+  Color(0xFF00A9E0),
+  Color(0xFFCD6A2E),
+  AppColors.income,
+];
+
+/// New-goal sheet (name, target, icon + colour).
 class _NewGoalSheet extends StatefulWidget {
   const _NewGoalSheet();
 
@@ -604,6 +617,9 @@ class _NewGoalSheet extends StatefulWidget {
 class _NewGoalSheetState extends State<_NewGoalSheet> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _target = TextEditingController();
+
+  IconData _icon = savingsIconChoices.values.first; // 'target'
+  Color _color = _savingsGoalColors.first;
 
   @override
   void dispose() {
@@ -624,7 +640,8 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
           AppSpacing.xxl,
           AppSpacing.xxl + keyboard,
         ),
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -665,6 +682,66 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
             _label(l10n.savingsGoalTarget),
             const SizedBox(height: AppSpacing.sm),
             _KhrField(controller: _target, onChanged: () => setState(() {})),
+            const SizedBox(height: AppSpacing.xl),
+            _label(l10n.savingsGoalIcon),
+            const SizedBox(height: AppSpacing.sm),
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                for (final icon in savingsIconChoices.values)
+                  PressScale(
+                    onTap: () => setState(() => _icon = icon),
+                    child: Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: icon == _icon
+                            ? _color.withValues(alpha: 0.14)
+                            : AppColors.surfaceVariant,
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(
+                          color: icon == _icon ? _color : Colors.transparent,
+                          width: 1.6,
+                        ),
+                      ),
+                      child: Icon(
+                        icon,
+                        size: 20,
+                        color: icon == _icon ? _color : AppColors.textMuted,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            _label(l10n.savingsGoalColor),
+            const SizedBox(height: AppSpacing.sm),
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                for (final color in _savingsGoalColors)
+                  PressScale(
+                    onTap: () => setState(() => _color = color),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                        border: color == _color
+                            ? Border.all(color: AppColors.textPrimary, width: 2)
+                            : null,
+                      ),
+                      child: color == _color
+                          ? const Icon(LucideIcons.check,
+                              size: 16, color: Colors.white)
+                          : null,
+                    ),
+                  ),
+              ],
+            ),
             const SizedBox(height: AppSpacing.xxl),
             Builder(
               builder: (context) {
@@ -678,8 +755,8 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
                       : () => Navigator.of(context).pop(
                             SavingsGoal(
                               id: 'custom-${_name.text.trim()}',
-                              icon: LucideIcons.target,
-                              color: AppColors.primary,
+                              icon: _icon,
+                              color: _color,
                               savedKhr: 0,
                               targetKhr: target,
                               customName: _name.text.trim(),
@@ -689,6 +766,7 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
               },
             ),
           ],
+          ),
         ),
       ),
     );

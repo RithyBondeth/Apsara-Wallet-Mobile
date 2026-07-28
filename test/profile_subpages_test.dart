@@ -77,6 +77,39 @@ void main() {
     );
   });
 
+  testWidgets('Add Goal sheet has icon + colour pickers and creates a goal',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 900));
+    await tester.pumpWidget(
+      _wrap(const SavingsGoalsScreen(), overrides: sampleSavingsOverride()),
+    );
+    await settle(tester);
+
+    // Open the new-goal sheet from the app-bar action.
+    await tester.tap(find.text('Add Goal'));
+    await tester.pumpAndSettle();
+
+    // The picker sections are present.
+    expect(find.text('Icon'), findsOneWidget);
+    expect(find.text('Color'), findsOneWidget);
+
+    // Fill name + target (name field is first, target is the KHR field).
+    await tester.enterText(find.byType(TextField).first, 'Test Goal');
+    final amount = find.byWidgetPredicate(
+      (w) => w is TextField && w.decoration?.hintText == '0',
+    );
+    await tester.enterText(amount, '500000');
+    await tester.pump();
+
+    // Save and confirm the new goal appears in the list.
+    await tester.ensureVisible(find.text('Save'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Test Goal'), findsOneWidget);
+  });
+
   testWidgets('Help & Support renders and FAQ expands', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     await tester.pumpWidget(_wrap(const HelpSupportScreen()));
