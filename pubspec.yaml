@@ -28,7 +28,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+  flutter_localizations:
+    sdk: flutter
+
   flutter_dotenv: ^6.0.0
   flutter_riverpod: ^2.6.1
   auto_route: ^10.1.0+1
@@ -40,6 +42,19 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  intl: ^0.20.2
+  dio: ^5.10.0
+  uuid: ^4.5.3
+  flutter_secure_storage: ^10.3.1
+  shared_preferences: ^2.5.5
+  local_auth: ^2.3.0
+  crypto: ^3.0.6
+  camera: ^0.12.0+2
+  image_picker: ^1.2.3
+  permission_handler: ^12.0.3
+  sqflite: ^2.4.2+1
+  path: ^1.9.1
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +68,8 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   auto_route_generator: ^10.0.0
   build_runner: ^2.4.13
+  flutter_launcher_icons: ^0.14.3
+  sqflite_common_ffi: ^2.4.0+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -65,10 +82,20 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Generate localization sources (AppLocalizations) from the .arb files
+  # in lib/l10n at build time. See l10n.yaml for configuration.
+  generate: true
+
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - .env.dev
+    - .env.staging
+    - .env.prod
+    - assets/animations/
+    - assets/backgrounds/
+    - assets/backgrounds/onboardings/
+    - assets/logos/
+    - assets/google_fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -95,3 +122,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/logos/app_icon.png
+  adaptive_icon_background: "#0B5B3D"
+  adaptive_icon_foreground: assets/logos/app_icon_foreground.png
+  remove_alpha_ios: true

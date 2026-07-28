@@ -1,5 +1,5 @@
-# Uncomment this line to define a global platform for your project
-# platform :ios, '13.0'
+# Google ML Kit text recognition requires iOS 15.5+.
+platform :ios, '15.5'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -39,5 +39,12 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      # Keep every pod on the ML Kit-required minimum.
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.5'
+    end
   end
+  # NOTE: Google ML Kit ships no iOS-Simulator framework slice, so this app
+  # cannot run on the iOS Simulator — test OCR on a physical iPhone (or use
+  # the Android emulator, which ML Kit does support). Device builds are fine.
 end

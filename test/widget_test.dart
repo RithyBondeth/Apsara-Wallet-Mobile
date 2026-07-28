@@ -1,29 +1,37 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// App smoke test: boots the real app and verifies the launch flow —
+// splash first, then the automatic handoff to the welcome screen.
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/app/app.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:apsara_wallet_mobile/features/auth/presentation/screens/splash_screen.dart';
+import 'package:apsara_wallet_mobile/features/auth/presentation/screens/welcome_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    // Fonts (incl. the Khmer fallback) fall back to bundled/default faces in
+    // tests rather than hitting the network.
+    GoogleFonts.config.allowRuntimeFetching = false;
+    await dotenv.load(fileName: '.env.dev');
+    // The splash now restores any saved session on boot, which reads secure
+    // storage — give it an empty in-memory store so the app boots signed-out.
+    FlutterSecureStorage.setMockInitialValues({});
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('App boots to splash and hands off to welcome', (tester) async {
+    await tester.pumpWidget(const ProviderScope(child: MyApp()));
+    await tester.pump(); // resolve localizations delegates
+    await tester.pump(); // let auto_route resolve the initial route
+    expect(find.byType(SplashScreen), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Splash exits on its own after intro + hold.
+    await tester.pump(const Duration(milliseconds: 3000));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.byType(WelcomeScreen), findsOneWidget);
   });
 }

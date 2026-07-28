@@ -1,0 +1,1 @@
+enum ECurrencyType { usd, khr }

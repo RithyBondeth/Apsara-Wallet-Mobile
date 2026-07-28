@@ -1,0 +1,1 @@
+enum ETransactionType { income, expense }

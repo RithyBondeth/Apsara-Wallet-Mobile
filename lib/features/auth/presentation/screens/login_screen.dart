@@ -1,10 +1,315 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class LoginScreen extends StatelessWidget {
+import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/auth/presentation/auth_ui_helpers.dart';
+import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
+import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/brand/aurora_background.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/buttons/social_button.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/controls/language_switcher.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/layout/or_divider.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
+
+@RoutePage()
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen>
+    with TickerProviderStateMixin {
+  final _identifierController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  /// Inline validation messages for the two fields (null = no error).
+  String? _identifierError;
+  String? _passwordError;
+
+  /// One-shot entrance cascade.
+  late final AnimationController _intro;
+
+  /// Endless ambient loop: aurora drift.
+  late final AnimationController _ambient;
+
+  @override
+  void initState() {
+    super.initState();
+    _intro = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..forward();
+    _ambient = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 9000),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _intro.dispose();
+    _ambient.dispose();
+    _identifierController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _login() async {
+    final email = _identifierController.text.trim();
+    final password = _passwordController.text;
+
+    setState(() {
+      _identifierError = email.isEmpty
+          ? context.l10n.authErrorEmailRequired
+          : (!isValidEmail(email) ? context.l10n.authErrorEmailInvalid : null);
+      _passwordError =
+          password.isEmpty ? context.l10n.authErrorPasswordRequired : null;
+    });
+    if (_identifierError != null || _passwordError != null) return;
+
+    context.hideKeyboard();
+    final ok = await ref
+        .read(authControllerProvider.notifier)
+        .login(email: email, password: password);
+    if (!mounted) return;
+
+    if (ok) {
+      // Fresh password login counts as an unlock — don't demand the PIN too.
+      ref.read(appLockControllerProvider.notifier).markUnlocked();
+      context.router.replaceAll([const DashboardRoute()]);
+    } else {
+      showAuthSnackBar(
+        context,
+        ref.read(authControllerProvider).errorMessage ??
+            context.l10n.authSessionExpired,
+      );
+    }
+  }
+
+  void _socialUnavailable() =>
+      showAuthSnackBar(context, context.l10n.authSocialComingSoon);
+
+  /// Shorthand: each block enters on its own slice of the cascade.
+  Widget _enter(double start, double end, Widget child,
+      {Offset offset = const Offset(0, 28)}) {
+    return FadeSlideIn(
+      controller: _intro,
+      start: start,
+      end: end,
+      offset: offset,
+      child: child,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text("Login Screen")));
+    final submitting =
+        ref.watch(authControllerProvider.select((s) => s.isSubmitting));
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // --- Misty temple backdrop + living aurora ----------------------
+          const Image(
+            image: AssetImage(AssetPathConstant.authBackground),
+            fit: BoxFit.cover,
+          ),
+          AnimatedBuilder(
+            animation: _ambient,
+            builder: (context, _) =>
+                AuroraBackground(t: _ambient.value, moteCount: 14),
+          ),
+
+          SafeArea(
+            child: GestureDetector(
+              onTap: context.hideKeyboard,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: AppSpacing.xl),
+
+                    // --- Language switcher ---------------------------------
+                    _enter(
+                      0.0,
+                      0.35,
+                      const Align(
+                        alignment: Alignment.centerRight,
+                        child: LanguageSwitcher(),
+                      ),
+                      offset: const Offset(0, -12),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+
+                    // --- Heading -------------------------------------------
+                    _enter(
+                      0.0,
+                      0.4,
+                      Text(context.l10n.loginTitle,
+                          style: AppFont.headingLarge),
+                      offset: const Offset(-24, 0),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    _enter(
+                      0.08,
+                      0.46,
+                      Text(
+                        context.l10n.loginSubtitle,
+                        style: AppFont.bodyMedium.copyWith(
+                          color: context.colors.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xxxl),
+
+                    // --- Fields --------------------------------------------
+                    _enter(
+                      0.18,
+                      0.54,
+                      AppTextField(
+                        label: context.l10n.authIdentifierLabel,
+                        hint: context.l10n.authIdentifierHint,
+                        controller: _identifierController,
+                        prefixIcon: LucideIcons.user,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        errorText: _identifierError,
+                        onChanged: (_) {
+                          if (_identifierError != null) {
+                            setState(() => _identifierError = null);
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    _enter(
+                      0.26,
+                      0.62,
+                      AppTextField(
+                        label: context.l10n.loginPasswordLabel,
+                        hint: context.l10n.loginPasswordHint,
+                        controller: _passwordController,
+                        prefixIcon: LucideIcons.lock,
+                        obscure: true,
+                        textInputAction: TextInputAction.done,
+                        errorText: _passwordError,
+                        onChanged: (_) {
+                          if (_passwordError != null) {
+                            setState(() => _passwordError = null);
+                          }
+                        },
+                        onSubmitted: (_) => _login(),
+                      ),
+                    ),
+
+                    // --- Forgot password -----------------------------------
+                    _enter(
+                      0.34,
+                      0.68,
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () =>
+                              context.router.push(const ForgotPasswordRoute()),
+                          child: Text(
+                            context.l10n.commonForgotPassword,
+                            style: AppFont.labelLarge.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+
+                    _enter(
+                      0.42,
+                      0.76,
+                      PrimaryButton(
+                        label: context.l10n.commonLogin,
+                        loading: submitting,
+                        onPressed: submitting ? null : _login,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xxl),
+
+                    // --- Divider -------------------------------------------
+                    _enter(0.50, 0.82, const OrDivider()),
+                    const SizedBox(height: AppSpacing.xl),
+
+                    // --- Social --------------------------------------------
+                    _enter(
+                      0.58,
+                      0.88,
+                      SocialButton(
+                        svg: BrandSvg.google,
+                        label: context.l10n.authContinueWithGoogle,
+                        onPressed: _socialUnavailable,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    _enter(
+                      0.64,
+                      0.93,
+                      SocialButton(
+                        svg: BrandSvg.facebook,
+                        label: context.l10n.authContinueWithFacebook,
+                        onPressed: _socialUnavailable,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xxxl),
+
+                    // --- Sign up -------------------------------------------
+                    _enter(
+                      0.72,
+                      1.0,
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              context.l10n.loginNoAccountPrompt,
+                              style: AppFont.bodyMedium.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () =>
+                                  context.router.push(const RegisterRoute()),
+                              child: Text(
+                                context.l10n.loginSignUpCta,
+                                style: AppFont.labelLarge.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xxl),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

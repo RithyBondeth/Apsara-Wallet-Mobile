@@ -24,7 +24,9 @@ android {
         applicationId = "com.example.apsara_wallet_mobile"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // Google ML Kit text recognition + camera require API 21+; use 24 to
+        // stay comfortably above the plugins' floor.
+        minSdk = maxOf(24, flutter.minSdkVersion)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -41,4 +43,10 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // On-device Latin text recognition for the receipt scanner (Android side
+    // of the `apsara/ocr` channel; iOS uses Apple Vision).
+    implementation("com.google.mlkit:text-recognition:16.0.1")
 }
