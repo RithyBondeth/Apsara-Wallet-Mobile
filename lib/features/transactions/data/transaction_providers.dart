@@ -78,6 +78,43 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
     await _reload();
   }
 
+  /// Edits an existing transaction in place (PATCH), preserving its id and
+  /// created-at. The backend rebalances wallets (reverses the old effect,
+  /// applies the new), so we invalidate wallets to reflect the change.
+  Future<void> edit(TransactionRecord record) async {
+    final index = await ref.read(categoryIndexProvider.future);
+    final wallets = await ref.read(walletsProvider.future);
+    if (wallets.isEmpty) throw StateError('no-wallet');
+
+    final wallet = wallets.firstWhere(
+      (w) => w.name == record.walletName,
+      orElse: () => wallets.first,
+    );
+    final categoryId = index.uuidForSlug(record.category.id) ??
+        index.uuidForSlug(
+          record.type == ETransactionType.income
+              ? 'othersIncome'
+              : 'othersExpense',
+        );
+    if (wallet.id == null || categoryId == null) {
+      throw StateError('map-failed');
+    }
+
+    final ok = await _api.update(
+      id: record.id,
+      title: record.title,
+      walletId: wallet.id!,
+      categoryId: categoryId,
+      amountKhr: record.amountKhr,
+      type: record.type,
+      date: record.date,
+      note: record.note,
+    );
+    if (!ok) throw StateError('update-failed');
+    ref.invalidate(walletsProvider);
+    await _reload();
+  }
+
   Future<void> remove(String id) async {
     await _api.delete(id);
     ref.invalidate(walletsProvider);

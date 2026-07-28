@@ -99,6 +99,31 @@ class TransactionApi {
     return res.success;
   }
 
+  Future<bool> update({
+    required String id,
+    required String title,
+    required String walletId,
+    required String categoryId,
+    required int amountKhr,
+    required ETransactionType type,
+    required DateTime date,
+    String? note,
+  }) async {
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/transactions/$id',
+      data: {
+        'title': title,
+        'walletId': walletId,
+        'categoryId': categoryId,
+        'amountKhr': amountKhr,
+        'type': type.name,
+        'date': date.toUtc().toIso8601String(),
+        'note': note,
+      },
+    );
+    return res.success;
+  }
+
   Future<bool> delete(String id) async {
     final res = await _api.delete<Map<String, dynamic>>('/transactions/$id');
     return res.success;

@@ -237,23 +237,24 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
         : (note.isNotEmpty ? note : category.labelOf(l10n));
 
     setState(() => _saving = true);
+    final record = TransactionRecord(
+      id: _editingId ?? UuidGenerator.generate(),
+      title: title,
+      category: category,
+      walletName: wallet.name,
+      date: _dateTime,
+      amountKhr: amountKhr,
+      type: _type,
+      note: note.isEmpty ? null : note,
+    );
+    final notifier = ref.read(transactionsProvider.notifier);
     try {
-      // Deleting + re-adding keeps edit working against the API (no PATCH yet).
+      // Edit updates in place (PATCH, preserving id/created-at); new saves POST.
       if (_editingId != null) {
-        await ref.read(transactionsProvider.notifier).remove(_editingId!);
+        await notifier.edit(record);
+      } else {
+        await notifier.add(record);
       }
-      await ref.read(transactionsProvider.notifier).add(
-            TransactionRecord(
-              id: _editingId ?? UuidGenerator.generate(),
-              title: title,
-              category: category,
-              walletName: wallet.name,
-              date: _dateTime,
-              amountKhr: amountKhr,
-              type: _type,
-              note: note.isEmpty ? null : note,
-            ),
-          );
     } catch (_) {
       if (!mounted) return;
       setState(() => _saving = false);

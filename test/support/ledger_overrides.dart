@@ -35,6 +35,18 @@ class _FakeTransactionsNotifier extends TransactionsNotifier {
   }
 
   @override
+  Future<void> edit(TransactionRecord record) async {
+    final i = _items.indexWhere((t) => t.id == record.id);
+    if (i >= 0) {
+      _items[i] = record;
+    } else {
+      _items.insert(0, record);
+    }
+    _items.sort((a, b) => b.date.compareTo(a.date));
+    state = AsyncData([..._items]);
+  }
+
+  @override
   Future<void> remove(String id) async {
     _items.removeWhere((t) => t.id == id);
     state = AsyncData([..._items]);

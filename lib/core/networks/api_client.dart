@@ -65,6 +65,22 @@ class ApiClient {
     }
   }
 
+  Future<ApiResponse<T>> patch<T>(String path, {dynamic data}) async {
+    try {
+      final response = await _dio.patch<T>(path, data: data);
+      return ApiResponse<T>(
+        success: true,
+        message: 'Success',
+        data: response.data,
+      );
+    } on DioException catch (e) {
+      final error = ApiException.fromDioException(e);
+      return ApiResponse<T>(success: false, message: error.message);
+    } catch (e) {
+      return ApiResponse<T>(success: false, message: e.toString());
+    }
+  }
+
   Future<ApiResponse<T>> delete<T>(String path) async {
     try {
       final response = await _dio.delete<T>(path);
