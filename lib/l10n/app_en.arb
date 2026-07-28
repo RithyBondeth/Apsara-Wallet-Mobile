@@ -298,6 +298,8 @@
   "savingsGoalIcon": "Icon",
   "savingsGoalColor": "Color",
   "savingsGoalAdded": "Goal added",
+  "savingsEditGoal": "Edit Goal",
+  "savingsGoalUpdated": "Goal updated",
   "savingsFundsAdded": "Funds added",
   "savingsError": "Something went wrong. Please try again.",
   "savingsEmptyTitle": "No savings goals yet",

@@ -1616,6 +1616,18 @@ abstract class AppLocalizations {
   /// **'Goal added'**
   String get savingsGoalAdded;
 
+  /// No description provided for @savingsEditGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Goal'**
+  String get savingsEditGoal;
+
+  /// No description provided for @savingsGoalUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal updated'**
+  String get savingsGoalUpdated;
+
   /// No description provided for @savingsFundsAdded.
   ///
   /// In en, this message translates to:

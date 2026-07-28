@@ -31,6 +31,20 @@ class SavingsGoalsNotifier extends AsyncNotifier<List<SavingsGoal>> {
     await _reload();
   }
 
+  /// Edits a goal's name / target / icon / colour (not its saved total).
+  /// Requires [draft].id — the server id of the goal being edited.
+  Future<void> edit(SavingsGoal draft) async {
+    final ok = await _api.update(
+      id: draft.id,
+      name: draft.customName ?? '',
+      targetKhr: draft.targetKhr,
+      icon: savingsIconToken(draft.icon),
+      color: colorToHex(draft.color),
+    );
+    if (!ok) throw StateError('savings-update-failed');
+    await _reload();
+  }
+
   /// Adds [amountKhr] to a goal's saved total.
   Future<void> addFunds(String id, int amountKhr) async {
     final ok = await _api.addFunds(id, amountKhr);

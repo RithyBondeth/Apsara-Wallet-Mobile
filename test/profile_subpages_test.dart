@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/about_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/help_support_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savings_goals_screen.dart';
@@ -108,6 +111,40 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Test Goal'), findsOneWidget);
+  });
+
+  testWidgets('Long-press a goal opens the edit sheet and updates it',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 900));
+    final goal = SavingsGoal(
+      id: 'g1',
+      icon: LucideIcons.target,
+      color: AppColors.primary,
+      savedKhr: 100000,
+      targetKhr: 500000,
+      customName: 'Old Name',
+    );
+    await tester.pumpWidget(
+      _wrap(const SavingsGoalsScreen(),
+          overrides: sampleSavingsOverride([goal])),
+    );
+    await settle(tester);
+    expect(find.text('Old Name'), findsOneWidget);
+
+    // Long-press opens the prefilled edit sheet.
+    await tester.longPress(find.text('Old Name'));
+    await tester.pumpAndSettle();
+    expect(find.text('Edit Goal'), findsOneWidget);
+
+    // Rename and save.
+    await tester.enterText(find.byType(TextField).first, 'New Name');
+    await tester.pump();
+    await tester.ensureVisible(find.text('Save'));
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('New Name'), findsOneWidget);
+    expect(find.text('Old Name'), findsNothing);
   });
 
   testWidgets('Help & Support renders and FAQ expands', (tester) async {

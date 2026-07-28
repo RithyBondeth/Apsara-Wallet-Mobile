@@ -820,6 +820,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savingsGoalAdded => 'Goal added';
 
   @override
+  String get savingsEditGoal => 'Edit Goal';
+
+  @override
+  String get savingsGoalUpdated => 'Goal updated';
+
+  @override
   String get savingsFundsAdded => 'Funds added';
 
   @override

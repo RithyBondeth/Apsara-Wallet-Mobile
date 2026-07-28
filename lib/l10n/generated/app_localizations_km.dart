@@ -822,6 +822,12 @@ class AppLocalizationsKm extends AppLocalizations {
   String get savingsGoalAdded => 'បានបន្ថែមគោលដៅ';
 
   @override
+  String get savingsEditGoal => 'កែប្រែគោលដៅ';
+
+  @override
+  String get savingsGoalUpdated => 'បានធ្វើបច្ចុប្បន្នភាពគោលដៅ';
+
+  @override
   String get savingsFundsAdded => 'បានបន្ថែមមូលនិធិ';
 
   @override

@@ -166,6 +166,17 @@ class _FakeSavingsGoalsNotifier extends SavingsGoalsNotifier {
   }
 
   @override
+  Future<void> edit(SavingsGoal draft) async {
+    final i = _items.indexWhere((g) => g.id == draft.id);
+    if (i >= 0) {
+      _items[i] = draft;
+    } else {
+      _items.add(draft);
+    }
+    state = AsyncData([..._items]);
+  }
+
+  @override
   Future<void> addFunds(String id, int amountKhr) async {
     final i = _items.indexWhere((g) => g.id == id);
     if (i >= 0) {

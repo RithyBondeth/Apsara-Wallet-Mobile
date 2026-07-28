@@ -298,6 +298,8 @@
   "savingsGoalIcon": "រូបតំណាង",
   "savingsGoalColor": "ពណ៌",
   "savingsGoalAdded": "បានបន្ថែមគោលដៅ",
+  "savingsEditGoal": "កែប្រែគោលដៅ",
+  "savingsGoalUpdated": "បានធ្វើបច្ចុប្បន្នភាពគោលដៅ",
   "savingsFundsAdded": "បានបន្ថែមមូលនិធិ",
   "savingsError": "មានបញ្ហាបានកើតឡើង។ សូមព្យាយាមម្តងទៀត។",
   "savingsEmptyTitle": "មិនទាន់មានគោលដៅសន្សំ",
