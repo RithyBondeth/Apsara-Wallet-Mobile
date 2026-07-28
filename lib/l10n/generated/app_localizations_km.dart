@@ -674,6 +674,15 @@ class AppLocalizationsKm extends AppLocalizations {
   String get txFilterApply => 'អនុវត្ត';
 
   @override
+  String get txExport => 'នាំចេញប្រតិបត្តិការ (CSV)';
+
+  @override
+  String get txExportEmpty => 'គ្មានប្រតិបត្តិការសម្រាប់នាំចេញ។';
+
+  @override
+  String get txExportFailed => 'មិនអាចនាំចេញបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
   String get txDetailTitle => 'ព័ត៌មានលម្អិតប្រតិបត្តិការ';
 
   @override

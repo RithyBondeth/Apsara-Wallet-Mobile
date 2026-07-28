@@ -12,7 +12,11 @@ import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'dart:io';
+
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
@@ -20,6 +24,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transactions_csv.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
@@ -104,6 +109,47 @@ class _TransactionsListScreenState
     });
   }
 
+  /// Exports the currently-filtered list as a CSV via the OS share sheet.
+  Future<void> _export() async {
+    final l10n = context.l10n;
+    final localeTag = Localizations.localeOf(context).toString();
+    final items = _filtered(ref.read(transactionsProvider).valueOrNull ?? const []);
+    if (items.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(l10n.txExportEmpty),
+        ),
+      );
+      return;
+    }
+    final csv = buildTransactionsCsv(
+      txns: items,
+      categoryLabel: (c) => c.labelOf(l10n),
+      typeLabel: (t) =>
+          t == ETransactionType.income ? l10n.dashboardIncome : l10n.dashboardExpense,
+      localeTag: localeTag,
+    );
+    try {
+      final dir = await getTemporaryDirectory();
+      final file = File('${dir.path}/apsara_transactions.csv');
+      await file.writeAsString(csv);
+      await Share.shareXFiles(
+        [XFile(file.path, mimeType: 'text/csv', name: 'apsara_transactions.csv')],
+        subject: l10n.txExport,
+      );
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(l10n.txExportFailed),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -160,6 +206,7 @@ class _TransactionsListScreenState
                   title: l10n.txListTitle,
                   filtersActive: _hasAdvancedFilters,
                   onFilters: _openFilters,
+                  onExport: _export,
                 ),
               ),
               Padding(
@@ -242,11 +289,13 @@ class _AppBar extends StatelessWidget {
     required this.title,
     required this.filtersActive,
     required this.onFilters,
+    required this.onExport,
   });
 
   final String title;
   final bool filtersActive;
   final VoidCallback onFilters;
+  final VoidCallback onExport;
 
   @override
   Widget build(BuildContext context) {
@@ -284,6 +333,24 @@ class _AppBar extends StatelessWidget {
               ),
             ),
           ),
+          PressScale(
+            onTap: onExport,
+            child: Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.surfaceVariant),
+              ),
+              child: const Icon(
+                LucideIcons.share,
+                size: 18,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
           PressScale(
             onTap: onFilters,
             child: Container(

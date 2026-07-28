@@ -1328,6 +1328,24 @@ abstract class AppLocalizations {
   /// **'Apply'**
   String get txFilterApply;
 
+  /// No description provided for @txExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export transactions (CSV)'**
+  String get txExport;
+
+  /// No description provided for @txExportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions to export.'**
+  String get txExportEmpty;
+
+  /// No description provided for @txExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t export. Please try again.'**
+  String get txExportFailed;
+
   /// No description provided for @txDetailTitle.
   ///
   /// In en, this message translates to:

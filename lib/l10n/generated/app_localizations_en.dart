@@ -673,6 +673,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get txFilterApply => 'Apply';
 
   @override
+  String get txExport => 'Export transactions (CSV)';
+
+  @override
+  String get txExportEmpty => 'No transactions to export.';
+
+  @override
+  String get txExportFailed => 'Couldn\'t export. Please try again.';
+
+  @override
   String get txDetailTitle => 'Transaction Details';
 
   @override
