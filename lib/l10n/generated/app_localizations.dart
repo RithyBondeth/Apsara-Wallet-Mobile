@@ -1982,6 +1982,42 @@ abstract class AppLocalizations {
   /// **'You\'ve reached your {category} budget for this month.'**
   String notifTypeBudgetBody(String category);
 
+  /// No description provided for @notifTypeSecurityLoginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New sign-in'**
+  String get notifTypeSecurityLoginTitle;
+
+  /// No description provided for @notifTypeSecurityLoginBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was just signed in to. If this wasn\'t you, reset your password.'**
+  String get notifTypeSecurityLoginBody;
+
+  /// No description provided for @notifTypeSecurityPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed'**
+  String get notifTypeSecurityPasswordTitle;
+
+  /// No description provided for @notifTypeSecurityPasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account password was just changed.'**
+  String get notifTypeSecurityPasswordBody;
+
+  /// No description provided for @notifTypeSecurityProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get notifTypeSecurityProfileTitle;
+
+  /// No description provided for @notifTypeSecurityProfileBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile details were updated.'**
+  String get notifTypeSecurityProfileBody;
+
   /// No description provided for @notifTxTitle.
   ///
   /// In en, this message translates to:

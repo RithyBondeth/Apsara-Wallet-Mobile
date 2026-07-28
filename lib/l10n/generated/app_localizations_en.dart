@@ -1050,6 +1050,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get notifTypeSecurityLoginTitle => 'New sign-in';
+
+  @override
+  String get notifTypeSecurityLoginBody =>
+      'Your account was just signed in to. If this wasn\'t you, reset your password.';
+
+  @override
+  String get notifTypeSecurityPasswordTitle => 'Password changed';
+
+  @override
+  String get notifTypeSecurityPasswordBody =>
+      'Your account password was just changed.';
+
+  @override
+  String get notifTypeSecurityProfileTitle => 'Profile updated';
+
+  @override
+  String get notifTypeSecurityProfileBody =>
+      'Your profile details were updated.';
+
+  @override
   String get notifTxTitle => 'Income recorded';
 
   @override

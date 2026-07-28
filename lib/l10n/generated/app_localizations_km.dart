@@ -1049,6 +1049,28 @@ class AppLocalizationsKm extends AppLocalizations {
   }
 
   @override
+  String get notifTypeSecurityLoginTitle => 'ការចូលគណនីថ្មី';
+
+  @override
+  String get notifTypeSecurityLoginBody =>
+      'គណនីរបស់អ្នកទើបតែត្រូវបានចូល។ ប្រសិនបើមិនមែនជាអ្នកទេ សូមកំណត់ពាក្យសម្ងាត់ឡើងវិញ។';
+
+  @override
+  String get notifTypeSecurityPasswordTitle => 'បានផ្លាស់ប្តូរពាក្យសម្ងាត់';
+
+  @override
+  String get notifTypeSecurityPasswordBody =>
+      'ពាក្យសម្ងាត់គណនីរបស់អ្នកទើបតែត្រូវបានផ្លាស់ប្តូរ។';
+
+  @override
+  String get notifTypeSecurityProfileTitle =>
+      'បានធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូប';
+
+  @override
+  String get notifTypeSecurityProfileBody =>
+      'ព័ត៌មានប្រវត្តិរូបរបស់អ្នកត្រូវបានធ្វើបច្ចុប្បន្នភាព។';
+
+  @override
   String get notifTxTitle => 'បានកត់ត្រាចំណូល';
 
   @override

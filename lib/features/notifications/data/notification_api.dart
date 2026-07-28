@@ -106,6 +106,27 @@ _NotifCopy _copyFor(
         (l) => l.notifTypeBudgetTitle,
         (l) => l.notifTypeBudgetBody(category),
       );
+    case 'security_login':
+      return _NotifCopy(
+        LucideIcons.shieldCheck,
+        AppColors.info,
+        (l) => l.notifTypeSecurityLoginTitle,
+        (l) => l.notifTypeSecurityLoginBody,
+      );
+    case 'security_password':
+      return _NotifCopy(
+        LucideIcons.lockKeyhole,
+        AppColors.warning,
+        (l) => l.notifTypeSecurityPasswordTitle,
+        (l) => l.notifTypeSecurityPasswordBody,
+      );
+    case 'security_profile':
+      return _NotifCopy(
+        LucideIcons.userRound,
+        AppColors.info,
+        (l) => l.notifTypeSecurityProfileTitle,
+        (l) => l.notifTypeSecurityProfileBody,
+      );
     default:
       return _NotifCopy(
         LucideIcons.bell,
