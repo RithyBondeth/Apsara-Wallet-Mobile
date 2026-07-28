@@ -4,6 +4,8 @@ import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.d
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_api.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_rule.dart';
@@ -145,6 +147,46 @@ class _FakeRecurringNotifier extends RecurringNotifier {
       const RunDueResult(posted: 0, rulesRun: 0);
 }
 
+/// In-memory savings goals so the Savings screen runs against sample data
+/// instead of the network.
+class _FakeSavingsGoalsNotifier extends SavingsGoalsNotifier {
+  _FakeSavingsGoalsNotifier(List<SavingsGoal> seed) : _items = [...seed];
+
+  final List<SavingsGoal> _items;
+
+  @override
+  Future<List<SavingsGoal>> build() async => _items;
+
+  @override
+  Future<void> addGoal(SavingsGoal draft) async {
+    _items.add(draft);
+    state = AsyncData([..._items]);
+  }
+
+  @override
+  Future<void> addFunds(String id, int amountKhr) async {
+    final i = _items.indexWhere((g) => g.id == id);
+    if (i >= 0) {
+      _items[i] = _items[i].copyWith(savedKhr: _items[i].savedKhr + amountKhr);
+    }
+    state = AsyncData([..._items]);
+  }
+
+  @override
+  Future<void> remove(String id) async {
+    _items.removeWhere((g) => g.id == id);
+    state = AsyncData([..._items]);
+  }
+}
+
+/// Override the Savings screen's provider with sample (or given) goals.
+List<Override> sampleSavingsOverride([List<SavingsGoal>? goals]) {
+  return [
+    savingsGoalsProvider
+        .overrideWith(() => _FakeSavingsGoalsNotifier(goals ?? sampleSavingsGoals())),
+  ];
+}
+
 /// Override the Budget screen's provider with sample (or given) budget data.
 List<Override> sampleBudgetOverride([BudgetData? data]) {
   final d = data ?? BudgetData.sample();
@@ -159,6 +201,7 @@ List<Override> sampleLedgerOverrides({
   AuthUser? user,
   BudgetData? budget,
   List<RecurringRule>? recurring,
+  List<SavingsGoal>? savings,
 }) {
   final txs = transactions ?? sampleTransactions();
   final ws = wallets ?? WalletsData.sample.wallets;
@@ -183,5 +226,7 @@ List<Override> sampleLedgerOverrides({
     // The dashboard fires this on load; keep it off the network in tests.
     recurringAutoPostProvider
         .overrideWith((ref) async => const RunDueResult(posted: 0, rulesRun: 0)),
+    savingsGoalsProvider
+        .overrideWith(() => _FakeSavingsGoalsNotifier(savings ?? const [])),
   ];
 }

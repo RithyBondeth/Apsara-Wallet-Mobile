@@ -1550,6 +1550,24 @@ abstract class AppLocalizations {
   /// **'Funds added'**
   String get savingsFundsAdded;
 
+  /// No description provided for @savingsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get savingsError;
+
+  /// No description provided for @savingsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No savings goals yet'**
+  String get savingsEmptyTitle;
+
+  /// No description provided for @savingsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a target — a trip, an emergency fund, a new phone — and track your progress toward it.'**
+  String get savingsEmptyBody;
+
   /// No description provided for @savingsGoalVacation.
   ///
   /// In en, this message translates to:

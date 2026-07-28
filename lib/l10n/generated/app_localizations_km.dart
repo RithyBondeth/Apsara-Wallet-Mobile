@@ -788,6 +788,16 @@ class AppLocalizationsKm extends AppLocalizations {
   String get savingsFundsAdded => 'បានបន្ថែមមូលនិធិ';
 
   @override
+  String get savingsError => 'មានបញ្ហាបានកើតឡើង។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get savingsEmptyTitle => 'មិនទាន់មានគោលដៅសន្សំ';
+
+  @override
+  String get savingsEmptyBody =>
+      'កំណត់គោលដៅ — ដំណើរកម្សាន្ត មូលនិធិបន្ទាន់ ឬទូរស័ព្ទថ្មី — ហើយតាមដានវឌ្ឍនភាពរបស់អ្នក។';
+
+  @override
   String get savingsGoalVacation => 'មូលនិធិវិស្សមកាល';
 
   @override

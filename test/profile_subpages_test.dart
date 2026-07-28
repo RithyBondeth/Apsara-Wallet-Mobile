@@ -10,8 +10,11 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savin
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/security_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
-Widget _wrap(Widget child) {
+import 'support/ledger_overrides.dart';
+
+Widget _wrap(Widget child, {List<Override> overrides = const []}) {
   return ProviderScope(
+    overrides: overrides,
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -59,7 +62,9 @@ void main() {
 
   testWidgets('Savings Goals renders settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
-    await tester.pumpWidget(_wrap(const SavingsGoalsScreen()));
+    await tester.pumpWidget(
+      _wrap(const SavingsGoalsScreen(), overrides: sampleSavingsOverride()),
+    );
     await settle(tester);
 
     expect(find.text('Total Saved'), findsOneWidget);

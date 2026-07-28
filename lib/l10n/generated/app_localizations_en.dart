@@ -786,6 +786,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savingsFundsAdded => 'Funds added';
 
   @override
+  String get savingsError => 'Something went wrong. Please try again.';
+
+  @override
+  String get savingsEmptyTitle => 'No savings goals yet';
+
+  @override
+  String get savingsEmptyBody =>
+      'Set a target — a trip, an emergency fund, a new phone — and track your progress toward it.';
+
+  @override
   String get savingsGoalVacation => 'Vacation Fund';
 
   @override

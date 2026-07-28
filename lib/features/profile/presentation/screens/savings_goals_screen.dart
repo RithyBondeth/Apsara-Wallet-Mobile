@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -12,25 +13,27 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
     show formatKhr;
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart'
     show GroupedAmountFormatter;
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/count_up_text.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Savings Goals (Phase 1, UI-only): set targets and track progress toward
-/// them. Tapping a goal adds funds to it; "+ Add Goal" appends a new one.
-/// Purely a tracker — no money is moved.
+/// Savings Goals: set targets and track progress toward them, API-backed.
+/// Tapping a goal adds funds to it; "+ Add Goal" creates a new one. Purely a
+/// tracker — no money is moved.
 @RoutePage()
-class SavingsGoalsScreen extends StatefulWidget {
+class SavingsGoalsScreen extends ConsumerStatefulWidget {
   const SavingsGoalsScreen({super.key});
 
   @override
-  State<SavingsGoalsScreen> createState() => _SavingsGoalsScreenState();
+  ConsumerState<SavingsGoalsScreen> createState() => _SavingsGoalsScreenState();
 }
 
-class _SavingsGoalsScreenState extends State<SavingsGoalsScreen>
+class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
@@ -41,11 +44,6 @@ class _SavingsGoalsScreenState extends State<SavingsGoalsScreen>
     parent: _intro,
     curve: const Interval(0.25, 0.85, curve: Curves.easeOut),
   );
-
-  final List<SavingsGoal> _goals = sampleSavingsGoals();
-
-  int get _totalSaved => _goals.fold(0, (s, g) => s + g.savedKhr);
-  int get _totalTarget => _goals.fold(0, (s, g) => s + g.targetKhr);
 
   void _snack(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -72,20 +70,23 @@ class _SavingsGoalsScreenState extends State<SavingsGoalsScreen>
       cta: context.l10n.savingsAddFunds,
     );
     if (amount == null || amount <= 0 || !mounted) return;
-    setState(() {
-      final i = _goals.indexWhere((g) => g.id == goal.id);
-      if (i >= 0) {
-        _goals[i] = _goals[i].copyWith(savedKhr: _goals[i].savedKhr + amount);
-      }
-    });
-    _snack(context.l10n.savingsFundsAdded);
+    try {
+      await ref.read(savingsGoalsProvider.notifier).addFunds(goal.id, amount);
+      if (mounted) _snack(context.l10n.savingsFundsAdded);
+    } catch (_) {
+      if (mounted) _snack(context.l10n.savingsError);
+    }
   }
 
   Future<void> _addGoal() async {
     final result = await _newGoalSheet();
     if (result == null || !mounted) return;
-    setState(() => _goals.add(result));
-    _snack(context.l10n.savingsGoalAdded);
+    try {
+      await ref.read(savingsGoalsProvider.notifier).addGoal(result);
+      if (mounted) _snack(context.l10n.savingsGoalAdded);
+    } catch (_) {
+      if (mounted) _snack(context.l10n.savingsError);
+    }
   }
 
   @override
@@ -98,6 +99,12 @@ class _SavingsGoalsScreenState extends State<SavingsGoalsScreen>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final bottomSafe = MediaQuery.of(context).padding.bottom;
+
+    final goalsAsync = ref.watch(savingsGoalsProvider);
+    final goals = goalsAsync.valueOrNull ?? const <SavingsGoal>[];
+    final loading = goalsAsync.isLoading && !goalsAsync.hasValue;
+    final totalSaved = goals.fold<int>(0, (s, g) => s + g.savedKhr);
+    final totalTarget = goals.fold<int>(0, (s, g) => s + g.targetKhr);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -119,45 +126,66 @@ class _SavingsGoalsScreenState extends State<SavingsGoalsScreen>
                 ),
               ),
               Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(
-                    AppSpacing.xxl,
-                    AppSpacing.md,
-                    AppSpacing.xxl,
-                    bottomSafe + AppSpacing.xxxl,
-                  ),
-                  children: [
-                    FadeSlideIn(
-                      controller: _intro,
-                      start: 0.08,
-                      end: 0.5,
-                      child: _SummaryCard(
-                        savedLabel: l10n.savingsTotalSaved,
-                        targetLine: l10n.savingsTargetOf(formatKhr(_totalTarget)),
-                        totalSaved: _totalSaved,
-                        fraction: _totalTarget == 0
-                            ? 0
-                            : _totalSaved / _totalTarget,
-                        fill: _fill,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xl),
-                    for (var i = 0; i < _goals.length; i++) ...[
-                      if (i > 0) const SizedBox(height: AppSpacing.md),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: (0.2 + i * 0.08).clamp(0.0, 0.6),
-                        end: (0.6 + i * 0.08).clamp(0.0, 1.0),
-                        child: _GoalCard(
-                          goal: _goals[i],
-                          fill: _fill,
-                          onAddFunds: () => _addFunds(_goals[i]),
+                child: loading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
                         ),
+                      )
+                    : ListView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(
+                          AppSpacing.xxl,
+                          AppSpacing.md,
+                          AppSpacing.xxl,
+                          bottomSafe + AppSpacing.xxxl,
+                        ),
+                        children: [
+                          FadeSlideIn(
+                            controller: _intro,
+                            start: 0.08,
+                            end: 0.5,
+                            child: _SummaryCard(
+                              savedLabel: l10n.savingsTotalSaved,
+                              targetLine: l10n
+                                  .savingsTargetOf(formatKhr(totalTarget)),
+                              totalSaved: totalSaved,
+                              fraction: totalTarget == 0
+                                  ? 0
+                                  : totalSaved / totalTarget,
+                              fill: _fill,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.xl),
+                          if (goals.isEmpty)
+                            FadeSlideIn(
+                              controller: _intro,
+                              start: 0.2,
+                              end: 0.7,
+                              child: EmptyState(
+                                icon: LucideIcons.piggyBank,
+                                title: l10n.savingsEmptyTitle,
+                                message: l10n.savingsEmptyBody,
+                                ctaLabel: l10n.savingsAddGoal,
+                                onCta: _addGoal,
+                              ),
+                            )
+                          else
+                            for (var i = 0; i < goals.length; i++) ...[
+                              if (i > 0) const SizedBox(height: AppSpacing.md),
+                              FadeSlideIn(
+                                controller: _intro,
+                                start: (0.2 + i * 0.08).clamp(0.0, 0.6),
+                                end: (0.6 + i * 0.08).clamp(0.0, 1.0),
+                                child: _GoalCard(
+                                  goal: goals[i],
+                                  fill: _fill,
+                                  onAddFunds: () => _addFunds(goals[i]),
+                                ),
+                              ),
+                            ],
+                        ],
                       ),
-                    ],
-                  ],
-                ),
               ),
             ],
           ),
