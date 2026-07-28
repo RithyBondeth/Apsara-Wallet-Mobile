@@ -158,6 +158,8 @@
   "analyticsRangeMonth": "This Month",
   "analyticsRangeYear": "This Year",
   "analyticsSelectRange": "Time Range",
+  "analyticsEmptyTitle": "Nothing to analyze yet",
+  "analyticsEmptyBody": "Add some expenses in this period and your breakdown and trends will appear here.",
 
   "budgetTitle": "Budget",
   "budgetAdd": "Add Budget",

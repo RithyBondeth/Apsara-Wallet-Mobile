@@ -158,6 +158,8 @@
   "analyticsRangeMonth": "ខែនេះ",
   "analyticsRangeYear": "ឆ្នាំនេះ",
   "analyticsSelectRange": "ជួរពេលវេលា",
+  "analyticsEmptyTitle": "មិនទាន់មានអ្វីសម្រាប់វិភាគ",
+  "analyticsEmptyBody": "បន្ថែមការចំណាយក្នុងកំឡុងពេលនេះ ហើយការវិភាគ និងនិន្នាការនឹងបង្ហាញនៅទីនេះ។",
 
   "budgetTitle": "ថវិកា",
   "budgetAdd": "បន្ថែមថវិកា",

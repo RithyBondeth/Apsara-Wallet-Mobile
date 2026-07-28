@@ -440,6 +440,13 @@ class AppLocalizationsKm extends AppLocalizations {
   String get analyticsSelectRange => 'ជួរពេលវេលា';
 
   @override
+  String get analyticsEmptyTitle => 'មិនទាន់មានអ្វីសម្រាប់វិភាគ';
+
+  @override
+  String get analyticsEmptyBody =>
+      'បន្ថែមការចំណាយក្នុងកំឡុងពេលនេះ ហើយការវិភាគ និងនិន្នាការនឹងបង្ហាញនៅទីនេះ។';
+
+  @override
   String get budgetTitle => 'ថវិកា';
 
   @override

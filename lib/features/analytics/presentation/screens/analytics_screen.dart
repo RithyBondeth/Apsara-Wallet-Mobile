@@ -6,12 +6,15 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/analytics/data/analytics_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/analytics_segmented_tabs.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/category_breakdown_list.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/daily_trend_card.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/expense_breakdown_card.dart';
@@ -38,19 +41,18 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   late final AnimationController _intro;
   late final Animation<double> _chart;
 
-  final AnalyticsData _data = AnalyticsData.sample;
   int _tabIndex = 0;
 
-  /// Filter state (UI-only: changing it relabels the row; the mock series
-  /// stay the same). Anchored to the mock data's month, not "now", so
-  /// goldens don't drift with the test date.
-  _RangeFilter _range = _RangeFilter.month;
-  DateTime _period = DateTime(2024, 5);
+  /// Filter state — the window ([_range]) and the period it's anchored to
+  /// ([_period], defaulted to "now" in [initState]). Both feed
+  /// [AnalyticsData.fromLedger] so changing them re-derives the real series.
+  AnalyticsRange _range = AnalyticsRange.month;
+  late DateTime _period;
 
   String _rangeLabel(BuildContext context) => switch (_range) {
-        _RangeFilter.week => context.l10n.analyticsRangeWeek,
-        _RangeFilter.month => context.l10n.analyticsRangeMonth,
-        _RangeFilter.year => context.l10n.analyticsRangeYear,
+        AnalyticsRange.week => context.l10n.analyticsRangeWeek,
+        AnalyticsRange.month => context.l10n.analyticsRangeMonth,
+        AnalyticsRange.year => context.l10n.analyticsRangeYear,
       };
 
   String _periodLabel(BuildContext context) => DateFormat.yMMMM(
@@ -71,7 +73,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Future<void> _pickRange() async {
-    final picked = await showModalBottomSheet<_RangeFilter>(
+    final picked = await showModalBottomSheet<AnalyticsRange>(
       context: context,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
@@ -86,6 +88,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   @override
   void initState() {
     super.initState();
+    _period = ref.read(nowProvider);
     _intro = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1300),
@@ -132,6 +135,16 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       context.l10n.analyticsTabCategories,
       context.l10n.analyticsTabTrends,
     ];
+
+    final ledgerAsync = ref.watch(transactionsProvider);
+    final data = AnalyticsData.fromLedger(
+      ledger: ledgerAsync.valueOrNull ?? const [],
+      anchor: _period,
+      range: _range,
+      l10n: context.l10n,
+      localeTag: Localizations.localeOf(context).toString(),
+    );
+    final loading = ledgerAsync.isLoading && !ledgerAsync.hasValue;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -185,12 +198,31 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      // Rebuilds the active tab each animation tick so the
-                      // hand-painted charts receive the live reveal value.
-                      AnimatedBuilder(
-                        animation: _chart,
-                        builder: (context, _) => _buildTab(context),
-                      ),
+                      if (loading)
+                        const Padding(
+                          padding: EdgeInsets.only(top: AppSpacing.xxxl),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        )
+                      else if (data.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.xxl),
+                          child: EmptyState(
+                            icon: LucideIcons.chartColumnBig,
+                            title: context.l10n.analyticsEmptyTitle,
+                            message: context.l10n.analyticsEmptyBody,
+                          ),
+                        )
+                      else
+                        // Rebuilds the active tab each animation tick so the
+                        // hand-painted charts receive the live reveal value.
+                        AnimatedBuilder(
+                          animation: _chart,
+                          builder: (context, _) => _buildTab(context, data),
+                        ),
                     ],
                   ),
                 ),
@@ -202,26 +234,26 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     );
   }
 
-  Widget _buildTab(BuildContext context) {
+  Widget _buildTab(BuildContext context, AnalyticsData data) {
     switch (_tabIndex) {
       case 1:
         return _cascade([
-          CategoryBreakdownList(data: _data, progress: _chart.value),
+          CategoryBreakdownList(data: data, progress: _chart.value),
         ]);
       case 2:
         return _cascade([
           DailyTrendCard(
-            data: _data,
+            data: data,
             progress: _chart.value,
             title: context.l10n.analyticsMonthlyTrend,
           ),
-          TrendSummaryRow(data: _data),
+          TrendSummaryRow(data: data),
         ]);
       case 0:
       default:
         return _cascade([
-          ExpenseBreakdownCard(data: _data, progress: _chart.value),
-          DailyTrendCard(data: _data, progress: _chart.value),
+          ExpenseBreakdownCard(data: data, progress: _chart.value),
+          DailyTrendCard(data: data, progress: _chart.value),
         ]);
     }
   }
@@ -308,22 +340,19 @@ class _AppBar extends StatelessWidget {
   }
 }
 
-/// The relative window shown by the filter row's left dropdown.
-enum _RangeFilter { week, month, year }
-
 /// Bottom sheet listing the three range options with a check on the current.
 class _RangeSheet extends StatelessWidget {
   const _RangeSheet({required this.selected});
 
-  final _RangeFilter selected;
+  final AnalyticsRange selected;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final options = [
-      (_RangeFilter.week, l10n.analyticsRangeWeek),
-      (_RangeFilter.month, l10n.analyticsRangeMonth),
-      (_RangeFilter.year, l10n.analyticsRangeYear),
+      (AnalyticsRange.week, l10n.analyticsRangeWeek),
+      (AnalyticsRange.month, l10n.analyticsRangeMonth),
+      (AnalyticsRange.year, l10n.analyticsRangeYear),
     ];
     return SafeArea(
       child: Padding(

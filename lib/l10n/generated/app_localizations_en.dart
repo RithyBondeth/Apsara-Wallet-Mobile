@@ -436,6 +436,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyticsSelectRange => 'Time Range';
 
   @override
+  String get analyticsEmptyTitle => 'Nothing to analyze yet';
+
+  @override
+  String get analyticsEmptyBody =>
+      'Add some expenses in this period and your breakdown and trends will appear here.';
+
+  @override
   String get budgetTitle => 'Budget';
 
   @override

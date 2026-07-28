@@ -3,13 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/screens/analytics_screen.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/analytics_segmented_tabs.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
+import 'support/ledger_overrides.dart';
+
+// Anchor to the sample ledger's month so the derived analytics are stable.
+final _fixedNow = DateTime(2024, 5, 20, 9, 0);
+
 Widget _wrap(Widget child) {
   return ProviderScope(
+    overrides: [
+      nowProvider.overrideWithValue(_fixedNow),
+      ...sampleLedgerOverrides(),
+    ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

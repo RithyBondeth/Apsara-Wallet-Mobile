@@ -914,6 +914,18 @@ abstract class AppLocalizations {
   /// **'Time Range'**
   String get analyticsSelectRange;
 
+  /// No description provided for @analyticsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to analyze yet'**
+  String get analyticsEmptyTitle;
+
+  /// No description provided for @analyticsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add some expenses in this period and your breakdown and trends will appear here.'**
+  String get analyticsEmptyBody;
+
   /// No description provided for @budgetTitle.
   ///
   /// In en, this message translates to:
