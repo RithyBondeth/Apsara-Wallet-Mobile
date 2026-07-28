@@ -7,6 +7,8 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/auth/data/auth_repository.dart';
+import 'package:apsara_wallet_mobile/features/auth/presentation/auth_ui_helpers.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
@@ -23,6 +25,8 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _identifierController = TextEditingController();
+  String? _error;
+  bool _busy = false;
 
   @override
   void dispose() {
@@ -30,9 +34,42 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  void _sendCode() {
-    // UI-only (Phase 1): continue straight to the reset screen.
-    context.router.push(const ResetPasswordRoute());
+  Future<void> _sendCode() async {
+    final email = _identifierController.text.trim();
+    setState(() {
+      _error = email.isEmpty
+          ? context.l10n.authErrorEmailRequired
+          : (!isValidEmail(email) ? context.l10n.authErrorEmailInvalid : null);
+    });
+    if (_error != null) return;
+
+    context.hideKeyboard();
+    setState(() => _busy = true);
+    String? token;
+    try {
+      token =
+          await ref.read(authRepositoryProvider).requestPasswordReset(email);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _busy = false);
+      showAuthSnackBar(context, context.l10n.forgotPasswordFailed);
+      return;
+    }
+    if (!mounted) return;
+    setState(() => _busy = false);
+
+    if (token != null) {
+      // Dev builds hand back the reset token (no email service) — continue.
+      context.router.push(ResetPasswordRoute(token: token));
+    } else {
+      // No account (or production) — show the non-enumerating message.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(context.l10n.forgotPasswordSent),
+        ),
+      );
+    }
   }
 
   @override
@@ -49,11 +86,18 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           prefixIcon: LucideIcons.mail,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
+          errorText: _error,
+          onChanged: (_) {
+            if (_error != null) setState(() => _error = null);
+          },
           onSubmitted: (_) => _sendCode(),
         ),
         const SizedBox(height: AppSpacing.xxl),
         PrimaryButton(
-            label: context.l10n.forgotPasswordSendCta, onPressed: _sendCode),
+          label: context.l10n.forgotPasswordSendCta,
+          loading: _busy,
+          onPressed: _busy ? null : _sendCode,
+        ),
         const SizedBox(height: AppSpacing.xxl),
         Center(
           child: GestureDetector(

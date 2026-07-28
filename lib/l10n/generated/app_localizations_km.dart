@@ -243,6 +243,22 @@ class AppLocalizationsKm extends AppLocalizations {
   String get forgotPasswordBackToLogin => 'ត្រឡប់ទៅចូលគណនី';
 
   @override
+  String get forgotPasswordSent =>
+      'ប្រសិនបើគណនីនោះមាន អ្នកនឹងទទួលបានការណែនាំកំណត់ឡើងវិញ។';
+
+  @override
+  String get forgotPasswordFailed =>
+      'មិនអាចចាប់ផ្តើមកំណត់ឡើងវិញបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get resetPasswordSuccess =>
+      'បានធ្វើបច្ចុប្បន្នភាពពាក្យសម្ងាត់។ សូមចូលគណនី។';
+
+  @override
+  String get resetPasswordFailed =>
+      'តំណកំណត់ឡើងវិញនេះមិនត្រឹមត្រូវ ឬផុតកំណត់ហើយ។';
+
+  @override
   String get resetPasswordTitle => 'កំណត់ពាក្យសម្ងាត់ឡើងវិញ';
 
   @override
@@ -479,6 +495,10 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get categoriesSaved => 'បានរក្សាទុកប្រភេទ';
+
+  @override
+  String get categoriesSaveFailed =>
+      'មិនអាចរក្សាទុកប្រភេទបានទេ។ សូមព្យាយាមម្តងទៀត។';
 
   @override
   String get categoriesDelete => 'លុបប្រភេទ';
@@ -1093,6 +1113,10 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get editProfileSaved => 'បានធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូប';
+
+  @override
+  String get editProfileSaveFailed =>
+      'មិនអាចធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូបបានទេ។ សូមព្យាយាមម្តងទៀត។';
 
   @override
   String get editProfileNameRequired => 'សូមបញ្ចូលឈ្មោះរបស់អ្នក';

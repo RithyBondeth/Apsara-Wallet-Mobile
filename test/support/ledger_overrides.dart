@@ -89,6 +89,8 @@ class _FixedAuthController extends StateNotifier<AuthState>
   }) async =>
       true;
   @override
+  Future<bool> updateProfile({String? fullName, String? phone}) async => true;
+  @override
   Future<void> logout() async {}
   @override
   void onSessionExpired([String? message]) {}

@@ -242,6 +242,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPasswordBackToLogin => 'Back to Login';
 
   @override
+  String get forgotPasswordSent =>
+      'If that account exists, you\'ll receive reset instructions.';
+
+  @override
+  String get forgotPasswordFailed =>
+      'Couldn\'t start the reset. Please try again.';
+
+  @override
+  String get resetPasswordSuccess => 'Password updated. Please sign in.';
+
+  @override
+  String get resetPasswordFailed =>
+      'This reset link is invalid or has expired.';
+
+  @override
   String get resetPasswordTitle => 'Reset Password';
 
   @override
@@ -476,6 +491,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoriesSaved => 'Category saved';
+
+  @override
+  String get categoriesSaveFailed =>
+      'Couldn\'t save the category. Please try again.';
 
   @override
   String get categoriesDelete => 'Delete category';
@@ -1093,6 +1112,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editProfileSaved => 'Profile updated';
+
+  @override
+  String get editProfileSaveFailed =>
+      'Couldn\'t update your profile. Please try again.';
 
   @override
   String get editProfileNameRequired => 'Please enter your name';

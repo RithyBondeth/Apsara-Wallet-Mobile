@@ -43,12 +43,12 @@ class ApiTransaction {
   /// gracefully so an unknown id never crashes the ledger.
   TransactionRecord toRecord({
     required String walletName,
-    required String? categorySlug,
+    required TxCategory category,
   }) {
     return TransactionRecord(
       id: id,
       title: title,
-      category: categoryById(categorySlug ?? ''),
+      category: category,
       walletName: walletName,
       date: DateTime.parse(date).toLocal(),
       amountKhr: amountKhr,

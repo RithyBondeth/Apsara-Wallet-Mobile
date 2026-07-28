@@ -536,6 +536,30 @@ abstract class AppLocalizations {
   /// **'Back to Login'**
   String get forgotPasswordBackToLogin;
 
+  /// No description provided for @forgotPasswordSent.
+  ///
+  /// In en, this message translates to:
+  /// **'If that account exists, you\'ll receive reset instructions.'**
+  String get forgotPasswordSent;
+
+  /// No description provided for @forgotPasswordFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start the reset. Please try again.'**
+  String get forgotPasswordFailed;
+
+  /// No description provided for @resetPasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated. Please sign in.'**
+  String get resetPasswordSuccess;
+
+  /// No description provided for @resetPasswordFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This reset link is invalid or has expired.'**
+  String get resetPasswordFailed;
+
   /// No description provided for @resetPasswordTitle.
   ///
   /// In en, this message translates to:
@@ -1003,6 +1027,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category saved'**
   String get categoriesSaved;
+
+  /// No description provided for @categoriesSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the category. Please try again.'**
+  String get categoriesSaveFailed;
 
   /// No description provided for @categoriesDelete.
   ///
@@ -2119,6 +2149,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile updated'**
   String get editProfileSaved;
+
+  /// No description provided for @editProfileSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update your profile. Please try again.'**
+  String get editProfileSaveFailed;
 
   /// No description provided for @editProfileNameRequired.
   ///

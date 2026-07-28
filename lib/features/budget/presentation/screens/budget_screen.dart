@@ -14,6 +14,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
+import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
     show formatKhr;
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
@@ -63,7 +64,14 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen>
         borderRadius:
             BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
       ),
-      builder: (context) => _AddBudgetSheet(initial: initial),
+      builder: (context) => _AddBudgetSheet(
+        initial: initial,
+        categories: [
+          ...expenseCategories,
+          ...(ref.read(userCategoriesProvider).valueOrNull?.expense ??
+              const []),
+        ],
+      ),
     );
     if (result == null || !mounted) return;
     final l10n = context.l10n;
@@ -560,9 +568,12 @@ class _BudgetSheetResult {
 /// (category locked, limit prefilled, delete available); pops a
 /// [_BudgetSheetResult].
 class _AddBudgetSheet extends StatefulWidget {
-  const _AddBudgetSheet({this.initial});
+  const _AddBudgetSheet({this.initial, required this.categories});
 
   final CategoryBudget? initial;
+
+  /// Expense categories to choose from (system + the user's own).
+  final List<TxCategory> categories;
 
   @override
   State<_AddBudgetSheet> createState() => _AddBudgetSheetState();
@@ -570,8 +581,10 @@ class _AddBudgetSheet extends StatefulWidget {
 
 class _AddBudgetSheetState extends State<_AddBudgetSheet> {
   final TextEditingController _amount = TextEditingController();
-  late TxCategory _category =
-      widget.initial?.category ?? expenseCategories.first;
+  late TxCategory _category = widget.initial?.category ??
+      (widget.categories.isNotEmpty
+          ? widget.categories.first
+          : expenseCategories.first);
 
   bool get _isEditing => widget.initial != null;
 
@@ -596,7 +609,7 @@ class _AddBudgetSheetState extends State<_AddBudgetSheet> {
   Future<void> _pickCategory() async {
     final picked = await showCategoryPicker(
       context,
-      categories: expenseCategories,
+      categories: widget.categories,
       selected: _category,
     );
     if (picked == null || !mounted) return;

@@ -114,6 +114,17 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  /// Updates the signed-in user's name/phone and reflects it in state.
+  Future<bool> updateProfile({String? fullName, String? phone}) async {
+    try {
+      final user = await _repo.updateProfile(fullName: fullName, phone: phone);
+      state = state.copyWith(user: user);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<void> logout() async {
     try {
       await _repo.logout();

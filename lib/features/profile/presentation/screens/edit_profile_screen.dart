@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -10,8 +11,8 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/profile_avatars.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/profile_mock_data.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
@@ -24,34 +25,40 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 /// hero live. "Save" validates and pops with a confirmation — nothing is
 /// persisted yet.
 @RoutePage()
-class EditProfileScreen extends StatefulWidget {
+class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen>
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1200),
   )..forward();
 
-  static const ProfileData _data = ProfileData.sample;
-
-  late final TextEditingController _name =
-      TextEditingController(text: _data.fullName);
-  late final TextEditingController _email =
-      TextEditingController(text: _data.email);
-  late final TextEditingController _phone =
-      TextEditingController(text: _data.phone);
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
 
   ProfileAvatar _avatar = presetAvatars.first;
 
   String? _nameError;
   String? _emailError;
   String? _phoneError;
+  bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Prefill from the signed-in user (email is shown but not editable here).
+    final user = ref.read(authControllerProvider).user;
+    _name.text = user?.fullName ?? '';
+    _email.text = user?.email ?? '';
+    _phone.text = user?.phone ?? '';
+  }
 
   @override
   void dispose() {
@@ -65,22 +72,44 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   bool _validate() {
     final l10n = context.l10n;
     final email = _email.text.trim();
-    final phoneDigits = _phone.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final phone = _phone.text.trim();
+    final phoneDigits = phone.replaceAll(RegExp(r'[^0-9]'), '');
     setState(() {
       _nameError =
           _name.text.trim().isEmpty ? l10n.editProfileNameRequired : null;
       _emailError = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)
           ? null
           : l10n.editProfileEmailInvalid;
-      _phoneError =
-          phoneDigits.length < 8 ? l10n.editProfilePhoneInvalid : null;
+      // Phone is optional; validate only when provided.
+      _phoneError = (phone.isNotEmpty && phoneDigits.length < 8)
+          ? l10n.editProfilePhoneInvalid
+          : null;
     });
     return _nameError == null && _emailError == null && _phoneError == null;
   }
 
-  void _save() {
+  Future<void> _save() async {
     FocusScope.of(context).unfocus();
-    if (!_validate()) return;
+    if (!_validate() || _saving) return;
+    setState(() => _saving = true);
+    final phone = _phone.text.trim();
+    final ok = await ref.read(authControllerProvider.notifier).updateProfile(
+          fullName: _name.text.trim(),
+          phone: phone.isEmpty ? '' : phone,
+        );
+    if (!mounted) return;
+    setState(() => _saving = false);
+
+    if (!ok) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.error,
+          content: Text(context.l10n.editProfileSaveFailed),
+        ),
+      );
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -218,7 +247,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       child: PrimaryButton(
                         label: l10n.editProfileSave,
                         trailingIcon: LucideIcons.check,
-                        onPressed: _save,
+                        loading: _saving,
+                        onPressed: _saving ? null : _save,
                       ),
                     ),
                   ],

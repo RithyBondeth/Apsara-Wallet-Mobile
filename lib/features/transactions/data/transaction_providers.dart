@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
@@ -18,20 +19,31 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
   @override
   Future<List<TransactionRecord>> build() async {
     final index = await ref.watch(categoryIndexProvider.future);
+    final userCats = await ref.watch(userCategoriesProvider.future);
     final wallets = await ref.watch(walletsProvider.future);
     final nameById = {
       for (final w in wallets)
         if (w.id != null) w.id!: w.name,
     };
 
+    // Resolve a category slug → TxCategory: static system catalog + the user's
+    // own categories. Falls back to the static resolver for anything unknown.
+    final bySlug = <String, TxCategory>{
+      for (final c in [...expenseCategories, ...incomeCategories]) c.id: c,
+      for (final c in [...userCats.expense, ...userCats.income]) c.id: c,
+    };
+
     final apiTxns = await _api.list();
     final records = apiTxns
-        .map(
-          (t) => t.toRecord(
+        .map((t) {
+          final slug = index.slugForUuid(t.categoryId);
+          final category = (slug != null ? bySlug[slug] : null) ??
+              categoryById(slug ?? '');
+          return t.toRecord(
             walletName: nameById[t.walletId] ?? '',
-            categorySlug: index.slugForUuid(t.categoryId),
-          ),
-        )
+            category: category,
+          );
+        })
         .toList()
       // Newest first — every surface (dashboard, history, wallet detail)
       // expects this ordering.

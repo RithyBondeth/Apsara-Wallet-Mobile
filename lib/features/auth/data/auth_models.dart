@@ -18,28 +18,37 @@ class AuthTokens {
 /// `email` are decoded from the access token's payload; `fullName` is only
 /// known at register time (or from a previously cached session).
 class AuthUser {
-  const AuthUser({required this.id, required this.email, this.fullName});
+  const AuthUser({
+    required this.id,
+    required this.email,
+    this.fullName,
+    this.phone,
+  });
 
   final String id;
   final String email;
   final String? fullName;
+  final String? phone;
 
-  AuthUser copyWith({String? fullName}) => AuthUser(
+  AuthUser copyWith({String? fullName, String? phone}) => AuthUser(
         id: id,
         email: email,
         fullName: fullName ?? this.fullName,
+        phone: phone ?? this.phone,
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'email': email,
         if (fullName != null) 'fullName': fullName,
+        if (phone != null) 'phone': phone,
       };
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
         id: json['id'] as String,
         email: json['email'] as String,
         fullName: json['fullName'] as String?,
+        phone: json['phone'] as String?,
       );
 
   /// Rebuilds a user from an access-token payload (`{ sub, email, ... }`).

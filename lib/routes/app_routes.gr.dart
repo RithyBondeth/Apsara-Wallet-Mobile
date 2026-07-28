@@ -459,18 +459,49 @@ class RegisterRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ResetPasswordScreen]
-class ResetPasswordRoute extends PageRouteInfo<void> {
-  const ResetPasswordRoute({List<PageRouteInfo>? children})
-    : super(ResetPasswordRoute.name, initialChildren: children);
+class ResetPasswordRoute extends PageRouteInfo<ResetPasswordRouteArgs> {
+  ResetPasswordRoute({
+    Key? key,
+    required String token,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ResetPasswordRoute.name,
+         args: ResetPasswordRouteArgs(key: key, token: token),
+         initialChildren: children,
+       );
 
   static const String name = 'ResetPasswordRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ResetPasswordScreen();
+      final args = data.argsAs<ResetPasswordRouteArgs>();
+      return ResetPasswordScreen(key: args.key, token: args.token);
     },
   );
+}
+
+class ResetPasswordRouteArgs {
+  const ResetPasswordRouteArgs({this.key, required this.token});
+
+  final Key? key;
+
+  final String token;
+
+  @override
+  String toString() {
+    return 'ResetPasswordRouteArgs{key: $key, token: $token}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ResetPasswordRouteArgs) return false;
+    return key == other.key && token == other.token;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ token.hashCode;
 }
 
 /// generated route for

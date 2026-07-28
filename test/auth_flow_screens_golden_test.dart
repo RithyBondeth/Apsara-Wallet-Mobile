@@ -33,7 +33,7 @@ void main() {
     'register': const RegisterScreen(),
     'forgot_password': const ForgotPasswordScreen(),
     'otp': const OtpScreen(),
-    'reset_password': const ResetPasswordScreen(),
+    'reset_password': const ResetPasswordScreen(token: 'test-token'),
     'pin_setup': const PinSetupScreen(),
     'pin_login': const PinLoginScreen(),
     'biometric': const BiometricScreen(),

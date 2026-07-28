@@ -8,11 +8,24 @@ import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
+import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
+import 'support/ledger_overrides.dart';
+
 Widget _wrap(Widget child) {
   return ProviderScope(
+    // Edit Profile prefills from the signed-in user; pin it to the sample
+    // identity the golden was captured with.
+    overrides: sampleLedgerOverrides(
+      user: const AuthUser(
+        id: 'sample',
+        email: 'sokunthea.chan@gmail.com',
+        fullName: 'Sokunthea Chan',
+        phone: '+855 12 345 678',
+      ),
+    ),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

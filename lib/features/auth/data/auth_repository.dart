@@ -75,9 +75,55 @@ class AuthRepository {
       id: id,
       email: email,
       fullName: data['fullName'] as String?,
+      phone: data['phone'] as String?,
     );
     await _storage.saveUser(jsonEncode(user.toJson()));
     return user;
+  }
+
+  /// Updates the user's name/phone via `PATCH /auth/me` and caches the result.
+  Future<AuthUser> updateProfile({String? fullName, String? phone}) async {
+    final res = await _api.patch<Map<String, dynamic>>('/auth/me', data: {
+      'fullName': ?fullName,
+      'phone': ?phone,
+    });
+    if (!res.success || res.data == null) {
+      throw AuthException(res.message);
+    }
+    final data = res.data!;
+    final user = AuthUser(
+      id: data['id'] as String,
+      email: data['email'] as String,
+      fullName: data['fullName'] as String?,
+      phone: data['phone'] as String?,
+    );
+    await _storage.saveUser(jsonEncode(user.toJson()));
+    return user;
+  }
+
+  /// Requests a password reset. Returns the reset token when the backend
+  /// provides one (dev builds return it directly since there's no email
+  /// service); null otherwise (unknown account, or production).
+  Future<String?> requestPasswordReset(String email) async {
+    final res = await _api.post<Map<String, dynamic>>(
+      '/auth/forgot-password',
+      data: {'email': email},
+    );
+    if (!res.success) throw AuthException(res.message);
+    return res.data?['resetToken'] as String?;
+  }
+
+  /// Sets a new password using a reset token. Returns false on an invalid or
+  /// expired token.
+  Future<bool> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    final res = await _api.post<Map<String, dynamic>>(
+      '/auth/reset-password',
+      data: {'token': token, 'newPassword': newPassword},
+    );
+    return res.success;
   }
 
   /// Best-effort server-side revocation, then always clears local state so the

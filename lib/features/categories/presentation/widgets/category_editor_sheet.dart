@@ -4,9 +4,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
-import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/categories/data/category_choices.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
@@ -22,57 +22,32 @@ class EditableCategory {
     this.customName,
     required this.icon,
     required this.color,
+    this.id,
+    this.isSystem = false,
   });
 
   EditableCategory.fromBase(TxCategory this.base)
       : customName = null,
         icon = base.icon,
-        color = base.color;
+        color = base.color,
+        id = null,
+        isSystem = true;
 
   final TxCategory? base;
   final String? customName;
   final IconData icon;
   final Color color;
 
+  /// Backend UUID for a user category (null for system categories and for a
+  /// brand-new category being created).
+  final String? id;
+
+  /// System categories are shared + read-only (can't be edited/deleted).
+  final bool isSystem;
+
   String labelOf(AppLocalizations l10n) =>
       customName ?? base?.labelOf(l10n) ?? '';
 }
-
-/// Icon choices offered by the editor.
-const List<IconData> categoryIconChoices = [
-  LucideIcons.utensils,
-  LucideIcons.car,
-  LucideIcons.shoppingBag,
-  LucideIcons.receipt,
-  LucideIcons.heartPulse,
-  LucideIcons.graduationCap,
-  LucideIcons.clapperboard,
-  LucideIcons.plane,
-  LucideIcons.sparkles,
-  LucideIcons.gift,
-  LucideIcons.house,
-  LucideIcons.banknote,
-  LucideIcons.briefcaseBusiness,
-  LucideIcons.trendingUp,
-  LucideIcons.gamepad2,
-  LucideIcons.ellipsis,
-];
-
-/// Color choices offered by the editor.
-const List<Color> categoryColorChoices = [
-  AppColors.expense,
-  AppColors.info,
-  AppGradients.goldCore,
-  AppColors.warning,
-  Color(0xFFE0507A),
-  Color(0xFF7C5CD6),
-  Color(0xFF0EA5B7),
-  AppColors.primary,
-  Color(0xFFB0679B),
-  Color(0xFFCD6A2E),
-  AppColors.income,
-  AppColors.textMuted,
-];
 
 /// Result of the editor: a category to save/add, or a request to delete it.
 class CategoryEditorResult {
@@ -143,6 +118,8 @@ class _CategoryEditorSheetState extends State<_CategoryEditorSheet> {
           customName: _name.text.trim(),
           icon: _icon,
           color: _color,
+          id: widget.category?.id,
+          isSystem: widget.category?.isSystem ?? false,
         ),
       ),
     );

@@ -33,7 +33,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   /// One-shot entrance cascade.
   late final AnimationController _intro;
 
-  final ProfileData _data = ProfileData.sample;
+  /// Profile header/stats: identity (name/email/phone) comes from the
+  /// signed-in user; the membership + counts are still sample data.
+  ProfileData get _data {
+    const sample = ProfileData.sample;
+    final user = ref.watch(authControllerProvider).user;
+    final name = (user?.fullName?.trim().isNotEmpty ?? false)
+        ? user!.fullName!.trim()
+        : (user?.email.split('@').first ?? sample.fullName);
+    return ProfileData(
+      fullName: name,
+      email: user?.email ?? sample.email,
+      phone: (user?.phone?.isNotEmpty ?? false) ? user!.phone! : sample.phone,
+      membership: sample.membership,
+      memberSince: sample.memberSince,
+      walletCount: sample.walletCount,
+      transactionCount: sample.transactionCount,
+      budgetCount: sample.budgetCount,
+    );
+  }
 
   @override
   void initState() {

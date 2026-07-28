@@ -1,14 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/core/utils/uuid_generator.dart';
+import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
+import 'package:apsara_wallet_mobile/features/categories/data/category_choices.dart';
 import 'package:apsara_wallet_mobile/features/categories/presentation/widgets/category_editor_sheet.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
@@ -20,14 +25,14 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 /// an editor sheet (name, icon, color); "+" adds a new one. Edits live in
 /// this screen's state only — no persistence yet.
 @RoutePage()
-class CategoriesScreen extends StatefulWidget {
+class CategoriesScreen extends ConsumerStatefulWidget {
   const CategoriesScreen({super.key});
 
   @override
-  State<CategoriesScreen> createState() => _CategoriesScreenState();
+  ConsumerState<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
-class _CategoriesScreenState extends State<CategoriesScreen>
+class _CategoriesScreenState extends ConsumerState<CategoriesScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
@@ -38,15 +43,25 @@ class _CategoriesScreenState extends State<CategoriesScreen>
 
   bool _showIncome = false;
 
-  /// Session-local editable copies of the shared catalogs.
-  late final List<EditableCategory> _expense = [
-    for (final c in expenseCategories) EditableCategory.fromBase(c),
-  ];
-  late final List<EditableCategory> _income = [
-    for (final c in incomeCategories) EditableCategory.fromBase(c),
-  ];
-
-  List<EditableCategory> get _current => _showIncome ? _income : _expense;
+  /// The current tab's categories: the static system catalog (read-only) plus
+  /// the user's own categories (from the API), which are editable/deletable.
+  List<EditableCategory> get _current {
+    final system = [
+      for (final c in (_showIncome ? incomeCategories : expenseCategories))
+        EditableCategory.fromBase(c),
+    ];
+    final api = ref.watch(categoriesListProvider).valueOrNull ?? const [];
+    final user = [
+      for (final c in api.where((c) => !c.isSystem && c.isExpense != _showIncome))
+        EditableCategory(
+          customName: c.name,
+          icon: iconFromToken(c.icon),
+          color: parseHexColor(c.color) ?? categoryColorChoices.first,
+          id: c.id,
+        ),
+    ];
+    return [...system, ...user];
+  }
 
   @override
   void dispose() {
@@ -64,32 +79,60 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     ];
   }
 
+  /// A unique-enough backend slug for a new user category.
+  String _slugFor(String name) {
+    final base = name
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
+        .replaceAll(RegExp(r'(^-+|-+$)'), '');
+    final suffix = UuidGenerator.generate().replaceAll('-', '').substring(0, 6);
+    final slug = '${base.isEmpty ? 'cat' : base}-$suffix';
+    return slug.length > 40 ? slug.substring(0, 40) : slug;
+  }
+
   Future<void> _edit(EditableCategory? category) async {
+    // System categories are shared + read-only.
+    if (category != null && category.isSystem) return;
+
     final result = await showCategoryEditorSheet(context, category: category);
     if (result == null || !mounted) return;
-    final list = _current;
+    final l10n = context.l10n;
+    final api = ref.read(categoryApiProvider);
+    final type =
+        _showIncome ? ETransactionType.income : ETransactionType.expense;
 
-    if (result.delete && category != null) {
-      final index = list.indexOf(category);
-      if (index < 0) return;
-      setState(() => list.removeAt(index));
-      _snack(context.l10n.categoriesDeleted, undo: () {
-        setState(() => list.insert(index, category));
-      });
-      return;
-    }
-
-    final edited = result.category;
-    if (edited == null) return;
-    setState(() {
-      if (category == null) {
-        list.add(edited);
-      } else {
-        final i = list.indexOf(category);
-        if (i >= 0) list[i] = edited;
+    try {
+      if (result.delete && category?.id != null) {
+        await api.delete(category!.id!);
+        ref.invalidate(categoriesListProvider);
+        if (mounted) _snack(l10n.categoriesDeleted);
+        return;
       }
-    });
-    _snack(context.l10n.categoriesSaved);
+      final edited = result.category;
+      if (edited == null) return;
+      final name = (edited.customName ?? '').trim();
+      if (name.isEmpty) return;
+
+      final ok = edited.id != null
+          ? await api.update(
+              id: edited.id!,
+              name: name,
+              icon: iconToken(edited.icon),
+              color: categoryColorHex(edited.color),
+            )
+          : await api.create(
+              slug: _slugFor(name),
+              name: name,
+              type: type,
+              icon: iconToken(edited.icon),
+              color: categoryColorHex(edited.color),
+            );
+      if (!ok) throw StateError('category-save-failed');
+      ref.invalidate(categoriesListProvider);
+      if (mounted) _snack(l10n.categoriesSaved);
+    } catch (_) {
+      if (mounted) _snack(l10n.categoriesSaveFailed);
+    }
   }
 
   void _snack(String message, {VoidCallback? undo}) {

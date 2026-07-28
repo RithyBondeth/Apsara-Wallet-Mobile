@@ -14,6 +14,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/core/utils/currency_converter.dart';
 import 'package:apsara_wallet_mobile/core/utils/uuid_generator.dart';
+import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
@@ -143,11 +144,16 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
       : _expenseCategory ?? expenseCategories.first;
 
   Future<void> _pickCategory() async {
+    final userCats = ref.read(userCategoriesProvider).valueOrNull;
+    final isIncome = _type == ETransactionType.income;
     final picked = await showCategoryPicker(
       context,
-      categories: _type == ETransactionType.income
-          ? incomeCategories
-          : expenseCategories,
+      categories: [
+        ...(isIncome ? incomeCategories : expenseCategories),
+        ...(isIncome
+            ? (userCats?.income ?? const [])
+            : (userCats?.expense ?? const [])),
+      ],
       selected: _category,
     );
     if (picked == null || !mounted) return;
