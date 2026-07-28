@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
@@ -82,20 +84,45 @@ class _FixedAuthController extends StateNotifier<AuthState>
   void clearError() {}
 }
 
+/// Serves fixed [BudgetData] to the Budget screen without hitting the network.
+class _FakeBudgetNotifier extends BudgetNotifier {
+  _FakeBudgetNotifier(this._data);
+  final BudgetData _data;
+  @override
+  Future<BudgetData> build() async => _data;
+}
+
+/// Override the Budget screen's provider with sample (or given) budget data.
+List<Override> sampleBudgetOverride([BudgetData? data]) {
+  final d = data ?? BudgetData.sample();
+  return [budgetDataProvider.overrideWith(() => _FakeBudgetNotifier(d))];
+}
+
 /// Provider overrides that seed the ledger + wallets with sample data and a
 /// stable signed-in user.
 List<Override> sampleLedgerOverrides({
   List<TransactionRecord>? transactions,
   List<Wallet>? wallets,
   AuthUser? user,
+  BudgetData? budget,
 }) {
   final txs = transactions ?? sampleTransactions();
   final ws = wallets ?? WalletsData.sample.wallets;
   final u = user ??
       const AuthUser(id: 'sample-user', email: 'sokunthea@example.com', fullName: 'Sokunthea');
+  // Default to an empty budget so the dashboard keeps its income fallback
+  // (goldens unchanged) and nothing hits the network.
+  final b = budget ??
+      BudgetData(
+        monthLabel: '',
+        totalBudgetKhr: 0,
+        spentKhr: 0,
+        categories: const [],
+      );
   return [
     transactionsProvider.overrideWith(() => _FakeTransactionsNotifier(txs)),
     walletsProvider.overrideWith(() => _FakeWalletsNotifier(ws)),
     authControllerProvider.overrideWith((ref) => _FixedAuthController(u)),
+    budgetDataProvider.overrideWith(() => _FakeBudgetNotifier(b)),
   ];
 }

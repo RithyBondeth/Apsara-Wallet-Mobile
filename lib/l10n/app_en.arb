@@ -58,6 +58,8 @@
   "emptyWalletsCta": "Create wallet",
   "emptyTransactionsTitle": "No transactions yet",
   "emptyTransactionsBody": "Tap the + button to add your first one.",
+  "budgetEmptyTitle": "No budgets yet",
+  "budgetEmptyBody": "Set a monthly limit for a category to track your spending.",
 
   "lockTitle": "Enter your PIN",
   "lockSubtitle": "Unlock to continue",

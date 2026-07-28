@@ -172,6 +172,13 @@ class AppLocalizationsKm extends AppLocalizations {
       'ចុចប៊ូតុង + ដើម្បីបន្ថែមប្រតិបត្តិការដំបូង។';
 
   @override
+  String get budgetEmptyTitle => 'មិនទាន់មានថវិកា';
+
+  @override
+  String get budgetEmptyBody =>
+      'កំណត់ដែនកំណត់ប្រចាំខែសម្រាប់ប្រភេទមួយ ដើម្បីតាមដានការចំណាយរបស់អ្នក។';
+
+  @override
   String get lockTitle => 'បញ្ចូលកូដ PIN របស់អ្នក';
 
   @override

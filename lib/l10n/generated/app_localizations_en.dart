@@ -170,6 +170,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emptyTransactionsBody => 'Tap the + button to add your first one.';
 
   @override
+  String get budgetEmptyTitle => 'No budgets yet';
+
+  @override
+  String get budgetEmptyBody =>
+      'Set a monthly limit for a category to track your spending.';
+
+  @override
   String get lockTitle => 'Enter your PIN';
 
   @override

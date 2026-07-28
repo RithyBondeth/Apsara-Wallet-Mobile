@@ -404,6 +404,18 @@ abstract class AppLocalizations {
   /// **'Tap the + button to add your first one.'**
   String get emptyTransactionsBody;
 
+  /// No description provided for @budgetEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No budgets yet'**
+  String get budgetEmptyTitle;
+
+  /// No description provided for @budgetEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a monthly limit for a category to track your spending.'**
+  String get budgetEmptyBody;
+
   /// No description provided for @lockTitle.
   ///
   /// In en, this message translates to:

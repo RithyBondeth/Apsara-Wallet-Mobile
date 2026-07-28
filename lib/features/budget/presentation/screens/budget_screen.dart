@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -12,6 +13,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
     show formatKhr;
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
@@ -20,6 +22,7 @@ import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/add_tx_pickers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/picker_row.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/count_up_text.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
@@ -28,14 +31,14 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 /// per-category budgets, per the design board's Budget mockup. "+ Add Budget"
 /// opens a sheet that appends a category budget to the local list only.
 @RoutePage()
-class BudgetScreen extends StatefulWidget {
+class BudgetScreen extends ConsumerStatefulWidget {
   const BudgetScreen({super.key});
 
   @override
-  State<BudgetScreen> createState() => _BudgetScreenState();
+  ConsumerState<BudgetScreen> createState() => _BudgetScreenState();
 }
 
-class _BudgetScreenState extends State<BudgetScreen>
+class _BudgetScreenState extends ConsumerState<BudgetScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
@@ -48,10 +51,9 @@ class _BudgetScreenState extends State<BudgetScreen>
     curve: const Interval(0.25, 0.85, curve: AppCurves.decelerate),
   );
 
-  final BudgetData _data = BudgetData.sample();
-
   /// Opens the add/edit sheet. With [initial] it edits (and can delete) that
-  /// category's budget; without it, it adds a new one.
+  /// category's budget; without it, it adds a new one. Saves flow through the
+  /// API-backed [budgetDataProvider].
   Future<void> _openSheet([CategoryBudget? initial]) async {
     final result = await showModalBottomSheet<_BudgetSheetResult>(
       context: context,
@@ -65,27 +67,20 @@ class _BudgetScreenState extends State<BudgetScreen>
     );
     if (result == null || !mounted) return;
     final l10n = context.l10n;
+    final notifier = ref.read(budgetDataProvider.notifier);
 
-    if (result.delete && initial != null) {
-      final index = _data.categories
-          .indexWhere((c) => c.category.id == initial.category.id);
-      if (index < 0) return;
-      final removed = _data.categories[index];
-      setState(() => _data.categories.removeAt(index));
-      _snack(l10n.budgetDeleted, undo: () {
-        setState(() => _data.categories.insert(index, removed));
-      });
-    } else if (result.budget != null) {
-      final budget = result.budget!;
-      final index = _data.categories
-          .indexWhere((c) => c.category.id == budget.category.id);
-      if (index >= 0) {
-        setState(() => _data.categories[index] = budget);
-        _snack(l10n.budgetUpdated);
-      } else {
-        setState(() => _data.categories.add(budget));
-        _snack(l10n.budgetAdded);
+    try {
+      if (result.delete && initial != null) {
+        await notifier.removeBudget(initial.category);
+        if (mounted) _snack(l10n.budgetDeleted);
+      } else if (result.budget != null) {
+        final budget = result.budget!;
+        final wasSet = initial != null;
+        await notifier.setBudget(budget.category, budget.limitKhr);
+        if (mounted) _snack(wasSet ? l10n.budgetUpdated : l10n.budgetAdded);
       }
+    } catch (_) {
+      if (mounted) _snack(l10n.addTxSaveFailed);
     }
   }
 
@@ -123,7 +118,7 @@ class _BudgetScreenState extends State<BudgetScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    final async = ref.watch(budgetDataProvider);
     final bottomSafe = MediaQuery.of(context).padding.bottom;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -142,57 +137,83 @@ class _BudgetScreenState extends State<BudgetScreen>
                 child: _AppBar(onAddBudget: () => _openSheet()),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(
-                    AppSpacing.xxl,
-                    AppSpacing.sm,
-                    AppSpacing.xxl,
-                    bottomSafe + AppSpacing.xxxl,
+                child: async.when(
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (_, _) => Center(
+                    child: Text(
+                      context.l10n.addTxSaveFailed,
+                      style: AppFont.bodyMedium
+                          .copyWith(color: AppColors.textSecondary),
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.08,
-                        end: 0.5,
-                        child: _MonthCard(data: _data, fill: _fill),
-                      ),
-                      const SizedBox(height: AppSpacing.xxl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.2,
-                        end: 0.6,
-                        child: Text(
-                          l10n.budgetByCategory,
-                          style: AppFont.titleMedium.copyWith(
-                            color: AppColors.textPrimary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      for (final (i, cb) in _data.categories.indexed) ...[
-                        FadeSlideIn(
-                          controller: _intro,
-                          start: (0.26 + 0.08 * i).clamp(0.0, 0.6),
-                          end: (0.66 + 0.08 * i).clamp(0.0, 1.0),
-                          child: _CategoryBudgetRow(
-                            budget: cb,
-                            fill: _fill,
-                            onTap: () => _openSheet(cb),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                      ],
-                    ],
-                  ),
+                  data: (data) => _body(context, data, bottomSafe),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _body(BuildContext context, BudgetData data, double bottomSafe) {
+    final l10n = context.l10n;
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.xxl,
+        AppSpacing.sm,
+        AppSpacing.xxl,
+        bottomSafe + AppSpacing.xxxl,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FadeSlideIn(
+            controller: _intro,
+            start: 0.08,
+            end: 0.5,
+            child: _MonthCard(data: data, fill: _fill),
+          ),
+          const SizedBox(height: AppSpacing.xxl),
+          FadeSlideIn(
+            controller: _intro,
+            start: 0.2,
+            end: 0.6,
+            child: Text(
+              l10n.budgetByCategory,
+              style: AppFont.titleMedium.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          if (data.categories.isEmpty)
+            EmptyState(
+              compact: true,
+              icon: LucideIcons.target,
+              title: l10n.budgetEmptyTitle,
+              message: l10n.budgetEmptyBody,
+              ctaLabel: l10n.budgetAdd,
+              onCta: () => _openSheet(),
+            )
+          else
+            for (final (i, cb) in data.categories.indexed) ...[
+              FadeSlideIn(
+                controller: _intro,
+                start: (0.26 + 0.08 * i).clamp(0.0, 0.6),
+                end: (0.66 + 0.08 * i).clamp(0.0, 1.0),
+                child: _CategoryBudgetRow(
+                  budget: cb,
+                  fill: _fill,
+                  onTap: () => _openSheet(cb),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+        ],
       ),
     );
   }

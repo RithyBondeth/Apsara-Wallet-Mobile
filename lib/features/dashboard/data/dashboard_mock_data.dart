@@ -81,10 +81,10 @@ class DashboardData {
   /// The "current month" is anchored to the most recent transaction (mirroring
   /// the Insights engine) rather than the wall clock, so both the seeded sample
   /// and live data read meaningfully and stay deterministic under test. The
-  /// budget bar shows this month's spend against this month's **income** (the
-  /// natural "don't spend more than you earn" target) — there is no separate
-  /// budget backend yet. Day labels in the recent list are relativized against
-  /// [now].
+  /// budget bar shows this month's spend against the user's set monthly budget
+  /// ([budgetKhr]); when no budget is set it falls back to this month's
+  /// **income** (a "don't spend more than you earn" target). Day labels in the
+  /// recent list are relativized against [now].
   factory DashboardData.fromLedger({
     required List<TransactionRecord> ledger,
     required int balanceKhr,
@@ -92,6 +92,7 @@ class DashboardData {
     required AppLocalizations l10n,
     required String localeTag,
     required DateTime now,
+    int budgetKhr = 0,
     String userName = 'Sokunthea',
     int recentCount = 4,
   }) {
@@ -103,7 +104,7 @@ class DashboardData {
         monthLabel: DateFormat.yMMMM(localeTag).format(now),
         monthIncomeKhr: 0,
         monthExpenseKhr: 0,
-        budgetKhr: 0,
+        budgetKhr: budgetKhr,
         budgetUsedFraction: 0,
         transactions: const [],
       );
@@ -123,12 +124,12 @@ class DashboardData {
         .where((t) => !t.isIncome)
         .fold<int>(0, (s, t) => s + t.amountKhr);
 
-    // Budget target = this month's income. Fraction is spend ÷ income;
-    // spending with no income reads as fully used (100%).
-    final budgetKhr = incomeKhr;
-    final fraction = budgetKhr == 0
+    // Budget target = the user's set budget, or this month's income when none.
+    // Fraction is spend ÷ target; spending with no target reads as 100%.
+    final target = budgetKhr > 0 ? budgetKhr : incomeKhr;
+    final fraction = target == 0
         ? (expenseKhr > 0 ? 1.0 : 0.0)
-        : (expenseKhr / budgetKhr).clamp(0.0, 1.0);
+        : (expenseKhr / target).clamp(0.0, 1.0);
 
     final recent = ledger
         .take(recentCount)
@@ -153,7 +154,7 @@ class DashboardData {
       monthLabel: DateFormat.yMMMM(localeTag).format(monthStart),
       monthIncomeKhr: incomeKhr,
       monthExpenseKhr: expenseKhr,
-      budgetKhr: budgetKhr,
+      budgetKhr: target,
       budgetUsedFraction: fraction.toDouble(),
       transactions: recent,
     );

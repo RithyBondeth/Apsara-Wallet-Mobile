@@ -31,6 +31,7 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(
       ProviderScope(
+        overrides: sampleBudgetOverride(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,

@@ -14,6 +14,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
@@ -144,6 +145,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       l10n: context.l10n,
       localeTag: Localizations.localeOf(context).toLanguageTag(),
       now: ref.watch(nowProvider),
+      budgetKhr: ref.watch(monthlyBudgetTotalProvider),
       userName: _greetingName(user),
     );
 
