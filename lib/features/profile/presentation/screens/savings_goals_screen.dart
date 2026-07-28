@@ -82,22 +82,64 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
 
   Future<void> _addGoal() async {
     final result = await _newGoalSheet();
-    if (result == null || !mounted) return;
+    final goal = result?.goal;
+    if (goal == null || !mounted) return;
     try {
-      await ref.read(savingsGoalsProvider.notifier).addGoal(result);
+      await ref.read(savingsGoalsProvider.notifier).addGoal(goal);
       if (mounted) _snack(context.l10n.savingsGoalAdded);
     } catch (_) {
       if (mounted) _snack(context.l10n.savingsError);
     }
   }
 
-  /// Long-press a goal to edit its name / target / icon / colour.
+  /// Long-press a goal to edit its name / target / icon / colour, or delete it.
   Future<void> _editGoal(SavingsGoal goal) async {
     final result = await _newGoalSheet(initial: goal);
     if (result == null || !mounted) return;
+    if (result.delete) {
+      await _deleteGoal(goal);
+      return;
+    }
+    final edited = result.goal;
+    if (edited == null) return;
     try {
-      await ref.read(savingsGoalsProvider.notifier).edit(result);
+      await ref.read(savingsGoalsProvider.notifier).edit(edited);
       if (mounted) _snack(context.l10n.savingsGoalUpdated);
+    } catch (_) {
+      if (mounted) _snack(context.l10n.savingsError);
+    }
+  }
+
+  Future<void> _deleteGoal(SavingsGoal goal) async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+        ),
+        title: Text(l10n.savingsDeleteConfirmTitle),
+        content: Text(l10n.savingsDeleteConfirmBody(goal.nameOf(l10n))),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              l10n.savingsDeleteGoal,
+              style: const TextStyle(color: AppColors.expense),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      await ref.read(savingsGoalsProvider.notifier).remove(goal.id);
+      if (mounted) _snack(context.l10n.savingsGoalDeleted);
     } catch (_) {
       if (mounted) _snack(context.l10n.savingsError);
     }
@@ -228,8 +270,8 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
     );
   }
 
-  Future<SavingsGoal?> _newGoalSheet({SavingsGoal? initial}) {
-    return showModalBottomSheet<SavingsGoal>(
+  Future<_GoalSheetResult?> _newGoalSheet({SavingsGoal? initial}) {
+    return showModalBottomSheet<_GoalSheetResult>(
       context: context,
       backgroundColor: AppColors.surface,
       isScrollControlled: true,
@@ -626,8 +668,19 @@ const List<Color> _savingsGoalColors = [
   AppColors.income,
 ];
 
+/// Result of the goal sheet: a goal to save/add, or a delete request (edit mode).
+class _GoalSheetResult {
+  const _GoalSheetResult.save(this.goal) : delete = false;
+  const _GoalSheetResult.remove()
+      : goal = null,
+        delete = true;
+
+  final SavingsGoal? goal;
+  final bool delete;
+}
+
 /// New/edit-goal sheet (name, target, icon + colour). With [initial] it edits
-/// that goal (prefilled), otherwise it creates a new one.
+/// that goal (prefilled, with a delete action), otherwise it creates a new one.
 class _NewGoalSheet extends StatefulWidget {
   const _NewGoalSheet({this.initial});
 
@@ -791,19 +844,35 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
                   onPressed: !valid
                       ? null
                       : () => Navigator.of(context).pop(
-                            SavingsGoal(
-                              id: widget.initial?.id ??
-                                  'custom-${_name.text.trim()}',
-                              icon: _icon,
-                              color: _color,
-                              savedKhr: widget.initial?.savedKhr ?? 0,
-                              targetKhr: target,
-                              customName: _name.text.trim(),
+                            _GoalSheetResult.save(
+                              SavingsGoal(
+                                id: widget.initial?.id ??
+                                    'custom-${_name.text.trim()}',
+                                icon: _icon,
+                                color: _color,
+                                savedKhr: widget.initial?.savedKhr ?? 0,
+                                targetKhr: target,
+                                customName: _name.text.trim(),
+                              ),
                             ),
                           ),
                 );
               },
             ),
+            if (_isEditing) ...[
+              const SizedBox(height: AppSpacing.sm),
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(const _GoalSheetResult.remove()),
+                child: Text(
+                  l10n.savingsDeleteGoal,
+                  style: AppFont.labelLarge.copyWith(
+                    color: AppColors.expense,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
           ],
           ),
         ),

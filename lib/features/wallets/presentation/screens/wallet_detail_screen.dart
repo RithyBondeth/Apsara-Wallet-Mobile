@@ -83,12 +83,28 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
       ),
-      builder: (sheetContext) => _ActionsSheet(l10n: sheetContext.l10n),
+      builder: (sheetContext) => _ActionsSheet(
+        l10n: sheetContext.l10n,
+        canSetPrimary: !wallet.isPrimary,
+      ),
     );
-    if (action == 'edit') {
+    if (action == 'primary') {
+      await _setPrimary(wallet);
+    } else if (action == 'edit') {
       await _edit(wallet);
     } else if (action == 'delete') {
       await _delete(wallet);
+    }
+  }
+
+  Future<void> _setPrimary(Wallet wallet) async {
+    final id = wallet.id;
+    if (id == null) return;
+    try {
+      await ref.read(walletsProvider.notifier).setPrimary(id);
+      if (mounted) _snack(context.l10n.walletSetPrimaryDone);
+    } catch (_) {
+      if (mounted) _snack(context.l10n.walletUpdateFailed, error: true);
     }
   }
 
@@ -324,11 +340,12 @@ class _AppBar extends StatelessWidget {
   }
 }
 
-/// Edit / Delete action sheet for a wallet.
+/// Set-primary / Edit / Delete action sheet for a wallet.
 class _ActionsSheet extends StatelessWidget {
-  const _ActionsSheet({required this.l10n});
+  const _ActionsSheet({required this.l10n, required this.canSetPrimary});
 
   final AppLocalizations l10n;
+  final bool canSetPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -346,6 +363,12 @@ class _ActionsSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
+          if (canSetPrimary)
+            ListTile(
+              leading: const Icon(LucideIcons.star, color: AppColors.primary),
+              title: Text(l10n.walletSetPrimaryAction),
+              onTap: () => Navigator.of(context).pop('primary'),
+            ),
           ListTile(
             leading: const Icon(LucideIcons.pencil, color: AppColors.textPrimary),
             title: Text(l10n.walletEditAction),

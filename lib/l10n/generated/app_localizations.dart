@@ -1628,6 +1628,30 @@ abstract class AppLocalizations {
   /// **'Goal updated'**
   String get savingsGoalUpdated;
 
+  /// No description provided for @savingsDeleteGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Goal'**
+  String get savingsDeleteGoal;
+
+  /// No description provided for @savingsGoalDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal deleted'**
+  String get savingsGoalDeleted;
+
+  /// No description provided for @savingsDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this goal?'**
+  String get savingsDeleteConfirmTitle;
+
+  /// No description provided for @savingsDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be removed. This can\'t be undone.'**
+  String savingsDeleteConfirmBody(String name);
+
   /// No description provided for @savingsFundsAdded.
   ///
   /// In en, this message translates to:
@@ -2743,6 +2767,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete wallet'**
   String get walletDeleteAction;
+
+  /// No description provided for @walletSetPrimaryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as primary'**
+  String get walletSetPrimaryAction;
+
+  /// No description provided for @walletSetPrimaryDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary wallet updated'**
+  String get walletSetPrimaryDone;
 
   /// No description provided for @walletUpdated.
   ///

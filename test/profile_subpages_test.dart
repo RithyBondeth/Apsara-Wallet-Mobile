@@ -147,6 +147,37 @@ void main() {
     expect(find.text('Old Name'), findsNothing);
   });
 
+  testWidgets('Edit sheet deletes a goal after confirmation', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 900));
+    final goal = SavingsGoal(
+      id: 'g9',
+      icon: LucideIcons.target,
+      color: AppColors.primary,
+      savedKhr: 0,
+      targetKhr: 300000,
+      customName: 'Doomed Goal',
+    );
+    await tester.pumpWidget(
+      _wrap(const SavingsGoalsScreen(),
+          overrides: sampleSavingsOverride([goal])),
+    );
+    await settle(tester);
+    expect(find.text('Doomed Goal'), findsOneWidget);
+
+    // Long-press → edit sheet → tap "Delete Goal".
+    await tester.longPress(find.text('Doomed Goal'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete Goal'));
+    await tester.pumpAndSettle();
+
+    // Confirm dialog → confirm.
+    expect(find.text('Delete this goal?'), findsOneWidget);
+    await tester.tap(find.text('Delete Goal')); // dialog's confirm action
+    await tester.pumpAndSettle();
+
+    expect(find.text('Doomed Goal'), findsNothing);
+  });
+
   testWidgets('Help & Support renders and FAQ expands', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     await tester.pumpWidget(_wrap(const HelpSupportScreen()));

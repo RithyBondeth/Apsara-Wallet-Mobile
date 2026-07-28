@@ -826,6 +826,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savingsGoalUpdated => 'Goal updated';
 
   @override
+  String get savingsDeleteGoal => 'Delete Goal';
+
+  @override
+  String get savingsGoalDeleted => 'Goal deleted';
+
+  @override
+  String get savingsDeleteConfirmTitle => 'Delete this goal?';
+
+  @override
+  String savingsDeleteConfirmBody(String name) {
+    return '$name will be removed. This can\'t be undone.';
+  }
+
+  @override
   String get savingsFundsAdded => 'Funds added';
 
   @override
@@ -1460,6 +1474,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletDeleteAction => 'Delete wallet';
+
+  @override
+  String get walletSetPrimaryAction => 'Set as primary';
+
+  @override
+  String get walletSetPrimaryDone => 'Primary wallet updated';
 
   @override
   String get walletUpdated => 'Wallet updated';

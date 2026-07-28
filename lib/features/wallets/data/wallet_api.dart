@@ -118,6 +118,16 @@ class WalletApi {
     return res.success;
   }
 
+  /// Marks a wallet as the primary one (the backend clears the flag on the
+  /// others in the same transaction).
+  Future<bool> setPrimary(String id) async {
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/wallets/$id',
+      data: {'isPrimary': true},
+    );
+    return res.success;
+  }
+
   /// Deletes a wallet. The backend returns 409 when the wallet still has
   /// transactions, which we surface as a distinct outcome so the UI can explain
   /// it rather than showing a generic failure.

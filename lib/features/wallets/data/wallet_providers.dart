@@ -31,6 +31,13 @@ class WalletsNotifier extends AsyncNotifier<List<Wallet>> {
     await _reload();
   }
 
+  /// Makes [id] the primary wallet (backend clears the flag on the others).
+  Future<void> setPrimary(String id) async {
+    final ok = await _api.setPrimary(id);
+    if (!ok) throw StateError('wallet-set-primary-failed');
+    await _reload();
+  }
+
   /// Deletes a wallet. Returns the outcome so the caller can explain the
   /// [WalletDeleteOutcome.hasTransactions] case instead of a generic error.
   Future<WalletDeleteOutcome> remove(String id) async {

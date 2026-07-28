@@ -15,10 +15,10 @@ class AppFont {
   /// Khmer fallback family, evaluated lazily on first text style access (after
   /// the binding is initialised).
   ///
-  /// Koh Santepheap is fetched at runtime by google_fonts. When runtime
-  /// fetching is disabled (e.g. in golden tests, where the face isn't bundled),
-  /// we skip the fallback so accessing a style never triggers a missing-font
-  /// exception — Latin text stays Ubuntu and there's no Khmer to render there.
+  /// Koh Santepheap is bundled in assets/google_fonts (KohSantepheap-Regular.ttf),
+  /// so google_fonts loads it from assets — no runtime fetch, works offline.
+  /// The `allowRuntimeFetching` gate stays only for golden tests: they turn it
+  /// off, and skipping the fallback there keeps goldens Latin-only and stable.
   static final List<String> _khmerFallback = GoogleFonts.config
           .allowRuntimeFetching
       ? <String>[GoogleFonts.kohSantepheap().fontFamily!]

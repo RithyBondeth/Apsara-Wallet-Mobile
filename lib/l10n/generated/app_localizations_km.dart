@@ -828,6 +828,20 @@ class AppLocalizationsKm extends AppLocalizations {
   String get savingsGoalUpdated => 'បានធ្វើបច្ចុប្បន្នភាពគោលដៅ';
 
   @override
+  String get savingsDeleteGoal => 'លុបគោលដៅ';
+
+  @override
+  String get savingsGoalDeleted => 'បានលុបគោលដៅ';
+
+  @override
+  String get savingsDeleteConfirmTitle => 'លុបគោលដៅនេះ?';
+
+  @override
+  String savingsDeleteConfirmBody(String name) {
+    return '$name នឹងត្រូវបានលុប។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។';
+  }
+
+  @override
   String get savingsFundsAdded => 'បានបន្ថែមមូលនិធិ';
 
   @override
@@ -1459,6 +1473,12 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get walletDeleteAction => 'លុបកាបូប';
+
+  @override
+  String get walletSetPrimaryAction => 'កំណត់ជាកាបូបចម្បង';
+
+  @override
+  String get walletSetPrimaryDone => 'បានធ្វើបច្ចុប្បន្នភាពកាបូបចម្បង';
 
   @override
   String get walletUpdated => 'បានធ្វើបច្ចុប្បន្នភាពកាបូប';
