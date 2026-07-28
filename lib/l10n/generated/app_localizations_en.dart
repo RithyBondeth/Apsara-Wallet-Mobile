@@ -875,6 +875,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add bills, subscriptions or salary that repeat, and they\'ll show up here.';
 
   @override
+  String get recurringError => 'Something went wrong. Please try again.';
+
+  @override
+  String recurringPosted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recurring entries posted',
+      one: '1 recurring entry posted',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get helpTitle => 'Help & Support';
 
   @override

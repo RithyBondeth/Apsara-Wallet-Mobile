@@ -316,6 +316,9 @@
   "recurringStarts": "ចាប់ផ្តើម",
   "recurringEmptyTitle": "មិនទាន់មានប្រតិបត្តិការដដែលៗ",
   "recurringEmptyBody": "បន្ថែមវិក្កយបត្រ ការជាវ ឬប្រាក់ខែ ដែលកើតឡើងដដែលៗ ហើយវានឹងបង្ហាញនៅទីនេះ។",
+  "recurringError": "មានបញ្ហាបានកើតឡើង។ សូមព្យាយាមម្តងទៀត។",
+  "recurringPosted": "{count, plural, other{បានកត់ត្រាប្រតិបត្តិការដដែលៗ {count}}}",
+  "@recurringPosted": { "placeholders": { "count": { "type": "int" } } },
 
   "helpTitle": "ជំនួយ និងការគាំទ្រ",
   "helpSectionContact": "ទាក់ទងមកយើង",

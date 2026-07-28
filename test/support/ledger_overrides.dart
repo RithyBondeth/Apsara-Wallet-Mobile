@@ -4,6 +4,9 @@ import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.d
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
+import 'package:apsara_wallet_mobile/features/recurring/data/recurring_api.dart';
+import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers.dart';
+import 'package:apsara_wallet_mobile/features/recurring/data/recurring_rule.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
@@ -106,6 +109,42 @@ class _FakeBudgetNotifier extends BudgetNotifier {
   Future<BudgetData> build() async => _data;
 }
 
+/// In-memory recurring rules so the Recurring screen (and the dashboard's
+/// auto-post trigger) run against sample data instead of the network.
+class _FakeRecurringNotifier extends RecurringNotifier {
+  _FakeRecurringNotifier(List<RecurringRule> seed) : _items = [...seed];
+
+  final List<RecurringRule> _items;
+
+  @override
+  Future<List<RecurringRule>> build() async => _items;
+
+  @override
+  Future<void> add(RecurringRule rule) async {
+    _items
+      ..removeWhere((r) => r.id == rule.id)
+      ..add(rule);
+    state = AsyncData([..._items]);
+  }
+
+  @override
+  Future<void> edit(RecurringRule rule) async {
+    final i = _items.indexWhere((r) => r.id == rule.id);
+    if (i >= 0) _items[i] = rule;
+    state = AsyncData([..._items]);
+  }
+
+  @override
+  Future<void> remove(String id) async {
+    _items.removeWhere((r) => r.id == id);
+    state = AsyncData([..._items]);
+  }
+
+  @override
+  Future<RunDueResult> runDue() async =>
+      const RunDueResult(posted: 0, rulesRun: 0);
+}
+
 /// Override the Budget screen's provider with sample (or given) budget data.
 List<Override> sampleBudgetOverride([BudgetData? data]) {
   final d = data ?? BudgetData.sample();
@@ -119,6 +158,7 @@ List<Override> sampleLedgerOverrides({
   List<Wallet>? wallets,
   AuthUser? user,
   BudgetData? budget,
+  List<RecurringRule>? recurring,
 }) {
   final txs = transactions ?? sampleTransactions();
   final ws = wallets ?? WalletsData.sample.wallets;
@@ -138,5 +178,10 @@ List<Override> sampleLedgerOverrides({
     walletsProvider.overrideWith(() => _FakeWalletsNotifier(ws)),
     authControllerProvider.overrideWith((ref) => _FixedAuthController(u)),
     budgetDataProvider.overrideWith(() => _FakeBudgetNotifier(b)),
+    recurringProvider
+        .overrideWith(() => _FakeRecurringNotifier(recurring ?? const [])),
+    // The dashboard fires this on load; keep it off the network in tests.
+    recurringAutoPostProvider
+        .overrideWith((ref) async => const RunDueResult(posted: 0, rulesRun: 0)),
   ];
 }

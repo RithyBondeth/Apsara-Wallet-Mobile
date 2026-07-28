@@ -876,6 +876,19 @@ class AppLocalizationsKm extends AppLocalizations {
       'បន្ថែមវិក្កយបត្រ ការជាវ ឬប្រាក់ខែ ដែលកើតឡើងដដែលៗ ហើយវានឹងបង្ហាញនៅទីនេះ។';
 
   @override
+  String get recurringError => 'មានបញ្ហាបានកើតឡើង។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String recurringPosted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'បានកត់ត្រាប្រតិបត្តិការដដែលៗ $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get helpTitle => 'ជំនួយ និងការគាំទ្រ';
 
   @override

@@ -22,6 +22,7 @@ import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/picker_row.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/tx_type_toggle.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
@@ -55,6 +56,12 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
   /// Opens the add/edit sheet. With [initial] it edits (and can delete) that
   /// rule; without it, it creates a new one.
   Future<void> _openSheet([RecurringRule? initial]) async {
+    final wallets = await ref.read(walletsProvider.future);
+    if (!mounted) return;
+    if (wallets.isEmpty) {
+      _snack(context.l10n.addTxNoWallet);
+      return;
+    }
     final result = await showModalBottomSheet<_SheetResult>(
       context: context,
       isScrollControlled: true,
@@ -62,22 +69,29 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
       ),
-      builder: (_) => _AddRecurringSheet(initial: initial),
+      builder: (_) => _AddRecurringSheet(initial: initial, wallets: wallets),
     );
     if (result == null || !mounted) return;
     final notifier = ref.read(recurringProvider.notifier);
     final l10n = context.l10n;
-    if (result.delete && initial != null) {
-      notifier.remove(initial.id);
-      _snack(l10n.recurringDeleted, undo: () => notifier.add(initial));
-    } else if (result.rule != null) {
-      if (initial != null) {
-        notifier.update(result.rule!);
-        _snack(l10n.recurringUpdated);
-      } else {
-        notifier.add(result.rule!);
-        _snack(l10n.recurringSaved);
+    try {
+      if (result.delete && initial != null) {
+        await notifier.remove(initial.id);
+        if (!mounted) return;
+        _snack(l10n.recurringDeleted, undo: () => notifier.add(initial));
+      } else if (result.rule != null) {
+        if (initial != null) {
+          await notifier.edit(result.rule!);
+          if (!mounted) return;
+          _snack(l10n.recurringUpdated);
+        } else {
+          await notifier.add(result.rule!);
+          if (!mounted) return;
+          _snack(l10n.recurringSaved);
+        }
       }
+    } catch (_) {
+      if (mounted) _snack(l10n.recurringError);
     }
   }
 
@@ -109,7 +123,9 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
 
   @override
   Widget build(BuildContext context) {
-    final rules = ref.watch(recurringProvider);
+    final rulesAsync = ref.watch(recurringProvider);
+    final rules = rulesAsync.valueOrNull ?? const <RecurringRule>[];
+    final loading = rulesAsync.isLoading && !rulesAsync.hasValue;
     final monthlyExpense = ref.watch(recurringMonthlyExpenseProvider);
     final bottomSafe = MediaQuery.of(context).padding.bottom;
 
@@ -151,7 +167,16 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xxl),
-                      if (rules.isEmpty)
+                      if (loading)
+                        const Padding(
+                          padding: EdgeInsets.only(top: AppSpacing.xxxl),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        )
+                      else if (rules.isEmpty)
                         FadeSlideIn(
                           controller: _intro,
                           start: 0.2,
@@ -477,10 +502,13 @@ class _EmptyState extends StatelessWidget {
 /// Bottom sheet to add a recurring entry: type, amount, title, category,
 /// wallet, frequency and start date.
 class _AddRecurringSheet extends StatefulWidget {
-  const _AddRecurringSheet({this.initial});
+  const _AddRecurringSheet({required this.wallets, this.initial});
 
   /// When non-null the sheet edits this rule (prefilled, with a delete action).
   final RecurringRule? initial;
+
+  /// The user's real wallets (from the API) to choose from.
+  final List<Wallet> wallets;
 
   @override
   State<_AddRecurringSheet> createState() => _AddRecurringSheetState();
@@ -495,7 +523,7 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
   DateTime _startDate = DateTime.now();
   TxCategory? _expenseCategory;
   TxCategory? _incomeCategory;
-  Wallet _wallet = WalletsData.sample.wallets.first;
+  late Wallet _wallet = widget.wallets.first;
 
   bool get _isEditing => widget.initial != null;
 
@@ -514,7 +542,7 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
       } else {
         _expenseCategory = r.category;
       }
-      _wallet = WalletsData.sample.wallets.firstWhere(
+      _wallet = widget.wallets.firstWhere(
         (w) => w.name == r.walletName,
         orElse: () => _wallet,
       );
@@ -556,7 +584,7 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
   Future<void> _pickWallet() async {
     final picked = await showWalletPicker(
       context,
-      wallets: WalletsData.sample.wallets,
+      wallets: widget.wallets,
       selected: _wallet,
     );
     if (picked == null || !mounted) return;

@@ -1700,6 +1700,18 @@ abstract class AppLocalizations {
   /// **'Add bills, subscriptions or salary that repeat, and they\'ll show up here.'**
   String get recurringEmptyBody;
 
+  /// No description provided for @recurringError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get recurringError;
+
+  /// No description provided for @recurringPosted.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 recurring entry posted} other{{count} recurring entries posted}}'**
+  String recurringPosted(int count);
+
   /// No description provided for @helpTitle.
   ///
   /// In en, this message translates to:

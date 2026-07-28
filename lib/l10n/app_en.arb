@@ -316,6 +316,9 @@
   "recurringStarts": "Starts",
   "recurringEmptyTitle": "No recurring entries yet",
   "recurringEmptyBody": "Add bills, subscriptions or salary that repeat, and they'll show up here.",
+  "recurringError": "Something went wrong. Please try again.",
+  "recurringPosted": "{count, plural, =1{1 recurring entry posted} other{{count} recurring entries posted}}",
+  "@recurringPosted": { "placeholders": { "count": { "type": "int" } } },
 
   "helpTitle": "Help & Support",
   "helpSectionContact": "Get in Touch",

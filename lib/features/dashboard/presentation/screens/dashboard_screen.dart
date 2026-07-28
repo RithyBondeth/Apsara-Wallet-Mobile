@@ -15,6 +15,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
+import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
@@ -138,6 +139,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final user = ref.watch(authControllerProvider).user;
     final hasWallet =
         (ref.watch(walletsProvider).valueOrNull ?? const []).isNotEmpty;
+    // Post any due recurring entries once per session (fire-and-forget — the
+    // result isn't rendered; posted entries flow in through the ledger). Gated
+    // on having a wallet so brand-new accounts don't fire it during onboarding.
+    if (hasWallet) ref.watch(recurringAutoPostProvider);
     final data = DashboardData.fromLedger(
       ledger: ledger,
       balanceKhr: total.khr,
