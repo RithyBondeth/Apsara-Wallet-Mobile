@@ -15,6 +15,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
@@ -209,6 +210,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             onTapBell: () => context.router.push(
                               const NotificationsRoute(),
                             ),
+                            hasUnread: ref.watch(unreadNotificationsProvider) > 0,
                             onOpenMenu: () =>
                                 _scaffoldKey.currentState?.openDrawer(),
                           ),

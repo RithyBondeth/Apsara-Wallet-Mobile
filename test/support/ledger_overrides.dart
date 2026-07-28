@@ -4,6 +4,8 @@ import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.d
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_api.dart';
@@ -187,6 +189,41 @@ List<Override> sampleSavingsOverride([List<SavingsGoal>? goals]) {
   ];
 }
 
+/// In-memory notifications so the inbox + dashboard bell run against sample
+/// data instead of the network.
+class _FakeNotificationsNotifier extends NotificationsNotifier {
+  _FakeNotificationsNotifier(List<AppNotification> seed) : _items = [...seed];
+
+  final List<AppNotification> _items;
+
+  @override
+  Future<List<AppNotification>> build() async => _items;
+
+  @override
+  Future<void> markRead(String id) async {
+    final i = _items.indexWhere((n) => n.id == id);
+    if (i < 0 || _items[i].read) return;
+    _items[i] = _items[i].copyWith(read: true);
+    state = AsyncData([..._items]);
+  }
+
+  @override
+  Future<void> markAllRead() async {
+    for (var i = 0; i < _items.length; i++) {
+      _items[i] = _items[i].copyWith(read: true);
+    }
+    state = AsyncData([..._items]);
+  }
+}
+
+/// Override the Notifications inbox provider with sample (or given) items.
+List<Override> sampleNotificationsOverride([List<AppNotification>? items]) {
+  return [
+    notificationsProvider
+        .overrideWith(() => _FakeNotificationsNotifier(items ?? sampleNotifications())),
+  ];
+}
+
 /// Override the Budget screen's provider with sample (or given) budget data.
 List<Override> sampleBudgetOverride([BudgetData? data]) {
   final d = data ?? BudgetData.sample();
@@ -202,6 +239,7 @@ List<Override> sampleLedgerOverrides({
   BudgetData? budget,
   List<RecurringRule>? recurring,
   List<SavingsGoal>? savings,
+  List<AppNotification>? notifications,
 }) {
   final txs = transactions ?? sampleTransactions();
   final ws = wallets ?? WalletsData.sample.wallets;
@@ -228,5 +266,9 @@ List<Override> sampleLedgerOverrides({
         .overrideWith((ref) async => const RunDueResult(posted: 0, rulesRun: 0)),
     savingsGoalsProvider
         .overrideWith(() => _FakeSavingsGoalsNotifier(savings ?? const [])),
+    // Default to the sample inbox so the dashboard bell keeps its unread dot
+    // (goldens unchanged); pass `notifications: []` for a cleared inbox.
+    notificationsProvider.overrideWith(
+        () => _FakeNotificationsNotifier(notifications ?? sampleNotifications())),
   ];
 }

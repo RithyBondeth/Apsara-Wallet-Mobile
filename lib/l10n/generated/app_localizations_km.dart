@@ -1005,6 +1005,43 @@ class AppLocalizationsKm extends AppLocalizations {
   }
 
   @override
+  String get notifTypeRecurringTitle => 'បានកត់ត្រាប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String notifTypeRecurringBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'បានបន្ថែមប្រតិបត្តិការដដែលៗ $count ទៅក្នុងបញ្ជីរបស់អ្នក។',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifTypeSavingsDoneTitle => 'សម្រេចគោលដៅ! 🎉';
+
+  @override
+  String notifTypeSavingsDoneBody(String name) {
+    return 'អ្នកបានសម្រេចគោលដៅសន្សំ \"$name\" របស់អ្នក។';
+  }
+
+  @override
+  String get notifTypeSavingsHalfTitle => 'ពាក់កណ្តាលផ្លូវហើយ';
+
+  @override
+  String notifTypeSavingsHalfBody(String name) {
+    return '\"$name\" បានដល់ពាក់កណ្តាលនៃគោលដៅ។';
+  }
+
+  @override
+  String get notifTypeBudgetTitle => 'ការជូនដំណឹងថវិកា';
+
+  @override
+  String notifTypeBudgetBody(String category) {
+    return 'អ្នកបានប្រើអស់ថវិកា $category សម្រាប់ខែនេះហើយ។';
+  }
+
+  @override
   String get notifTxTitle => 'បានកត់ត្រាចំណូល';
 
   @override

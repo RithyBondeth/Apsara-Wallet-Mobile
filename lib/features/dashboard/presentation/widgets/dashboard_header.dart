@@ -28,6 +28,7 @@ class DashboardHeader extends StatelessWidget {
     required this.onToggleBalance,
     required this.onTapBell,
     required this.onOpenMenu,
+    this.hasUnread = false,
   });
 
   final DashboardData data;
@@ -36,6 +37,7 @@ class DashboardHeader extends StatelessWidget {
   final VoidCallback onToggleBalance;
   final VoidCallback onTapBell;
   final VoidCallback onOpenMenu;
+  final bool hasUnread;
 
   static const Color _ivory = Color(0xFFF3F1E7);
 
@@ -119,7 +121,7 @@ class DashboardHeader extends StatelessWidget {
         ),
         const LanguageSwitcher.compact(),
         const SizedBox(width: AppSpacing.sm),
-        _BellButton(onTap: onTapBell),
+        _BellButton(onTap: onTapBell, hasUnread: hasUnread),
       ],
     );
   }
@@ -264,9 +266,10 @@ class _MenuButton extends StatelessWidget {
 }
 
 class _BellButton extends StatelessWidget {
-  const _BellButton({required this.onTap});
+  const _BellButton({required this.onTap, this.hasUnread = false});
 
   final VoidCallback onTap;
+  final bool hasUnread;
 
   @override
   Widget build(BuildContext context) {
@@ -285,22 +288,23 @@ class _BellButton extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             const Icon(LucideIcons.bell, size: 20, color: Colors.white),
-            Positioned(
-              top: 11,
-              right: 12,
-              child: Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: AppGradients.goldCore,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppGradients.emeraldCore,
-                    width: 1.5,
+            if (hasUnread)
+              Positioned(
+                top: 11,
+                right: 12,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: AppGradients.goldCore,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppGradients.emeraldCore,
+                      width: 1.5,
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

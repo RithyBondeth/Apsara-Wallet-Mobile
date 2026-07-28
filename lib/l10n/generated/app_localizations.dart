@@ -1922,6 +1922,54 @@ abstract class AppLocalizations {
   /// **'{count}d ago'**
   String notifDaysAgo(int count);
 
+  /// No description provided for @notifTypeRecurringTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring entries posted'**
+  String get notifTypeRecurringTitle;
+
+  /// No description provided for @notifTypeRecurringBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 recurring entry was added to your ledger.} other{{count} recurring entries were added to your ledger.}}'**
+  String notifTypeRecurringBody(int count);
+
+  /// No description provided for @notifTypeSavingsDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached! 🎉'**
+  String get notifTypeSavingsDoneTitle;
+
+  /// No description provided for @notifTypeSavingsDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You hit your \"{name}\" savings goal.'**
+  String notifTypeSavingsDoneBody(String name);
+
+  /// No description provided for @notifTypeSavingsHalfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Halfway there'**
+  String get notifTypeSavingsHalfTitle;
+
+  /// No description provided for @notifTypeSavingsHalfBody.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{name}\" is halfway to its target.'**
+  String notifTypeSavingsHalfBody(String name);
+
+  /// No description provided for @notifTypeBudgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget alert'**
+  String get notifTypeBudgetTitle;
+
+  /// No description provided for @notifTypeBudgetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached your {category} budget for this month.'**
+  String notifTypeBudgetBody(String category);
+
   /// No description provided for @notifTxTitle.
   ///
   /// In en, this message translates to:

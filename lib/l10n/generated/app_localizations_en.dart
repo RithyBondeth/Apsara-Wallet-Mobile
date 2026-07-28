@@ -1005,6 +1005,44 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get notifTypeRecurringTitle => 'Recurring entries posted';
+
+  @override
+  String notifTypeRecurringBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recurring entries were added to your ledger.',
+      one: '1 recurring entry was added to your ledger.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifTypeSavingsDoneTitle => 'Goal reached! 🎉';
+
+  @override
+  String notifTypeSavingsDoneBody(String name) {
+    return 'You hit your \"$name\" savings goal.';
+  }
+
+  @override
+  String get notifTypeSavingsHalfTitle => 'Halfway there';
+
+  @override
+  String notifTypeSavingsHalfBody(String name) {
+    return '\"$name\" is halfway to its target.';
+  }
+
+  @override
+  String get notifTypeBudgetTitle => 'Budget alert';
+
+  @override
+  String notifTypeBudgetBody(String category) {
+    return 'You\'ve reached your $category budget for this month.';
+  }
+
+  @override
   String get notifTxTitle => 'Income recorded';
 
   @override
