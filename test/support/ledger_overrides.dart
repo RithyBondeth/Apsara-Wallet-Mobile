@@ -13,6 +13,7 @@ import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_rule.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/transfer_api.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 
@@ -71,6 +72,11 @@ class _FakeWalletsNotifier extends WalletsNotifier {
   @override
   Future<void> add(Wallet wallet) async {
     state = AsyncData([...(state.valueOrNull ?? const []), wallet]);
+  }
+
+  @override
+  Future<void> reorder(List<Wallet> ordered) async {
+    state = AsyncData([...ordered]);
   }
 }
 
@@ -288,5 +294,8 @@ List<Override> sampleLedgerOverrides({
     // (goldens unchanged); pass `notifications: []` for a cleared inbox.
     notificationsProvider.overrideWith(
         () => _FakeNotificationsNotifier(notifications ?? sampleNotifications())),
+    // Wallet-detail fetches transfers per wallet; keep it off the network.
+    walletTransfersProvider
+        .overrideWith((ref, walletId) async => const <ApiTransfer>[]),
   ];
 }

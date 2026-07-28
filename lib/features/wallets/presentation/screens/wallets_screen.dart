@@ -162,24 +162,46 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                         child: _SectionHeader(count: wallets.length),
                       ),
                       const SizedBox(height: AppSpacing.md),
-                      for (var i = 0; i < wallets.length; i++) ...[
-                        if (i > 0) const SizedBox(height: AppSpacing.md),
-                        FadeSlideIn(
-                          controller: _intro,
-                          start: (0.24 + i * 0.10).clamp(0.0, 0.8),
-                          end: (0.68 + i * 0.10).clamp(0.0, 1.0),
-                          offset: const Offset(0, 20),
-                          child: WalletCard(
-                            wallet: wallets[i],
-                            balanceHidden: _balanceHidden,
-                            balanceKhr: balances[wallets[i].name]?.khr,
-                            balanceUsd: balances[wallets[i].name]?.usd,
-                            onTap: () => context.router.push(
-                              WalletDetailRoute(index: i),
+                      // Long-press a card to drag-reorder; tap still opens it.
+                      FadeSlideIn(
+                        controller: _intro,
+                        start: 0.24,
+                        end: 0.8,
+                        offset: const Offset(0, 20),
+                        child: ReorderableListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: wallets.length,
+                          onReorderStart: (_) =>
+                              HapticFeedback.mediumImpact(),
+                          onReorder: (oldIndex, newIndex) {
+                            if (newIndex > oldIndex) newIndex -= 1;
+                            final reordered = [...wallets];
+                            final moved = reordered.removeAt(oldIndex);
+                            reordered.insert(newIndex, moved);
+                            ref
+                                .read(walletsProvider.notifier)
+                                .reorder(reordered);
+                          },
+                          itemBuilder: (context, i) => Padding(
+                            key: ValueKey(wallets[i].id ?? wallets[i].name),
+                            padding: EdgeInsets.only(
+                              bottom: i == wallets.length - 1
+                                  ? 0
+                                  : AppSpacing.md,
+                            ),
+                            child: WalletCard(
+                              wallet: wallets[i],
+                              balanceHidden: _balanceHidden,
+                              balanceKhr: balances[wallets[i].name]?.khr,
+                              balanceUsd: balances[wallets[i].name]?.usd,
+                              onTap: () => context.router.push(
+                                WalletDetailRoute(index: i),
+                              ),
                             ),
                           ),
                         ),
-                      ],
+                      ),
                       const SizedBox(height: AppSpacing.lg),
                       FadeSlideIn(
                         controller: _intro,

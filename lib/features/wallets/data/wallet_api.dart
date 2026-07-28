@@ -118,6 +118,15 @@ class WalletApi {
     return res.success;
   }
 
+  /// Persists a manual wallet order. [ids] is the full ordered list.
+  Future<bool> reorder(List<String> ids) async {
+    final res = await _api.patch<List<dynamic>>(
+      '/wallets/reorder',
+      data: {'ids': ids},
+    );
+    return res.success;
+  }
+
   /// Marks a wallet as the primary one (the backend clears the flag on the
   /// others in the same transaction).
   Future<bool> setPrimary(String id) async {

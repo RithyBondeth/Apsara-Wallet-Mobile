@@ -1482,6 +1482,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletSetPrimaryDone => 'Primary wallet updated';
 
   @override
+  String get transferTitle => 'Transfer';
+
+  @override
+  String get transferAction => 'Transfer';
+
+  @override
+  String get transferFrom => 'From';
+
+  @override
+  String get transferTo => 'To';
+
+  @override
+  String get transferDone => 'Transfer complete';
+
+  @override
+  String get transferFailed =>
+      'Couldn\'t complete the transfer. Please try again.';
+
+  @override
+  String transferToLabel(String name) {
+    return 'Transfer to $name';
+  }
+
+  @override
+  String transferFromLabel(String name) {
+    return 'Transfer from $name';
+  }
+
+  @override
   String get walletUpdated => 'Wallet updated';
 
   @override

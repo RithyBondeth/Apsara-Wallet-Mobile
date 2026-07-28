@@ -1481,6 +1481,34 @@ class AppLocalizationsKm extends AppLocalizations {
   String get walletSetPrimaryDone => 'បានធ្វើបច្ចុប្បន្នភាពកាបូបចម្បង';
 
   @override
+  String get transferTitle => 'ផ្ទេរប្រាក់';
+
+  @override
+  String get transferAction => 'ផ្ទេរប្រាក់';
+
+  @override
+  String get transferFrom => 'ពី';
+
+  @override
+  String get transferTo => 'ទៅ';
+
+  @override
+  String get transferDone => 'បានផ្ទេរប្រាក់រួចរាល់';
+
+  @override
+  String get transferFailed => 'មិនអាចផ្ទេរប្រាក់បានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String transferToLabel(String name) {
+    return 'ផ្ទេរទៅ $name';
+  }
+
+  @override
+  String transferFromLabel(String name) {
+    return 'ផ្ទេរពី $name';
+  }
+
+  @override
   String get walletUpdated => 'បានធ្វើបច្ចុប្បន្នភាពកាបូប';
 
   @override

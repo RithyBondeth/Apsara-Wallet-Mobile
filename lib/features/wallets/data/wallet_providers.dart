@@ -31,6 +31,18 @@ class WalletsNotifier extends AsyncNotifier<List<Wallet>> {
     await _reload();
   }
 
+  /// Persists a new manual order. Optimistically shows [ordered] immediately,
+  /// then persists; on failure it reloads to the server's truth.
+  Future<void> reorder(List<Wallet> ordered) async {
+    state = AsyncData([...ordered]);
+    final ids = [
+      for (final w in ordered)
+        if (w.id != null) w.id!,
+    ];
+    final ok = await _api.reorder(ids);
+    if (!ok) await _reload();
+  }
+
   /// Makes [id] the primary wallet (backend clears the flag on the others).
   Future<void> setPrimary(String id) async {
     final ok = await _api.setPrimary(id);

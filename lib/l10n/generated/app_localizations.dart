@@ -2780,6 +2780,54 @@ abstract class AppLocalizations {
   /// **'Primary wallet updated'**
   String get walletSetPrimaryDone;
 
+  /// No description provided for @transferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferTitle;
+
+  /// No description provided for @transferAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferAction;
+
+  /// No description provided for @transferFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get transferFrom;
+
+  /// No description provided for @transferTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get transferTo;
+
+  /// No description provided for @transferDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer complete'**
+  String get transferDone;
+
+  /// No description provided for @transferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t complete the transfer. Please try again.'**
+  String get transferFailed;
+
+  /// No description provided for @transferToLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer to {name}'**
+  String transferToLabel(String name);
+
+  /// No description provided for @transferFromLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer from {name}'**
+  String transferFromLabel(String name);
+
   /// No description provided for @walletUpdated.
   ///
   /// In en, this message translates to:
