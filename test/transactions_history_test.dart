@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'support/ledger_overrides.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -122,6 +123,29 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text('Coffee Shop'), findsOneWidget);
+    expect(find.text('ABA Salary'), findsNothing);
+  });
+
+  testWidgets('Category filter narrows the list', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 900));
+    await tester.pumpWidget(_wrap(const TransactionsListScreen()));
+    await settle(tester);
+
+    // Open the advanced-filter sheet via the app-bar funnel button.
+    await tester.tap(find.byIcon(LucideIcons.slidersHorizontal));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    // Pick the Shopping category chip, then apply.
+    await tester.tap(find.text('Shopping'));
+    await tester.pump();
+    await tester.tap(find.text('Apply'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    // Only the Shopping transaction (AEON Mall) remains.
+    expect(find.text('AEON Mall'), findsOneWidget);
+    expect(find.text('Grab Food'), findsNothing);
     expect(find.text('ABA Salary'), findsNothing);
   });
 

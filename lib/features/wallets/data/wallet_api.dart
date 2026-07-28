@@ -103,7 +103,34 @@ class WalletApi {
     });
     return res.success;
   }
+
+  Future<bool> update(String id, Wallet wallet) async {
+    final res = await _api.patch<Map<String, dynamic>>('/wallets/$id', data: {
+      'name': wallet.name,
+      'kind': wallet.kind.name,
+      'balanceKhr': wallet.balanceKhr,
+      'balanceUsd': wallet.balanceUsd,
+      'brandColor': colorToHex(wallet.brandColor),
+      'accountLast4': wallet.accountLast4,
+      'shortCode': wallet.shortCode,
+      'isPrimary': wallet.isPrimary,
+    });
+    return res.success;
+  }
+
+  /// Deletes a wallet. The backend returns 409 when the wallet still has
+  /// transactions, which we surface as a distinct outcome so the UI can explain
+  /// it rather than showing a generic failure.
+  Future<WalletDeleteOutcome> delete(String id) async {
+    final res = await _api.delete<Map<String, dynamic>>('/wallets/$id');
+    if (res.success) return WalletDeleteOutcome.ok;
+    if (res.statusCode == 409) return WalletDeleteOutcome.hasTransactions;
+    return WalletDeleteOutcome.failed;
+  }
 }
+
+/// Result of a wallet delete attempt.
+enum WalletDeleteOutcome { ok, hasTransactions, failed }
 
 final walletApiProvider = Provider<WalletApi>(
   (ref) => WalletApi(ref.watch(apiClientProvider)),

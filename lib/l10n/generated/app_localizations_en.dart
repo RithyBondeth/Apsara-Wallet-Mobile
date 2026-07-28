@@ -649,6 +649,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get txEmptyBody => 'Try a different search or filter.';
 
   @override
+  String get txFilters => 'Filters';
+
+  @override
+  String get txFilterCategory => 'Category';
+
+  @override
+  String get txFilterDateRange => 'Date range';
+
+  @override
+  String get txFilterFrom => 'From';
+
+  @override
+  String get txFilterTo => 'To';
+
+  @override
+  String get txFilterAny => 'Any';
+
+  @override
+  String get txFilterClearAll => 'Clear all';
+
+  @override
+  String get txFilterApply => 'Apply';
+
+  @override
   String get txDetailTitle => 'Transaction Details';
 
   @override
@@ -1394,10 +1418,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletInitialBalance => 'Initial Balance';
 
   @override
+  String get walletBalanceEditLabel => 'Balance';
+
+  @override
   String get walletColorLabel => 'Color';
 
   @override
   String get walletAdded => 'Wallet added';
+
+  @override
+  String get walletsEditWallet => 'Edit Wallet';
+
+  @override
+  String get walletEditAction => 'Edit wallet';
+
+  @override
+  String get walletDeleteAction => 'Delete wallet';
+
+  @override
+  String get walletUpdated => 'Wallet updated';
+
+  @override
+  String get walletUpdateFailed =>
+      'Couldn\'t update the wallet. Please try again.';
+
+  @override
+  String get walletDeleted => 'Wallet deleted';
+
+  @override
+  String get walletDeleteConfirmTitle => 'Delete this wallet?';
+
+  @override
+  String walletDeleteConfirmBody(String name) {
+    return '$name will be removed. This can\'t be undone.';
+  }
+
+  @override
+  String get walletDeleteHasTransactions =>
+      'This wallet still has transactions. Move or delete them first.';
+
+  @override
+  String get walletDeleteFailed =>
+      'Couldn\'t delete the wallet. Please try again.';
 
   @override
   String get menuTitle => 'Menu';

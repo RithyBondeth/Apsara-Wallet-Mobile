@@ -21,6 +21,24 @@ class WalletsNotifier extends AsyncNotifier<List<Wallet>> {
     await _reload();
   }
 
+  /// Edits a wallet in place (name/kind/balance/color/primary). Requires the
+  /// backend id — [wallet].id must be non-null.
+  Future<void> edit(Wallet wallet) async {
+    final id = wallet.id;
+    if (id == null) throw StateError('wallet-no-id');
+    final ok = await _api.update(id, wallet);
+    if (!ok) throw StateError('wallet-update-failed');
+    await _reload();
+  }
+
+  /// Deletes a wallet. Returns the outcome so the caller can explain the
+  /// [WalletDeleteOutcome.hasTransactions] case instead of a generic error.
+  Future<WalletDeleteOutcome> remove(String id) async {
+    final outcome = await _api.delete(id);
+    if (outcome == WalletDeleteOutcome.ok) await _reload();
+    return outcome;
+  }
+
   Future<void> _reload() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(build);

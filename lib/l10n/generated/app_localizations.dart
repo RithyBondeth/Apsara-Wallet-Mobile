@@ -1280,6 +1280,54 @@ abstract class AppLocalizations {
   /// **'Try a different search or filter.'**
   String get txEmptyBody;
 
+  /// No description provided for @txFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get txFilters;
+
+  /// No description provided for @txFilterCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get txFilterCategory;
+
+  /// No description provided for @txFilterDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Date range'**
+  String get txFilterDateRange;
+
+  /// No description provided for @txFilterFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get txFilterFrom;
+
+  /// No description provided for @txFilterTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get txFilterTo;
+
+  /// No description provided for @txFilterAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get txFilterAny;
+
+  /// No description provided for @txFilterClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get txFilterClearAll;
+
+  /// No description provided for @txFilterApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get txFilterApply;
+
   /// No description provided for @txDetailTitle.
   ///
   /// In en, this message translates to:
@@ -2624,6 +2672,12 @@ abstract class AppLocalizations {
   /// **'Initial Balance'**
   String get walletInitialBalance;
 
+  /// No description provided for @walletBalanceEditLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get walletBalanceEditLabel;
+
   /// No description provided for @walletColorLabel.
   ///
   /// In en, this message translates to:
@@ -2635,6 +2689,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wallet added'**
   String get walletAdded;
+
+  /// No description provided for @walletsEditWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Wallet'**
+  String get walletsEditWallet;
+
+  /// No description provided for @walletEditAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit wallet'**
+  String get walletEditAction;
+
+  /// No description provided for @walletDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete wallet'**
+  String get walletDeleteAction;
+
+  /// No description provided for @walletUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet updated'**
+  String get walletUpdated;
+
+  /// No description provided for @walletUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update the wallet. Please try again.'**
+  String get walletUpdateFailed;
+
+  /// No description provided for @walletDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet deleted'**
+  String get walletDeleted;
+
+  /// No description provided for @walletDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this wallet?'**
+  String get walletDeleteConfirmTitle;
+
+  /// No description provided for @walletDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be removed. This can\'t be undone.'**
+  String walletDeleteConfirmBody(String name);
+
+  /// No description provided for @walletDeleteHasTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet still has transactions. Move or delete them first.'**
+  String get walletDeleteHasTransactions;
+
+  /// No description provided for @walletDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete the wallet. Please try again.'**
+  String get walletDeleteFailed;
 
   /// No description provided for @menuTitle.
   ///

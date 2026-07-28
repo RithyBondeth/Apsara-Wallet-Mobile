@@ -12,11 +12,16 @@ import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:intl/intl.dart';
+
+import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
     show formatKhr;
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
@@ -45,6 +50,14 @@ class _TransactionsListScreenState
   /// null = All; otherwise the single type shown.
   ETransactionType? _filter;
 
+  /// Advanced filters (from the filter sheet). Null = unset.
+  TxCategory? _category;
+  DateTime? _from;
+  DateTime? _to;
+
+  bool get _hasAdvancedFilters =>
+      _category != null || _from != null || _to != null;
+
   @override
   void dispose() {
     _intro.dispose();
@@ -54,12 +67,41 @@ class _TransactionsListScreenState
 
   List<TransactionRecord> _filtered(List<TransactionRecord> all) {
     final q = _search.text.trim().toLowerCase();
+    // Inclusive end-of-day so a "to" date includes that whole day.
+    final toEnd = _to == null
+        ? null
+        : DateTime(_to!.year, _to!.month, _to!.day, 23, 59, 59);
     return all.where((t) {
       if (_filter != null && t.type != _filter) return false;
+      if (_category != null && t.category.id != _category!.id) return false;
+      if (_from != null && t.date.isBefore(_from!)) return false;
+      if (toEnd != null && t.date.isAfter(toEnd)) return false;
       if (q.isEmpty) return true;
       return t.title.toLowerCase().contains(q) ||
           t.category.labelOf(context.l10n).toLowerCase().contains(q);
     }).toList();
+  }
+
+  Future<void> _openFilters() async {
+    final result = await showModalBottomSheet<_TxFilters>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+      ),
+      builder: (_) => _FiltersSheet(
+        category: _category,
+        from: _from,
+        to: _to,
+      ),
+    );
+    if (result == null || !mounted) return;
+    setState(() {
+      _category = result.category;
+      _from = result.from;
+      _to = result.to;
+    });
   }
 
   @override
@@ -114,7 +156,11 @@ class _TransactionsListScreenState
                 start: 0.0,
                 end: 0.4,
                 offset: const Offset(0, 10),
-                child: _AppBar(title: l10n.txListTitle),
+                child: _AppBar(
+                  title: l10n.txListTitle,
+                  filtersActive: _hasAdvancedFilters,
+                  onFilters: _openFilters,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -192,9 +238,15 @@ class _TransactionsListScreenState
 }
 
 class _AppBar extends StatelessWidget {
-  const _AppBar({required this.title});
+  const _AppBar({
+    required this.title,
+    required this.filtersActive,
+    required this.onFilters,
+  });
 
   final String title;
+  final bool filtersActive;
+  final VoidCallback onFilters;
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +284,27 @@ class _AppBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 42),
+          PressScale(
+            onTap: onFilters,
+            child: Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: filtersActive ? AppColors.primary : AppColors.surface,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: filtersActive
+                      ? AppColors.primary
+                      : AppColors.surfaceVariant,
+                ),
+              ),
+              child: Icon(
+                LucideIcons.slidersHorizontal,
+                size: 19,
+                color: filtersActive ? Colors.white : AppColors.textPrimary,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -417,6 +489,276 @@ class _TxTile extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The advanced-filter selection returned by [_FiltersSheet].
+class _TxFilters {
+  const _TxFilters({this.category, this.from, this.to});
+  final TxCategory? category;
+  final DateTime? from;
+  final DateTime? to;
+}
+
+/// Bottom sheet: filter by category and/or a date range. Returns the chosen
+/// [_TxFilters] on Apply, or an empty one on Clear all.
+class _FiltersSheet extends ConsumerStatefulWidget {
+  const _FiltersSheet({this.category, this.from, this.to});
+
+  final TxCategory? category;
+  final DateTime? from;
+  final DateTime? to;
+
+  @override
+  ConsumerState<_FiltersSheet> createState() => _FiltersSheetState();
+}
+
+class _FiltersSheetState extends ConsumerState<_FiltersSheet> {
+  late TxCategory? _category = widget.category;
+  late DateTime? _from = widget.from;
+  late DateTime? _to = widget.to;
+
+  Future<void> _pickDate({required bool isFrom}) async {
+    final initial = (isFrom ? _from : _to) ?? DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2035),
+    );
+    if (picked == null || !mounted) return;
+    setState(() => isFrom ? _from = picked : _to = picked);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final localeTag = Localizations.localeOf(context).toString();
+    final dateFmt = DateFormat.yMMMd(localeTag);
+    final userCats = ref.watch(userCategoriesProvider).valueOrNull;
+    final categories = <TxCategory>[
+      ...expenseCategories,
+      ...incomeCategories,
+      if (userCats != null) ...userCats.expense,
+      if (userCats != null) ...userCats.income,
+    ];
+
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.xxl,
+          AppSpacing.lg,
+          AppSpacing.xxl,
+          AppSpacing.xxl + MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceVariant,
+                  borderRadius: BorderRadius.circular(AppRadius.full),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Center(
+              child: Text(
+                l10n.txFilters,
+                style: AppFont.titleMedium.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            _label(l10n.txFilterDateRange),
+            const SizedBox(height: AppSpacing.sm),
+            Row(
+              children: [
+                Expanded(
+                  child: _DateField(
+                    label: l10n.txFilterFrom,
+                    value: _from == null ? l10n.txFilterAny : dateFmt.format(_from!),
+                    onTap: () => _pickDate(isFrom: true),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: _DateField(
+                    label: l10n.txFilterTo,
+                    value: _to == null ? l10n.txFilterAny : dateFmt.format(_to!),
+                    onTap: () => _pickDate(isFrom: false),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            _label(l10n.txFilterCategory),
+            const SizedBox(height: AppSpacing.sm),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 220),
+              child: SingleChildScrollView(
+                child: Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    _CategoryChip(
+                      label: l10n.txFilterAny,
+                      selected: _category == null,
+                      onTap: () => setState(() => _category = null),
+                    ),
+                    for (final c in categories)
+                      _CategoryChip(
+                        label: c.labelOf(l10n),
+                        icon: c.icon,
+                        color: c.color,
+                        selected: _category?.id == c.id,
+                        onTap: () => setState(() => _category = c),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xxl),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () =>
+                        Navigator.of(context).pop(const _TxFilters()),
+                    child: Text(l10n.txFilterClearAll),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: PrimaryButton(
+                    label: l10n.txFilterApply,
+                    onPressed: () => Navigator.of(context).pop(
+                      _TxFilters(category: _category, from: _from, to: _to),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _label(String text) => Text(
+        text,
+        style: AppFont.labelLarge.copyWith(
+          color: AppColors.textSecondary,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+}
+
+class _DateField extends StatelessWidget {
+  const _DateField({
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return PressScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.md,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceVariant,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: AppFont.labelSmall.copyWith(color: AppColors.textMuted),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              value,
+              style: AppFont.bodyMedium.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CategoryChip extends StatelessWidget {
+  const _CategoryChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.icon,
+    this.color,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final IconData? icon;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return PressScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : AppColors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.full),
+          border: Border.all(
+            color: selected ? AppColors.primary : AppColors.surfaceVariant,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(
+                icon,
+                size: 15,
+                color: selected ? Colors.white : (color ?? AppColors.textMuted),
+              ),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              label,
+              style: AppFont.labelMedium.copyWith(
+                color: selected ? Colors.white : AppColors.textSecondary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
       ),
     );

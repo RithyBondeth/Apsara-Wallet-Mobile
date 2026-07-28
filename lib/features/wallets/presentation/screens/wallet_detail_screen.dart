@@ -14,8 +14,12 @@ import 'package:apsara_wallet_mobile/features/transactions/data/transaction_hist
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/add_tx_pickers.dart'
     show WalletBrandTile;
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_api.dart'
+    show WalletDeleteOutcome;
+import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/add_wallet_sheet.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
@@ -52,6 +56,95 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
         WalletKind.ewallet => context.l10n.walletTypeEwallet,
       };
 
+  void _snack(String message, {bool error = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: error ? AppColors.error : AppColors.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+        ),
+        content: Text(
+          message,
+          style: AppFont.bodyMedium.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Bottom-sheet menu with Edit + Delete.
+  Future<void> _openActions(Wallet wallet) async {
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+      ),
+      builder: (sheetContext) => _ActionsSheet(l10n: sheetContext.l10n),
+    );
+    if (action == 'edit') {
+      await _edit(wallet);
+    } else if (action == 'delete') {
+      await _delete(wallet);
+    }
+  }
+
+  Future<void> _edit(Wallet wallet) async {
+    final updated = await showEditWalletSheet(context, wallet);
+    if (updated == null || !mounted) return;
+    try {
+      await ref.read(walletsProvider.notifier).edit(updated);
+      if (mounted) _snack(context.l10n.walletUpdated);
+    } catch (_) {
+      if (mounted) _snack(context.l10n.walletUpdateFailed, error: true);
+    }
+  }
+
+  Future<void> _delete(Wallet wallet) async {
+    final id = wallet.id;
+    if (id == null) return;
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+        ),
+        title: Text(l10n.walletDeleteConfirmTitle),
+        content: Text(l10n.walletDeleteConfirmBody(wallet.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              l10n.walletDeleteAction,
+              style: const TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    final outcome = await ref.read(walletsProvider.notifier).remove(id);
+    if (!mounted) return;
+    switch (outcome) {
+      case WalletDeleteOutcome.ok:
+        _snack(context.l10n.walletDeleted);
+        context.router.maybePop();
+      case WalletDeleteOutcome.hasTransactions:
+        _snack(context.l10n.walletDeleteHasTransactions, error: true);
+      case WalletDeleteOutcome.failed:
+        _snack(context.l10n.walletDeleteFailed, error: true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -82,7 +175,10 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
                 start: 0.0,
                 end: 0.4,
                 offset: const Offset(0, 10),
-                child: _AppBar(title: wallet.name),
+                child: _AppBar(
+                  title: wallet.name,
+                  onMenu: () => _openActions(wallet),
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -159,9 +255,10 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
 }
 
 class _AppBar extends StatelessWidget {
-  const _AppBar({required this.title});
+  const _AppBar({required this.title, this.onMenu});
 
   final String title;
+  final VoidCallback? onMenu;
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +298,68 @@ class _AppBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 42),
+          if (onMenu != null)
+            PressScale(
+              onTap: onMenu,
+              child: Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.surfaceVariant),
+                ),
+                child: const Icon(
+                  LucideIcons.ellipsisVertical,
+                  size: 20,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            )
+          else
+            const SizedBox(width: 42),
+        ],
+      ),
+    );
+  }
+}
+
+/// Edit / Delete action sheet for a wallet.
+class _ActionsSheet extends StatelessWidget {
+  const _ActionsSheet({required this.l10n});
+
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: AppSpacing.md),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceVariant,
+              borderRadius: BorderRadius.circular(AppRadius.full),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ListTile(
+            leading: const Icon(LucideIcons.pencil, color: AppColors.textPrimary),
+            title: Text(l10n.walletEditAction),
+            onTap: () => Navigator.of(context).pop('edit'),
+          ),
+          ListTile(
+            leading: const Icon(LucideIcons.trash2, color: AppColors.error),
+            title: Text(
+              l10n.walletDeleteAction,
+              style: const TextStyle(color: AppColors.error),
+            ),
+            onTap: () => Navigator.of(context).pop('delete'),
+          ),
+          const SizedBox(height: AppSpacing.md),
         ],
       ),
     );

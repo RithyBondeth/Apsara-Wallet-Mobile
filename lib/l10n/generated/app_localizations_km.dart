@@ -650,6 +650,30 @@ class AppLocalizationsKm extends AppLocalizations {
   String get txEmptyBody => 'សាកល្បងស្វែងរក ឬតម្រងផ្សេង។';
 
   @override
+  String get txFilters => 'តម្រង';
+
+  @override
+  String get txFilterCategory => 'ប្រភេទ';
+
+  @override
+  String get txFilterDateRange => 'ចន្លោះកាលបរិច្ឆេទ';
+
+  @override
+  String get txFilterFrom => 'ពី';
+
+  @override
+  String get txFilterTo => 'ដល់';
+
+  @override
+  String get txFilterAny => 'ទាំងអស់';
+
+  @override
+  String get txFilterClearAll => 'សម្អាតទាំងអស់';
+
+  @override
+  String get txFilterApply => 'អនុវត្ត';
+
+  @override
   String get txDetailTitle => 'ព័ត៌មានលម្អិតប្រតិបត្តិការ';
 
   @override
@@ -1394,10 +1418,47 @@ class AppLocalizationsKm extends AppLocalizations {
   String get walletInitialBalance => 'សមតុល្យដំបូង';
 
   @override
+  String get walletBalanceEditLabel => 'សមតុល្យ';
+
+  @override
   String get walletColorLabel => 'ពណ៌';
 
   @override
   String get walletAdded => 'បានបន្ថែមកាបូប';
+
+  @override
+  String get walletsEditWallet => 'កែប្រែកាបូប';
+
+  @override
+  String get walletEditAction => 'កែប្រែកាបូប';
+
+  @override
+  String get walletDeleteAction => 'លុបកាបូប';
+
+  @override
+  String get walletUpdated => 'បានធ្វើបច្ចុប្បន្នភាពកាបូប';
+
+  @override
+  String get walletUpdateFailed =>
+      'មិនអាចធ្វើបច្ចុប្បន្នភាពកាបូបបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get walletDeleted => 'បានលុបកាបូប';
+
+  @override
+  String get walletDeleteConfirmTitle => 'លុបកាបូបនេះ?';
+
+  @override
+  String walletDeleteConfirmBody(String name) {
+    return '$name នឹងត្រូវបានលុប។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។';
+  }
+
+  @override
+  String get walletDeleteHasTransactions =>
+      'កាបូបនេះនៅមានប្រតិបត្តិការ។ សូមផ្លាស់ទី ឬលុបពួកវាជាមុនសិន។';
+
+  @override
+  String get walletDeleteFailed => 'មិនអាចលុបកាបូបបានទេ។ សូមព្យាយាមម្តងទៀត។';
 
   @override
   String get menuTitle => 'ម៉ឺនុយ';
