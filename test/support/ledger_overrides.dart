@@ -269,6 +269,8 @@ List<Override> sampleLedgerOverrides({
     // The dashboard fires this on load; keep it off the network in tests.
     recurringAutoPostProvider
         .overrideWith((ref) async => const RunDueResult(posted: 0, rulesRun: 0)),
+    // The dashboard also fires the insight digest post; keep it off-network.
+    insightAutoPostProvider.overrideWith((ref) async {}),
     savingsGoalsProvider
         .overrideWith(() => _FakeSavingsGoalsNotifier(savings ?? const [])),
     // Default to the sample inbox so the dashboard bell keeps its unread dot

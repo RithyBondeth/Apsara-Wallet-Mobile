@@ -1101,6 +1101,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your profile details were updated.';
 
   @override
+  String get notifTypeInsightTitle => 'Monthly insight';
+
+  @override
+  String notifTypeInsightBody(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transactions',
+      one: '1 transaction',
+    );
+    return 'This month you spent KHR $amount across $_temp0.';
+  }
+
+  @override
   String get notifTxTitle => 'Income recorded';
 
   @override

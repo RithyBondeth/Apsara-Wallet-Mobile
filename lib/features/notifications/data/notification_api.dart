@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/networks/api_client.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
+import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
+    show formatKhr;
 import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
@@ -127,6 +129,15 @@ _NotifCopy _copyFor(
         (l) => l.notifTypeSecurityProfileTitle,
         (l) => l.notifTypeSecurityProfileBody,
       );
+    case 'insight':
+      final spent = (data['spentKhr'] as num?)?.toInt() ?? 0;
+      final count = (data['count'] as num?)?.toInt() ?? 0;
+      return _NotifCopy(
+        LucideIcons.sparkles,
+        const Color(0xFF6C63D2),
+        (l) => l.notifTypeInsightTitle,
+        (l) => l.notifTypeInsightBody(formatKhr(spent), count),
+      );
     default:
       return _NotifCopy(
         LucideIcons.bell,
@@ -158,6 +169,21 @@ class NotificationApi {
   Future<bool> markAllRead() async {
     final res = await _api.post<Map<String, dynamic>>('/notifications/read-all');
     return res.success;
+  }
+
+  /// Posts the monthly insight digest. The backend dedupes per [periodKey], so
+  /// calling this repeatedly is safe (only the first per month creates one).
+  /// Returns whether a new notification was created.
+  Future<bool> emitInsight({
+    required String periodKey,
+    required int spentKhr,
+    required int count,
+  }) async {
+    final res = await _api.post<Map<String, dynamic>>(
+      '/notifications/insight',
+      data: {'periodKey': periodKey, 'spentKhr': spentKhr, 'count': count},
+    );
+    return res.success && res.data?['created'] == true;
   }
 }
 

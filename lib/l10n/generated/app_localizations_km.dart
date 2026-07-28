@@ -1101,6 +1101,19 @@ class AppLocalizationsKm extends AppLocalizations {
       'ព័ត៌មានប្រវត្តិរូបរបស់អ្នកត្រូវបានធ្វើបច្ចុប្បន្នភាព។';
 
   @override
+  String get notifTypeInsightTitle => 'ការវិភាគប្រចាំខែ';
+
+  @override
+  String notifTypeInsightBody(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ប្រតិបត្តិការ $count',
+    );
+    return 'ខែនេះអ្នកបានចំណាយ KHR $amount លើ $_temp0។';
+  }
+
+  @override
   String get notifTxTitle => 'បានកត់ត្រាចំណូល';
 
   @override

@@ -144,6 +144,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     // result isn't rendered; posted entries flow in through the ledger). Gated
     // on having a wallet so brand-new accounts don't fire it during onboarding.
     if (hasWallet) ref.watch(recurringAutoPostProvider);
+    // Post this month's insight digest once per session (backend dedupes per
+    // month). Gated on having a wallet, same as the recurring auto-post.
+    if (hasWallet) ref.watch(insightAutoPostProvider);
     final data = DashboardData.fromLedger(
       ledger: ledger,
       balanceKhr: total.khr,

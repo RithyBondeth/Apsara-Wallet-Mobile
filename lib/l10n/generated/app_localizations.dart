@@ -2078,6 +2078,18 @@ abstract class AppLocalizations {
   /// **'Your profile details were updated.'**
   String get notifTypeSecurityProfileBody;
 
+  /// No description provided for @notifTypeInsightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly insight'**
+  String get notifTypeInsightTitle;
+
+  /// No description provided for @notifTypeInsightBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This month you spent KHR {amount} across {count, plural, =1{1 transaction} other{{count} transactions}}.'**
+  String notifTypeInsightBody(String amount, int count);
+
   /// No description provided for @notifTxTitle.
   ///
   /// In en, this message translates to:
