@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 import 'package:apsara_wallet_mobile/core/enums/language_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
@@ -12,8 +13,10 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/rate_app_sheet.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_section.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 
 /// App preferences: language, currency, appearance, notifications, security and
@@ -261,24 +264,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           SettingsTile(
                             icon: LucideIcons.fileText,
                             title: context.l10n.settingsTermsOfService,
-                            onTap: _comingSoon,
+                            onTap: () => context.router.push(
+                              const TermsOfServiceRoute(),
+                            ),
                           ),
                           SettingsTile(
                             icon: LucideIcons.shield,
                             title: context.l10n.settingsPrivacyPolicy,
                             iconColor: AppColors.info,
-                            onTap: _comingSoon,
+                            onTap: () => context.router.push(
+                              const PrivacyPolicyRoute(),
+                            ),
                           ),
                           SettingsTile(
                             icon: LucideIcons.star,
                             title: context.l10n.settingsRateApp,
                             iconColor: AppColors.accent,
-                            onTap: _comingSoon,
+                            onTap: () => showRateAppSheet(context),
                           ),
                           SettingsTile(
                             icon: LucideIcons.info,
                             title: context.l10n.settingsAppVersion,
-                            value: 'v1.0.0',
+                            value: 'v${AppConstants.appVersion}',
                             showChevron: false,
                           ),
                         ],

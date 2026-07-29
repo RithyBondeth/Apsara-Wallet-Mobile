@@ -27,6 +27,7 @@ import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/walle
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/about_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/help_support_screen.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/screens/legal_document_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/savings_goals_screen.dart';
 import 'package:apsara_wallet_mobile/features/recurring/presentation/screens/recurring_screen.dart';
@@ -312,6 +313,16 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: SettingsRoute.page,
       path: RoutePathConstant.settingsPath,
+      guards: [_authGuard],
+    ),
+    AutoRoute(
+      page: TermsOfServiceRoute.page,
+      path: RoutePathConstant.termsPath,
+      guards: [_authGuard],
+    ),
+    AutoRoute(
+      page: PrivacyPolicyRoute.page,
+      path: RoutePathConstant.privacyPath,
       guards: [_authGuard],
     ),
   ];

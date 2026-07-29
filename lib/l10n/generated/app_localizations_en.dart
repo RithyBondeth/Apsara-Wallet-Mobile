@@ -1412,6 +1412,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAppVersion => 'App Version';
 
   @override
+  String get legalLastUpdated => 'Last updated';
+
+  @override
+  String get legalContactHeading => 'Contact Us';
+
+  @override
+  String get rateTitle => 'Enjoying Apsara Wallet?';
+
+  @override
+  String get rateSubtitle =>
+      'Tap a star to rate your experience. Your feedback helps us improve.';
+
+  @override
+  String get rateSubmit => 'Submit Rating';
+
+  @override
+  String get rateThankYou => 'Thanks for your feedback!';
+
+  @override
   String get walletsTitle => 'Wallets';
 
   @override

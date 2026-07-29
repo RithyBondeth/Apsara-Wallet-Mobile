@@ -500,6 +500,13 @@
   "settingsRateApp": "វាយតម្លៃ Apsara Wallet",
   "settingsAppVersion": "កំណែកម្មវិធី",
 
+  "legalLastUpdated": "ធ្វើបច្ចុប្បន្នភាពចុងក្រោយ",
+  "legalContactHeading": "ទំនាក់ទំនងមកយើង",
+  "rateTitle": "ចូលចិត្ត Apsara Wallet ទេ?",
+  "rateSubtitle": "ចុចផ្កាយដើម្បីវាយតម្លៃបទពិសោធន៍របស់អ្នក។ មតិយោបល់របស់អ្នកជួយយើងឱ្យប្រសើរឡើង។",
+  "rateSubmit": "ដាក់ស្នើការវាយតម្លៃ",
+  "rateThankYou": "សូមអរគុណសម្រាប់មតិយោបល់របស់អ្នក!",
+
   "walletsTitle": "កាបូប",
   "walletsCountTotal": "សរុប {count}",
   "@walletsCountTotal": {

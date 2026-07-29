@@ -1411,6 +1411,25 @@ class AppLocalizationsKm extends AppLocalizations {
   String get settingsAppVersion => 'កំណែកម្មវិធី';
 
   @override
+  String get legalLastUpdated => 'ធ្វើបច្ចុប្បន្នភាពចុងក្រោយ';
+
+  @override
+  String get legalContactHeading => 'ទំនាក់ទំនងមកយើង';
+
+  @override
+  String get rateTitle => 'ចូលចិត្ត Apsara Wallet ទេ?';
+
+  @override
+  String get rateSubtitle =>
+      'ចុចផ្កាយដើម្បីវាយតម្លៃបទពិសោធន៍របស់អ្នក។ មតិយោបល់របស់អ្នកជួយយើងឱ្យប្រសើរឡើង។';
+
+  @override
+  String get rateSubmit => 'ដាក់ស្នើការវាយតម្លៃ';
+
+  @override
+  String get rateThankYou => 'សូមអរគុណសម្រាប់មតិយោបល់របស់អ្នក!';
+
+  @override
   String get walletsTitle => 'កាបូប';
 
   @override

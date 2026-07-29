@@ -2660,6 +2660,42 @@ abstract class AppLocalizations {
   /// **'App Version'**
   String get settingsAppVersion;
 
+  /// No description provided for @legalLastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated'**
+  String get legalLastUpdated;
+
+  /// No description provided for @legalContactHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get legalContactHeading;
+
+  /// No description provided for @rateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying Apsara Wallet?'**
+  String get rateTitle;
+
+  /// No description provided for @rateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a star to rate your experience. Your feedback helps us improve.'**
+  String get rateSubtitle;
+
+  /// No description provided for @rateSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Rating'**
+  String get rateSubmit;
+
+  /// No description provided for @rateThankYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your feedback!'**
+  String get rateThankYou;
+
   /// No description provided for @walletsTitle.
   ///
   /// In en, this message translates to:

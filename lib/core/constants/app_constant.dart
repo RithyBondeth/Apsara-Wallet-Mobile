@@ -8,6 +8,22 @@ class AppConstants {
   static const String appVersion = '1.0.0';
   static const String appTagline = 'Smart Digital Expense Tracker';
 
+  /// Support / legal contact address (shown at the foot of legal pages).
+  static const String supportEmail = 'support@apsarawallet.app';
+
+  // =========================
+  // STORE LISTINGS (Rate the app)
+  // =========================
+  // NOTE: placeholder bundle ids — update once the app is published so the
+  // "Rate" action deep-links to the real store listings.
+  static const String androidPackageId = 'com.example.apsara_wallet_mobile';
+  static const String iosAppId = '000000000';
+
+  static const String playStoreUrl =
+      'https://play.google.com/store/apps/details?id=$androidPackageId';
+  static const String appStoreUrl =
+      'https://apps.apple.com/app/id$iosAppId';
+
   // =========================
   // TIME CONFIG
   // =========================

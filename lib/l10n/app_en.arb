@@ -500,6 +500,13 @@
   "settingsRateApp": "Rate Apsara Wallet",
   "settingsAppVersion": "App Version",
 
+  "legalLastUpdated": "Last updated",
+  "legalContactHeading": "Contact Us",
+  "rateTitle": "Enjoying Apsara Wallet?",
+  "rateSubtitle": "Tap a star to rate your experience. Your feedback helps us improve.",
+  "rateSubmit": "Submit Rating",
+  "rateThankYou": "Thanks for your feedback!",
+
   "walletsTitle": "Wallets",
   "walletsCountTotal": "{count} total",
   "@walletsCountTotal": {
