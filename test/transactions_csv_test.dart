@@ -13,17 +13,16 @@ void main() {
     String? note,
     int amount = 1000,
     ETransactionType type = ETransactionType.expense,
-  }) =>
-      TransactionRecord(
-        id: 't',
-        title: title,
-        category: cat,
-        walletName: 'ABA, Bank', // comma on purpose
-        date: DateTime(2026, 7, 28, 9, 5),
-        amountKhr: amount,
-        type: type,
-        note: note,
-      );
+  }) => TransactionRecord(
+    id: 't',
+    title: title,
+    category: cat,
+    walletName: 'ABA, Bank', // comma on purpose
+    date: DateTime(2026, 7, 28, 9, 5),
+    amountKhr: amount,
+    type: type,
+    note: note,
+  );
 
   test('header row + RFC-4180 escaping of commas and quotes', () {
     final csv = buildTransactionsCsv(
@@ -32,8 +31,7 @@ void main() {
         tx(title: 'Salary', amount: 500000, type: ETransactionType.income),
       ],
       categoryLabel: (_) => 'Food',
-      typeLabel: (t) =>
-          t == ETransactionType.income ? 'Income' : 'Expense',
+      typeLabel: (t) => t == ETransactionType.income ? 'Income' : 'Expense',
     );
     final lines = csv.split('\r\n');
 

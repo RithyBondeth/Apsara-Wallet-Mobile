@@ -24,8 +24,7 @@ void main() {
   });
 
   test('older days fall back to an absolute date', () {
-    final label =
-        transactionGroupLabel(l10n, 'en', DateTime(2026, 7, 15), now);
+    final label = transactionGroupLabel(l10n, 'en', DateTime(2026, 7, 15), now);
     expect(label, isNot(l10n.notifToday));
     expect(label, isNot(l10n.notifYesterday));
   });

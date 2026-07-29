@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
@@ -97,13 +99,18 @@ class MonthOverviewCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      // Budget target = this month's income; remaining is what
-                      // is left after this month's spend (floored at zero).
-                      'KHR ${formatKhr((data.budgetKhr - data.monthExpenseKhr).clamp(0, data.budgetKhr))}',
-                      style: AppFont.titleSmall.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w600,
+                    // Budget target = this month's income; remaining is what
+                    // is left after this month's spend (floored at zero).
+                    Consumer(
+                      builder: (context, ref, _) => Text(
+                        ref.watch(moneyFormatterProvider).format(
+                              (data.budgetKhr - data.monthExpenseKhr)
+                                  .clamp(0, data.budgetKhr),
+                            ),
+                        style: AppFont.titleSmall.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -145,11 +152,13 @@ class _Metric extends StatelessWidget {
           style: AppFont.bodySmall.copyWith(color: AppColors.textSecondary),
         ),
         const SizedBox(height: AppSpacing.xs),
-        Text(
-          'KHR ${formatKhr(amountKhr)}',
-          style: AppFont.titleMedium.copyWith(
-            color: color,
-            fontWeight: FontWeight.w700,
+        Consumer(
+          builder: (context, ref, _) => Text(
+            ref.watch(moneyFormatterProvider).format(amountKhr),
+            style: AppFont.titleMedium.copyWith(
+              color: color,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ],

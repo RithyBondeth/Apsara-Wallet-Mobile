@@ -78,6 +78,19 @@ class TransactionApi {
         .toList();
   }
 
+  /// Raw transaction JSON, throwing when the request fails so callers can fall
+  /// back to a cached copy instead of silently rendering an empty ledger.
+  Future<List<dynamic>> fetchRaw({int limit = 200}) async {
+    final res = await _api.get<Map<String, dynamic>>(
+      '/transactions',
+      query: {'limit': limit},
+    );
+    if (!res.success || res.data == null) throw Exception(res.message);
+    final data = res.data!['data'];
+    if (data is! List) throw Exception('unexpected transactions response');
+    return data;
+  }
+
   Future<bool> create({
     required String title,
     required String walletId,

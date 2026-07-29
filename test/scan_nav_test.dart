@@ -57,8 +57,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
   }
 
-  testWidgets('Scan button opens ScanReceiptScreen from the dashboard',
-      (tester) async {
+  testWidgets('Scan button opens ScanReceiptScreen from the dashboard', (
+    tester,
+  ) async {
     await pumpApp(tester);
     expect(find.byType(DashboardScreen), findsOneWidget);
 
@@ -66,12 +67,13 @@ void main() {
     expect(find.byType(ScanReceiptScreen), findsOneWidget);
   });
 
-  testWidgets('Scan button opens ScanReceiptScreen from Analytics',
-      (tester) async {
+  testWidgets('Scan button opens ScanReceiptScreen from Analytics', (
+    tester,
+  ) async {
     await pumpApp(tester);
 
     // Home -> Analytics.
-    await tester.tap(find.text('Analytics'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(1)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1400));
     expect(find.byType(AnalyticsScreen), findsOneWidget);

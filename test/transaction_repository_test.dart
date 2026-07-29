@@ -24,8 +24,11 @@ void main() {
     expect(all.length, sampleTransactions().length);
     // Ordered by date descending.
     for (var i = 1; i < all.length; i++) {
-      expect(all[i - 1].date.isAfter(all[i].date) ||
-          all[i - 1].date.isAtSameMomentAs(all[i].date), isTrue);
+      expect(
+        all[i - 1].date.isAfter(all[i].date) ||
+            all[i - 1].date.isAtSameMomentAs(all[i].date),
+        isTrue,
+      );
     }
   });
 

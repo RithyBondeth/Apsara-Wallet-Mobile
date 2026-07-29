@@ -35,12 +35,17 @@ class _FakeFeedbackApi extends FeedbackApi {
   }
 }
 
-Widget _wrap(Widget child, {List<Override> overrides = const []}) {
+Widget _wrap(
+  Widget child, {
+  List<Override> overrides = const [],
+  Locale? locale,
+}) {
   return ProviderScope(
     overrides: overrides,
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: child,
@@ -114,8 +119,39 @@ void main() {
     expect(find.text('Contact Us'), findsOneWidget);
   });
 
-  testWidgets('Rate sheet: submit disabled until a star is picked',
-      (tester) async {
+  testWidgets('Terms of Service renders in Khmer when locale is km', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 1600));
+    await tester.pumpWidget(
+      _wrap(const TermsOfServiceScreen(), locale: const Locale('km')),
+    );
+    await settle(tester);
+
+    // Localised title + first section heading (Khmer numeral "១").
+    expect(find.text('លក្ខខណ្ឌនៃការប្រើប្រាស់'), findsOneWidget);
+    expect(find.text('១. ការទទួលយកលក្ខខណ្ឌ'), findsOneWidget);
+    // English body must not leak through.
+    expect(find.text('1. Acceptance of Terms'), findsNothing);
+  });
+
+  testWidgets('Privacy Policy renders in Khmer when locale is km', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 1600));
+    await tester.pumpWidget(
+      _wrap(const PrivacyPolicyScreen(), locale: const Locale('km')),
+    );
+    await settle(tester);
+
+    expect(find.text('គោលការណ៍ឯកជនភាព'), findsOneWidget);
+    expect(find.text('១. ព័ត៌មានដែលយើងប្រមូល'), findsOneWidget);
+    expect(find.text('1. Information We Collect'), findsNothing);
+  });
+
+  testWidgets('Rate sheet: submit disabled until a star is picked', (
+    tester,
+  ) async {
     final fake = _FakeFeedbackApi();
     await tester.pumpWidget(
       _rateHost(overrides: [feedbackApiProvider.overrideWithValue(fake)]),
@@ -132,8 +168,9 @@ void main() {
     expect(fake.calls, 0);
   });
 
-  testWidgets('Rate sheet: high rating records and thanks the user',
-      (tester) async {
+  testWidgets('Rate sheet: high rating records and thanks the user', (
+    tester,
+  ) async {
     final fake = _FakeFeedbackApi();
     await tester.pumpWidget(
       _rateHost(overrides: [feedbackApiProvider.overrideWithValue(fake)]),
@@ -154,8 +191,9 @@ void main() {
     expect(find.text('Thanks for your feedback!'), findsOneWidget);
   });
 
-  testWidgets('Rate sheet: low rating opens comment step and sends comment',
-      (tester) async {
+  testWidgets('Rate sheet: low rating opens comment step and sends comment', (
+    tester,
+  ) async {
     final fake = _FakeFeedbackApi();
     await tester.pumpWidget(
       _rateHost(overrides: [feedbackApiProvider.overrideWithValue(fake)]),

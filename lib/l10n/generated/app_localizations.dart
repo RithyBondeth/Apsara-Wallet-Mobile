@@ -1250,6 +1250,30 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get commonComingSoon;
 
+  /// No description provided for @commonRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetry;
+
+  /// No description provided for @errorLoadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load'**
+  String get errorLoadTitle;
+
+  /// No description provided for @errorLoadMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong reaching the server. Check your connection and try again.'**
+  String get errorLoadMessage;
+
+  /// No description provided for @offlineBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline — showing the latest saved data.'**
+  String get offlineBannerMessage;
+
   /// No description provided for @txListTitle.
   ///
   /// In en, this message translates to:

@@ -36,9 +36,9 @@ void main() {
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       if (details.exception.toString().contains('google_fonts') ||
-          details.exception
-              .toString()
-              .contains('was not found in the application assets')) {
+          details.exception.toString().contains(
+            'was not found in the application assets',
+          )) {
         return;
       }
       oldOnError(details);

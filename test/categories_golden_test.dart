@@ -10,6 +10,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/das
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 Widget _wrap(Widget child) {
   return ProviderScope(
@@ -39,8 +40,9 @@ void main() {
     addTearDown(() => FlutterError.onError = oldOnError);
   });
 
-  testWidgets('Categories renders settled and toggles to income',
-      (tester) async {
+  testWidgets('Categories renders settled and toggles to income', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(_wrap(const CategoriesScreen()));
     await tester.pump();
@@ -75,8 +77,7 @@ void main() {
     expect(find.text('Food & Dining'), findsNothing);
   });
 
-  testWidgets('Profile Categories tile opens CategoriesScreen',
-      (tester) async {
+  testWidgets('Profile Categories tile opens CategoriesScreen', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     final router = AppRouter();
     await tester.pumpWidget(
@@ -96,7 +97,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1600));
     expect(find.byType(DashboardScreen), findsOneWidget);
 
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(3)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 1400));

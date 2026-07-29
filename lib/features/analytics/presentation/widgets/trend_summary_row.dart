@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
@@ -23,35 +25,40 @@ class TrendSummaryRow extends StatelessWidget {
     final avg = series.isEmpty ? 0.0 : total / series.length;
     final peak = series.isEmpty ? 0.0 : series.reduce((a, b) => a > b ? a : b);
 
-    return Row(
-      children: [
-        Expanded(
-          child: _StatTile(
-            icon: LucideIcons.chartNoAxesColumn,
-            label: context.l10n.analyticsAvgPerDay,
-            value: formatKhr(avg.round()),
-            tint: AppColors.info,
-          ),
-        ),
-        const SizedBox(width: AppSpacing.md),
-        Expanded(
-          child: _StatTile(
-            icon: LucideIcons.trendingUp,
-            label: context.l10n.analyticsPeakDay,
-            value: formatKhr(peak.round()),
-            tint: AppColors.expense,
-          ),
-        ),
-        const SizedBox(width: AppSpacing.md),
-        Expanded(
-          child: _StatTile(
-            icon: LucideIcons.wallet,
-            label: context.l10n.analyticsTotal,
-            value: formatKhr(total.round()),
-            tint: AppGradients.goldCore,
-          ),
-        ),
-      ],
+    return Consumer(
+      builder: (context, ref, _) {
+        final money = ref.watch(moneyFormatterProvider);
+        return Row(
+          children: [
+            Expanded(
+              child: _StatTile(
+                icon: LucideIcons.chartNoAxesColumn,
+                label: context.l10n.analyticsAvgPerDay,
+                value: money.number(avg.round()),
+                tint: AppColors.info,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: _StatTile(
+                icon: LucideIcons.trendingUp,
+                label: context.l10n.analyticsPeakDay,
+                value: money.number(peak.round()),
+                tint: AppColors.expense,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: _StatTile(
+                icon: LucideIcons.wallet,
+                label: context.l10n.analyticsTotal,
+                value: money.number(total.round()),
+                tint: AppGradients.goldCore,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

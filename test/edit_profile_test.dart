@@ -11,6 +11,7 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profi
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 import 'support/ledger_overrides.dart';
 
@@ -68,8 +69,9 @@ void main() {
     );
   });
 
-  testWidgets('Clearing the name surfaces a validation error on save',
-      (tester) async {
+  testWidgets('Clearing the name surfaces a validation error on save', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     await tester.pumpWidget(_wrap(const EditProfileScreen()));
     await tester.pump(const Duration(milliseconds: 1400));
@@ -82,8 +84,9 @@ void main() {
     expect(find.text('Please enter your name'), findsOneWidget);
   });
 
-  testWidgets('Personal Information tile opens EditProfileScreen',
-      (tester) async {
+  testWidgets('Personal Information tile opens EditProfileScreen', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     final router = AppRouter();
     await tester.pumpWidget(
@@ -104,7 +107,7 @@ void main() {
     expect(find.byType(DashboardScreen), findsOneWidget);
 
     // Home -> Profile.
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(3)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 1400));

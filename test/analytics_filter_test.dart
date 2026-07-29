@@ -56,8 +56,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1400));
   }
 
-  testWidgets('Range dropdown opens sheet and updates the label',
-      (tester) async {
+  testWidgets('Range dropdown opens sheet and updates the label', (
+    tester,
+  ) async {
     await boot(tester);
     expect(find.text('This Month'), findsOneWidget);
 
@@ -74,8 +75,9 @@ void main() {
     expect(find.text('This Month'), findsNothing);
   });
 
-  testWidgets('Calendar button opens the date picker and updates the period',
-      (tester) async {
+  testWidgets('Calendar button opens the date picker and updates the period', (
+    tester,
+  ) async {
     await boot(tester);
     expect(find.text('May 2024'), findsOneWidget);
 

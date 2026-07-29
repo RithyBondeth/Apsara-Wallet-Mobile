@@ -15,6 +15,7 @@ import 'package:apsara_wallet_mobile/features/analytics/data/analytics_mock_data
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/analytics_segmented_tabs.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/offline_banner.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/category_breakdown_list.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/daily_trend_card.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/expense_breakdown_card.dart';
@@ -50,14 +51,14 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   late DateTime _period;
 
   String _rangeLabel(BuildContext context) => switch (_range) {
-        AnalyticsRange.week => context.l10n.analyticsRangeWeek,
-        AnalyticsRange.month => context.l10n.analyticsRangeMonth,
-        AnalyticsRange.year => context.l10n.analyticsRangeYear,
-      };
+    AnalyticsRange.week => context.l10n.analyticsRangeWeek,
+    AnalyticsRange.month => context.l10n.analyticsRangeMonth,
+    AnalyticsRange.year => context.l10n.analyticsRangeYear,
+  };
 
   String _periodLabel(BuildContext context) => DateFormat.yMMMM(
-        Localizations.localeOf(context).toString(),
-      ).format(_period);
+    Localizations.localeOf(context).toString(),
+  ).format(_period);
 
   /// Localized calendar picker — backs both the app-bar calendar button and
   /// the "May 2024 ›" period stepper.
@@ -155,13 +156,17 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
         floatingActionButton: AppBottomBarCenterButton(
           onTap: () => context.router.push(const ScanReceiptRoute()),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: AppBottomBar(currentIndex: 1, onSelect: _onNavSelect),
+        floatingActionButtonLocation: const AppBottomBarCenterLocation(),
+        bottomNavigationBar: AppBottomBar(
+          currentIndex: 1,
+          onSelect: _onNavSelect,
+        ),
         body: SafeArea(
           bottom: false,
           child: Column(
             children: [
               _AppBar(onTapCalendar: _pickPeriod),
+              const OfflineBanner(),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),

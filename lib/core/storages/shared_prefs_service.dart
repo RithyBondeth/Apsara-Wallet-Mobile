@@ -16,6 +16,13 @@ class SharedPrefsService {
     return prefs.getBool(key) ?? false;
   }
 
+  /// Like [getBool] but returns [fallback] when the key was never set — needed
+  /// for preferences that default to `true`.
+  Future<bool> getBoolOr(String key, bool fallback) async {
+    final prefs = await _prefs;
+    return prefs.getBool(key) ?? fallback;
+  }
+
   Future<void> setString(String key, String value) async {
     final prefs = await _prefs;
     await prefs.setString(key, value);

@@ -634,6 +634,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonComingSoon => 'Coming soon';
 
   @override
+  String get commonRetry => 'Retry';
+
+  @override
+  String get errorLoadTitle => 'Couldn\'t load';
+
+  @override
+  String get errorLoadMessage =>
+      'Something went wrong reaching the server. Check your connection and try again.';
+
+  @override
+  String get offlineBannerMessage =>
+      'You\'re offline — showing the latest saved data.';
+
+  @override
   String get txListTitle => 'Transactions';
 
   @override

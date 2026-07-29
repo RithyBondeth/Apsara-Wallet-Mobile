@@ -22,7 +22,10 @@ final _fixedNow = DateTime(2024, 5, 20, 12);
 
 Widget _wrap(Widget child) {
   return ProviderScope(
-    overrides: [nowProvider.overrideWithValue(_fixedNow), ...sampleLedgerOverrides()],
+    overrides: [
+      nowProvider.overrideWithValue(_fixedNow),
+      ...sampleLedgerOverrides(),
+    ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -35,15 +38,18 @@ Widget _wrap(Widget child) {
 
 Widget _router(AppRouter router) {
   return ProviderScope(
-    overrides: [nowProvider.overrideWithValue(_fixedNow), ...sampleLedgerOverrides()],
+    overrides: [
+      nowProvider.overrideWithValue(_fixedNow),
+      ...sampleLedgerOverrides(),
+    ],
     child: MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: router.config(
-            deepLinkBuilder: (_) => DeepLink.single(const DashboardRoute()),
-          ),
+        deepLinkBuilder: (_) => DeepLink.single(const DashboardRoute()),
+      ),
     ),
   );
 }
@@ -87,7 +93,9 @@ void main() {
 
   testWidgets('Transaction detail renders settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
-    await tester.pumpWidget(_wrap(const TransactionDetailScreen(id: 'aba-salary')));
+    await tester.pumpWidget(
+      _wrap(const TransactionDetailScreen(id: 'aba-salary')),
+    );
     await settle(tester);
 
     expect(find.text('ABA Salary'), findsOneWidget);
@@ -171,8 +179,9 @@ void main() {
     expect(find.text('Lunch delivery'), findsOneWidget);
   });
 
-  testWidgets('Manually adding a titled expense persists it to the list',
-      (tester) async {
+  testWidgets('Manually adding a titled expense persists it to the list', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     final router = AppRouter();
     await tester.pumpWidget(_router(router));

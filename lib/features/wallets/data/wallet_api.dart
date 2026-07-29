@@ -90,6 +90,16 @@ class WalletApi {
         .toList();
   }
 
+  /// Raw wallet JSON, throwing when the request fails so callers can fall back
+  /// to a cached copy instead of silently rendering an empty list.
+  Future<List<dynamic>> fetchRaw() async {
+    final res = await _api.get<List<dynamic>>('/wallets');
+    if (!res.success || res.data == null) {
+      throw Exception(res.message);
+    }
+    return res.data!;
+  }
+
   Future<bool> create(Wallet wallet) async {
     final res = await _api.post<Map<String, dynamic>>('/wallets', data: {
       'name': wallet.name,

@@ -1,5 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:apsara_wallet_mobile/core/providers/offline_status_provider.dart';
+import 'package:apsara_wallet_mobile/core/storages/json_cache.dart';
+import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_api.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 
@@ -11,8 +14,34 @@ class WalletsNotifier extends AsyncNotifier<List<Wallet>> {
 
   @override
   Future<List<Wallet>> build() async {
-    final apiWallets = await _api.list();
-    return apiWallets.map((w) => w.toWallet()).toList();
+    final cache = ref.read(jsonCacheProvider);
+    try {
+      final raw = await _api.fetchRaw();
+      await cache.writeList(StorageKeys.cachedWallets, raw);
+      _mark(stale: false);
+      return _parse(raw);
+    } catch (e) {
+      // Network down — serve the last good snapshot if we have one, so the
+      // screen stays useful offline. No snapshot → surface the error (retry).
+      final cached = await cache.readList(StorageKeys.cachedWallets);
+      if (cached != null) {
+        _mark(stale: true);
+        return _parse(cached);
+      }
+      rethrow;
+    }
+  }
+
+  List<Wallet> _parse(List<dynamic> raw) => raw
+      .map((e) => ApiWallet.fromJson(e as Map<String, dynamic>).toWallet())
+      .toList();
+
+  // Deferred so we never modify another provider during this one's build.
+  void _mark({required bool stale}) {
+    Future.microtask(() {
+      final notifier = ref.read(offlineSourcesProvider.notifier);
+      stale ? notifier.markStale('wallets') : notifier.markFresh('wallets');
+    });
   }
 
   Future<void> add(Wallet wallet) async {

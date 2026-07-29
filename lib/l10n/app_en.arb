@@ -232,6 +232,10 @@
   "insightsFooter": "Insights are generated on your device from your own transactions.",
 
   "commonComingSoon": "Coming soon",
+  "commonRetry": "Retry",
+  "errorLoadTitle": "Couldn't load",
+  "errorLoadMessage": "Something went wrong reaching the server. Check your connection and try again.",
+  "offlineBannerMessage": "You're offline — showing the latest saved data.",
 
   "txListTitle": "Transactions",
   "txSearchHint": "Search transactions",

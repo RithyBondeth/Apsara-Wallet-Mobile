@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
+import 'package:apsara_wallet_mobile/core/providers/offline_status_provider.dart';
+import 'package:apsara_wallet_mobile/core/storages/json_cache.dart';
+import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_api.dart';
@@ -33,7 +36,24 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
       for (final c in [...userCats.expense, ...userCats.income]) c.id: c,
     };
 
-    final apiTxns = await _api.list();
+    // Live fetch → cache the raw snapshot; on network failure fall back to the
+    // last good snapshot (stale) so the ledger stays readable offline. No
+    // snapshot → rethrow so the screen can offer a retry.
+    final cache = ref.read(jsonCacheProvider);
+    List<dynamic> raw;
+    try {
+      raw = await _api.fetchRaw();
+      await cache.writeList(StorageKeys.cachedTransactions, raw);
+      _markOffline(stale: false);
+    } catch (e) {
+      final cached = await cache.readList(StorageKeys.cachedTransactions);
+      if (cached == null) rethrow;
+      raw = cached;
+      _markOffline(stale: true);
+    }
+    final apiTxns = raw
+        .map((e) => ApiTransaction.fromJson(e as Map<String, dynamic>))
+        .toList();
     final records = apiTxns
         .map((t) {
           final slug = index.slugForUuid(t.categoryId);
@@ -49,6 +69,16 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
       // expects this ordering.
       ..sort((a, b) => b.date.compareTo(a.date));
     return records;
+  }
+
+  // Deferred so we never modify another provider during this one's build.
+  void _markOffline({required bool stale}) {
+    Future.microtask(() {
+      final notifier = ref.read(offlineSourcesProvider.notifier);
+      stale
+          ? notifier.markStale('transactions')
+          : notifier.markFresh('transactions');
+    });
   }
 
   Future<void> add(TransactionRecord record) async {

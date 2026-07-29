@@ -6,12 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
-    show formatKhr;
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
@@ -351,12 +350,14 @@ class _AmountHero extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
-        Text(
-          '${record.sign} KHR ${formatKhr(record.amountKhr)}',
-          style: AppFont.headingLarge.copyWith(
-            color: amountColor,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.5,
+        Consumer(
+          builder: (context, ref, _) => Text(
+            '${record.sign} ${ref.watch(moneyFormatterProvider).format(record.amountKhr)}',
+            style: AppFont.headingLarge.copyWith(
+              color: amountColor,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5,
+            ),
           ),
         ),
         const SizedBox(height: AppSpacing.md),

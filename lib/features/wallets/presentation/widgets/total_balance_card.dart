@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -114,11 +117,13 @@ class TotalBalanceCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
-                          Text(
-                            'KHR',
-                            style: AppFont.titleMedium.copyWith(
-                              color: AppGradients.goldLight,
-                              fontWeight: FontWeight.w700,
+                          Consumer(
+                            builder: (context, ref, _) => Text(
+                              ref.watch(moneyFormatterProvider).code,
+                              style: AppFont.titleMedium.copyWith(
+                                color: AppGradients.goldLight,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                           const SizedBox(width: AppSpacing.sm),
@@ -133,14 +138,20 @@ class TotalBalanceCard extends StatelessWidget {
                             )
                           else
                             ShimmerSweep(
-                              child: CountUpText(
-                                value: data.totalBalanceKhr,
-                                formatter: (v) => formatKhr(v.round()),
-                                style: AppFont.headingLarge.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.5,
-                                ),
+                              child: Consumer(
+                                builder: (context, ref, _) {
+                                  final money =
+                                      ref.watch(moneyFormatterProvider);
+                                  return CountUpText(
+                                    value: data.totalBalanceKhr,
+                                    formatter: (v) => money.number(v.round()),
+                                    style: AppFont.headingLarge.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                         ],
@@ -148,13 +159,22 @@ class TotalBalanceCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    balanceHidden
-                        ? '≈ USD ••••••'
-                        : '≈ USD ${formatUsd(data.totalBalanceUsd)}',
-                    style: AppFont.bodyMedium.copyWith(
-                      color: _ivory.withValues(alpha: 0.78),
-                    ),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final isUsd = ref.watch(moneyFormatterProvider).currency ==
+                          ECurrencyType.usd;
+                      final text = balanceHidden
+                          ? (isUsd ? '≈ KHR ••••••' : '≈ USD ••••••')
+                          : (isUsd
+                              ? '≈ KHR ${formatKhr(data.totalBalanceKhr)}'
+                              : '≈ USD ${formatUsd(data.totalBalanceUsd)}');
+                      return Text(
+                        text,
+                        style: AppFont.bodyMedium.copyWith(
+                          color: _ivory.withValues(alpha: 0.78),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   _WalletCountChip(count: data.walletCount),

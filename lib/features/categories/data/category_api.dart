@@ -1,5 +1,7 @@
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/networks/api_client.dart';
+import 'package:apsara_wallet_mobile/core/storages/json_cache.dart';
+import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_choices.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,6 +76,15 @@ class CategoryApi {
         .toList();
   }
 
+  /// Raw category JSON, throwing on failure so the provider can fall back to a
+  /// cached copy instead of silently returning an empty catalog (which would
+  /// break transaction/budget category resolution offline).
+  Future<List<dynamic>> fetchRaw() async {
+    final res = await _api.get<List<dynamic>>('/categories');
+    if (!res.success || res.data == null) throw Exception(res.message);
+    return res.data!;
+  }
+
   Future<bool> create({
     required String slug,
     required String name,
@@ -116,8 +127,25 @@ final categoryApiProvider = Provider<CategoryApi>(
 );
 
 /// Raw category list (system + the user's own), fetched once for the session.
+/// The category catalog, cached so it survives offline — transaction and
+/// budget category resolution both depend on it. (Supporting data, so it does
+/// not itself drive the offline banner; wallets/transactions/budgets do.)
 final categoriesListProvider = FutureProvider<List<ApiCategory>>((ref) async {
-  return ref.watch(categoryApiProvider).list();
+  final api = ref.watch(categoryApiProvider);
+  final cache = ref.read(jsonCacheProvider);
+  List<dynamic> raw;
+  try {
+    raw = await api.fetchRaw();
+    await cache.writeList(StorageKeys.cachedCategories, raw);
+  } catch (e) {
+    // Offline: serve the cached catalog if any, else empty. Never throws — the
+    // static system catalog still resolves system categories, and callers use
+    // `valueOrNull ?? []`, so an empty result degrades gracefully.
+    raw = await cache.readList(StorageKeys.cachedCategories) ?? const [];
+  }
+  return raw
+      .map((e) => ApiCategory.fromJson(e as Map<String, dynamic>))
+      .toList();
 });
 
 final categoryIndexProvider = FutureProvider<CategoryIndex>((ref) async {

@@ -12,6 +12,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/das
 import 'package:apsara_wallet_mobile/features/insights/presentation/screens/ai_insights_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 import 'support/test_database.dart';
 
@@ -83,7 +84,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1600));
     expect(find.byType(DashboardScreen), findsOneWidget);
 
-    await tester.tap(find.text('Analytics'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(1)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 1400));
