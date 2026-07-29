@@ -428,6 +428,14 @@
 
   "dashboardAppBarTitle": "ផ្ទាំងគ្រប់គ្រង",
   "commonCancel": "បោះបង់",
+  "securityDeleteAccount": "លុបគណនី",
+  "securityDeleteAccountSubtitle": "លុបគណនី និងទិន្នន័យរបស់អ្នកជាអចិន្ត្រៃយ៍",
+  "deleteAccountDialogTitle": "លុបគណនី?",
+  "deleteAccountDialogBody": "នេះនឹងលុបគណនី និងទិន្នន័យទាំងអស់របស់អ្នកជាអចិន្ត្រៃយ៍ — កាបូប ប្រតិបត្តិការ ថវិកា និងច្រើនទៀត។ វាមិនអាចត្រឡប់វិញបានទេ។",
+  "deleteAccountPasswordHint": "បញ្ចូលពាក្យសម្ងាត់របស់អ្នកដើម្បីបញ្ជាក់",
+  "deleteAccountConfirm": "លុបគណនី",
+  "deleteAccountFailed": "មិនអាចលុបគណនីរបស់អ្នកបានទេ។ សូមពិនិត្យពាក្យសម្ងាត់ ហើយព្យាយាមម្ដងទៀត។",
+  "deleteAccountSuccess": "គណនីរបស់អ្នកត្រូវបានលុប។",
 
   "dashboardGreeting": "អរុណសួស្តី!",
   "dashboardTotalBalance": "សមតុល្យសរុប",

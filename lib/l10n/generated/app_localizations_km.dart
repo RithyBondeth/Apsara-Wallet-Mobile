@@ -1218,6 +1218,34 @@ class AppLocalizationsKm extends AppLocalizations {
   String get commonCancel => 'បោះបង់';
 
   @override
+  String get securityDeleteAccount => 'លុបគណនី';
+
+  @override
+  String get securityDeleteAccountSubtitle =>
+      'លុបគណនី និងទិន្នន័យរបស់អ្នកជាអចិន្ត្រៃយ៍';
+
+  @override
+  String get deleteAccountDialogTitle => 'លុបគណនី?';
+
+  @override
+  String get deleteAccountDialogBody =>
+      'នេះនឹងលុបគណនី និងទិន្នន័យទាំងអស់របស់អ្នកជាអចិន្ត្រៃយ៍ — កាបូប ប្រតិបត្តិការ ថវិកា និងច្រើនទៀត។ វាមិនអាចត្រឡប់វិញបានទេ។';
+
+  @override
+  String get deleteAccountPasswordHint =>
+      'បញ្ចូលពាក្យសម្ងាត់របស់អ្នកដើម្បីបញ្ជាក់';
+
+  @override
+  String get deleteAccountConfirm => 'លុបគណនី';
+
+  @override
+  String get deleteAccountFailed =>
+      'មិនអាចលុបគណនីរបស់អ្នកបានទេ។ សូមពិនិត្យពាក្យសម្ងាត់ ហើយព្យាយាមម្ដងទៀត។';
+
+  @override
+  String get deleteAccountSuccess => 'គណនីរបស់អ្នកត្រូវបានលុប។';
+
+  @override
   String get dashboardGreeting => 'អរុណសួស្តី!';
 
   @override

@@ -63,6 +63,7 @@ void main() {
     );
   });
 
+
   testWidgets('Savings Goals renders settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     await tester.pumpWidget(

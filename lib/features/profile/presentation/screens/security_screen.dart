@@ -11,6 +11,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_section.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_sub_scaffold.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_toggle.dart';
 import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
@@ -57,6 +58,113 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
   }
 
   void _comingSoon() => _toast(context.l10n.commonComingSoon);
+
+  /// Confirms + performs permanent account deletion. Requires re-entering the
+  /// password (verified server-side), then lands on Welcome once the session
+  /// is cleared.
+  Future<void> _confirmDeleteAccount() async {
+    final l10n = context.l10n;
+    final passwordController = TextEditingController();
+
+    final deleted = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        var obscure = true;
+        var submitting = false;
+        String? error;
+        return StatefulBuilder(
+          builder: (context, setLocal) {
+            Future<void> submit() async {
+              if (passwordController.text.isEmpty) {
+                setLocal(() => error = l10n.deleteAccountPasswordHint);
+                return;
+              }
+              setLocal(() {
+                submitting = true;
+                error = null;
+              });
+              final ok = await ref
+                  .read(authControllerProvider.notifier)
+                  .deleteAccount(passwordController.text);
+              if (!dialogContext.mounted) return;
+              if (ok) {
+                Navigator.of(dialogContext).pop(true);
+              } else {
+                setLocal(() {
+                  submitting = false;
+                  error = ref.read(authControllerProvider).errorMessage ??
+                      l10n.deleteAccountFailed;
+                });
+              }
+            }
+
+            return AlertDialog(
+              title: Text(l10n.deleteAccountDialogTitle),
+              content: SingleChildScrollView(
+                child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.deleteAccountDialogBody),
+                  const SizedBox(height: AppSpacing.lg),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: obscure,
+                    autofocus: true,
+                    enabled: !submitting,
+                    onSubmitted: (_) => submit(),
+                    decoration: InputDecoration(
+                      hintText: l10n.deleteAccountPasswordHint,
+                      errorText: error,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscure ? LucideIcons.eye : LucideIcons.eyeOff,
+                          size: 18,
+                        ),
+                        onPressed: () => setLocal(() => obscure = !obscure),
+                      ),
+                    ),
+                  ),
+                ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: submitting
+                      ? null
+                      : () => Navigator.of(dialogContext).pop(false),
+                  child: Text(l10n.commonCancel),
+                ),
+                TextButton(
+                  onPressed: submitting ? null : submit,
+                  child: submitting
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          l10n.deleteAccountConfirm,
+                          style: const TextStyle(
+                            color: AppColors.expense,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    passwordController.dispose();
+    if (deleted == true && mounted) {
+      // Session is already cleared; leave the guarded area for Welcome.
+      context.router.replaceAll([const WelcomeRoute()]);
+    }
+  }
 
   Future<void> _onAppLockChanged(bool wantOn) async {
     final notifier = ref.read(appLockControllerProvider.notifier);
@@ -159,6 +267,18 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                 value: _hideBalance,
                 onChanged: (v) => setState(() => _hideBalance = v),
               ),
+            ),
+          ],
+        ),
+        SettingsSection(
+          children: [
+            SettingsTile(
+              icon: LucideIcons.trash2,
+              title: l10n.securityDeleteAccount,
+              subtitle: l10n.securityDeleteAccountSubtitle,
+              destructive: true,
+              showChevron: false,
+              onTap: _confirmDeleteAccount,
             ),
           ],
         ),

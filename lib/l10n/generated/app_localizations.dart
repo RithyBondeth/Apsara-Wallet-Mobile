@@ -2282,6 +2282,54 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// No description provided for @securityDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get securityDeleteAccount;
+
+  /// No description provided for @securityDeleteAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently erase your account and data'**
+  String get securityDeleteAccountSubtitle;
+
+  /// No description provided for @deleteAccountDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get deleteAccountDialogTitle;
+
+  /// No description provided for @deleteAccountDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently erases your account and all your data — wallets, transactions, budgets and more. This can\'t be undone.'**
+  String get deleteAccountDialogBody;
+
+  /// No description provided for @deleteAccountPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm'**
+  String get deleteAccountPasswordHint;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @deleteAccountFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete your account. Check your password and try again.'**
+  String get deleteAccountFailed;
+
+  /// No description provided for @deleteAccountSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted.'**
+  String get deleteAccountSuccess;
+
   /// No description provided for @dashboardGreeting.
   ///
   /// In en, this message translates to:
