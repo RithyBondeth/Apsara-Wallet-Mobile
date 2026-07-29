@@ -1431,6 +1431,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rateThankYou => 'Thanks for your feedback!';
 
   @override
+  String get rateLowTitle => 'Sorry to hear that';
+
+  @override
+  String get rateLowSubtitle =>
+      'Tell us what we could do better — your feedback goes straight to our team.';
+
+  @override
+  String get rateCommentHint => 'What could be better? (optional)';
+
+  @override
+  String get rateSend => 'Send Feedback';
+
+  @override
   String get walletsTitle => 'Wallets';
 
   @override

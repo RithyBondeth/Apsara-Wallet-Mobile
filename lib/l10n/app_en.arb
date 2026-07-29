@@ -506,6 +506,10 @@
   "rateSubtitle": "Tap a star to rate your experience. Your feedback helps us improve.",
   "rateSubmit": "Submit Rating",
   "rateThankYou": "Thanks for your feedback!",
+  "rateLowTitle": "Sorry to hear that",
+  "rateLowSubtitle": "Tell us what we could do better — your feedback goes straight to our team.",
+  "rateCommentHint": "What could be better? (optional)",
+  "rateSend": "Send Feedback",
 
   "walletsTitle": "Wallets",
   "walletsCountTotal": "{count} total",

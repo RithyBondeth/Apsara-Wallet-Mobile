@@ -2696,6 +2696,30 @@ abstract class AppLocalizations {
   /// **'Thanks for your feedback!'**
   String get rateThankYou;
 
+  /// No description provided for @rateLowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry to hear that'**
+  String get rateLowTitle;
+
+  /// No description provided for @rateLowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what we could do better — your feedback goes straight to our team.'**
+  String get rateLowSubtitle;
+
+  /// No description provided for @rateCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What could be better? (optional)'**
+  String get rateCommentHint;
+
+  /// No description provided for @rateSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Feedback'**
+  String get rateSend;
+
   /// No description provided for @walletsTitle.
   ///
   /// In en, this message translates to:

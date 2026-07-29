@@ -1430,6 +1430,19 @@ class AppLocalizationsKm extends AppLocalizations {
   String get rateThankYou => 'សូមអរគុណសម្រាប់មតិយោបល់របស់អ្នក!';
 
   @override
+  String get rateLowTitle => 'សូមអភ័យទោស​ដែលធ្វើឱ្យអ្នកមិនពេញចិត្ត';
+
+  @override
+  String get rateLowSubtitle =>
+      'ប្រាប់យើងអំពីអ្វីដែលយើងអាចធ្វើឱ្យប្រសើរឡើង — មតិយោបល់របស់អ្នកនឹងផ្ញើទៅក្រុមការងាររបស់យើងដោយផ្ទាល់។';
+
+  @override
+  String get rateCommentHint => 'តើអ្វីដែលអាចធ្វើឱ្យប្រសើរឡើង? (ស្រេចចិត្ត)';
+
+  @override
+  String get rateSend => 'ផ្ញើមតិយោបល់';
+
+  @override
   String get walletsTitle => 'កាបូប';
 
   @override

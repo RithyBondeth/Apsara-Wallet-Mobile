@@ -1,15 +1,43 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:apsara_wallet_mobile/core/networks/api_client.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/feedback_api.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/legal_document_screen.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/rate_app_sheet.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
-Widget _wrap(Widget child) {
+/// Captures what the sheet would POST to `/feedback` without any network.
+class _FakeFeedbackApi extends FeedbackApi {
+  _FakeFeedbackApi() : super(ApiClient(Dio()));
+
+  int calls = 0;
+  int? lastRating;
+  String? lastComment;
+  String? lastPlatform;
+
+  @override
+  Future<bool> submit({
+    required int rating,
+    String? comment,
+    String? appVersion,
+    String? platform,
+  }) async {
+    calls++;
+    lastRating = rating;
+    lastComment = comment;
+    lastPlatform = platform;
+    return true;
+  }
+}
+
+Widget _wrap(Widget child, {List<Override> overrides = const []}) {
   return ProviderScope(
+    overrides: overrides,
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -17,6 +45,22 @@ Widget _wrap(Widget child) {
       supportedLocales: AppLocalizations.supportedLocales,
       home: child,
     ),
+  );
+}
+
+Widget _rateHost({required List<Override> overrides}) {
+  return _wrap(
+    Scaffold(
+      body: Builder(
+        builder: (context) => Center(
+          child: ElevatedButton(
+            onPressed: () => showRateAppSheet(context),
+            child: const Text('open'),
+          ),
+        ),
+      ),
+    ),
+    overrides: overrides,
   );
 }
 
@@ -72,19 +116,9 @@ void main() {
 
   testWidgets('Rate sheet: submit disabled until a star is picked',
       (tester) async {
+    final fake = _FakeFeedbackApi();
     await tester.pumpWidget(
-      _wrap(
-        Scaffold(
-          body: Builder(
-            builder: (context) => Center(
-              child: ElevatedButton(
-                onPressed: () => showRateAppSheet(context),
-                child: const Text('open'),
-              ),
-            ),
-          ),
-        ),
-      ),
+      _rateHost(overrides: [feedbackApiProvider.overrideWithValue(fake)]),
     );
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
@@ -95,39 +129,56 @@ void main() {
     await tester.tap(find.text('Submit Rating'));
     await tester.pumpAndSettle();
     expect(find.text('Enjoying Apsara Wallet?'), findsOneWidget);
+    expect(fake.calls, 0);
   });
 
-  testWidgets('Rate sheet: picking a star then submitting thanks the user',
+  testWidgets('Rate sheet: high rating records and thanks the user',
       (tester) async {
+    final fake = _FakeFeedbackApi();
     await tester.pumpWidget(
-      _wrap(
-        Scaffold(
-          body: Builder(
-            builder: (context) => Center(
-              child: ElevatedButton(
-                onPressed: () => showRateAppSheet(context),
-                child: const Text('open'),
-              ),
-            ),
-          ),
-        ),
-      ),
+      _rateHost(overrides: [feedbackApiProvider.overrideWithValue(fake)]),
     );
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
 
-    // Pick 3 stars (a low rating stays in-app — no store launch).
-    final stars = find.byIcon(Icons.star_outline_rounded);
-    expect(stars, findsNWidgets(5));
-    await tester.tap(stars.at(2));
+    // 5 stars → records immediately, no comment step.
+    await tester.tap(find.byIcon(Icons.star_outline_rounded).at(4));
     await tester.pump();
-    // Third star is now filled.
-    expect(find.byIcon(Icons.star_rounded), findsNWidgets(3));
-
     await tester.tap(find.text('Submit Rating'));
-    await tester.pumpAndSettle(); // process pop + snackbar
+    await tester.pumpAndSettle();
 
+    expect(fake.calls, 1);
+    expect(fake.lastRating, 5);
+    expect(fake.lastComment, isNull);
     expect(find.text('Enjoying Apsara Wallet?'), findsNothing); // closed
+    expect(find.text('Thanks for your feedback!'), findsOneWidget);
+  });
+
+  testWidgets('Rate sheet: low rating opens comment step and sends comment',
+      (tester) async {
+    final fake = _FakeFeedbackApi();
+    await tester.pumpWidget(
+      _rateHost(overrides: [feedbackApiProvider.overrideWithValue(fake)]),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    // 2 stars → advances to the in-app comment step (no send yet).
+    await tester.tap(find.byIcon(Icons.star_outline_rounded).at(1));
+    await tester.pump();
+    await tester.tap(find.text('Submit Rating'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sorry to hear that'), findsOneWidget);
+    expect(fake.calls, 0);
+
+    await tester.enterText(find.byType(TextField), 'Search was hard to find');
+    await tester.tap(find.text('Send Feedback'));
+    await tester.pumpAndSettle();
+
+    expect(fake.calls, 1);
+    expect(fake.lastRating, 2);
+    expect(fake.lastComment, 'Search was hard to find');
     expect(find.text('Thanks for your feedback!'), findsOneWidget);
   });
 }
