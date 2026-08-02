@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -9,31 +10,29 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// The notifications inbox (Phase 1, UI-only): grouped Today / Earlier lists
-/// of activity, budget, security, reward and insight alerts. Tapping a row
-/// marks it read; "Mark all read" clears every unread. Reached from the
+/// The notifications inbox, API-backed: grouped Today / Earlier lists of real
+/// activity (recurring posted, savings milestones, budget alerts). Tapping a
+/// row marks it read; "Mark all read" clears every unread. Reached from the
 /// dashboard header's bell.
 @RoutePage()
-class NotificationsScreen extends StatefulWidget {
+class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
-  State<NotificationsScreen> createState() => _NotificationsScreenState();
+  ConsumerState<NotificationsScreen> createState() =>
+      _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen>
+class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1200),
   )..forward();
-
-  late final List<AppNotification> _items = sampleNotifications();
-
-  int get _unread => _items.where((n) => !n.read).length;
 
   @override
   void dispose() {
@@ -42,18 +41,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   }
 
   void _markRead(String id) {
-    final i = _items.indexWhere((n) => n.id == id);
-    if (i < 0 || _items[i].read) return;
-    setState(() => _items[i] = _items[i].copyWith(read: true));
+    ref.read(notificationsProvider.notifier).markRead(id);
   }
 
   void _markAllRead() {
-    if (_unread == 0) return;
-    setState(() {
-      for (var i = 0; i < _items.length; i++) {
-        _items[i] = _items[i].copyWith(read: true);
-      }
-    });
+    final unread = ref.read(unreadNotificationsProvider);
+    if (unread == 0) return;
+    ref.read(notificationsProvider.notifier).markAllRead();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -76,8 +70,12 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final today = _items.where((n) => n.isToday).toList();
-    final earlier = _items.where((n) => !n.isToday).toList();
+    final notifsAsync = ref.watch(visibleNotificationsProvider);
+    final items = notifsAsync.valueOrNull ?? const <AppNotification>[];
+    final loading = notifsAsync.isLoading && !notifsAsync.hasValue;
+    final unread = items.where((n) => !n.read).length;
+    final today = items.where((n) => n.isToday).toList();
+    final earlier = items.where((n) => !n.isToday).toList();
 
     // Flatten into rows so each gets its own staggered entrance interval.
     final rows = <Widget>[];
@@ -121,19 +119,25 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                 offset: const Offset(0, 10),
                 child: _AppBar(
                   title: l10n.notifTitle,
-                  unread: _unread,
+                  unread: unread,
                   markAllLabel: l10n.notifMarkAllRead,
                   onBack: () => context.router.maybePop(),
                   onMarkAll: _markAllRead,
                 ),
               ),
               Expanded(
-                child: _items.isEmpty
-                    ? _EmptyState(
-                        title: l10n.notifEmptyTitle,
-                        body: l10n.notifEmptyBody,
+                child: loading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
                       )
-                    : ListView(
+                    : items.isEmpty
+                        ? _EmptyState(
+                            title: l10n.notifEmptyTitle,
+                            body: l10n.notifEmptyBody,
+                          )
+                        : ListView(
                         physics: const BouncingScrollPhysics(),
                         padding: EdgeInsets.fromLTRB(
                           AppSpacing.xxl,

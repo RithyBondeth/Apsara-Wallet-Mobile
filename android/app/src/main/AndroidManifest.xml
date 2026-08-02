@@ -5,7 +5,7 @@
     <!-- App-lock: fingerprint / face unlock via local_auth. -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <application
-        android:label="apsara_wallet_mobile"
+        android:label="Apsara Wallet"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

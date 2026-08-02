@@ -1,11 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
+import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -28,6 +31,7 @@ class DashboardHeader extends StatelessWidget {
     required this.onToggleBalance,
     required this.onTapBell,
     required this.onOpenMenu,
+    this.hasUnread = false,
   });
 
   final DashboardData data;
@@ -36,6 +40,7 @@ class DashboardHeader extends StatelessWidget {
   final VoidCallback onToggleBalance;
   final VoidCallback onTapBell;
   final VoidCallback onOpenMenu;
+  final bool hasUnread;
 
   static const Color _ivory = Color(0xFFF3F1E7);
 
@@ -119,7 +124,7 @@ class DashboardHeader extends StatelessWidget {
         ),
         const LanguageSwitcher.compact(),
         const SizedBox(width: AppSpacing.sm),
-        _BellButton(onTap: onTapBell),
+        _BellButton(onTap: onTapBell, hasUnread: hasUnread),
       ],
     );
   }
@@ -191,11 +196,13 @@ class DashboardHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Text(
-              'KHR',
-              style: AppFont.titleMedium.copyWith(
-                color: AppGradients.goldLight,
-                fontWeight: FontWeight.w700,
+            Consumer(
+              builder: (context, ref, _) => Text(
+                ref.watch(moneyFormatterProvider).code,
+                style: AppFont.titleMedium.copyWith(
+                  color: AppGradients.goldLight,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
@@ -208,29 +215,42 @@ class DashboardHeader extends StatelessWidget {
               ),
               child: ShimmerSweep(
                 key: const ValueKey('khr-shown'),
-                child: CountUpText(
-                  value: data.balanceKhr,
-                  formatter: (v) => formatKhr(v.round()),
-                  style: _khrStyle,
+                child: Consumer(
+                  builder: (context, ref, _) {
+                    final money = ref.watch(moneyFormatterProvider);
+                    return CountUpText(
+                      value: data.balanceKhr,
+                      formatter: (v) => money.number(v.round()),
+                      style: _khrStyle,
+                    );
+                  },
                 ),
               ),
             ),
           ],
         ),
         const SizedBox(height: AppSpacing.xs),
-        _revealSwitcher(
-          hidden: balanceHidden,
-          hiddenChild: Text(
-            '≈ USD ••••••',
-            key: const ValueKey('usd-hidden'),
-            style: _usdStyle,
-          ),
-          child: CountUpText(
-            key: const ValueKey('usd-shown'),
-            value: data.balanceUsd,
-            formatter: (v) => '≈ USD ${formatUsd(v)}',
-            style: _usdStyle,
-          ),
+        Consumer(
+          builder: (context, ref, _) {
+            final isUsd = ref.watch(moneyFormatterProvider).currency ==
+                ECurrencyType.usd;
+            return _revealSwitcher(
+              hidden: balanceHidden,
+              hiddenChild: Text(
+                isUsd ? '≈ KHR ••••••' : '≈ USD ••••••',
+                key: const ValueKey('usd-hidden'),
+                style: _usdStyle,
+              ),
+              child: CountUpText(
+                key: const ValueKey('usd-shown'),
+                value: isUsd ? data.balanceKhr : data.balanceUsd,
+                formatter: (v) => isUsd
+                    ? '≈ KHR ${formatKhr(v.round())}'
+                    : '≈ USD ${formatUsd(v)}',
+                style: _usdStyle,
+              ),
+            );
+          },
         ),
       ],
     );
@@ -264,9 +284,10 @@ class _MenuButton extends StatelessWidget {
 }
 
 class _BellButton extends StatelessWidget {
-  const _BellButton({required this.onTap});
+  const _BellButton({required this.onTap, this.hasUnread = false});
 
   final VoidCallback onTap;
+  final bool hasUnread;
 
   @override
   Widget build(BuildContext context) {
@@ -285,22 +306,23 @@ class _BellButton extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             const Icon(LucideIcons.bell, size: 20, color: Colors.white),
-            Positioned(
-              top: 11,
-              right: 12,
-              child: Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: AppGradients.goldCore,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppGradients.emeraldCore,
-                    width: 1.5,
+            if (hasUnread)
+              Positioned(
+                top: 11,
+                right: 12,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: AppGradients.goldCore,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppGradients.emeraldCore,
+                      width: 1.5,
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

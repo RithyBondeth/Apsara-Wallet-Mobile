@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -169,10 +171,12 @@ Future<Wallet?> showWalletPicker(
                         ),
                       ),
                     ),
-                    Text(
-                      'KHR ${formatKhr(w.balanceKhr)}',
-                      style: AppFont.labelMedium.copyWith(
-                        color: AppColors.textMuted,
+                    Consumer(
+                      builder: (context, ref, _) => Text(
+                        ref.watch(moneyFormatterProvider).format(w.balanceKhr),
+                        style: AppFont.labelMedium.copyWith(
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ),
                   ],

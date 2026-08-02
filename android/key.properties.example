@@ -1,0 +1,17 @@
+# Copy to android/key.properties and fill in with your own upload key.
+# NEVER commit the real file or the .jks — both are gitignored. Losing this
+# keystore means you can never update the app on Play again, so back it up
+# somewhere durable (password manager / encrypted archive).
+#
+# Generate the keystore with:
+#
+#   keytool -genkey -v -keystore ~/apsara-upload-key.jks \
+#     -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+#
+# storeFile is resolved relative to the android/app directory, so an absolute
+# path is the least surprising option.
+
+storeFile=/Users/you/apsara-upload-key.jks
+storePassword=your-keystore-password
+keyAlias=upload
+keyPassword=your-key-password

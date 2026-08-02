@@ -98,10 +98,12 @@ void main() {
     expect(all.any((t) => t.amountKhr == 0), isFalse);
   });
 
-  testWidgets('B2: editing replaces the row instead of duplicating it',
-      (tester) async {
-    final original =
-        sampleTransactions().firstWhere((t) => t.id == 'grab-food');
+  testWidgets('B2: editing replaces the row instead of duplicating it', (
+    tester,
+  ) async {
+    final original = sampleTransactions().firstWhere(
+      (t) => t.id == 'grab-food',
+    );
     final countBefore = sampleTransactions().length;
     expect(original.amountKhr, 18000);
 

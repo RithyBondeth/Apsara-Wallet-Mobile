@@ -57,8 +57,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1400));
   }
 
-  testWidgets('Add Expense quick action opens AddTransactionScreen',
-      (tester) async {
+  testWidgets('Add Expense quick action opens AddTransactionScreen', (
+    tester,
+  ) async {
     await bootToDashboard(tester);
 
     await tester.tap(find.text('Add Expense'));

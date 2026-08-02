@@ -11,8 +11,11 @@ import 'package:apsara_wallet_mobile/features/notifications/presentation/screens
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-Widget _wrap(Widget child) {
+import 'support/ledger_overrides.dart';
+
+Widget _wrap(Widget child, {List<Override> overrides = const []}) {
   return ProviderScope(
+    overrides: overrides,
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -41,7 +44,12 @@ void main() {
 
   testWidgets('Notifications renders settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
-    await tester.pumpWidget(_wrap(const NotificationsScreen()));
+    await tester.pumpWidget(
+      _wrap(
+        const NotificationsScreen(),
+        overrides: sampleNotificationsOverride(),
+      ),
+    );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1400));
 
@@ -59,7 +67,12 @@ void main() {
 
   testWidgets('Mark all read clears the unread action', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
-    await tester.pumpWidget(_wrap(const NotificationsScreen()));
+    await tester.pumpWidget(
+      _wrap(
+        const NotificationsScreen(),
+        overrides: sampleNotificationsOverride(),
+      ),
+    );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1400));
 
@@ -77,6 +90,7 @@ void main() {
     final router = AppRouter();
     await tester.pumpWidget(
       ProviderScope(
+        overrides: sampleLedgerOverrides(),
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,

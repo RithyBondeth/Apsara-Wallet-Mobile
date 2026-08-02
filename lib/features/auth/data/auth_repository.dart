@@ -76,6 +76,9 @@ class AuthRepository {
       email: email,
       fullName: data['fullName'] as String?,
       phone: data['phone'] as String?,
+      createdAt: data['createdAt'] != null
+          ? DateTime.tryParse(data['createdAt'] as String)
+          : null,
     );
     await _storage.saveUser(jsonEncode(user.toJson()));
     return user;
@@ -124,6 +127,18 @@ class AuthRepository {
       data: {'token': token, 'newPassword': newPassword},
     );
     return res.success;
+  }
+
+  /// Permanently deletes the account (verifying [password] server-side), then
+  /// wipes local session state. Throws [AuthException] on failure (e.g. wrong
+  /// password) and leaves the session intact so the user can retry.
+  Future<void> deleteAccount(String password) async {
+    final res = await _api.delete<Map<String, dynamic>>(
+      '/auth/me',
+      data: {'password': password},
+    );
+    if (!res.success) throw AuthException(res.message);
+    await _storage.clear();
   }
 
   /// Best-effort server-side revocation, then always clears local state so the

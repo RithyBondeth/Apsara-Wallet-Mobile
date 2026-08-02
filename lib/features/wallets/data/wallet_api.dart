@@ -90,6 +90,16 @@ class WalletApi {
         .toList();
   }
 
+  /// Raw wallet JSON, throwing when the request fails so callers can fall back
+  /// to a cached copy instead of silently rendering an empty list.
+  Future<List<dynamic>> fetchRaw() async {
+    final res = await _api.get<List<dynamic>>('/wallets');
+    if (!res.success || res.data == null) {
+      throw Exception(res.message);
+    }
+    return res.data!;
+  }
+
   Future<bool> create(Wallet wallet) async {
     final res = await _api.post<Map<String, dynamic>>('/wallets', data: {
       'name': wallet.name,
@@ -103,7 +113,53 @@ class WalletApi {
     });
     return res.success;
   }
+
+  Future<bool> update(String id, Wallet wallet) async {
+    final res = await _api.patch<Map<String, dynamic>>('/wallets/$id', data: {
+      'name': wallet.name,
+      'kind': wallet.kind.name,
+      'balanceKhr': wallet.balanceKhr,
+      'balanceUsd': wallet.balanceUsd,
+      'brandColor': colorToHex(wallet.brandColor),
+      'accountLast4': wallet.accountLast4,
+      'shortCode': wallet.shortCode,
+      'isPrimary': wallet.isPrimary,
+    });
+    return res.success;
+  }
+
+  /// Persists a manual wallet order. [ids] is the full ordered list.
+  Future<bool> reorder(List<String> ids) async {
+    final res = await _api.patch<List<dynamic>>(
+      '/wallets/reorder',
+      data: {'ids': ids},
+    );
+    return res.success;
+  }
+
+  /// Marks a wallet as the primary one (the backend clears the flag on the
+  /// others in the same transaction).
+  Future<bool> setPrimary(String id) async {
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/wallets/$id',
+      data: {'isPrimary': true},
+    );
+    return res.success;
+  }
+
+  /// Deletes a wallet. The backend returns 409 when the wallet still has
+  /// transactions, which we surface as a distinct outcome so the UI can explain
+  /// it rather than showing a generic failure.
+  Future<WalletDeleteOutcome> delete(String id) async {
+    final res = await _api.delete<Map<String, dynamic>>('/wallets/$id');
+    if (res.success) return WalletDeleteOutcome.ok;
+    if (res.statusCode == 409) return WalletDeleteOutcome.hasTransactions;
+    return WalletDeleteOutcome.failed;
+  }
 }
+
+/// Result of a wallet delete attempt.
+enum WalletDeleteOutcome { ok, hasTransactions, failed }
 
 final walletApiProvider = Provider<WalletApi>(
   (ref) => WalletApi(ref.watch(apiClientProvider)),

@@ -77,6 +77,25 @@ class SavingsGoalApi {
     return res.success;
   }
 
+  Future<bool> update({
+    required String id,
+    required String name,
+    required int targetKhr,
+    String? icon,
+    String? color,
+  }) async {
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/savings-goals/$id',
+      data: {
+        'name': name,
+        'targetKhr': targetKhr,
+        'icon': ?icon,
+        'color': ?color,
+      },
+    );
+    return res.success;
+  }
+
   Future<bool> addFunds(String id, int amountKhr) async {
     final res = await _api.post<Map<String, dynamic>>(
       '/savings-goals/$id/add-funds',

@@ -4,9 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/screens/analytics_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
+
+import 'support/ledger_overrides.dart';
 
 /// The filter row must be functional: the range dropdown opens a localized
 /// sheet and the calendar button/period stepper open a real date picker.
@@ -36,6 +39,10 @@ void main() {
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          nowProvider.overrideWithValue(DateTime(2024, 5, 20, 9, 0)),
+          ...sampleLedgerOverrides(),
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
@@ -49,8 +56,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1400));
   }
 
-  testWidgets('Range dropdown opens sheet and updates the label',
-      (tester) async {
+  testWidgets('Range dropdown opens sheet and updates the label', (
+    tester,
+  ) async {
     await boot(tester);
     expect(find.text('This Month'), findsOneWidget);
 
@@ -67,8 +75,9 @@ void main() {
     expect(find.text('This Month'), findsNothing);
   });
 
-  testWidgets('Calendar button opens the date picker and updates the period',
-      (tester) async {
+  testWidgets('Calendar button opens the date picker and updates the period', (
+    tester,
+  ) async {
     await boot(tester);
     expect(find.text('May 2024'), findsOneWidget);
 

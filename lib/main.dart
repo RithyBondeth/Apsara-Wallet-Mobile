@@ -1,25 +1,40 @@
 import 'package:apsara_wallet_mobile/app/app.dart';
 import 'package:apsara_wallet_mobile/core/configs/config_service.dart';
-import 'package:apsara_wallet_mobile/core/enums/environment_enum.dart';
+import 'package:apsara_wallet_mobile/core/configs/environment.dart';
+import 'package:apsara_wallet_mobile/core/providers/currency_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
+import 'package:apsara_wallet_mobile/core/providers/notification_prefs_provider.dart';
+import 'package:apsara_wallet_mobile/core/monitoring/crash_reporting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await AppConfigService.initialize(EEnvironmentType.dev);
+  // Environment comes from `--dart-define=ENV=...` at build time (dev when
+  // omitted), so a release build never silently ships pointing at localhost.
+  await AppConfigService.initialize(AppEnvironmentConfig.buildEnvironment);
 
-  // Seed the locale from storage before the first frame so the app opens in
-  // the user's saved language.
+  // Seed persisted preferences from storage before the first frame so the app
+  // opens in the user's saved language / currency / notification settings.
   final savedLanguage = await LocaleNotifier.loadSaved();
+  final savedCurrency = await CurrencyNotifier.loadSaved();
+  final savedNotifPrefs = await NotificationPrefsNotifier.loadSaved();
 
-  runApp(
-    ProviderScope(
-      overrides: [
-        localeProvider.overrideWith((ref) => LocaleNotifier(savedLanguage)),
-      ],
-      child: const MyApp(),
+  // Installs Sentry when the environment supplies a DSN, and is a plain
+  // passthrough when it does not.
+  await CrashReporting.runGuarded(
+    () => runApp(
+      ProviderScope(
+        overrides: [
+          localeProvider.overrideWith((ref) => LocaleNotifier(savedLanguage)),
+          currencyProvider
+              .overrideWith((ref) => CurrencyNotifier(savedCurrency)),
+          notificationPrefsProvider
+              .overrideWith((ref) => NotificationPrefsNotifier(savedNotifPrefs)),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }

@@ -440,6 +440,13 @@ class AppLocalizationsKm extends AppLocalizations {
   String get analyticsSelectRange => 'ជួរពេលវេលា';
 
   @override
+  String get analyticsEmptyTitle => 'មិនទាន់មានអ្វីសម្រាប់វិភាគ';
+
+  @override
+  String get analyticsEmptyBody =>
+      'បន្ថែមការចំណាយក្នុងកំឡុងពេលនេះ ហើយការវិភាគ និងនិន្នាការនឹងបង្ហាញនៅទីនេះ។';
+
+  @override
   String get budgetTitle => 'ថវិកា';
 
   @override
@@ -628,6 +635,20 @@ class AppLocalizationsKm extends AppLocalizations {
   String get commonComingSoon => 'នឹងមានក្នុងពេលឆាប់ៗ';
 
   @override
+  String get commonRetry => 'ព្យាយាមម្ដងទៀត';
+
+  @override
+  String get errorLoadTitle => 'មិនអាចផ្ទុកបានទេ';
+
+  @override
+  String get errorLoadMessage =>
+      'មានបញ្ហាក្នុងការភ្ជាប់ទៅម៉ាស៊ីនមេ។ សូមពិនិត្យការតភ្ជាប់របស់អ្នក ហើយព្យាយាមម្ដងទៀត។';
+
+  @override
+  String get offlineBannerMessage =>
+      'អ្នកនៅក្រៅបណ្ដាញ — កំពុងបង្ហាញទិន្នន័យដែលបានរក្សាទុកចុងក្រោយ។';
+
+  @override
   String get txListTitle => 'ប្រតិបត្តិការ';
 
   @override
@@ -641,6 +662,39 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get txEmptyBody => 'សាកល្បងស្វែងរក ឬតម្រងផ្សេង។';
+
+  @override
+  String get txFilters => 'តម្រង';
+
+  @override
+  String get txFilterCategory => 'ប្រភេទ';
+
+  @override
+  String get txFilterDateRange => 'ចន្លោះកាលបរិច្ឆេទ';
+
+  @override
+  String get txFilterFrom => 'ពី';
+
+  @override
+  String get txFilterTo => 'ដល់';
+
+  @override
+  String get txFilterAny => 'ទាំងអស់';
+
+  @override
+  String get txFilterClearAll => 'សម្អាតទាំងអស់';
+
+  @override
+  String get txFilterApply => 'អនុវត្ត';
+
+  @override
+  String get txExport => 'នាំចេញប្រតិបត្តិការ (CSV)';
+
+  @override
+  String get txExportEmpty => 'គ្មានប្រតិបត្តិការសម្រាប់នាំចេញ។';
+
+  @override
+  String get txExportFailed => 'មិនអាចនាំចេញបានទេ។ សូមព្យាយាមម្តងទៀត។';
 
   @override
   String get txDetailTitle => 'ព័ត៌មានលម្អិតប្រតិបត្តិការ';
@@ -782,7 +836,33 @@ class AppLocalizationsKm extends AppLocalizations {
   String get savingsGoalTarget => 'ចំនួនគោលដៅ';
 
   @override
+  String get savingsGoalIcon => 'រូបតំណាង';
+
+  @override
+  String get savingsGoalColor => 'ពណ៌';
+
+  @override
   String get savingsGoalAdded => 'បានបន្ថែមគោលដៅ';
+
+  @override
+  String get savingsEditGoal => 'កែប្រែគោលដៅ';
+
+  @override
+  String get savingsGoalUpdated => 'បានធ្វើបច្ចុប្បន្នភាពគោលដៅ';
+
+  @override
+  String get savingsDeleteGoal => 'លុបគោលដៅ';
+
+  @override
+  String get savingsGoalDeleted => 'បានលុបគោលដៅ';
+
+  @override
+  String get savingsDeleteConfirmTitle => 'លុបគោលដៅនេះ?';
+
+  @override
+  String savingsDeleteConfirmBody(String name) {
+    return '$name នឹងត្រូវបានលុប។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។';
+  }
 
   @override
   String get savingsFundsAdded => 'បានបន្ថែមមូលនិធិ';
@@ -1005,6 +1085,78 @@ class AppLocalizationsKm extends AppLocalizations {
   }
 
   @override
+  String get notifTypeRecurringTitle => 'បានកត់ត្រាប្រតិបត្តិការដដែលៗ';
+
+  @override
+  String notifTypeRecurringBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'បានបន្ថែមប្រតិបត្តិការដដែលៗ $count ទៅក្នុងបញ្ជីរបស់អ្នក។',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifTypeSavingsDoneTitle => 'សម្រេចគោលដៅ! 🎉';
+
+  @override
+  String notifTypeSavingsDoneBody(String name) {
+    return 'អ្នកបានសម្រេចគោលដៅសន្សំ \"$name\" របស់អ្នក។';
+  }
+
+  @override
+  String get notifTypeSavingsHalfTitle => 'ពាក់កណ្តាលផ្លូវហើយ';
+
+  @override
+  String notifTypeSavingsHalfBody(String name) {
+    return '\"$name\" បានដល់ពាក់កណ្តាលនៃគោលដៅ។';
+  }
+
+  @override
+  String get notifTypeBudgetTitle => 'ការជូនដំណឹងថវិកា';
+
+  @override
+  String notifTypeBudgetBody(String category) {
+    return 'អ្នកបានប្រើអស់ថវិកា $category សម្រាប់ខែនេះហើយ។';
+  }
+
+  @override
+  String get notifTypeSecurityLoginTitle => 'ការចូលគណនីថ្មី';
+
+  @override
+  String get notifTypeSecurityLoginBody =>
+      'គណនីរបស់អ្នកទើបតែត្រូវបានចូល។ ប្រសិនបើមិនមែនជាអ្នកទេ សូមកំណត់ពាក្យសម្ងាត់ឡើងវិញ។';
+
+  @override
+  String get notifTypeSecurityPasswordTitle => 'បានផ្លាស់ប្តូរពាក្យសម្ងាត់';
+
+  @override
+  String get notifTypeSecurityPasswordBody =>
+      'ពាក្យសម្ងាត់គណនីរបស់អ្នកទើបតែត្រូវបានផ្លាស់ប្តូរ។';
+
+  @override
+  String get notifTypeSecurityProfileTitle =>
+      'បានធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូប';
+
+  @override
+  String get notifTypeSecurityProfileBody =>
+      'ព័ត៌មានប្រវត្តិរូបរបស់អ្នកត្រូវបានធ្វើបច្ចុប្បន្នភាព។';
+
+  @override
+  String get notifTypeInsightTitle => 'ការវិភាគប្រចាំខែ';
+
+  @override
+  String notifTypeInsightBody(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ប្រតិបត្តិការ $count',
+    );
+    return 'ខែនេះអ្នកបានចំណាយ KHR $amount លើ $_temp0។';
+  }
+
+  @override
   String get notifTxTitle => 'បានកត់ត្រាចំណូល';
 
   @override
@@ -1064,6 +1216,34 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get commonCancel => 'បោះបង់';
+
+  @override
+  String get securityDeleteAccount => 'លុបគណនី';
+
+  @override
+  String get securityDeleteAccountSubtitle =>
+      'លុបគណនី និងទិន្នន័យរបស់អ្នកជាអចិន្ត្រៃយ៍';
+
+  @override
+  String get deleteAccountDialogTitle => 'លុបគណនី?';
+
+  @override
+  String get deleteAccountDialogBody =>
+      'នេះនឹងលុបគណនី និងទិន្នន័យទាំងអស់របស់អ្នកជាអចិន្ត្រៃយ៍ — កាបូប ប្រតិបត្តិការ ថវិកា និងច្រើនទៀត។ វាមិនអាចត្រឡប់វិញបានទេ។';
+
+  @override
+  String get deleteAccountPasswordHint =>
+      'បញ្ចូលពាក្យសម្ងាត់របស់អ្នកដើម្បីបញ្ជាក់';
+
+  @override
+  String get deleteAccountConfirm => 'លុបគណនី';
+
+  @override
+  String get deleteAccountFailed =>
+      'មិនអាចលុបគណនីរបស់អ្នកបានទេ។ សូមពិនិត្យពាក្យសម្ងាត់ ហើយព្យាយាមម្ដងទៀត។';
+
+  @override
+  String get deleteAccountSuccess => 'គណនីរបស់អ្នកត្រូវបានលុប។';
 
   @override
   String get dashboardGreeting => 'អរុណសួស្តី!';
@@ -1208,6 +1388,11 @@ class AppLocalizationsKm extends AppLocalizations {
   String get profileStatsBudgets => 'ថវិកា';
 
   @override
+  String profileMemberSince(int year) {
+    return 'សមាជិកតាំងពីឆ្នាំ $year';
+  }
+
+  @override
   String get settingsTitle => 'ការកំណត់';
 
   @override
@@ -1268,6 +1453,38 @@ class AppLocalizationsKm extends AppLocalizations {
   String get settingsAppVersion => 'កំណែកម្មវិធី';
 
   @override
+  String get legalLastUpdated => 'ធ្វើបច្ចុប្បន្នភាពចុងក្រោយ';
+
+  @override
+  String get legalContactHeading => 'ទំនាក់ទំនងមកយើង';
+
+  @override
+  String get rateTitle => 'ចូលចិត្ត Apsara Wallet ទេ?';
+
+  @override
+  String get rateSubtitle =>
+      'ចុចផ្កាយដើម្បីវាយតម្លៃបទពិសោធន៍របស់អ្នក។ មតិយោបល់របស់អ្នកជួយយើងឱ្យប្រសើរឡើង។';
+
+  @override
+  String get rateSubmit => 'ដាក់ស្នើការវាយតម្លៃ';
+
+  @override
+  String get rateThankYou => 'សូមអរគុណសម្រាប់មតិយោបល់របស់អ្នក!';
+
+  @override
+  String get rateLowTitle => 'សូមអភ័យទោស​ដែលធ្វើឱ្យអ្នកមិនពេញចិត្ត';
+
+  @override
+  String get rateLowSubtitle =>
+      'ប្រាប់យើងអំពីអ្វីដែលយើងអាចធ្វើឱ្យប្រសើរឡើង — មតិយោបល់របស់អ្នកនឹងផ្ញើទៅក្រុមការងាររបស់យើងដោយផ្ទាល់។';
+
+  @override
+  String get rateCommentHint => 'តើអ្វីដែលអាចធ្វើឱ្យប្រសើរឡើង? (ស្រេចចិត្ត)';
+
+  @override
+  String get rateSend => 'ផ្ញើមតិយោបល់';
+
+  @override
   String get walletsTitle => 'កាបូប';
 
   @override
@@ -1323,10 +1540,81 @@ class AppLocalizationsKm extends AppLocalizations {
   String get walletInitialBalance => 'សមតុល្យដំបូង';
 
   @override
+  String get walletBalanceEditLabel => 'សមតុល្យ';
+
+  @override
   String get walletColorLabel => 'ពណ៌';
 
   @override
   String get walletAdded => 'បានបន្ថែមកាបូប';
+
+  @override
+  String get walletsEditWallet => 'កែប្រែកាបូប';
+
+  @override
+  String get walletEditAction => 'កែប្រែកាបូប';
+
+  @override
+  String get walletDeleteAction => 'លុបកាបូប';
+
+  @override
+  String get walletSetPrimaryAction => 'កំណត់ជាកាបូបចម្បង';
+
+  @override
+  String get walletSetPrimaryDone => 'បានធ្វើបច្ចុប្បន្នភាពកាបូបចម្បង';
+
+  @override
+  String get transferTitle => 'ផ្ទេរប្រាក់';
+
+  @override
+  String get transferAction => 'ផ្ទេរប្រាក់';
+
+  @override
+  String get transferFrom => 'ពី';
+
+  @override
+  String get transferTo => 'ទៅ';
+
+  @override
+  String get transferDone => 'បានផ្ទេរប្រាក់រួចរាល់';
+
+  @override
+  String get transferFailed => 'មិនអាចផ្ទេរប្រាក់បានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String transferToLabel(String name) {
+    return 'ផ្ទេរទៅ $name';
+  }
+
+  @override
+  String transferFromLabel(String name) {
+    return 'ផ្ទេរពី $name';
+  }
+
+  @override
+  String get walletUpdated => 'បានធ្វើបច្ចុប្បន្នភាពកាបូប';
+
+  @override
+  String get walletUpdateFailed =>
+      'មិនអាចធ្វើបច្ចុប្បន្នភាពកាបូបបានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get walletDeleted => 'បានលុបកាបូប';
+
+  @override
+  String get walletDeleteConfirmTitle => 'លុបកាបូបនេះ?';
+
+  @override
+  String walletDeleteConfirmBody(String name) {
+    return '$name នឹងត្រូវបានលុប។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។';
+  }
+
+  @override
+  String get walletDeleteHasTransactions =>
+      'កាបូបនេះនៅមានប្រតិបត្តិការ។ សូមផ្លាស់ទី ឬលុបពួកវាជាមុនសិន។';
+
+  @override
+  String get walletDeleteFailed => 'មិនអាចលុបកាបូបបានទេ។ សូមព្យាយាមម្តងទៀត។';
 
   @override
   String get menuTitle => 'ម៉ឺនុយ';

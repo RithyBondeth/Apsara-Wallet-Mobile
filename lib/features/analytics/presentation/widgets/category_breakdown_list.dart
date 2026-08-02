@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -52,11 +54,13 @@ class CategoryBreakdownList extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                'KHR ${formatKhr(data.totalExpenseKhr)}',
-                style: AppFont.labelLarge.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w600,
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  ref.watch(moneyFormatterProvider).format(data.totalExpenseKhr),
+                  style: AppFont.labelLarge.copyWith(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
@@ -106,10 +110,12 @@ class _CategoryRow extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Text(
-                    'KHR ${formatKhr(c.amountKhr)}',
-                    style: AppFont.bodySmall.copyWith(
-                      color: AppColors.textMuted,
+                  Consumer(
+                    builder: (context, ref, _) => Text(
+                      ref.watch(moneyFormatterProvider).format(c.amountKhr),
+                      style: AppFont.bodySmall.copyWith(
+                        color: AppColors.textMuted,
+                      ),
                     ),
                   ),
                 ],

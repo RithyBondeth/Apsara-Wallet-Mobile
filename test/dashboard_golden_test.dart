@@ -18,7 +18,10 @@ final _fixedNow = DateTime(2024, 5, 20, 9, 0);
 
 Widget _wrap(Widget child) {
   return ProviderScope(
-    overrides: [nowProvider.overrideWithValue(_fixedNow), ...sampleLedgerOverrides()],
+    overrides: [
+      nowProvider.overrideWithValue(_fixedNow),
+      ...sampleLedgerOverrides(),
+    ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -50,9 +53,9 @@ void main() {
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       if (details.exception.toString().contains('google_fonts') ||
-          details.exception
-              .toString()
-              .contains('was not found in the application assets')) {
+          details.exception.toString().contains(
+            'was not found in the application assets',
+          )) {
         return;
       }
       oldOnError(details);

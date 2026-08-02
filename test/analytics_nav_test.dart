@@ -11,6 +11,7 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profi
 import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/wallets_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 /// Regression: from the Analytics screen the bottom bar must still reach the
 /// Wallets and Profile destinations (they were previously stubbed out).
@@ -51,18 +52,19 @@ void main() {
     expect(find.byType(DashboardScreen), findsOneWidget);
 
     // Home -> Analytics.
-    await tester.tap(find.text('Analytics'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(1)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 1400));
     expect(find.byType(AnalyticsScreen), findsOneWidget);
   }
 
-  testWidgets('Analytics -> Wallets tab routes to WalletsScreen',
-      (tester) async {
+  testWidgets('Analytics -> Wallets tab routes to WalletsScreen', (
+    tester,
+  ) async {
     await bootToAnalytics(tester);
 
-    await tester.tap(find.text('Wallets'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(2)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 1400));
@@ -71,11 +73,12 @@ void main() {
     expect(find.byType(AnalyticsScreen), findsNothing);
   });
 
-  testWidgets('Analytics -> Profile tab routes to ProfileScreen',
-      (tester) async {
+  testWidgets('Analytics -> Profile tab routes to ProfileScreen', (
+    tester,
+  ) async {
     await bootToAnalytics(tester);
 
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(3)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 1400));

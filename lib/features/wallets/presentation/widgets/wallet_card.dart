@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -10,8 +13,9 @@ import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
 /// One funding source in the wallets list: a branded logo tile, the wallet's
-/// name and type/account line, and its balance in KHR (with a small USD sub).
-class WalletCard extends StatelessWidget {
+/// name and type/account line, and its balance in the user's chosen currency
+/// (with a small approximate sub-line in the other currency).
+class WalletCard extends ConsumerWidget {
   const WalletCard({
     super.key,
     required this.wallet,
@@ -31,9 +35,15 @@ class WalletCard extends StatelessWidget {
   final double? balanceUsd;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final money = ref.watch(moneyFormatterProvider);
     final khr = balanceKhr ?? wallet.balanceKhr;
     final usd = balanceUsd ?? wallet.balanceUsd;
+    // Sub-line shows the *other* currency as an approximation. KHR mode keeps
+    // its long-standing "≈ $x" line unchanged.
+    final sub = money.currency == ECurrencyType.usd
+        ? '≈ KHR ${formatKhr(khr)}'
+        : '≈ \$${formatUsd(usd)}';
     final subtitle = wallet.maskedAccount == null
         ? wallet.kind.label
         : '${wallet.kind.label} · ${wallet.maskedAccount}';
@@ -95,7 +105,7 @@ class WalletCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  balanceHidden ? 'KHR ••••••' : 'KHR ${formatKhr(khr)}',
+                  balanceHidden ? '${money.code} ••••••' : money.format(khr),
                   style: AppFont.titleSmall.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
@@ -103,7 +113,7 @@ class WalletCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  balanceHidden ? '≈ ••••' : '≈ \$${formatUsd(usd)}',
+                  balanceHidden ? '≈ ••••' : sub,
                   style: AppFont.bodySmall.copyWith(
                     color: AppColors.textSecondary,
                   ),

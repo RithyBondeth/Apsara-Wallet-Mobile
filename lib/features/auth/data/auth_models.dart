@@ -23,6 +23,7 @@ class AuthUser {
     required this.email,
     this.fullName,
     this.phone,
+    this.createdAt,
   });
 
   final String id;
@@ -30,11 +31,16 @@ class AuthUser {
   final String? fullName;
   final String? phone;
 
+  /// When the account was created (from `/auth/me`). Null when the user was
+  /// only rebuilt from a token payload, which doesn't carry it.
+  final DateTime? createdAt;
+
   AuthUser copyWith({String? fullName, String? phone}) => AuthUser(
         id: id,
         email: email,
         fullName: fullName ?? this.fullName,
         phone: phone ?? this.phone,
+        createdAt: createdAt,
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +48,7 @@ class AuthUser {
         'email': email,
         if (fullName != null) 'fullName': fullName,
         if (phone != null) 'phone': phone,
+        if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
       };
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
@@ -49,6 +56,9 @@ class AuthUser {
         email: json['email'] as String,
         fullName: json['fullName'] as String?,
         phone: json['phone'] as String?,
+        createdAt: json['createdAt'] != null
+            ? DateTime.tryParse(json['createdAt'] as String)
+            : null,
       );
 
   /// Rebuilds a user from an access-token payload (`{ sub, email, ... }`).

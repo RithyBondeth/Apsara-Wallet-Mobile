@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_api.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_rule.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
@@ -90,6 +91,8 @@ class RecurringNotifier extends AsyncNotifier<List<RecurringRule>> {
     if (result.postedAny) {
       ref.invalidate(transactionsProvider);
       ref.invalidate(walletsProvider);
+      // The server also emitted a "recurring posted" notification.
+      ref.invalidate(notificationsProvider);
     }
     await _reload();
     return result;

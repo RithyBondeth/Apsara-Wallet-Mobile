@@ -914,6 +914,18 @@ abstract class AppLocalizations {
   /// **'Time Range'**
   String get analyticsSelectRange;
 
+  /// No description provided for @analyticsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to analyze yet'**
+  String get analyticsEmptyTitle;
+
+  /// No description provided for @analyticsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add some expenses in this period and your breakdown and trends will appear here.'**
+  String get analyticsEmptyBody;
+
   /// No description provided for @budgetTitle.
   ///
   /// In en, this message translates to:
@@ -1238,6 +1250,30 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get commonComingSoon;
 
+  /// No description provided for @commonRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetry;
+
+  /// No description provided for @errorLoadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load'**
+  String get errorLoadTitle;
+
+  /// No description provided for @errorLoadMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong reaching the server. Check your connection and try again.'**
+  String get errorLoadMessage;
+
+  /// No description provided for @offlineBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline — showing the latest saved data.'**
+  String get offlineBannerMessage;
+
   /// No description provided for @txListTitle.
   ///
   /// In en, this message translates to:
@@ -1267,6 +1303,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try a different search or filter.'**
   String get txEmptyBody;
+
+  /// No description provided for @txFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get txFilters;
+
+  /// No description provided for @txFilterCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get txFilterCategory;
+
+  /// No description provided for @txFilterDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Date range'**
+  String get txFilterDateRange;
+
+  /// No description provided for @txFilterFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get txFilterFrom;
+
+  /// No description provided for @txFilterTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get txFilterTo;
+
+  /// No description provided for @txFilterAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get txFilterAny;
+
+  /// No description provided for @txFilterClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get txFilterClearAll;
+
+  /// No description provided for @txFilterApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get txFilterApply;
+
+  /// No description provided for @txExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export transactions (CSV)'**
+  String get txExport;
+
+  /// No description provided for @txExportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions to export.'**
+  String get txExportEmpty;
+
+  /// No description provided for @txExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t export. Please try again.'**
+  String get txExportFailed;
 
   /// No description provided for @txDetailTitle.
   ///
@@ -1538,11 +1640,59 @@ abstract class AppLocalizations {
   /// **'Target Amount'**
   String get savingsGoalTarget;
 
+  /// No description provided for @savingsGoalIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get savingsGoalIcon;
+
+  /// No description provided for @savingsGoalColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get savingsGoalColor;
+
   /// No description provided for @savingsGoalAdded.
   ///
   /// In en, this message translates to:
   /// **'Goal added'**
   String get savingsGoalAdded;
+
+  /// No description provided for @savingsEditGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Goal'**
+  String get savingsEditGoal;
+
+  /// No description provided for @savingsGoalUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal updated'**
+  String get savingsGoalUpdated;
+
+  /// No description provided for @savingsDeleteGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Goal'**
+  String get savingsDeleteGoal;
+
+  /// No description provided for @savingsGoalDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal deleted'**
+  String get savingsGoalDeleted;
+
+  /// No description provided for @savingsDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this goal?'**
+  String get savingsDeleteConfirmTitle;
+
+  /// No description provided for @savingsDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be removed. This can\'t be undone.'**
+  String savingsDeleteConfirmBody(String name);
 
   /// No description provided for @savingsFundsAdded.
   ///
@@ -1922,6 +2072,102 @@ abstract class AppLocalizations {
   /// **'{count}d ago'**
   String notifDaysAgo(int count);
 
+  /// No description provided for @notifTypeRecurringTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring entries posted'**
+  String get notifTypeRecurringTitle;
+
+  /// No description provided for @notifTypeRecurringBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 recurring entry was added to your ledger.} other{{count} recurring entries were added to your ledger.}}'**
+  String notifTypeRecurringBody(int count);
+
+  /// No description provided for @notifTypeSavingsDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached! 🎉'**
+  String get notifTypeSavingsDoneTitle;
+
+  /// No description provided for @notifTypeSavingsDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You hit your \"{name}\" savings goal.'**
+  String notifTypeSavingsDoneBody(String name);
+
+  /// No description provided for @notifTypeSavingsHalfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Halfway there'**
+  String get notifTypeSavingsHalfTitle;
+
+  /// No description provided for @notifTypeSavingsHalfBody.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{name}\" is halfway to its target.'**
+  String notifTypeSavingsHalfBody(String name);
+
+  /// No description provided for @notifTypeBudgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget alert'**
+  String get notifTypeBudgetTitle;
+
+  /// No description provided for @notifTypeBudgetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached your {category} budget for this month.'**
+  String notifTypeBudgetBody(String category);
+
+  /// No description provided for @notifTypeSecurityLoginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New sign-in'**
+  String get notifTypeSecurityLoginTitle;
+
+  /// No description provided for @notifTypeSecurityLoginBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was just signed in to. If this wasn\'t you, reset your password.'**
+  String get notifTypeSecurityLoginBody;
+
+  /// No description provided for @notifTypeSecurityPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed'**
+  String get notifTypeSecurityPasswordTitle;
+
+  /// No description provided for @notifTypeSecurityPasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account password was just changed.'**
+  String get notifTypeSecurityPasswordBody;
+
+  /// No description provided for @notifTypeSecurityProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get notifTypeSecurityProfileTitle;
+
+  /// No description provided for @notifTypeSecurityProfileBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile details were updated.'**
+  String get notifTypeSecurityProfileBody;
+
+  /// No description provided for @notifTypeInsightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly insight'**
+  String get notifTypeInsightTitle;
+
+  /// No description provided for @notifTypeInsightBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This month you spent KHR {amount} across {count, plural, =1{1 transaction} other{{count} transactions}}.'**
+  String notifTypeInsightBody(String amount, int count);
+
   /// No description provided for @notifTxTitle.
   ///
   /// In en, this message translates to:
@@ -2035,6 +2281,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get commonCancel;
+
+  /// No description provided for @securityDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get securityDeleteAccount;
+
+  /// No description provided for @securityDeleteAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently erase your account and data'**
+  String get securityDeleteAccountSubtitle;
+
+  /// No description provided for @deleteAccountDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get deleteAccountDialogTitle;
+
+  /// No description provided for @deleteAccountDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently erases your account and all your data — wallets, transactions, budgets and more. This can\'t be undone.'**
+  String get deleteAccountDialogBody;
+
+  /// No description provided for @deleteAccountPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm'**
+  String get deleteAccountPasswordHint;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @deleteAccountFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete your account. Check your password and try again.'**
+  String get deleteAccountFailed;
+
+  /// No description provided for @deleteAccountSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted.'**
+  String get deleteAccountSuccess;
 
   /// No description provided for @dashboardGreeting.
   ///
@@ -2312,6 +2606,12 @@ abstract class AppLocalizations {
   /// **'Budgets'**
   String get profileStatsBudgets;
 
+  /// No description provided for @profileMemberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Member since {year}'**
+  String profileMemberSince(int year);
+
   /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:
@@ -2432,6 +2732,66 @@ abstract class AppLocalizations {
   /// **'App Version'**
   String get settingsAppVersion;
 
+  /// No description provided for @legalLastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated'**
+  String get legalLastUpdated;
+
+  /// No description provided for @legalContactHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get legalContactHeading;
+
+  /// No description provided for @rateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying Apsara Wallet?'**
+  String get rateTitle;
+
+  /// No description provided for @rateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a star to rate your experience. Your feedback helps us improve.'**
+  String get rateSubtitle;
+
+  /// No description provided for @rateSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Rating'**
+  String get rateSubmit;
+
+  /// No description provided for @rateThankYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your feedback!'**
+  String get rateThankYou;
+
+  /// No description provided for @rateLowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry to hear that'**
+  String get rateLowTitle;
+
+  /// No description provided for @rateLowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what we could do better — your feedback goes straight to our team.'**
+  String get rateLowSubtitle;
+
+  /// No description provided for @rateCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What could be better? (optional)'**
+  String get rateCommentHint;
+
+  /// No description provided for @rateSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Feedback'**
+  String get rateSend;
+
   /// No description provided for @walletsTitle.
   ///
   /// In en, this message translates to:
@@ -2522,6 +2882,12 @@ abstract class AppLocalizations {
   /// **'Initial Balance'**
   String get walletInitialBalance;
 
+  /// No description provided for @walletBalanceEditLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get walletBalanceEditLabel;
+
   /// No description provided for @walletColorLabel.
   ///
   /// In en, this message translates to:
@@ -2533,6 +2899,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wallet added'**
   String get walletAdded;
+
+  /// No description provided for @walletsEditWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Wallet'**
+  String get walletsEditWallet;
+
+  /// No description provided for @walletEditAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit wallet'**
+  String get walletEditAction;
+
+  /// No description provided for @walletDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete wallet'**
+  String get walletDeleteAction;
+
+  /// No description provided for @walletSetPrimaryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as primary'**
+  String get walletSetPrimaryAction;
+
+  /// No description provided for @walletSetPrimaryDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary wallet updated'**
+  String get walletSetPrimaryDone;
+
+  /// No description provided for @transferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferTitle;
+
+  /// No description provided for @transferAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferAction;
+
+  /// No description provided for @transferFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get transferFrom;
+
+  /// No description provided for @transferTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get transferTo;
+
+  /// No description provided for @transferDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer complete'**
+  String get transferDone;
+
+  /// No description provided for @transferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t complete the transfer. Please try again.'**
+  String get transferFailed;
+
+  /// No description provided for @transferToLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer to {name}'**
+  String transferToLabel(String name);
+
+  /// No description provided for @transferFromLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer from {name}'**
+  String transferFromLabel(String name);
+
+  /// No description provided for @walletUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet updated'**
+  String get walletUpdated;
+
+  /// No description provided for @walletUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update the wallet. Please try again.'**
+  String get walletUpdateFailed;
+
+  /// No description provided for @walletDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet deleted'**
+  String get walletDeleted;
+
+  /// No description provided for @walletDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this wallet?'**
+  String get walletDeleteConfirmTitle;
+
+  /// No description provided for @walletDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be removed. This can\'t be undone.'**
+  String walletDeleteConfirmBody(String name);
+
+  /// No description provided for @walletDeleteHasTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet still has transactions. Move or delete them first.'**
+  String get walletDeleteHasTransactions;
+
+  /// No description provided for @walletDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete the wallet. Please try again.'**
+  String get walletDeleteFailed;
 
   /// No description provided for @menuTitle.
   ///

@@ -1,9 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:apsara_wallet_mobile/core/providers/fx_rate_provider.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_api.dart';
@@ -11,6 +14,7 @@ import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_rule.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/transfer_api.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 
@@ -20,7 +24,7 @@ import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart
 /// public surface (`add`/`remove`, `add`) with local state.
 class _FakeTransactionsNotifier extends TransactionsNotifier {
   _FakeTransactionsNotifier(List<TransactionRecord> seed)
-      : _items = [...seed]..sort((a, b) => b.date.compareTo(a.date));
+    : _items = [...seed]..sort((a, b) => b.date.compareTo(a.date));
 
   // Mutated IN PLACE (never reassigned) and returned by reference from
   // build(), so a build() future that resolves *after* an add()/remove()
@@ -70,6 +74,11 @@ class _FakeWalletsNotifier extends WalletsNotifier {
   Future<void> add(Wallet wallet) async {
     state = AsyncData([...(state.valueOrNull ?? const []), wallet]);
   }
+
+  @override
+  Future<void> reorder(List<Wallet> ordered) async {
+    state = AsyncData([...ordered]);
+  }
 }
 
 /// A fixed, always-authenticated auth controller for tests — supplies a stable
@@ -78,7 +87,7 @@ class _FakeWalletsNotifier extends WalletsNotifier {
 class _FixedAuthController extends StateNotifier<AuthState>
     implements AuthController {
   _FixedAuthController(AuthUser user)
-      : super(AuthState(status: AuthStatus.authenticated, user: user));
+    : super(AuthState(status: AuthStatus.authenticated, user: user));
 
   @override
   Future<void> restore() async {}
@@ -91,12 +100,13 @@ class _FixedAuthController extends StateNotifier<AuthState>
     required String fullName,
     required String password,
     String? phone,
-  }) async =>
-      true;
+  }) async => true;
   @override
   Future<bool> updateProfile({String? fullName, String? phone}) async => true;
   @override
   Future<void> logout() async {}
+  @override
+  Future<bool> deleteAccount(String password) async => true;
   @override
   void onSessionExpired([String? message]) {}
   @override
@@ -164,6 +174,17 @@ class _FakeSavingsGoalsNotifier extends SavingsGoalsNotifier {
   }
 
   @override
+  Future<void> edit(SavingsGoal draft) async {
+    final i = _items.indexWhere((g) => g.id == draft.id);
+    if (i >= 0) {
+      _items[i] = draft;
+    } else {
+      _items.add(draft);
+    }
+    state = AsyncData([..._items]);
+  }
+
+  @override
   Future<void> addFunds(String id, int amountKhr) async {
     final i = _items.indexWhere((g) => g.id == id);
     if (i >= 0) {
@@ -179,18 +200,65 @@ class _FakeSavingsGoalsNotifier extends SavingsGoalsNotifier {
   }
 }
 
+/// A fixed FX rate so money widgets never hit the network in tests.
+List<Override> fxTestOverrides() => [
+  fxRateProvider.overrideWith((ref) async => const FxRate(khrPerUsd: 4100)),
+];
+
 /// Override the Savings screen's provider with sample (or given) goals.
 List<Override> sampleSavingsOverride([List<SavingsGoal>? goals]) {
   return [
-    savingsGoalsProvider
-        .overrideWith(() => _FakeSavingsGoalsNotifier(goals ?? sampleSavingsGoals())),
+    savingsGoalsProvider.overrideWith(
+      () => _FakeSavingsGoalsNotifier(goals ?? sampleSavingsGoals()),
+    ),
+    ...fxTestOverrides(),
+  ];
+}
+
+/// In-memory notifications so the inbox + dashboard bell run against sample
+/// data instead of the network.
+class _FakeNotificationsNotifier extends NotificationsNotifier {
+  _FakeNotificationsNotifier(List<AppNotification> seed) : _items = [...seed];
+
+  final List<AppNotification> _items;
+
+  @override
+  Future<List<AppNotification>> build() async => _items;
+
+  @override
+  Future<void> markRead(String id) async {
+    final i = _items.indexWhere((n) => n.id == id);
+    if (i < 0 || _items[i].read) return;
+    _items[i] = _items[i].copyWith(read: true);
+    state = AsyncData([..._items]);
+  }
+
+  @override
+  Future<void> markAllRead() async {
+    for (var i = 0; i < _items.length; i++) {
+      _items[i] = _items[i].copyWith(read: true);
+    }
+    state = AsyncData([..._items]);
+  }
+}
+
+/// Override the Notifications inbox provider with sample (or given) items.
+List<Override> sampleNotificationsOverride([List<AppNotification>? items]) {
+  return [
+    notificationsProvider.overrideWith(
+      () => _FakeNotificationsNotifier(items ?? sampleNotifications()),
+    ),
+    ...fxTestOverrides(),
   ];
 }
 
 /// Override the Budget screen's provider with sample (or given) budget data.
 List<Override> sampleBudgetOverride([BudgetData? data]) {
   final d = data ?? BudgetData.sample();
-  return [budgetDataProvider.overrideWith(() => _FakeBudgetNotifier(d))];
+  return [
+    budgetDataProvider.overrideWith(() => _FakeBudgetNotifier(d)),
+    ...fxTestOverrides(),
+  ];
 }
 
 /// Provider overrides that seed the ledger + wallets with sample data and a
@@ -202,14 +270,22 @@ List<Override> sampleLedgerOverrides({
   BudgetData? budget,
   List<RecurringRule>? recurring,
   List<SavingsGoal>? savings,
+  List<AppNotification>? notifications,
 }) {
   final txs = transactions ?? sampleTransactions();
   final ws = wallets ?? WalletsData.sample.wallets;
-  final u = user ??
-      const AuthUser(id: 'sample-user', email: 'sokunthea@example.com', fullName: 'Sokunthea');
+  final u =
+      user ??
+      AuthUser(
+        id: 'sample-user',
+        email: 'sokunthea@example.com',
+        fullName: 'Sokunthea',
+        createdAt: DateTime(2024, 1, 1),
+      );
   // Default to an empty budget so the dashboard keeps its income fallback
   // (goldens unchanged) and nothing hits the network.
-  final b = budget ??
+  final b =
+      budget ??
       BudgetData(
         monthLabel: '',
         totalBudgetKhr: 0,
@@ -221,12 +297,31 @@ List<Override> sampleLedgerOverrides({
     walletsProvider.overrideWith(() => _FakeWalletsNotifier(ws)),
     authControllerProvider.overrideWith((ref) => _FixedAuthController(u)),
     budgetDataProvider.overrideWith(() => _FakeBudgetNotifier(b)),
-    recurringProvider
-        .overrideWith(() => _FakeRecurringNotifier(recurring ?? const [])),
+    recurringProvider.overrideWith(
+      () => _FakeRecurringNotifier(recurring ?? const []),
+    ),
     // The dashboard fires this on load; keep it off the network in tests.
-    recurringAutoPostProvider
-        .overrideWith((ref) async => const RunDueResult(posted: 0, rulesRun: 0)),
-    savingsGoalsProvider
-        .overrideWith(() => _FakeSavingsGoalsNotifier(savings ?? const [])),
+    recurringAutoPostProvider.overrideWith(
+      (ref) async => const RunDueResult(posted: 0, rulesRun: 0),
+    ),
+    // The dashboard also fires the insight digest post; keep it off-network.
+    insightAutoPostProvider.overrideWith((ref) async {}),
+    savingsGoalsProvider.overrideWith(
+      () => _FakeSavingsGoalsNotifier(savings ?? const []),
+    ),
+    // Default to the sample inbox so the dashboard bell keeps its unread dot
+    // (goldens unchanged); pass `notifications: []` for a cleared inbox.
+    notificationsProvider.overrideWith(
+      () => _FakeNotificationsNotifier(notifications ?? sampleNotifications()),
+    ),
+    // Wallet-detail fetches transfers per wallet; keep it off the network.
+    walletTransfersProvider.overrideWith(
+      (ref, walletId) async => const <ApiTransfer>[],
+    ),
+    // Money widgets watch the FX rate; serve a fixed rate so nothing hits the
+    // network (KHR display doesn't use it, so goldens are unaffected).
+    fxRateProvider.overrideWith(
+      (ref) async => const FxRate(khrPerUsd: 4100),
+    ),
   ];
 }

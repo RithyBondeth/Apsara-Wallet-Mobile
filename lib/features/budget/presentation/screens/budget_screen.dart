@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
@@ -15,8 +16,6 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
-    show formatKhr;
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart'
     show GroupedAmountFormatter;
@@ -398,11 +397,13 @@ class _MoneyReadout extends StatelessWidget {
           style: AppFont.labelMedium.copyWith(color: AppColors.textMuted),
         ),
         const SizedBox(height: 2),
-        Text(
-          'KHR ${formatKhr(amountKhr)}',
-          style: AppFont.titleSmall.copyWith(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.w700,
+        Consumer(
+          builder: (context, ref, _) => Text(
+            ref.watch(moneyFormatterProvider).format(amountKhr),
+            style: AppFont.titleSmall.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ],
@@ -475,23 +476,30 @@ class _CategoryBudgetRow extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text.rich(
-                  TextSpan(
-                    text: 'KHR ',
-                    style: AppFont.labelMedium.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                    children: [
+                Consumer(
+                  builder: (context, ref, _) {
+                    final money = ref.watch(moneyFormatterProvider);
+                    return Text.rich(
                       TextSpan(
-                        text: formatKhr(budget.spentKhr),
+                        text: '${money.code} ',
                         style: AppFont.labelMedium.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w700,
+                          color: AppColors.textMuted,
                         ),
+                        children: [
+                          TextSpan(
+                            text: money.number(budget.spentKhr),
+                            style: AppFont.labelMedium.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' / ${money.number(budget.limitKhr)}',
+                          ),
+                        ],
                       ),
-                      TextSpan(text: ' / ${formatKhr(budget.limitKhr)}'),
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 _GradientBar(

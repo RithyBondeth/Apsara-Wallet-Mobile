@@ -43,4 +43,6 @@ class RoutePathConstant {
   static const String helpPath = '/help';
   static const String aboutPath = '/about';
   static const String settingsPath = '/settings';
+  static const String termsPath = '/terms';
+  static const String privacyPath = '/privacy';
 }

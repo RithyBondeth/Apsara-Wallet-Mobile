@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -50,17 +52,23 @@ class ExpenseBreakdownCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      'KHR',
-                      style: AppFont.labelSmall.copyWith(
-                        color: AppColors.textSecondary,
+                    Consumer(
+                      builder: (context, ref, _) => Text(
+                        ref.watch(moneyFormatterProvider).code,
+                        style: AppFont.labelSmall.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ),
-                    Text(
-                      formatKhr(data.totalExpenseKhr),
-                      style: AppFont.titleSmall.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w700,
+                    Consumer(
+                      builder: (context, ref, _) => Text(
+                        ref
+                            .watch(moneyFormatterProvider)
+                            .number(data.totalExpenseKhr),
+                        style: AppFont.titleSmall.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
@@ -118,9 +126,11 @@ class _LegendRow extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Text(
-                'KHR ${formatKhr(category.amountKhr)}',
-                style: AppFont.bodySmall.copyWith(color: AppColors.textMuted),
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  ref.watch(moneyFormatterProvider).format(category.amountKhr),
+                  style: AppFont.bodySmall.copyWith(color: AppColors.textMuted),
+                ),
               ),
             ],
           ),

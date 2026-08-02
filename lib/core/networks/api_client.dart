@@ -24,10 +24,15 @@ class ApiClient {
         success: true,
         message: 'Success',
         data: response.data,
+        statusCode: response.statusCode,
       );
     } on DioException catch (e) {
       final error = ApiException.fromDioException(e);
-      return ApiResponse<T>(success: false, message: error.message);
+      return ApiResponse<T>(
+        success: false,
+        message: error.message,
+        statusCode: e.response?.statusCode,
+      );
     } catch (e) {
       return ApiResponse<T>(success: false, message: e.toString());
     }
@@ -40,10 +45,15 @@ class ApiClient {
         success: true,
         message: 'Success',
         data: response.data,
+        statusCode: response.statusCode,
       );
     } on DioException catch (e) {
       final error = ApiException.fromDioException(e);
-      return ApiResponse<T>(success: false, message: error.message);
+      return ApiResponse<T>(
+        success: false,
+        message: error.message,
+        statusCode: e.response?.statusCode,
+      );
     } catch (e) {
       return ApiResponse<T>(success: false, message: e.toString());
     }
@@ -56,10 +66,15 @@ class ApiClient {
         success: true,
         message: 'Success',
         data: response.data,
+        statusCode: response.statusCode,
       );
     } on DioException catch (e) {
       final error = ApiException.fromDioException(e);
-      return ApiResponse<T>(success: false, message: error.message);
+      return ApiResponse<T>(
+        success: false,
+        message: error.message,
+        statusCode: e.response?.statusCode,
+      );
     } catch (e) {
       return ApiResponse<T>(success: false, message: e.toString());
     }
@@ -72,26 +87,36 @@ class ApiClient {
         success: true,
         message: 'Success',
         data: response.data,
+        statusCode: response.statusCode,
       );
     } on DioException catch (e) {
       final error = ApiException.fromDioException(e);
-      return ApiResponse<T>(success: false, message: error.message);
+      return ApiResponse<T>(
+        success: false,
+        message: error.message,
+        statusCode: e.response?.statusCode,
+      );
     } catch (e) {
       return ApiResponse<T>(success: false, message: e.toString());
     }
   }
 
-  Future<ApiResponse<T>> delete<T>(String path) async {
+  Future<ApiResponse<T>> delete<T>(String path, {dynamic data}) async {
     try {
-      final response = await _dio.delete<T>(path);
+      final response = await _dio.delete<T>(path, data: data);
       return ApiResponse<T>(
         success: true,
         message: 'Success',
         data: response.data,
+        statusCode: response.statusCode,
       );
     } on DioException catch (e) {
       final error = ApiException.fromDioException(e);
-      return ApiResponse<T>(success: false, message: error.message);
+      return ApiResponse<T>(
+        success: false,
+        message: error.message,
+        statusCode: e.response?.statusCode,
+      );
     } catch (e) {
       return ApiResponse<T>(success: false, message: e.toString());
     }

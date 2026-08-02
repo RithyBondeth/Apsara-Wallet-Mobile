@@ -4,16 +4,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
+import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/enums/language_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/currency_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
+import 'package:apsara_wallet_mobile/core/providers/notification_prefs_provider.dart';
+import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/rate_app_sheet.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_section.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 
 /// App preferences: language, currency, appearance, notifications, security and
@@ -31,13 +38,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro;
 
-  // --- Local UI state (mock; no persistence in Phase 1) ------------------
-  String _currency = 'KHR';
-  bool _pushNotifications = true;
-  bool _transactionAlerts = true;
-  bool _budgetWarnings = true;
-  bool _promotions = false;
-  bool _biometricLogin = true;
+  // Currency, notification preferences and biometric app-lock are all backed
+  // by real, persisted providers (currencyProvider / notificationPrefsProvider
+  // / appLockControllerProvider) — no local mock state.
 
   @override
   void initState() {
@@ -75,18 +78,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   }
 
   void _pickCurrency() {
+    final current = ref.read(currencyProvider);
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => _OptionSheet<String>(
+      builder: (context) => _OptionSheet<ECurrencyType>(
         title: context.l10n.settingsPrimaryCurrency,
         options: [
-          _Option(value: 'KHR', label: context.l10n.settingsCurrencyKhr),
-          _Option(value: 'USD', label: context.l10n.settingsCurrencyUsd),
+          _Option(
+            value: ECurrencyType.khr,
+            label: context.l10n.settingsCurrencyKhr,
+          ),
+          _Option(
+            value: ECurrencyType.usd,
+            label: context.l10n.settingsCurrencyUsd,
+          ),
         ],
-        selected: _currency,
+        selected: current,
         onSelected: (value) {
-          setState(() => _currency = value);
+          ref.read(currencyProvider.notifier).set(value);
           Navigator.of(context).pop();
         },
       ),
@@ -114,6 +124,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   @override
   Widget build(BuildContext context) {
     final language = ref.watch(localeProvider);
+    final currency = ref.watch(currencyProvider);
+    final notif = ref.watch(notificationPrefsProvider);
+    final notifCtrl = ref.read(notificationPrefsProvider.notifier);
+    final biometricOn =
+        ref.watch(appLockControllerProvider).isBiometricEnabled;
     final bottomSafe = MediaQuery.of(context).padding.bottom;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -158,7 +173,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             icon: LucideIcons.banknote,
                             title: context.l10n.settingsPrimaryCurrency,
                             iconColor: AppColors.income,
-                            value: _currency,
+                            value: currency.label,
                             onTap: _pickCurrency,
                           ),
                         ],
@@ -178,9 +193,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             iconColor: AppColors.warning,
                             showChevron: false,
                             trailing: _Toggle(
-                              value: _pushNotifications,
-                              onChanged: (v) =>
-                                  setState(() => _pushNotifications = v),
+                              value: notif.push,
+                              onChanged: notifCtrl.setPush,
                             ),
                           ),
                           SettingsTile(
@@ -188,9 +202,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             title: context.l10n.settingsTransactionAlerts,
                             showChevron: false,
                             trailing: _Toggle(
-                              value: _transactionAlerts,
-                              onChanged: (v) =>
-                                  setState(() => _transactionAlerts = v),
+                              value: notif.transactionAlerts,
+                              onChanged: notifCtrl.setTransactionAlerts,
                             ),
                           ),
                           SettingsTile(
@@ -199,9 +212,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             iconColor: AppColors.expense,
                             showChevron: false,
                             trailing: _Toggle(
-                              value: _budgetWarnings,
-                              onChanged: (v) =>
-                                  setState(() => _budgetWarnings = v),
+                              value: notif.budgetWarnings,
+                              onChanged: notifCtrl.setBudgetWarnings,
                             ),
                           ),
                           SettingsTile(
@@ -210,8 +222,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             iconColor: AppColors.accent,
                             showChevron: false,
                             trailing: _Toggle(
-                              value: _promotions,
-                              onChanged: (v) => setState(() => _promotions = v),
+                              value: notif.promotions,
+                              onChanged: notifCtrl.setPromotions,
                             ),
                           ),
                         ],
@@ -232,9 +244,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             iconColor: AppColors.income,
                             showChevron: false,
                             trailing: _Toggle(
-                              value: _biometricLogin,
-                              onChanged: (v) =>
-                                  setState(() => _biometricLogin = v),
+                              value: biometricOn,
+                              onChanged: (v) async {
+                                final ctrl = ref
+                                    .read(appLockControllerProvider.notifier);
+                                if (v) {
+                                  await ctrl.enableBiometric(
+                                    AppConstants.biometricReason,
+                                  );
+                                } else {
+                                  await ctrl.disableBiometric();
+                                }
+                              },
                             ),
                           ),
                           SettingsTile(
@@ -261,24 +282,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           SettingsTile(
                             icon: LucideIcons.fileText,
                             title: context.l10n.settingsTermsOfService,
-                            onTap: _comingSoon,
+                            onTap: () => context.router.push(
+                              const TermsOfServiceRoute(),
+                            ),
                           ),
                           SettingsTile(
                             icon: LucideIcons.shield,
                             title: context.l10n.settingsPrivacyPolicy,
                             iconColor: AppColors.info,
-                            onTap: _comingSoon,
+                            onTap: () => context.router.push(
+                              const PrivacyPolicyRoute(),
+                            ),
                           ),
                           SettingsTile(
                             icon: LucideIcons.star,
                             title: context.l10n.settingsRateApp,
                             iconColor: AppColors.accent,
-                            onTap: _comingSoon,
+                            onTap: () => showRateAppSheet(context),
                           ),
                           SettingsTile(
                             icon: LucideIcons.info,
                             title: context.l10n.settingsAppVersion,
-                            value: 'v1.0.0',
+                            value: 'v${AppConstants.appVersion}',
                             showChevron: false,
                           ),
                         ],

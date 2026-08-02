@@ -3,5 +3,14 @@ class ApiResponse<T> {
   final String message;
   final T? data;
 
-  ApiResponse({required this.success, required this.message, this.data});
+  /// HTTP status code when known (from the response or a bad-response error).
+  /// Null for transport-level failures (timeout, no connection).
+  final int? statusCode;
+
+  ApiResponse({
+    required this.success,
+    required this.message,
+    this.data,
+    this.statusCode,
+  });
 }

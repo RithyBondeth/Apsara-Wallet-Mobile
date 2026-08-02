@@ -436,6 +436,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyticsSelectRange => 'Time Range';
 
   @override
+  String get analyticsEmptyTitle => 'Nothing to analyze yet';
+
+  @override
+  String get analyticsEmptyBody =>
+      'Add some expenses in this period and your breakdown and trends will appear here.';
+
+  @override
   String get budgetTitle => 'Budget';
 
   @override
@@ -627,6 +634,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonComingSoon => 'Coming soon';
 
   @override
+  String get commonRetry => 'Retry';
+
+  @override
+  String get errorLoadTitle => 'Couldn\'t load';
+
+  @override
+  String get errorLoadMessage =>
+      'Something went wrong reaching the server. Check your connection and try again.';
+
+  @override
+  String get offlineBannerMessage =>
+      'You\'re offline — showing the latest saved data.';
+
+  @override
   String get txListTitle => 'Transactions';
 
   @override
@@ -640,6 +661,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get txEmptyBody => 'Try a different search or filter.';
+
+  @override
+  String get txFilters => 'Filters';
+
+  @override
+  String get txFilterCategory => 'Category';
+
+  @override
+  String get txFilterDateRange => 'Date range';
+
+  @override
+  String get txFilterFrom => 'From';
+
+  @override
+  String get txFilterTo => 'To';
+
+  @override
+  String get txFilterAny => 'Any';
+
+  @override
+  String get txFilterClearAll => 'Clear all';
+
+  @override
+  String get txFilterApply => 'Apply';
+
+  @override
+  String get txExport => 'Export transactions (CSV)';
+
+  @override
+  String get txExportEmpty => 'No transactions to export.';
+
+  @override
+  String get txExportFailed => 'Couldn\'t export. Please try again.';
 
   @override
   String get txDetailTitle => 'Transaction Details';
@@ -780,7 +834,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savingsGoalTarget => 'Target Amount';
 
   @override
+  String get savingsGoalIcon => 'Icon';
+
+  @override
+  String get savingsGoalColor => 'Color';
+
+  @override
   String get savingsGoalAdded => 'Goal added';
+
+  @override
+  String get savingsEditGoal => 'Edit Goal';
+
+  @override
+  String get savingsGoalUpdated => 'Goal updated';
+
+  @override
+  String get savingsDeleteGoal => 'Delete Goal';
+
+  @override
+  String get savingsGoalDeleted => 'Goal deleted';
+
+  @override
+  String get savingsDeleteConfirmTitle => 'Delete this goal?';
+
+  @override
+  String savingsDeleteConfirmBody(String name) {
+    return '$name will be removed. This can\'t be undone.';
+  }
 
   @override
   String get savingsFundsAdded => 'Funds added';
@@ -1005,6 +1085,79 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get notifTypeRecurringTitle => 'Recurring entries posted';
+
+  @override
+  String notifTypeRecurringBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recurring entries were added to your ledger.',
+      one: '1 recurring entry was added to your ledger.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifTypeSavingsDoneTitle => 'Goal reached! 🎉';
+
+  @override
+  String notifTypeSavingsDoneBody(String name) {
+    return 'You hit your \"$name\" savings goal.';
+  }
+
+  @override
+  String get notifTypeSavingsHalfTitle => 'Halfway there';
+
+  @override
+  String notifTypeSavingsHalfBody(String name) {
+    return '\"$name\" is halfway to its target.';
+  }
+
+  @override
+  String get notifTypeBudgetTitle => 'Budget alert';
+
+  @override
+  String notifTypeBudgetBody(String category) {
+    return 'You\'ve reached your $category budget for this month.';
+  }
+
+  @override
+  String get notifTypeSecurityLoginTitle => 'New sign-in';
+
+  @override
+  String get notifTypeSecurityLoginBody =>
+      'Your account was just signed in to. If this wasn\'t you, reset your password.';
+
+  @override
+  String get notifTypeSecurityPasswordTitle => 'Password changed';
+
+  @override
+  String get notifTypeSecurityPasswordBody =>
+      'Your account password was just changed.';
+
+  @override
+  String get notifTypeSecurityProfileTitle => 'Profile updated';
+
+  @override
+  String get notifTypeSecurityProfileBody =>
+      'Your profile details were updated.';
+
+  @override
+  String get notifTypeInsightTitle => 'Monthly insight';
+
+  @override
+  String notifTypeInsightBody(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transactions',
+      one: '1 transaction',
+    );
+    return 'This month you spent KHR $amount across $_temp0.';
+  }
+
+  @override
   String get notifTxTitle => 'Income recorded';
 
   @override
@@ -1064,6 +1217,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonCancel => 'Cancel';
+
+  @override
+  String get securityDeleteAccount => 'Delete Account';
+
+  @override
+  String get securityDeleteAccountSubtitle =>
+      'Permanently erase your account and data';
+
+  @override
+  String get deleteAccountDialogTitle => 'Delete account?';
+
+  @override
+  String get deleteAccountDialogBody =>
+      'This permanently erases your account and all your data — wallets, transactions, budgets and more. This can\'t be undone.';
+
+  @override
+  String get deleteAccountPasswordHint => 'Enter your password to confirm';
+
+  @override
+  String get deleteAccountConfirm => 'Delete Account';
+
+  @override
+  String get deleteAccountFailed =>
+      'Couldn\'t delete your account. Check your password and try again.';
+
+  @override
+  String get deleteAccountSuccess => 'Your account has been deleted.';
 
   @override
   String get dashboardGreeting => 'Good morning!';
@@ -1208,6 +1388,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileStatsBudgets => 'Budgets';
 
   @override
+  String profileMemberSince(int year) {
+    return 'Member since $year';
+  }
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override
@@ -1268,6 +1453,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAppVersion => 'App Version';
 
   @override
+  String get legalLastUpdated => 'Last updated';
+
+  @override
+  String get legalContactHeading => 'Contact Us';
+
+  @override
+  String get rateTitle => 'Enjoying Apsara Wallet?';
+
+  @override
+  String get rateSubtitle =>
+      'Tap a star to rate your experience. Your feedback helps us improve.';
+
+  @override
+  String get rateSubmit => 'Submit Rating';
+
+  @override
+  String get rateThankYou => 'Thanks for your feedback!';
+
+  @override
+  String get rateLowTitle => 'Sorry to hear that';
+
+  @override
+  String get rateLowSubtitle =>
+      'Tell us what we could do better — your feedback goes straight to our team.';
+
+  @override
+  String get rateCommentHint => 'What could be better? (optional)';
+
+  @override
+  String get rateSend => 'Send Feedback';
+
+  @override
   String get walletsTitle => 'Wallets';
 
   @override
@@ -1323,10 +1540,83 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletInitialBalance => 'Initial Balance';
 
   @override
+  String get walletBalanceEditLabel => 'Balance';
+
+  @override
   String get walletColorLabel => 'Color';
 
   @override
   String get walletAdded => 'Wallet added';
+
+  @override
+  String get walletsEditWallet => 'Edit Wallet';
+
+  @override
+  String get walletEditAction => 'Edit wallet';
+
+  @override
+  String get walletDeleteAction => 'Delete wallet';
+
+  @override
+  String get walletSetPrimaryAction => 'Set as primary';
+
+  @override
+  String get walletSetPrimaryDone => 'Primary wallet updated';
+
+  @override
+  String get transferTitle => 'Transfer';
+
+  @override
+  String get transferAction => 'Transfer';
+
+  @override
+  String get transferFrom => 'From';
+
+  @override
+  String get transferTo => 'To';
+
+  @override
+  String get transferDone => 'Transfer complete';
+
+  @override
+  String get transferFailed =>
+      'Couldn\'t complete the transfer. Please try again.';
+
+  @override
+  String transferToLabel(String name) {
+    return 'Transfer to $name';
+  }
+
+  @override
+  String transferFromLabel(String name) {
+    return 'Transfer from $name';
+  }
+
+  @override
+  String get walletUpdated => 'Wallet updated';
+
+  @override
+  String get walletUpdateFailed =>
+      'Couldn\'t update the wallet. Please try again.';
+
+  @override
+  String get walletDeleted => 'Wallet deleted';
+
+  @override
+  String get walletDeleteConfirmTitle => 'Delete this wallet?';
+
+  @override
+  String walletDeleteConfirmBody(String name) {
+    return '$name will be removed. This can\'t be undone.';
+  }
+
+  @override
+  String get walletDeleteHasTransactions =>
+      'This wallet still has transactions. Move or delete them first.';
+
+  @override
+  String get walletDeleteFailed =>
+      'Couldn\'t delete the wallet. Please try again.';
 
   @override
   String get menuTitle => 'Menu';

@@ -14,6 +14,7 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/screens/secur
 import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/wallets_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 /// Every Profile menu tile must reach its destination — the sub-pages were
 /// previously dead `onTap: () {}` stubs.
@@ -51,7 +52,7 @@ void main() {
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1600));
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(3)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 1400));

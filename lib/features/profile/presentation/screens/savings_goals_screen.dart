@@ -2,18 +2,19 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
-    show formatKhr;
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_icon_choices.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart'
     show GroupedAmountFormatter;
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
@@ -80,10 +81,64 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
 
   Future<void> _addGoal() async {
     final result = await _newGoalSheet();
-    if (result == null || !mounted) return;
+    final goal = result?.goal;
+    if (goal == null || !mounted) return;
     try {
-      await ref.read(savingsGoalsProvider.notifier).addGoal(result);
+      await ref.read(savingsGoalsProvider.notifier).addGoal(goal);
       if (mounted) _snack(context.l10n.savingsGoalAdded);
+    } catch (_) {
+      if (mounted) _snack(context.l10n.savingsError);
+    }
+  }
+
+  /// Long-press a goal to edit its name / target / icon / colour, or delete it.
+  Future<void> _editGoal(SavingsGoal goal) async {
+    final result = await _newGoalSheet(initial: goal);
+    if (result == null || !mounted) return;
+    if (result.delete) {
+      await _deleteGoal(goal);
+      return;
+    }
+    final edited = result.goal;
+    if (edited == null) return;
+    try {
+      await ref.read(savingsGoalsProvider.notifier).edit(edited);
+      if (mounted) _snack(context.l10n.savingsGoalUpdated);
+    } catch (_) {
+      if (mounted) _snack(context.l10n.savingsError);
+    }
+  }
+
+  Future<void> _deleteGoal(SavingsGoal goal) async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+        ),
+        title: Text(l10n.savingsDeleteConfirmTitle),
+        content: Text(l10n.savingsDeleteConfirmBody(goal.nameOf(l10n))),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              l10n.savingsDeleteGoal,
+              style: const TextStyle(color: AppColors.expense),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      await ref.read(savingsGoalsProvider.notifier).remove(goal.id);
+      if (mounted) _snack(context.l10n.savingsGoalDeleted);
     } catch (_) {
       if (mounted) _snack(context.l10n.savingsError);
     }
@@ -147,8 +202,11 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
                             end: 0.5,
                             child: _SummaryCard(
                               savedLabel: l10n.savingsTotalSaved,
-                              targetLine: l10n
-                                  .savingsTargetOf(formatKhr(totalTarget)),
+                              targetLine: l10n.savingsTargetOf(
+                                ref
+                                    .watch(moneyFormatterProvider)
+                                    .number(totalTarget),
+                              ),
                               totalSaved: totalSaved,
                               fraction: totalTarget == 0
                                   ? 0
@@ -181,6 +239,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
                                   goal: goals[i],
                                   fill: _fill,
                                   onAddFunds: () => _addFunds(goals[i]),
+                                  onEdit: () => _editGoal(goals[i]),
                                 ),
                               ),
                             ],
@@ -213,15 +272,15 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
     );
   }
 
-  Future<SavingsGoal?> _newGoalSheet() {
-    return showModalBottomSheet<SavingsGoal>(
+  Future<_GoalSheetResult?> _newGoalSheet({SavingsGoal? initial}) {
+    return showModalBottomSheet<_GoalSheetResult>(
       context: context,
       backgroundColor: AppColors.surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
       ),
-      builder: (sheetContext) => const _NewGoalSheet(),
+      builder: (sheetContext) => _NewGoalSheet(initial: initial),
     );
   }
 }
@@ -349,20 +408,27 @@ class _SummaryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(
-                'KHR ',
-                style: AppFont.titleMedium.copyWith(
-                  color: AppGradients.goldLight,
-                  fontWeight: FontWeight.w700,
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  '${ref.watch(moneyFormatterProvider).code} ',
+                  style: AppFont.titleMedium.copyWith(
+                    color: AppGradients.goldLight,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-              CountUpText(
-                value: totalSaved,
-                formatter: (v) => formatKhr(v.round()),
-                style: AppFont.headingMedium.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
+              Consumer(
+                builder: (context, ref, _) {
+                  final money = ref.watch(moneyFormatterProvider);
+                  return CountUpText(
+                    value: totalSaved,
+                    formatter: (v) => money.number(v.round()),
+                    style: AppFont.headingMedium.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -411,16 +477,21 @@ class _GoalCard extends StatelessWidget {
     required this.goal,
     required this.fill,
     required this.onAddFunds,
+    required this.onEdit,
   });
 
   final SavingsGoal goal;
   final Animation<double> fill;
   final VoidCallback onAddFunds;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return PressScale(
+    // Tap adds funds; long-press edits the goal.
+    return GestureDetector(
+      onLongPress: onEdit,
+      child: PressScale(
       onTap: onAddFunds,
       pressedScale: 0.99,
       child: Container(
@@ -464,23 +535,30 @@ class _GoalCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text.rich(
-                        TextSpan(
-                          text: 'KHR ',
-                          style: AppFont.labelMedium.copyWith(
-                            color: AppColors.textMuted,
-                          ),
-                          children: [
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final money = ref.watch(moneyFormatterProvider);
+                          return Text.rich(
                             TextSpan(
-                              text: formatKhr(goal.savedKhr),
+                              text: '${money.code} ',
                               style: AppFont.labelMedium.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w700,
+                                color: AppColors.textMuted,
                               ),
+                              children: [
+                                TextSpan(
+                                  text: money.number(goal.savedKhr),
+                                  style: AppFont.labelMedium.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' / ${money.number(goal.targetKhr)}',
+                                ),
+                              ],
                             ),
-                            TextSpan(text: ' / ${formatKhr(goal.targetKhr)}'),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -527,6 +605,7 @@ class _GoalCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -593,9 +672,35 @@ class _AmountSheet extends StatelessWidget {
   }
 }
 
-/// New-goal sheet (name + target amount).
+/// Colour choices for a savings goal's icon tile.
+const List<Color> _savingsGoalColors = [
+  AppColors.primary,
+  AppColors.info,
+  AppGradients.goldCore,
+  Color(0xFF7C5CD6),
+  Color(0xFFE0507A),
+  Color(0xFF00A9E0),
+  Color(0xFFCD6A2E),
+  AppColors.income,
+];
+
+/// Result of the goal sheet: a goal to save/add, or a delete request (edit mode).
+class _GoalSheetResult {
+  const _GoalSheetResult.save(this.goal) : delete = false;
+  const _GoalSheetResult.remove()
+      : goal = null,
+        delete = true;
+
+  final SavingsGoal? goal;
+  final bool delete;
+}
+
+/// New/edit-goal sheet (name, target, icon + colour). With [initial] it edits
+/// that goal (prefilled, with a delete action), otherwise it creates a new one.
 class _NewGoalSheet extends StatefulWidget {
-  const _NewGoalSheet();
+  const _NewGoalSheet({this.initial});
+
+  final SavingsGoal? initial;
 
   @override
   State<_NewGoalSheet> createState() => _NewGoalSheetState();
@@ -604,6 +709,24 @@ class _NewGoalSheet extends StatefulWidget {
 class _NewGoalSheetState extends State<_NewGoalSheet> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _target = TextEditingController();
+
+  late IconData _icon = savingsIconChoices.values.first; // 'target'
+  late Color _color = _savingsGoalColors.first;
+
+  bool get _isEditing => widget.initial != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final g = widget.initial;
+    if (g != null) {
+      _name.text = g.customName ?? '';
+      _target.text =
+          NumberFormat.decimalPattern('en_US').format(g.targetKhr);
+      _icon = g.icon;
+      _color = g.color;
+    }
+  }
 
   @override
   void dispose() {
@@ -624,7 +747,8 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
           AppSpacing.xxl,
           AppSpacing.xxl + keyboard,
         ),
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -632,7 +756,7 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
             const SizedBox(height: AppSpacing.lg),
             Center(
               child: Text(
-                l10n.savingsAddGoal,
+                _isEditing ? l10n.savingsEditGoal : l10n.savingsAddGoal,
                 style: AppFont.titleMedium.copyWith(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w700,
@@ -665,6 +789,66 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
             _label(l10n.savingsGoalTarget),
             const SizedBox(height: AppSpacing.sm),
             _KhrField(controller: _target, onChanged: () => setState(() {})),
+            const SizedBox(height: AppSpacing.xl),
+            _label(l10n.savingsGoalIcon),
+            const SizedBox(height: AppSpacing.sm),
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                for (final icon in savingsIconChoices.values)
+                  PressScale(
+                    onTap: () => setState(() => _icon = icon),
+                    child: Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: icon == _icon
+                            ? _color.withValues(alpha: 0.14)
+                            : AppColors.surfaceVariant,
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(
+                          color: icon == _icon ? _color : Colors.transparent,
+                          width: 1.6,
+                        ),
+                      ),
+                      child: Icon(
+                        icon,
+                        size: 20,
+                        color: icon == _icon ? _color : AppColors.textMuted,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            _label(l10n.savingsGoalColor),
+            const SizedBox(height: AppSpacing.sm),
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                for (final color in _savingsGoalColors)
+                  PressScale(
+                    onTap: () => setState(() => _color = color),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                        border: color == _color
+                            ? Border.all(color: AppColors.textPrimary, width: 2)
+                            : null,
+                      ),
+                      child: color == _color
+                          ? const Icon(LucideIcons.check,
+                              size: 16, color: Colors.white)
+                          : null,
+                    ),
+                  ),
+              ],
+            ),
             const SizedBox(height: AppSpacing.xxl),
             Builder(
               builder: (context) {
@@ -676,19 +860,37 @@ class _NewGoalSheetState extends State<_NewGoalSheet> {
                   onPressed: !valid
                       ? null
                       : () => Navigator.of(context).pop(
-                            SavingsGoal(
-                              id: 'custom-${_name.text.trim()}',
-                              icon: LucideIcons.target,
-                              color: AppColors.primary,
-                              savedKhr: 0,
-                              targetKhr: target,
-                              customName: _name.text.trim(),
+                            _GoalSheetResult.save(
+                              SavingsGoal(
+                                id: widget.initial?.id ??
+                                    'custom-${_name.text.trim()}',
+                                icon: _icon,
+                                color: _color,
+                                savedKhr: widget.initial?.savedKhr ?? 0,
+                                targetKhr: target,
+                                customName: _name.text.trim(),
+                              ),
                             ),
                           ),
                 );
               },
             ),
+            if (_isEditing) ...[
+              const SizedBox(height: AppSpacing.sm),
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(const _GoalSheetResult.remove()),
+                child: Text(
+                  l10n.savingsDeleteGoal,
+                  style: AppFont.labelLarge.copyWith(
+                    color: AppColors.expense,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
           ],
+          ),
         ),
       ),
     );

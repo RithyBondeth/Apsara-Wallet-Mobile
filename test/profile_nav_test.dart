@@ -9,6 +9,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/das
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
@@ -26,8 +27,9 @@ void main() {
     addTearDown(() => FlutterError.onError = oldOnError);
   });
 
-  testWidgets('Tapping the Profile tab routes to ProfileScreen',
-      (tester) async {
+  testWidgets('Tapping the Profile tab routes to ProfileScreen', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
 
     final router = AppRouter();
@@ -54,7 +56,7 @@ void main() {
     expect(find.byType(ProfileScreen), findsNothing);
 
     // Tap the Profile tab in the bottom bar.
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(3)));
     await tester.pump(); // start the route transition
     await tester.pump(const Duration(milliseconds: 500)); // let it animate in
     await tester.pump(const Duration(milliseconds: 1400)); // profile intro

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -28,8 +29,8 @@ const List<Color> _walletColors = [
 /// Rough KHR→USD divisor for the mock secondary balance.
 const double _khrPerUsd = 4100;
 
-/// Bottom sheet to add a wallet/account (UI-only): name, type, initial
-/// balance and a brand colour. Pops the built [Wallet].
+/// Bottom sheet to add a wallet/account: name, type, initial balance and a
+/// brand colour. Pops the built [Wallet].
 Future<Wallet?> showAddWalletSheet(BuildContext context) {
   return showModalBottomSheet<Wallet>(
     context: context,
@@ -42,8 +43,25 @@ Future<Wallet?> showAddWalletSheet(BuildContext context) {
   );
 }
 
+/// Same sheet in edit mode: prefilled from [wallet], pops the edited [Wallet]
+/// (preserving its id + primary flag).
+Future<Wallet?> showEditWalletSheet(BuildContext context, Wallet wallet) {
+  return showModalBottomSheet<Wallet>(
+    context: context,
+    backgroundColor: AppColors.surface,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+    ),
+    builder: (context) => _AddWalletSheet(initial: wallet),
+  );
+}
+
 class _AddWalletSheet extends StatefulWidget {
-  const _AddWalletSheet();
+  const _AddWalletSheet({this.initial});
+
+  /// When non-null the sheet edits this wallet instead of creating one.
+  final Wallet? initial;
 
   @override
   State<_AddWalletSheet> createState() => _AddWalletSheetState();
@@ -53,8 +71,23 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _balance = TextEditingController();
 
-  WalletKind _kind = WalletKind.bank;
-  Color _color = _walletColors.first;
+  late WalletKind _kind;
+  late Color _color;
+
+  bool get _isEditing => widget.initial != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final w = widget.initial;
+    _kind = w?.kind ?? WalletKind.bank;
+    // Keep the wallet's own colour if it isn't one of the presets.
+    _color = w?.brandColor ?? _walletColors.first;
+    if (w != null) {
+      _name.text = w.name;
+      _balance.text = NumberFormat.decimalPattern('en_US').format(w.balanceKhr);
+    }
+  }
 
   @override
   void dispose() {
@@ -69,13 +102,16 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
   void _save() {
     final name = _name.text.trim();
     final isCash = _kind == WalletKind.cash;
+    final initial = widget.initial;
     Navigator.of(context).pop(
       Wallet(
+        id: initial?.id,
         name: name,
         kind: _kind,
         balanceKhr: _balanceKhr,
         balanceUsd: _balanceKhr / _khrPerUsd,
         brandColor: _color,
+        isPrimary: initial?.isPrimary ?? false,
         // Cash gets a banknote glyph; others a short code from the name.
         icon: isCash ? LucideIcons.banknote : null,
         shortCode: isCash
@@ -123,7 +159,7 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
             const SizedBox(height: AppSpacing.lg),
             Center(
               child: Text(
-                l10n.walletsAddWallet,
+                _isEditing ? l10n.walletsEditWallet : l10n.walletsAddWallet,
                 style: AppFont.titleMedium.copyWith(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w700,
@@ -185,7 +221,9 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
               ],
             ),
             const SizedBox(height: AppSpacing.xl),
-            _label(l10n.walletInitialBalance),
+            _label(_isEditing
+                ? l10n.walletBalanceEditLabel
+                : l10n.walletInitialBalance),
             const SizedBox(height: AppSpacing.sm),
             _filledField(
               child: Row(

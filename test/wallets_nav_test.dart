@@ -10,6 +10,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/das
 import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/wallets_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
@@ -27,8 +28,9 @@ void main() {
     addTearDown(() => FlutterError.onError = oldOnError);
   });
 
-  testWidgets('Tapping the Wallets tab routes to WalletsScreen',
-      (tester) async {
+  testWidgets('Tapping the Wallets tab routes to WalletsScreen', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
 
     final router = AppRouter();
@@ -56,7 +58,7 @@ void main() {
     expect(find.byType(WalletsScreen), findsNothing);
 
     // Tap the Wallets tab in the bottom bar.
-    await tester.tap(find.text('Wallets'));
+    await tester.tap(find.byKey(AppBottomBar.tabKey(2)));
     await tester.pump(); // start the route transition
     await tester.pump(const Duration(milliseconds: 500)); // animate in
     await tester.pump(const Duration(milliseconds: 1400)); // wallets intro
