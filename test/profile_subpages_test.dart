@@ -80,8 +80,9 @@ void main() {
     );
   });
 
-  testWidgets('Add Goal sheet has icon + colour pickers and creates a goal',
-      (tester) async {
+  testWidgets('Add Goal sheet has icon + colour pickers and creates a goal', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     await tester.pumpWidget(
       _wrap(const SavingsGoalsScreen(), overrides: sampleSavingsOverride()),
@@ -113,8 +114,9 @@ void main() {
     expect(find.text('Test Goal'), findsOneWidget);
   });
 
-  testWidgets('Long-press a goal opens the edit sheet and updates it',
-      (tester) async {
+  testWidgets('Long-press a goal opens the edit sheet and updates it', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     final goal = SavingsGoal(
       id: 'g1',
@@ -125,8 +127,10 @@ void main() {
       customName: 'Old Name',
     );
     await tester.pumpWidget(
-      _wrap(const SavingsGoalsScreen(),
-          overrides: sampleSavingsOverride([goal])),
+      _wrap(
+        const SavingsGoalsScreen(),
+        overrides: sampleSavingsOverride([goal]),
+      ),
     );
     await settle(tester);
     expect(find.text('Old Name'), findsOneWidget);
@@ -158,8 +162,10 @@ void main() {
       customName: 'Doomed Goal',
     );
     await tester.pumpWidget(
-      _wrap(const SavingsGoalsScreen(),
-          overrides: sampleSavingsOverride([goal])),
+      _wrap(
+        const SavingsGoalsScreen(),
+        overrides: sampleSavingsOverride([goal]),
+      ),
     );
     await settle(tester);
     expect(find.text('Doomed Goal'), findsOneWidget);
@@ -194,10 +200,7 @@ void main() {
     await tester.tap(find.text('Is my financial data secure?'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
-    expect(
-      find.textContaining('encrypted and protected'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('encrypted and protected'), findsOneWidget);
   });
 
   testWidgets('About renders settled', (tester) async {
@@ -205,10 +208,7 @@ void main() {
     await tester.pumpWidget(_wrap(const AboutScreen()));
     await tester.runAsync(() async {
       final ctx = tester.element(find.byType(MaterialApp));
-      await precacheImage(
-        const AssetImage('assets/logos/logo.png'),
-        ctx,
-      );
+      await precacheImage(const AssetImage('assets/logos/logo.png'), ctx);
     });
     await settle(tester);
 

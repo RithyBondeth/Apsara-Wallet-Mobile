@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
+import 'package:apsara_wallet_mobile/core/providers/notification_prefs_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notification_api.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
@@ -44,9 +45,39 @@ final notificationsProvider =
   NotificationsNotifier.new,
 );
 
-/// Count of unread notifications, for the dashboard bell badge. 0 while loading.
+/// Whether a notification's category is currently allowed by the user's
+/// preferences. Security alerts are never suppressible.
+bool _allowedByPrefs(ENotifCategory c, NotificationPrefs p) {
+  switch (c) {
+    case ENotifCategory.security:
+      return true;
+    case ENotifCategory.budget:
+      return p.budgetWarnings;
+    case ENotifCategory.promotion:
+      return p.promotions;
+    case ENotifCategory.activity:
+      return p.transactionAlerts;
+  }
+}
+
+/// The inbox filtered by the user's notification preferences — the list the
+/// UI actually shows. Category toggles (transaction alerts / budget warnings /
+/// promotions) hide their notifications; security always shows.
+final visibleNotificationsProvider =
+    Provider<AsyncValue<List<AppNotification>>>((ref) {
+  final prefs = ref.watch(notificationPrefsProvider);
+  return ref.watch(notificationsProvider).whenData(
+        (items) =>
+            items.where((n) => _allowedByPrefs(n.category, prefs)).toList(),
+      );
+});
+
+/// Count of unread (visible) notifications, for the dashboard bell dot. Returns
+/// 0 when the master push toggle is off (no nudge) or while loading.
 final unreadNotificationsProvider = Provider<int>((ref) {
-  final items = ref.watch(notificationsProvider).valueOrNull ?? const [];
+  final prefs = ref.watch(notificationPrefsProvider);
+  if (!prefs.push) return 0;
+  final items = ref.watch(visibleNotificationsProvider).valueOrNull ?? const [];
   return items.where((n) => !n.read).length;
 });
 

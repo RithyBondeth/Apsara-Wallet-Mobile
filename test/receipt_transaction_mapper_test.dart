@@ -37,28 +37,30 @@ void main() {
     expect(record.note, 'Phnom Penh');
   });
 
-  test('KHR receipt keeps its amount; unknown category falls back to Others',
-      () {
-    final receipt = ScannedReceipt(
-      merchant: '',
-      dateLabel: '',
-      categoryLabel: 'Uncategorised',
-      categoryIcon: ScannedReceipt.empty().categoryIcon,
-      items: [],
-      total: 12000,
-      currency: ECurrencyType.khr,
-    );
+  test(
+    'KHR receipt keeps its amount; unknown category falls back to Others',
+    () {
+      final receipt = ScannedReceipt(
+        merchant: '',
+        dateLabel: '',
+        categoryLabel: 'Uncategorised',
+        categoryIcon: ScannedReceipt.empty().categoryIcon,
+        items: [],
+        total: 12000,
+        currency: ECurrencyType.khr,
+      );
 
-    final record = ReceiptTransactionMapper.toTransaction(
-      receipt,
-      id: 'r2',
-      walletName: 'Wing',
-      date: date,
-    );
+      final record = ReceiptTransactionMapper.toTransaction(
+        receipt,
+        id: 'r2',
+        walletName: 'Wing',
+        date: date,
+      );
 
-    expect(record.amountKhr, 12000);
-    expect(record.category.id, 'othersExpense');
-    // Empty merchant falls back to the category label.
-    expect(record.title, 'Uncategorised');
-  });
+      expect(record.amountKhr, 12000);
+      expect(record.category.id, 'othersExpense');
+      // Empty merchant falls back to the category label.
+      expect(record.title, 'Uncategorised');
+    },
+  );
 }

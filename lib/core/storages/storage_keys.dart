@@ -29,6 +29,20 @@ class StorageKeys {
   static const String language = 'language';
 
   // ==================================================
+  // NOTIFICATION PREFERENCES
+  // ==================================================
+  static const String notifPush = 'notif_push';
+  static const String notifTransactionAlerts = 'notif_transaction_alerts';
+  static const String notifBudgetWarnings = 'notif_budget_warnings';
+  static const String notifPromotions = 'notif_promotions';
+
+  // ==================================================
+  // FX (exchange rate cache)
+  // ==================================================
+  static const String fxKhrPerUsd = 'fx_khr_per_usd';
+  static const String fxFetchedAt = 'fx_fetched_at';
+
+  // ==================================================
   // WALLET
   // ==================================================
   static const String walletBalance = 'wallet_balance';
@@ -38,6 +52,9 @@ class StorageKeys {
   // CACHE
   // ==================================================
   static const String cachedTransactions = 'cached_transactions';
+  static const String cachedWallets = 'cached_wallets';
+  static const String cachedCategories = 'cached_categories';
+  static const String cachedBudget = 'cached_budget';
   static const String lastSyncTime = 'last_sync_time';
 
   // ==================================================

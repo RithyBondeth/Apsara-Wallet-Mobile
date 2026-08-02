@@ -70,7 +70,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final notifsAsync = ref.watch(notificationsProvider);
+    final notifsAsync = ref.watch(visibleNotificationsProvider);
     final items = notifsAsync.valueOrNull ?? const <AppNotification>[];
     final loading = notifsAsync.isLoading && !notifsAsync.hasValue;
     final unread = items.where((n) => !n.read).length;

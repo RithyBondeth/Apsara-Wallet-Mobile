@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
@@ -569,18 +570,22 @@ class _BalanceHero extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(
-                'KHR ',
-                style: AppFont.titleMedium.copyWith(
-                  color: AppGradients.goldLight,
-                  fontWeight: FontWeight.w700,
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  '${ref.watch(moneyFormatterProvider).code} ',
+                  style: AppFont.titleMedium.copyWith(
+                    color: AppGradients.goldLight,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-              Text(
-                formatKhr(balanceKhr),
-                style: AppFont.headingMedium.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  ref.watch(moneyFormatterProvider).number(balanceKhr),
+                  style: AppFont.headingMedium.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],
@@ -663,11 +668,13 @@ class _ActivityTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
-            Text(
-              '${t.sign} KHR ${formatKhr(t.amountKhr)}',
-              style: AppFont.titleSmall.copyWith(
-                color: amountColor,
-                fontWeight: FontWeight.w700,
+            Consumer(
+              builder: (context, ref, _) => Text(
+                '${t.sign} ${ref.watch(moneyFormatterProvider).format(t.amountKhr)}',
+                style: AppFont.titleSmall.copyWith(
+                  color: amountColor,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],
@@ -778,11 +785,13 @@ class _TransferTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppSpacing.sm),
-          Text(
-            '$sign KHR ${formatKhr(transfer.amountKhr)}',
-            style: AppFont.titleSmall.copyWith(
-              color: amountColor,
-              fontWeight: FontWeight.w700,
+          Consumer(
+            builder: (context, ref, _) => Text(
+              '$sign ${ref.watch(moneyFormatterProvider).format(transfer.amountKhr)}',
+              style: AppFont.titleSmall.copyWith(
+                color: amountColor,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],

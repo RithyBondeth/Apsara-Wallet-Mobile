@@ -41,7 +41,9 @@ void main() {
   test('adding a wallet raises the total', () async {
     final container = await booted();
     final before = container.read(walletsTotalProvider).khr;
-    await container.read(walletsProvider.notifier).add(
+    await container
+        .read(walletsProvider.notifier)
+        .add(
           const Wallet(
             name: 'New Wallet',
             kind: WalletKind.cash,

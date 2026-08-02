@@ -45,6 +45,18 @@ class BudgetApi {
         .toList();
   }
 
+  /// Raw budget JSON for [month], throwing on failure so the notifier can fall
+  /// back to a cached snapshot instead of silently showing no budgets.
+  Future<List<dynamic>> fetchRaw(String month) async {
+    final res = await _api.get<Map<String, dynamic>>(
+      '/budgets',
+      query: {'month': month},
+    );
+    final data = res.data?['budgets'];
+    if (!res.success || data is! List) throw Exception(res.message);
+    return data;
+  }
+
   /// Create or update the budget for (month, category).
   Future<bool> upsert({
     required String categoryId,

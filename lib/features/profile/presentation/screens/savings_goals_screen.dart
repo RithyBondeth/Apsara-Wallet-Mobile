@@ -6,13 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
-    show formatKhr;
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_icon_choices.dart';
@@ -203,8 +202,11 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
                             end: 0.5,
                             child: _SummaryCard(
                               savedLabel: l10n.savingsTotalSaved,
-                              targetLine: l10n
-                                  .savingsTargetOf(formatKhr(totalTarget)),
+                              targetLine: l10n.savingsTargetOf(
+                                ref
+                                    .watch(moneyFormatterProvider)
+                                    .number(totalTarget),
+                              ),
                               totalSaved: totalSaved,
                               fraction: totalTarget == 0
                                   ? 0
@@ -406,20 +408,27 @@ class _SummaryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(
-                'KHR ',
-                style: AppFont.titleMedium.copyWith(
-                  color: AppGradients.goldLight,
-                  fontWeight: FontWeight.w700,
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  '${ref.watch(moneyFormatterProvider).code} ',
+                  style: AppFont.titleMedium.copyWith(
+                    color: AppGradients.goldLight,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-              CountUpText(
-                value: totalSaved,
-                formatter: (v) => formatKhr(v.round()),
-                style: AppFont.headingMedium.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
+              Consumer(
+                builder: (context, ref, _) {
+                  final money = ref.watch(moneyFormatterProvider);
+                  return CountUpText(
+                    value: totalSaved,
+                    formatter: (v) => money.number(v.round()),
+                    style: AppFont.headingMedium.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -526,23 +535,30 @@ class _GoalCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text.rich(
-                        TextSpan(
-                          text: 'KHR ',
-                          style: AppFont.labelMedium.copyWith(
-                            color: AppColors.textMuted,
-                          ),
-                          children: [
+                      Consumer(
+                        builder: (context, ref, _) {
+                          final money = ref.watch(moneyFormatterProvider);
+                          return Text.rich(
                             TextSpan(
-                              text: formatKhr(goal.savedKhr),
+                              text: '${money.code} ',
                               style: AppFont.labelMedium.copyWith(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w700,
+                                color: AppColors.textMuted,
                               ),
+                              children: [
+                                TextSpan(
+                                  text: money.number(goal.savedKhr),
+                                  style: AppFont.labelMedium.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' / ${money.number(goal.targetKhr)}',
+                                ),
+                              ],
                             ),
-                            TextSpan(text: ' / ${formatKhr(goal.targetKhr)}'),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     ],
                   ),

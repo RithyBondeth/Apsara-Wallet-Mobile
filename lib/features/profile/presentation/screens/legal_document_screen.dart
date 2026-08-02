@@ -17,9 +17,10 @@ class TermsOfServiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Localizations.localeOf(context).languageCode;
     return LegalDocumentView(
       title: context.l10n.settingsTermsOfService,
-      document: LegalContent.terms,
+      document: LegalContent.terms(lang),
     );
   }
 }
@@ -31,9 +32,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Localizations.localeOf(context).languageCode;
     return LegalDocumentView(
       title: context.l10n.settingsPrivacyPolicy,
-      document: LegalContent.privacy,
+      document: LegalContent.privacy(lang),
     );
   }
 }

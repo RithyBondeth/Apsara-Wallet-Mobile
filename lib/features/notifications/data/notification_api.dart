@@ -55,8 +55,17 @@ class ApiNotification {
       titleOf: copy.titleOf,
       bodyOf: copy.bodyOf,
       read: read,
+      category: _categoryFor(type),
     );
   }
+}
+
+/// Maps a server notification `type` to the preference bucket that gates it.
+ENotifCategory _categoryFor(String? type) {
+  if (type == null) return ENotifCategory.activity;
+  if (type.startsWith('security')) return ENotifCategory.security;
+  if (type == 'budget_alert') return ENotifCategory.budget;
+  return ENotifCategory.activity; // recurring / savings / insight / unknown
 }
 
 typedef _L10nText = String Function(AppLocalizations l10n);

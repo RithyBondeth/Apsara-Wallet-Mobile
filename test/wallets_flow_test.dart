@@ -130,8 +130,9 @@ void main() {
     // Long-press to pick up Alpha, then drag it down past Beta. Uses explicit
     // pumps (not pumpAndSettle) — the shrink-wrapped ReorderableListView's drag
     // auto-scroller never "settles".
-    final gesture =
-        await tester.startGesture(tester.getCenter(find.text('Alpha Bank')));
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('Alpha Bank')),
+    );
     await tester.pump(const Duration(milliseconds: 700)); // trigger long-press
     for (var i = 0; i < 6; i++) {
       await gesture.moveBy(const Offset(0, 40));
@@ -213,8 +214,9 @@ void main() {
     expect(fake.amount, 25000);
   });
 
-  testWidgets('Tapping a wallet opens its detail with that account activity',
-      (tester) async {
+  testWidgets('Tapping a wallet opens its detail with that account activity', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(wrapRouter(AppRouter()));
     await settle(tester);

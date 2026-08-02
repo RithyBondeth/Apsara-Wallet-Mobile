@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:apsara_wallet_mobile/core/providers/fx_rate_provider.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/total_balance_card.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/wallet_card.dart';
@@ -28,19 +30,25 @@ void main() {
     addTearDown(() => FlutterError.onError = oldOnError);
   });
 
-  Widget wrap(Widget child) => MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: child,
-          ),
+  Widget wrap(Widget child) => ProviderScope(
+    overrides: [
+      fxRateProvider.overrideWith((ref) async => const FxRate(khrPerUsd: 4100)),
+    ],
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: child,
         ),
-      );
+      ),
+    ),
+  );
 
-  testWidgets('TotalBalanceCard shows the combined balance and wallet count',
-      (tester) async {
+  testWidgets('TotalBalanceCard shows the combined balance and wallet count', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     await tester.pumpWidget(
       wrap(
@@ -77,8 +85,9 @@ void main() {
     expect(find.text('2,584,300'), findsNothing);
   });
 
-  testWidgets('WalletCard renders name, type/account and balances',
-      (tester) async {
+  testWidgets('WalletCard renders name, type/account and balances', (
+    tester,
+  ) async {
     final wallet = WalletsData.sample.wallets.first; // ABA Bank (primary)
     await tester.pumpWidget(
       wrap(WalletCard(wallet: wallet, balanceHidden: false)),
@@ -92,10 +101,12 @@ void main() {
     expect(find.text('KHR 1,250,000'), findsOneWidget);
   });
 
-  testWidgets('Cash wallet falls back to an icon and hides masking',
-      (tester) async {
-    final cash = WalletsData.sample.wallets
-        .firstWhere((w) => w.kind == WalletKind.cash);
+  testWidgets('Cash wallet falls back to an icon and hides masking', (
+    tester,
+  ) async {
+    final cash = WalletsData.sample.wallets.firstWhere(
+      (w) => w.kind == WalletKind.cash,
+    );
     expect(cash.maskedAccount, isNull);
 
     await tester.pumpWidget(
@@ -108,8 +119,10 @@ void main() {
   });
 
   test('Sample wallet balances sum to the stated total', () {
-    final sum = WalletsData.sample.wallets
-        .fold<int>(0, (acc, w) => acc + w.balanceKhr);
+    final sum = WalletsData.sample.wallets.fold<int>(
+      0,
+      (acc, w) => acc + w.balanceKhr,
+    );
     expect(sum, WalletsData.sample.totalBalanceKhr);
   });
 }

@@ -15,8 +15,9 @@ import 'support/ledger_overrides.dart';
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
-  testWidgets('no wallets → dashboard shows the create-first-wallet CTA',
-      (tester) async {
+  testWidgets('no wallets → dashboard shows the create-first-wallet CTA', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -41,8 +42,9 @@ void main() {
     expect(find.text('This Month Overview'), findsNothing);
   });
 
-  testWidgets('wallets present → shows the month overview, not onboarding',
-      (tester) async {
+  testWidgets('wallets present → shows the month overview, not onboarding', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

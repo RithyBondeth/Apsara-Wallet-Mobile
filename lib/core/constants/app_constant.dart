@@ -60,6 +60,11 @@ class AppConstants {
   static const double minTransferAmount = 0.01;
   static const double maxTransferAmount = 10000.0;
 
+  /// Offline/last-resort USD→KHR rate (riel is a de-facto USD peg ~4100).
+  /// The live rate comes from `GET /fx/rates`; this is only the fallback when
+  /// the app has never reached the backend and has no cached rate.
+  static const double defaultKhrPerUsd = 4100;
+
   // =========================
   // BIOMETRIC
   // =========================

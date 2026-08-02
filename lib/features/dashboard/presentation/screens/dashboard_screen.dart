@@ -27,6 +27,7 @@ import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/qui
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/widgets/recent_transactions_section.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/offline_banner.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
@@ -135,8 +136,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
 
     // Everything on screen is derived from the live ledger + wallet totals.
     final total = ref.watch(walletsTotalProvider);
-    final ledger =
-        ref.watch(transactionsProvider).valueOrNull ?? const [];
+    final ledger = ref.watch(transactionsProvider).valueOrNull ?? const [];
     final user = ref.watch(authControllerProvider).user;
     final hasWallet =
         (ref.watch(walletsProvider).valueOrNull ?? const []).isNotEmpty;
@@ -168,7 +168,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
         floatingActionButton: AppBottomBarCenterButton(
           onTap: () => context.router.push(const ScanReceiptRoute()),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation: const AppBottomBarCenterLocation(),
         bottomNavigationBar: AppBottomBar(
           currentIndex: _navIndex,
           onSelect: _onNavSelect,
@@ -210,10 +210,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             onToggleBalance: () => setState(
                               () => _balanceHidden = !_balanceHidden,
                             ),
-                            onTapBell: () => context.router.push(
-                              const NotificationsRoute(),
-                            ),
-                            hasUnread: ref.watch(unreadNotificationsProvider) > 0,
+                            onTapBell: () =>
+                                context.router.push(const NotificationsRoute()),
+                            hasUnread:
+                                ref.watch(unreadNotificationsProvider) > 0,
                             onOpenMenu: () =>
                                 _scaffoldKey.currentState?.openDrawer(),
                           ),
@@ -240,15 +240,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                                 initialType: ETransactionType.expense,
                               ),
                             ),
-                            onScan: () => context.router.push(
-                              const ScanReceiptRoute(),
-                            ),
+                            onScan: () =>
+                                context.router.push(const ScanReceiptRoute()),
                           ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: AppSpacing.xxl),
+
+                  const OfflineBanner(),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -264,13 +265,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                                 end: 0.78,
                                 child: PressScale(
                                   pressedScale: 0.98,
-                                  onTap: () => context.router
-                                      .push(const BudgetRoute()),
+                                  onTap: () =>
+                                      context.router.push(const BudgetRoute()),
                                   child: AnimatedBuilder(
                                     animation: _budget,
                                     builder: (context, _) => MonthOverviewCard(
                                       data: data,
-                                      progress: _budget.value *
+                                      progress:
+                                          _budget.value *
                                           data.budgetUsedFraction,
                                     ),
                                   ),
@@ -301,9 +303,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                             controller: _intro,
                             start: 0.30,
                             end: 0.82,
-                            child: _OnboardingCard(
-                              onCreateWallet: _addWallet,
-                            ),
+                            child: _OnboardingCard(onCreateWallet: _addWallet),
                           ),
                   ),
                 ],

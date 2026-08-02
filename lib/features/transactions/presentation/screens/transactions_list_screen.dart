@@ -6,7 +6,10 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/error_retry_state.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/offline_banner.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
@@ -19,8 +22,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
-    show formatKhr;
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
@@ -158,6 +159,7 @@ class _TransactionsListScreenState
     final txAsync = ref.watch(transactionsProvider);
     final all = txAsync.valueOrNull ?? const <TransactionRecord>[];
     final loading = txAsync.isLoading && all.isEmpty;
+    final showError = txAsync.hasError && all.isEmpty;
     final items = _filtered(all);
     final now = ref.watch(nowProvider);
 
@@ -209,6 +211,7 @@ class _TransactionsListScreenState
                   onExport: _export,
                 ),
               ),
+              const OfflineBanner(),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.xxl,
@@ -240,7 +243,11 @@ class _TransactionsListScreenState
               ),
               const SizedBox(height: AppSpacing.md),
               Expanded(
-                child: loading
+                child: showError
+                    ? ErrorRetryState(
+                        onRetry: () => ref.invalidate(transactionsProvider),
+                      )
+                    : loading
                     ? const Center(child: CircularProgressIndicator())
                     : items.isEmpty
                     ? _EmptyState(
@@ -547,11 +554,13 @@ class _TxTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
-              Text(
-                '${t.sign} KHR ${formatKhr(t.amountKhr)}',
-                style: AppFont.titleSmall.copyWith(
-                  color: amountColor,
-                  fontWeight: FontWeight.w700,
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  '${t.sign} ${ref.watch(moneyFormatterProvider).format(t.amountKhr)}',
+                  style: AppFont.titleSmall.copyWith(
+                    color: amountColor,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],

@@ -45,8 +45,10 @@ void main() {
   testWidgets('Notifications renders settled', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     await tester.pumpWidget(
-      _wrap(const NotificationsScreen(),
-          overrides: sampleNotificationsOverride()),
+      _wrap(
+        const NotificationsScreen(),
+        overrides: sampleNotificationsOverride(),
+      ),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1400));
@@ -66,8 +68,10 @@ void main() {
   testWidgets('Mark all read clears the unread action', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 900));
     await tester.pumpWidget(
-      _wrap(const NotificationsScreen(),
-          overrides: sampleNotificationsOverride()),
+      _wrap(
+        const NotificationsScreen(),
+        overrides: sampleNotificationsOverride(),
+      ),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1400));

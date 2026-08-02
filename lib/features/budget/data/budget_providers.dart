@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
+import 'package:apsara_wallet_mobile/core/providers/offline_status_provider.dart';
+import 'package:apsara_wallet_mobile/core/storages/json_cache.dart';
+import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_api.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
@@ -26,7 +29,29 @@ class BudgetNotifier extends AsyncNotifier<BudgetData> {
   Future<BudgetData> build() async {
     final month = ref.watch(budgetMonthProvider);
     final index = await ref.watch(categoryIndexProvider.future);
-    final apiBudgets = await _api.list(month);
+
+    // Live fetch → cache; on failure serve the last good snapshot (stale) if
+    // present, else rethrow so the Budget screen can retry.
+    final cache = ref.read(jsonCacheProvider);
+    List<dynamic> raw;
+    try {
+      raw = await _api.fetchRaw(month);
+      await cache.writeList(StorageKeys.cachedBudget, raw);
+      _markOffline(stale: false);
+    } catch (e) {
+      final cached = await cache.readList(StorageKeys.cachedBudget);
+      if (cached == null) {
+        // No snapshot — degrade to an empty budget (dashboard bar falls back
+        // to income, as before); nothing stale to flag.
+        _markOffline(stale: false);
+        raw = const [];
+      } else {
+        raw = cached;
+        _markOffline(stale: true);
+      }
+    }
+    final apiBudgets =
+        raw.map((e) => ApiBudget.fromJson(e as Map<String, dynamic>)).toList();
     _raw = apiBudgets;
 
     final categories = apiBudgets
@@ -45,6 +70,14 @@ class BudgetNotifier extends AsyncNotifier<BudgetData> {
       spentKhr: categories.fold<int>(0, (s, c) => s + c.spentKhr),
       categories: categories,
     );
+  }
+
+  // Deferred so we never modify another provider during this one's build.
+  void _markOffline({required bool stale}) {
+    Future.microtask(() {
+      final notifier = ref.read(offlineSourcesProvider.notifier);
+      stale ? notifier.markStale('budget') : notifier.markFresh('budget');
+    });
   }
 
   /// Create or update the budget for [category] this month.

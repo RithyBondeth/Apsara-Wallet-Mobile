@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -111,14 +113,15 @@ class RecentTransactionsSection extends StatelessWidget {
   }
 }
 
-class _TransactionTile extends StatelessWidget {
+class _TransactionTile extends ConsumerWidget {
   const _TransactionTile({required this.transaction, required this.onTap});
 
   final DashboardTransaction transaction;
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final money = ref.watch(moneyFormatterProvider);
     final tx = transaction;
     final sign = tx.isIncome ? '+' : '-';
     final amountColor =
@@ -167,7 +170,7 @@ class _TransactionTile extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.sm),
             Text(
-              '$sign KHR ${formatKhr(tx.amountKhr)}',
+              '$sign ${money.format(tx.amountKhr)}',
               style: AppFont.titleSmall.copyWith(
                 color: amountColor,
                 fontWeight: FontWeight.w700,

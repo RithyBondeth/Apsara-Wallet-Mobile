@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/error_retry_state.dart';
+import 'package:apsara_wallet_mobile/shared/widgets/feedback/offline_banner.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
@@ -103,7 +105,9 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
+    final walletsAsync = ref.watch(walletsProvider);
+    final wallets = walletsAsync.valueOrNull ?? const <Wallet>[];
+    final showError = walletsAsync.hasError && wallets.isEmpty;
     final balances = ref.watch(walletBalancesProvider);
     final total = ref.watch(walletsTotalProvider);
     final data = WalletsData(
@@ -121,16 +125,23 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
         floatingActionButton: AppBottomBarCenterButton(
           onTap: () => context.router.push(const ScanReceiptRoute()),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar:
-            AppBottomBar(currentIndex: 2, onSelect: _onNavSelect),
+        floatingActionButtonLocation: const AppBottomBarCenterLocation(),
+        bottomNavigationBar: AppBottomBar(
+          currentIndex: 2,
+          onSelect: _onNavSelect,
+        ),
         body: SafeArea(
           bottom: false,
           child: Column(
             children: [
               _AppBar(onAddWallet: _addWallet),
+              const OfflineBanner(),
               Expanded(
-                child: SingleChildScrollView(
+                child: showError
+                    ? ErrorRetryState(
+                        onRetry: () => ref.invalidate(walletsProvider),
+                      )
+                    : SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   padding: EdgeInsets.fromLTRB(
                     AppSpacing.xxl,
@@ -149,9 +160,8 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                         child: TotalBalanceCard(
                           data: data,
                           balanceHidden: _balanceHidden,
-                          onToggleBalance: () => setState(
-                            () => _balanceHidden = !_balanceHidden,
-                          ),
+                          onToggleBalance: () =>
+                              setState(() => _balanceHidden = !_balanceHidden),
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xxl),
@@ -172,8 +182,7 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: wallets.length,
-                          onReorderStart: (_) =>
-                              HapticFeedback.mediumImpact(),
+                          onReorderStart: (_) => HapticFeedback.mediumImpact(),
                           onReorder: (oldIndex, newIndex) {
                             if (newIndex > oldIndex) newIndex -= 1;
                             final reordered = [...wallets];

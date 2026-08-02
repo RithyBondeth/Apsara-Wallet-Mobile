@@ -4,6 +4,10 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
+/// Which notification-preference toggle a notification answers to. `security`
+/// is never suppressible (login/password/profile alerts always surface).
+enum ENotifCategory { activity, budget, security, promotion }
+
 /// A single notification (Phase 1, UI-only). Title/body resolve their copy
 /// via l10n functions — like [InsightTip] / [TxCategory] — so the whole inbox
 /// follows the language switcher. [minutesAgo] is a fixed offset (not a real
@@ -17,6 +21,7 @@ class AppNotification {
     required this.titleOf,
     required this.bodyOf,
     this.read = false,
+    this.category = ENotifCategory.activity,
   });
 
   final String id;
@@ -26,6 +31,7 @@ class AppNotification {
   final String Function(AppLocalizations l10n) titleOf;
   final String Function(AppLocalizations l10n) bodyOf;
   final bool read;
+  final ENotifCategory category;
 
   /// Today = within the last 24h; anything older groups under "Earlier".
   bool get isToday => minutesAgo < 1440;
@@ -45,6 +51,7 @@ class AppNotification {
         titleOf: titleOf,
         bodyOf: bodyOf,
         read: read ?? this.read,
+        category: category,
       );
 }
 
@@ -65,6 +72,7 @@ List<AppNotification> sampleNotifications() => [
         minutesAgo: 180,
         titleOf: (l) => l.notifBudgetTitle,
         bodyOf: (l) => l.notifBudgetBody,
+        category: ENotifCategory.budget,
       ),
       AppNotification(
         id: 'security',
@@ -73,6 +81,7 @@ List<AppNotification> sampleNotifications() => [
         minutesAgo: 480,
         titleOf: (l) => l.notifSecurityTitle,
         bodyOf: (l) => l.notifSecurityBody,
+        category: ENotifCategory.security,
       ),
       AppNotification(
         id: 'reward',

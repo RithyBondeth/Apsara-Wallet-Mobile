@@ -635,6 +635,20 @@ class AppLocalizationsKm extends AppLocalizations {
   String get commonComingSoon => 'នឹងមានក្នុងពេលឆាប់ៗ';
 
   @override
+  String get commonRetry => 'ព្យាយាមម្ដងទៀត';
+
+  @override
+  String get errorLoadTitle => 'មិនអាចផ្ទុកបានទេ';
+
+  @override
+  String get errorLoadMessage =>
+      'មានបញ្ហាក្នុងការភ្ជាប់ទៅម៉ាស៊ីនមេ។ សូមពិនិត្យការតភ្ជាប់របស់អ្នក ហើយព្យាយាមម្ដងទៀត។';
+
+  @override
+  String get offlineBannerMessage =>
+      'អ្នកនៅក្រៅបណ្ដាញ — កំពុងបង្ហាញទិន្នន័យដែលបានរក្សាទុកចុងក្រោយ។';
+
+  @override
   String get txListTitle => 'ប្រតិបត្តិការ';
 
   @override
