@@ -257,7 +257,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1600));
     await tester.runAsync(() async {
       await precacheImage(
-        const AssetImage('assets/backgrounds/sidemenu-bg.png'),
+        const AssetImage('assets/backgrounds/sidemenu-bg.webp'),
         tester.element(find.byType(DashboardScreen)),
       );
     });
