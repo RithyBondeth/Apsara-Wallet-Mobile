@@ -1,6 +1,6 @@
 import 'package:apsara_wallet_mobile/app/app.dart';
 import 'package:apsara_wallet_mobile/core/configs/config_service.dart';
-import 'package:apsara_wallet_mobile/core/enums/environment_enum.dart';
+import 'package:apsara_wallet_mobile/core/configs/environment.dart';
 import 'package:apsara_wallet_mobile/core/providers/currency_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/notification_prefs_provider.dart';
@@ -10,7 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await AppConfigService.initialize(EEnvironmentType.dev);
+  // Environment comes from `--dart-define=ENV=...` at build time (dev when
+  // omitted), so a release build never silently ships pointing at localhost.
+  await AppConfigService.initialize(AppEnvironmentConfig.buildEnvironment);
 
   // Seed persisted preferences from storage before the first frame so the app
   // opens in the user's saved language / currency / notification settings.
