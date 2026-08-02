@@ -18,15 +18,26 @@ class AppConstants {
   /// PRODUCT_BUNDLE_IDENTIFIER. Permanent once published.
   static const String androidPackageId = 'com.apsarawallet.app';
 
+  /// Sentinel meaning "no App Store record exists yet".
+  static const String _unassignedIosAppId = '000000000';
+
   /// TODO(store): numeric App Store ID, assigned when the app record is first
-  /// created in App Store Connect. Until then the iOS "Rate" action has no
-  /// listing to open.
-  static const String iosAppId = '000000000';
+  /// created in App Store Connect. Replace [_unassignedIosAppId] with it —
+  /// [appStoreUrlOrNull] starts returning a real link the moment you do.
+  static const String iosAppId = _unassignedIosAppId;
 
   static const String playStoreUrl =
       'https://play.google.com/store/apps/details?id=$androidPackageId';
   static const String appStoreUrl =
       'https://apps.apple.com/app/id$iosAppId';
+
+  /// Whether the app has a published App Store record to link to.
+  static bool get hasAppStoreListing => iosAppId != _unassignedIosAppId;
+
+  /// The App Store link, or null while the listing does not exist. Callers
+  /// must skip the link rather than send the user to a dead store page.
+  static String? get appStoreUrlOrNull =>
+      hasAppStoreListing ? appStoreUrl : null;
 
   // =========================
   // TIME CONFIG

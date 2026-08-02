@@ -67,9 +67,12 @@ class _RateAppSheetState extends ConsumerState<RateAppSheet> {
   }
 
   Future<void> _openStore() async {
+    // Null on iOS until the App Store record exists — better to open nothing
+    // than to drop the user on a "not available" store page.
     final url = defaultTargetPlatform == TargetPlatform.iOS
-        ? AppConstants.appStoreUrl
+        ? AppConstants.appStoreUrlOrNull
         : AppConstants.playStoreUrl;
+    if (url == null) return;
     try {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } catch (_) {
