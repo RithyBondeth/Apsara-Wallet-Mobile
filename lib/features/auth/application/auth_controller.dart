@@ -133,6 +133,24 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  /// Permanently deletes the account after re-verifying [password]. On success
+  /// the session is cleared (guards bounce to Welcome); on failure the error is
+  /// surfaced and the user stays signed in to retry. Returns whether it worked.
+  Future<bool> deleteAccount(String password) async {
+    state = state.copyWith(isSubmitting: true, clearError: true);
+    try {
+      await _repo.deleteAccount(password);
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      return true;
+    } on AuthException catch (e) {
+      state = state.copyWith(isSubmitting: false, errorMessage: e.message);
+      return false;
+    } catch (e) {
+      state = state.copyWith(isSubmitting: false, errorMessage: e.toString());
+      return false;
+    }
+  }
+
   /// Invoked by the network layer when a refresh attempt fails (the session is
   /// no longer valid). Flips state so the router guard bounces to login.
   void onSessionExpired([String? message]) {

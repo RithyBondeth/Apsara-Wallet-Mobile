@@ -129,6 +129,18 @@ class AuthRepository {
     return res.success;
   }
 
+  /// Permanently deletes the account (verifying [password] server-side), then
+  /// wipes local session state. Throws [AuthException] on failure (e.g. wrong
+  /// password) and leaves the session intact so the user can retry.
+  Future<void> deleteAccount(String password) async {
+    final res = await _api.delete<Map<String, dynamic>>(
+      '/auth/me',
+      data: {'password': password},
+    );
+    if (!res.success) throw AuthException(res.message);
+    await _storage.clear();
+  }
+
   /// Best-effort server-side revocation, then always clears local state so the
   /// user is signed out even if the network call fails.
   Future<void> logout() async {

@@ -1219,6 +1219,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get securityDeleteAccount => 'Delete Account';
+
+  @override
+  String get securityDeleteAccountSubtitle =>
+      'Permanently erase your account and data';
+
+  @override
+  String get deleteAccountDialogTitle => 'Delete account?';
+
+  @override
+  String get deleteAccountDialogBody =>
+      'This permanently erases your account and all your data — wallets, transactions, budgets and more. This can\'t be undone.';
+
+  @override
+  String get deleteAccountPasswordHint => 'Enter your password to confirm';
+
+  @override
+  String get deleteAccountConfirm => 'Delete Account';
+
+  @override
+  String get deleteAccountFailed =>
+      'Couldn\'t delete your account. Check your password and try again.';
+
+  @override
+  String get deleteAccountSuccess => 'Your account has been deleted.';
+
+  @override
   String get dashboardGreeting => 'Good morning!';
 
   @override

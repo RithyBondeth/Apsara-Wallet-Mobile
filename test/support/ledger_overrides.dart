@@ -106,6 +106,8 @@ class _FixedAuthController extends StateNotifier<AuthState>
   @override
   Future<void> logout() async {}
   @override
+  Future<bool> deleteAccount(String password) async => true;
+  @override
   void onSessionExpired([String? message]) {}
   @override
   void clearError() {}

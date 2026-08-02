@@ -101,9 +101,9 @@ class ApiClient {
     }
   }
 
-  Future<ApiResponse<T>> delete<T>(String path) async {
+  Future<ApiResponse<T>> delete<T>(String path, {dynamic data}) async {
     try {
-      final response = await _dio.delete<T>(path);
+      final response = await _dio.delete<T>(path, data: data);
       return ApiResponse<T>(
         success: true,
         message: 'Success',

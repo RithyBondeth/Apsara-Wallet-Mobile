@@ -428,6 +428,14 @@
 
   "dashboardAppBarTitle": "Dashboard",
   "commonCancel": "Cancel",
+  "securityDeleteAccount": "Delete Account",
+  "securityDeleteAccountSubtitle": "Permanently erase your account and data",
+  "deleteAccountDialogTitle": "Delete account?",
+  "deleteAccountDialogBody": "This permanently erases your account and all your data — wallets, transactions, budgets and more. This can't be undone.",
+  "deleteAccountPasswordHint": "Enter your password to confirm",
+  "deleteAccountConfirm": "Delete Account",
+  "deleteAccountFailed": "Couldn't delete your account. Check your password and try again.",
+  "deleteAccountSuccess": "Your account has been deleted.",
 
   "dashboardGreeting": "Good morning!",
   "dashboardTotalBalance": "Total Balance",
