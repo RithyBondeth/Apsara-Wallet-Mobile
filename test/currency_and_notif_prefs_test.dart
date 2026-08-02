@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
-import 'package:apsara_wallet_mobile/core/providers/currency_provider.dart';
-import 'package:apsara_wallet_mobile/core/providers/fx_rate_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/money_format_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/notification_prefs_provider.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';

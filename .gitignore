@@ -44,5 +44,14 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Upload signing key and its passwords. Committing either of these hands
+# anyone who clones the repo the ability to publish as us.
+/android/key.properties
+*.jks
+*.keystore
+
+# Local agent/editor settings
+.claude/
+
 # Golden-test failure diff artifacts (generated)
 test/failures/

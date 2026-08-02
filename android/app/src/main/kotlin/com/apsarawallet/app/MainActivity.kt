@@ -1,4 +1,4 @@
-package com.example.apsara_wallet_mobile
+package com.apsarawallet.app
 
 import android.net.Uri
 import com.google.mlkit.vision.common.InputImage
