@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,8 +7,19 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Upload-key credentials, kept out of version control. Create android/key.properties
+// from android/key.properties.example — see RELEASE.md. When it is absent (CI
+// without secrets, or a fresh clone) release falls back to the debug key so
+// `flutter build` still works locally.
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+val hasReleaseKeystore = keystorePropertiesFile.exists()
+if (hasReleaseKeystore) {
+    keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+}
+
 android {
-    namespace = "com.example.apsara_wallet_mobile"
+    namespace = "com.apsarawallet.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,8 +33,8 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.apsara_wallet_mobile"
+        // Permanent Play Store identity — cannot be changed after publishing.
+        applicationId = "com.apsarawallet.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         // Google ML Kit text recognition + camera require API 21+; use 24 to
@@ -32,11 +45,31 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                // No upload key present: sign with debug so local release
+                // builds still run. Such an APK CANNOT be uploaded to Play.
+                logger.warn(
+                    "WARNING: android/key.properties not found — signing the " +
+                        "release build with the DEBUG key. This artifact is not " +
+                        "uploadable to Play. See RELEASE.md."
+                )
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }

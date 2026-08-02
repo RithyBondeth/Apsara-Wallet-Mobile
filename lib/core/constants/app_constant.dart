@@ -14,9 +14,13 @@ class AppConstants {
   // =========================
   // STORE LISTINGS (Rate the app)
   // =========================
-  // NOTE: placeholder bundle ids — update once the app is published so the
-  // "Rate" action deep-links to the real store listings.
-  static const String androidPackageId = 'com.example.apsara_wallet_mobile';
+  /// Matches `applicationId` in android/app/build.gradle.kts and the iOS
+  /// PRODUCT_BUNDLE_IDENTIFIER. Permanent once published.
+  static const String androidPackageId = 'com.apsarawallet.app';
+
+  /// TODO(store): numeric App Store ID, assigned when the app record is first
+  /// created in App Store Connect. Until then the iOS "Rate" action has no
+  /// listing to open.
   static const String iosAppId = '000000000';
 
   static const String playStoreUrl =
