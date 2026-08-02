@@ -20,4 +20,8 @@ class AppConfigService {
   static String get apiBaseURL => _get('API_BASE_URL', '');
   static bool get debugMode =>
       _get('DEBUG_MODE', 'false').toLowerCase() == 'true';
+
+  /// Sentry project DSN. Empty disables crash reporting entirely — see
+  /// [CrashReporting]. Left blank in dev so local runs report nothing.
+  static String get sentryDsn => _get('SENTRY_DSN', '');
 }
