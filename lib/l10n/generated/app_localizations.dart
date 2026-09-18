@@ -131,13 +131,13 @@ abstract class AppLocalizations {
   /// No description provided for @authIdentifierLabel.
   ///
   /// In en, this message translates to:
-  /// **'Email or Phone Number'**
+  /// **'Email'**
   String get authIdentifierLabel;
 
   /// No description provided for @authIdentifierHint.
   ///
   /// In en, this message translates to:
-  /// **'Enter email or phone number'**
+  /// **'Enter your email'**
   String get authIdentifierHint;
 
   /// No description provided for @authContinueWithGoogle.
@@ -521,7 +521,7 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPasswordSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Enter the email or phone linked to your account and we\'ll send you a reset code.'**
+  /// **'Enter the email linked to your account and we\'ll send you a reset link.'**
   String get forgotPasswordSubtitle;
 
   /// No description provided for @forgotPasswordSendCta.
@@ -1484,6 +1484,42 @@ abstract class AppLocalizations {
   /// **'Privacy'**
   String get securitySectionPrivacy;
 
+  /// No description provided for @changePasswordCurrentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get changePasswordCurrentLabel;
+
+  /// No description provided for @changePasswordCurrentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password'**
+  String get changePasswordCurrentHint;
+
+  /// No description provided for @changePasswordSameAsCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'New password must be different from the current one'**
+  String get changePasswordSameAsCurrent;
+
+  /// No description provided for @changePasswordWrongCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password is incorrect'**
+  String get changePasswordWrongCurrent;
+
+  /// No description provided for @changePasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated'**
+  String get changePasswordSuccess;
+
+  /// No description provided for @changePasswordFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update password. Please try again.'**
+  String get changePasswordFailed;
+
   /// No description provided for @securityChangePassword.
   ///
   /// In en, this message translates to:
@@ -2048,6 +2084,12 @@ abstract class AppLocalizations {
   /// **'New notifications will appear here.'**
   String get notifEmptyBody;
 
+  /// No description provided for @notifJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get notifJustNow;
+
   /// No description provided for @notifMinutesAgo.
   ///
   /// In en, this message translates to:
@@ -2329,6 +2371,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your account has been deleted.'**
   String get deleteAccountSuccess;
+
+  /// No description provided for @dashboardGreetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon!'**
+  String get dashboardGreetingAfternoon;
+
+  /// No description provided for @dashboardGreetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening!'**
+  String get dashboardGreetingEvening;
 
   /// No description provided for @dashboardGreeting.
   ///

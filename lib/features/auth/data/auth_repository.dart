@@ -129,6 +129,21 @@ class AuthRepository {
     return res.success;
   }
 
+  /// Signed-in password change. The server verifies [currentPassword] and
+  /// revokes every other session; this device's tokens stay valid. Throws
+  /// [AuthException] with the server's reason (wrong current password, too
+  /// weak, same as before).
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final res = await _api.post<Map<String, dynamic>>(
+      '/auth/me/change-password',
+      data: {'currentPassword': currentPassword, 'newPassword': newPassword},
+    );
+    if (!res.success) throw AuthException(res.message);
+  }
+
   /// Permanently deletes the account (verifying [password] server-side), then
   /// wipes local session state. Throws [AuthException] on failure (e.g. wrong
   /// password) and leaves the session intact so the user can retry.

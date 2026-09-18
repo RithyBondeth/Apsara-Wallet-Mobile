@@ -123,4 +123,15 @@ class AppConstants {
   // =========================
   static const bool enableBiometricLogin = true;
   static const bool enablePinLogin = true;
+
+  // =========================
+  // FEATURE FLAGS (no backend yet — keep hidden so the UI never shows a
+  // control that only says "coming soon"; store reviewers flag those, and
+  // Apple requires Sign in with Apple the moment Google sign-in is offered)
+  // =========================
+  /// Google / Facebook sign-in buttons on Login and Register.
+  static const bool enableSocialLogin = false;
+
+  /// Two-factor toggle on Security & Privacy.
+  static const bool enableAccountSecurityExtras = false;
 }

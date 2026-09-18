@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
@@ -57,7 +58,6 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
     );
   }
 
-  void _comingSoon() => _toast(context.l10n.commonComingSoon);
 
   /// Confirms + performs permanent account deletion. Requires re-entering the
   /// password (verified server-side), then lands on Welcome once the session
@@ -224,17 +224,18 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                 onChanged: _onBiometricChanged,
               ),
             ),
-            SettingsTile(
-              icon: LucideIcons.shieldCheck,
-              title: l10n.securityTwoFactor,
-              subtitle: l10n.securityTwoFactorSubtitle,
-              iconColor: AppColors.info,
-              showChevron: false,
-              trailing: SettingsToggle(
-                value: _twoFactor,
-                onChanged: (v) => setState(() => _twoFactor = v),
+            if (AppConstants.enableAccountSecurityExtras)
+              SettingsTile(
+                icon: LucideIcons.shieldCheck,
+                title: l10n.securityTwoFactor,
+                subtitle: l10n.securityTwoFactorSubtitle,
+                iconColor: AppColors.info,
+                showChevron: false,
+                trailing: SettingsToggle(
+                  value: _twoFactor,
+                  onChanged: (v) => setState(() => _twoFactor = v),
+                ),
               ),
-            ),
           ],
         ),
         SettingsSection(
@@ -244,7 +245,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               icon: LucideIcons.keyRound,
               title: l10n.securityChangePassword,
               subtitle: l10n.securityChangePasswordSubtitle,
-              onTap: _comingSoon,
+              onTap: () => context.router.push(const ChangePasswordRoute()),
             ),
             SettingsTile(
               icon: LucideIcons.smartphone,
