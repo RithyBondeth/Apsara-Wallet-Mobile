@@ -183,8 +183,9 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: wallets.length,
                           onReorderStart: (_) => HapticFeedback.mediumImpact(),
-                          onReorder: (oldIndex, newIndex) {
-                            if (newIndex > oldIndex) newIndex -= 1;
+                          // onReorderItem already accounts for the removed
+                          // slot, so newIndex is the final insertion index.
+                          onReorderItem: (oldIndex, newIndex) {
                             final reordered = [...wallets];
                             final moved = reordered.removeAt(oldIndex);
                             reordered.insert(newIndex, moved);
