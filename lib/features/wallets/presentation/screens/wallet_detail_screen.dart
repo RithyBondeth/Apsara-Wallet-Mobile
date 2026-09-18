@@ -12,6 +12,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/add_tx_pickers.dart'
@@ -39,8 +40,7 @@ class WalletDetailScreen extends ConsumerStatefulWidget {
   final int index;
 
   @override
-  ConsumerState<WalletDetailScreen> createState() =>
-      _WalletDetailScreenState();
+  ConsumerState<WalletDetailScreen> createState() => _WalletDetailScreenState();
 }
 
 class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
@@ -57,10 +57,10 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
   }
 
   String _kindLabel(BuildContext context, WalletKind kind) => switch (kind) {
-        WalletKind.bank => context.l10n.walletTypeBank,
-        WalletKind.cash => context.l10n.walletTypeCash,
-        WalletKind.ewallet => context.l10n.walletTypeEwallet,
-      };
+    WalletKind.bank => context.l10n.walletTypeBank,
+    WalletKind.cash => context.l10n.walletTypeCash,
+    WalletKind.ewallet => context.l10n.walletTypeEwallet,
+  };
 
   void _snack(String message, {bool error = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +89,9 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
       context: context,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.xxl),
+        ),
       ),
       builder: (sheetContext) => _ActionsSheet(
         l10n: sheetContext.l10n,
@@ -120,13 +122,17 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
       isScrollControlled: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.xxl),
+        ),
       ),
       builder: (_) => _TransferSheet(from: from, others: others),
     );
     if (result == null || !mounted) return;
     try {
-      final ok = await ref.read(transferApiProvider).create(
+      final ok = await ref
+          .read(transferApiProvider)
+          .create(
             fromWalletId: fromId,
             toWalletId: result.toWalletId,
             amountKhr: result.amountKhr,
@@ -211,6 +217,7 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final localeTag = Localizations.localeOf(context).toString();
+    final now = ref.watch(nowProvider);
     final bottomSafe = MediaQuery.of(context).padding.bottom;
 
     final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
@@ -228,7 +235,7 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
     final transfers = wallet.id == null
         ? const <ApiTransfer>[]
         : (ref.watch(walletTransfersProvider(wallet.id!)).valueOrNull ??
-            const []);
+              const []);
     final nameById = {
       for (final w in wallets)
         if (w.id != null) w.id!: w.name,
@@ -240,8 +247,8 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
           tile: _ActivityTile(
             record: t,
             localeTag: localeTag,
-            onTap: () =>
-                context.router.push(TransactionDetailRoute(id: t.id)),
+            now: now,
+            onTap: () => context.router.push(TransactionDetailRoute(id: t.id)),
           ),
         ),
       for (final tr in transfers)
@@ -249,8 +256,10 @@ class _WalletDetailScreenState extends ConsumerState<WalletDetailScreen>
           date: tr.date,
           tile: _TransferTile(
             transfer: tr,
+            now: now,
             outgoing: tr.fromWalletId == wallet.id,
-            counterparty: nameById[tr.fromWalletId == wallet.id
+            counterparty:
+                nameById[tr.fromWalletId == wallet.id
                     ? tr.toWalletId
                     : tr.fromWalletId] ??
                 '',
@@ -445,8 +454,10 @@ class _ActionsSheet extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           if (canTransfer)
             ListTile(
-              leading: const Icon(LucideIcons.arrowLeftRight,
-                  color: AppColors.primary),
+              leading: const Icon(
+                LucideIcons.arrowLeftRight,
+                color: AppColors.primary,
+              ),
               title: Text(l10n.transferAction),
               onTap: () => Navigator.of(context).pop('transfer'),
             ),
@@ -457,7 +468,10 @@ class _ActionsSheet extends StatelessWidget {
               onTap: () => Navigator.of(context).pop('primary'),
             ),
           ListTile(
-            leading: const Icon(LucideIcons.pencil, color: AppColors.textPrimary),
+            leading: const Icon(
+              LucideIcons.pencil,
+              color: AppColors.textPrimary,
+            ),
             title: Text(l10n.walletEditAction),
             onTap: () => Navigator.of(context).pop('edit'),
           ),
@@ -607,19 +621,20 @@ class _ActivityTile extends StatelessWidget {
   const _ActivityTile({
     required this.record,
     required this.localeTag,
+    required this.now,
     required this.onTap,
   });
 
   final TransactionRecord record;
   final String localeTag;
+  final DateTime now;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final t = record;
-    final amountColor =
-        t.isIncome ? AppColors.income : AppColors.textPrimary;
+    final amountColor = t.isIncome ? AppColors.income : AppColors.textPrimary;
     return PressScale(
       onTap: onTap,
       pressedScale: 0.98,
@@ -657,7 +672,11 @@ class _ActivityTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '${t.category.labelOf(l10n)} · ${t.timeLabel(localeTag)}',
+                    // Day + time: activity spans many days, so a bare clock
+                    // time made rows from different dates look identical.
+                    '${t.category.labelOf(l10n)} · '
+                    '${transactionGroupLabel(l10n, localeTag, t.date, now)}, '
+                    '${t.timeLabel(localeTag)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppFont.bodySmall.copyWith(
@@ -701,11 +720,7 @@ class _EmptyActivity extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(
-            LucideIcons.receiptText,
-            size: 30,
-            color: AppColors.textMuted,
-          ),
+          Icon(LucideIcons.receiptText, size: 30, color: AppColors.textMuted),
           const SizedBox(height: AppSpacing.md),
           Text(
             label,
@@ -726,12 +741,14 @@ class _TransferTile extends StatelessWidget {
     required this.outgoing,
     required this.counterparty,
     required this.localeTag,
+    required this.now,
   });
 
   final ApiTransfer transfer;
   final bool outgoing;
   final String counterparty;
   final String localeTag;
+  final DateTime now;
 
   @override
   Widget build(BuildContext context) {
@@ -778,7 +795,8 @@ class _TransferTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  DateFormat.jm(localeTag).format(transfer.date),
+                  '${transactionGroupLabel(context.l10n, localeTag, transfer.date, now)}, '
+                  '${DateFormat.jm(localeTag).format(transfer.date)}',
                   style: AppFont.bodySmall.copyWith(color: AppColors.textMuted),
                 ),
               ],
@@ -926,7 +944,9 @@ class _TransferSheetState extends State<_TransferSheet> {
                       child: TextField(
                         controller: _amount,
                         keyboardType: TextInputType.number,
-                        inputFormatters: [GroupedAmountFormatter(decimal: false)],
+                        inputFormatters: [
+                          GroupedAmountFormatter(decimal: false),
+                        ],
                         onChanged: (_) => setState(() {}),
                         style: AppFont.titleMedium.copyWith(
                           color: AppColors.textPrimary,
@@ -956,12 +976,12 @@ class _TransferSheetState extends State<_TransferSheet> {
   }
 
   Widget _label(String text) => Text(
-        text,
-        style: AppFont.labelLarge.copyWith(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w600,
-        ),
-      );
+    text,
+    style: AppFont.labelLarge.copyWith(
+      color: AppColors.textSecondary,
+      fontWeight: FontWeight.w600,
+    ),
+  );
 
   Widget _walletRow(Wallet w, {VoidCallback? onTap}) {
     final row = Container(
@@ -984,8 +1004,11 @@ class _TransferSheetState extends State<_TransferSheet> {
             ),
           ),
           if (onTap != null)
-            const Icon(LucideIcons.chevronDown,
-                size: 18, color: AppColors.textMuted),
+            const Icon(
+              LucideIcons.chevronDown,
+              size: 18,
+              color: AppColors.textMuted,
+            ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -95,6 +96,13 @@ class DashboardHeader extends StatelessWidget {
     );
   }
 
+  /// Morning until noon, afternoon until 18:00, evening after.
+  static String _greetingFor(BuildContext context, int hour) {
+    if (hour < 12) return context.l10n.dashboardGreeting;
+    if (hour < 18) return context.l10n.dashboardGreetingAfternoon;
+    return context.l10n.dashboardGreetingEvening;
+  }
+
   Widget _greetingRow(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,10 +113,12 @@ class DashboardHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                context.l10n.dashboardGreeting,
-                style: AppFont.bodyMedium.copyWith(
-                  color: _ivory.withValues(alpha: 0.82),
+              Consumer(
+                builder: (context, ref, _) => Text(
+                  _greetingFor(context, ref.watch(nowProvider).hour),
+                  style: AppFont.bodyMedium.copyWith(
+                    color: _ivory.withValues(alpha: 0.82),
+                  ),
                 ),
               ),
               const SizedBox(height: 2),

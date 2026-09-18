@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
+import 'package:apsara_wallet_mobile/core/providers/fx_rate_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/offline_status_provider.dart';
 import 'package:apsara_wallet_mobile/core/storages/json_cache.dart';
 import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
@@ -96,22 +98,30 @@ class WalletsNotifier extends AsyncNotifier<List<Wallet>> {
 final walletsProvider =
     AsyncNotifierProvider<WalletsNotifier, List<Wallet>>(WalletsNotifier.new);
 
-/// Per-wallet balance keyed by name — taken straight from the backend wallet
-/// records (the server owns the balance figure; it is not derived from the
-/// transaction ledger).
+/// The USD figure shown next to a riel balance. The ledger only ever moves
+/// `balanceKhr` (the backend's `balanceUsd` column is never updated by
+/// transactions or transfers), so USD is always *derived* from riel at the
+/// current rate — never read from the wallet record.
+double _khrToUsd(Ref ref, int khr) {
+  final rate = ref.watch(fxRateProvider).valueOrNull?.khrPerUsd ??
+      AppConstants.defaultKhrPerUsd;
+  return khr / rate;
+}
+
+/// Per-wallet balance keyed by name — riel straight from the backend wallet
+/// record (the server owns that figure), USD derived at the live FX rate.
 final walletBalancesProvider =
     Provider<Map<String, ({int khr, double usd})>>((ref) {
   final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
   return {
-    for (final w in wallets) w.name: (khr: w.balanceKhr, usd: w.balanceUsd),
+    for (final w in wallets)
+      w.name: (khr: w.balanceKhr, usd: _khrToUsd(ref, w.balanceKhr)),
   };
 });
 
 /// Combined balance across every wallet.
 final walletsTotalProvider = Provider<({int khr, double usd})>((ref) {
   final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
-  return (
-    khr: wallets.fold<int>(0, (sum, w) => sum + w.balanceKhr),
-    usd: wallets.fold<double>(0, (sum, w) => sum + w.balanceUsd),
-  );
+  final khr = wallets.fold<int>(0, (sum, w) => sum + w.balanceKhr);
+  return (khr: khr, usd: _khrToUsd(ref, khr));
 });

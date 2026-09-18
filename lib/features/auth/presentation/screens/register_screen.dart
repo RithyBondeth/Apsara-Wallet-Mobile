@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/auth_ui_helpers.dart';
@@ -164,20 +165,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           loading: submitting,
           onPressed: submitting ? null : _register,
         ),
-        const SizedBox(height: AppSpacing.xxl),
-        const OrDivider(),
-        const SizedBox(height: AppSpacing.xl),
-        SocialButton(
-          svg: BrandSvg.google,
-          label: context.l10n.authContinueWithGoogle,
-          onPressed: _socialUnavailable,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        SocialButton(
-          svg: BrandSvg.facebook,
-          label: context.l10n.authContinueWithFacebook,
-          onPressed: _socialUnavailable,
-        ),
+        if (AppConstants.enableSocialLogin) ...[
+          const SizedBox(height: AppSpacing.xxl),
+          const OrDivider(),
+          const SizedBox(height: AppSpacing.xl),
+          SocialButton(
+            svg: BrandSvg.google,
+            label: context.l10n.authContinueWithGoogle,
+            onPressed: _socialUnavailable,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          SocialButton(
+            svg: BrandSvg.facebook,
+            label: context.l10n.authContinueWithFacebook,
+            onPressed: _socialUnavailable,
+          ),
+        ],
         const SizedBox(height: AppSpacing.xxxl),
         Center(
           child: Wrap(

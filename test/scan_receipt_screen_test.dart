@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -7,7 +8,9 @@ import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/screens/scan_receipt_screen.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/receipt_review_sheet.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_capture_controls.dart';
+import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
 Widget _wrap(Widget child) {
   return ProviderScope(
@@ -52,20 +55,33 @@ void main() {
     expect(find.byType(ReceiptReviewSheet), findsNothing);
   });
 
-  testWidgets('Manual entry opens the editable review sheet', (tester) async {
+  testWidgets('Manual entry swaps the scanner for the Add Transaction form',
+      (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
-    await tester.pumpWidget(_wrap(const ScanReceiptScreen()));
+    final router = AppRouter();
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router.config(
+            deepLinkBuilder: (_) => DeepLink.single(const ScanReceiptRoute()),
+          ),
+        ),
+      ),
+    );
     await tester.pump(const Duration(milliseconds: 900));
+    expect(find.byType(ScanReceiptScreen), findsOneWidget);
 
     await tester.tap(find.text('Manual'));
-    await tester.pump(); // start reveal
-    await tester.pump(const Duration(milliseconds: 700)); // reveal animates in
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
 
-    expect(find.byType(ReceiptReviewSheet), findsOneWidget);
-    expect(find.text('Review receipt'), findsOneWidget);
-    expect(find.text('Save Expense'), findsOneWidget);
-    // Editable form fields are present (merchant, date, items, total).
-    expect(find.byType(TextField), findsWidgets);
-    expect(find.text('Add item'), findsOneWidget);
+    expect(find.byType(AddTransactionScreen), findsOneWidget);
+    // Replaced, not pushed: Back must not return to the camera.
+    expect(find.byType(ScanReceiptScreen), findsNothing);
+    expect(find.byType(ReceiptReviewSheet), findsNothing);
   });
 }

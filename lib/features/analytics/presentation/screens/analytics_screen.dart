@@ -154,7 +154,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
         // Body flows under the floating nav capsule so its blur has content.
         extendBody: true,
         floatingActionButton: AppBottomBarCenterButton(
-          onTap: () => context.router.push(const ScanReceiptRoute()),
+          onTap: () => context.router.push(AddTransactionRoute()),
         ),
         floatingActionButtonLocation: const AppBottomBarCenterLocation(),
         bottomNavigationBar: AppBottomBar(

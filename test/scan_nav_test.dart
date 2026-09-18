@@ -7,13 +7,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/screens/analytics_screen.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:apsara_wallet_mobile/features/scan/presentation/screens/scan_receipt_screen.dart';
+import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
-/// Regression: the centre "scan" button must open the Scan Receipt screen from
-/// every tab that shows it — it was previously a no-op on Analytics & Wallets.
+/// Regression: the centre "+" button must open Add Transaction from every tab
+/// that shows it — it was previously a no-op on Analytics & Wallets, and later
+/// opened the camera (with an immediate permission prompt) instead of the
+/// form most users actually want.
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
@@ -51,23 +53,23 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1600));
   }
 
-  Future<void> tapScanAndSettle(WidgetTester tester) async {
+  Future<void> tapAddAndSettle(WidgetTester tester) async {
     await tester.tap(find.byType(AppBottomBarCenterButton));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
   }
 
-  testWidgets('Scan button opens ScanReceiptScreen from the dashboard', (
+  testWidgets('Centre button opens AddTransactionScreen from the dashboard', (
     tester,
   ) async {
     await pumpApp(tester);
     expect(find.byType(DashboardScreen), findsOneWidget);
 
-    await tapScanAndSettle(tester);
-    expect(find.byType(ScanReceiptScreen), findsOneWidget);
+    await tapAddAndSettle(tester);
+    expect(find.byType(AddTransactionScreen), findsOneWidget);
   });
 
-  testWidgets('Scan button opens ScanReceiptScreen from Analytics', (
+  testWidgets('Centre button opens AddTransactionScreen from Analytics', (
     tester,
   ) async {
     await pumpApp(tester);
@@ -78,7 +80,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1400));
     expect(find.byType(AnalyticsScreen), findsOneWidget);
 
-    await tapScanAndSettle(tester);
-    expect(find.byType(ScanReceiptScreen), findsOneWidget);
+    await tapAddAndSettle(tester);
+    expect(find.byType(AddTransactionScreen), findsOneWidget);
   });
 }

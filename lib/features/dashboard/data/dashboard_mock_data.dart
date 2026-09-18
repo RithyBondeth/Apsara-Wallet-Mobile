@@ -81,10 +81,11 @@ class DashboardData {
   /// The "current month" is anchored to the most recent transaction (mirroring
   /// the Insights engine) rather than the wall clock, so both the seeded sample
   /// and live data read meaningfully and stay deterministic under test. The
-  /// budget bar shows this month's spend against the user's set monthly budget
-  /// ([budgetKhr]); when no budget is set it falls back to this month's
-  /// **income** (a "don't spend more than you earn" target). Day labels in the
-  /// recent list are relativized against [now].
+  /// budget bar shows this month's spend against [budgetKhr] when a caller
+  /// supplies one, otherwise against this month's **income** (a "don't spend
+  /// more than you earn" target — the dashboard uses this so its figure agrees
+  /// with the Insights savings rate). Day labels in the recent list are
+  /// relativized against [now].
   factory DashboardData.fromLedger({
     required List<TransactionRecord> ledger,
     required int balanceKhr,

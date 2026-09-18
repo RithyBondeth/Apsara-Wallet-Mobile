@@ -1,3 +1,4 @@
+import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,6 +103,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     );
   }
 
+  /// Profile is the fourth tab, so it carries the same dock as the other
+  /// three — without it the only way out was the back arrow.
+  void _onNavSelect(int index) {
+    if (index == 3) return; // already on Profile
+    switch (index) {
+      case 0:
+        // Home is the stack root — unwind to it rather than stacking.
+        context.router.popUntilRoot();
+      case 1:
+        // Sibling tab: swap in place so the stack stays [Dashboard, tab].
+        context.router.replace(const AnalyticsRoute());
+      case 2:
+        context.router.replace(const WalletsRoute());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
@@ -110,9 +127,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
         backgroundColor: AppColors.background,
+        // Body flows under the floating nav capsule so its blur has content.
+        extendBody: true,
+        floatingActionButton: AppBottomBarCenterButton(
+          onTap: () => context.router.push(AddTransactionRoute()),
+        ),
+        floatingActionButtonLocation: const AppBottomBarCenterLocation(),
+        bottomNavigationBar: AppBottomBar(
+          currentIndex: 3,
+          onSelect: _onNavSelect,
+        ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.only(bottom: bottomSafe + AppSpacing.xxxl),
+          padding: EdgeInsets.only(
+            bottom: bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

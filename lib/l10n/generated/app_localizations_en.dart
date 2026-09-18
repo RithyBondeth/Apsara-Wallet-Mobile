@@ -24,10 +24,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonForgotPassword => 'Forgot Password?';
 
   @override
-  String get authIdentifierLabel => 'Email or Phone Number';
+  String get authIdentifierLabel => 'Email';
 
   @override
-  String get authIdentifierHint => 'Enter email or phone number';
+  String get authIdentifierHint => 'Enter your email';
 
   @override
   String get authContinueWithGoogle => 'Continue with Google';
@@ -233,7 +233,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordSubtitle =>
-      'Enter the email or phone linked to your account and we\'ll send you a reset code.';
+      'Enter the email linked to your account and we\'ll send you a reset link.';
 
   @override
   String get forgotPasswordSendCta => 'Send Reset Code';
@@ -753,6 +753,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get securitySectionPrivacy => 'Privacy';
 
   @override
+  String get changePasswordCurrentLabel => 'Current Password';
+
+  @override
+  String get changePasswordCurrentHint => 'Enter your current password';
+
+  @override
+  String get changePasswordSameAsCurrent =>
+      'New password must be different from the current one';
+
+  @override
+  String get changePasswordWrongCurrent => 'Current password is incorrect';
+
+  @override
+  String get changePasswordSuccess => 'Password updated';
+
+  @override
+  String get changePasswordFailed =>
+      'Couldn\'t update password. Please try again.';
+
+  @override
   String get securityChangePassword => 'Change Password';
 
   @override
@@ -1067,6 +1087,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifEmptyBody => 'New notifications will appear here.';
 
   @override
+  String get notifJustNow => 'Just now';
+
+  @override
   String notifMinutesAgo(int count) {
     return '${count}m ago';
   }
@@ -1244,6 +1267,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccountSuccess => 'Your account has been deleted.';
+
+  @override
+  String get dashboardGreetingAfternoon => 'Good afternoon!';
+
+  @override
+  String get dashboardGreetingEvening => 'Good evening!';
 
   @override
   String get dashboardGreeting => 'Good morning!';

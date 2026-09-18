@@ -24,10 +24,10 @@ class AppLocalizationsKm extends AppLocalizations {
   String get commonForgotPassword => 'ភ្លេចពាក្យសម្ងាត់?';
 
   @override
-  String get authIdentifierLabel => 'អ៊ីមែល ឬលេខទូរស័ព្ទ';
+  String get authIdentifierLabel => 'អ៊ីមែល';
 
   @override
-  String get authIdentifierHint => 'បញ្ចូលអ៊ីមែល ឬលេខទូរស័ព្ទ';
+  String get authIdentifierHint => 'បញ្ចូលអ៊ីមែលរបស់អ្នក';
 
   @override
   String get authContinueWithGoogle => 'បន្តជាមួយ Google';
@@ -234,7 +234,7 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get forgotPasswordSubtitle =>
-      'បញ្ចូលអ៊ីមែល ឬលេខទូរស័ព្ទដែលភ្ជាប់ជាមួយគណនីរបស់អ្នក រួចយើងនឹងផ្ញើលេខកូដកំណត់ឡើងវិញជូនអ្នក។';
+      'បញ្ចូលអ៊ីមែលដែលភ្ជាប់ជាមួយគណនីរបស់អ្នក រួចយើងនឹងផ្ញើតំណកំណត់ឡើងវិញជូនអ្នក។';
 
   @override
   String get forgotPasswordSendCta => 'ផ្ញើលេខកូដកំណត់ឡើងវិញ';
@@ -754,6 +754,28 @@ class AppLocalizationsKm extends AppLocalizations {
   String get securitySectionPrivacy => 'ឯកជនភាព';
 
   @override
+  String get changePasswordCurrentLabel => 'ពាក្យសម្ងាត់បច្ចុប្បន្ន';
+
+  @override
+  String get changePasswordCurrentHint =>
+      'បញ្ចូលពាក្យសម្ងាត់បច្ចុប្បន្នរបស់អ្នក';
+
+  @override
+  String get changePasswordSameAsCurrent =>
+      'ពាក្យសម្ងាត់ថ្មីត្រូវតែខុសពីពាក្យសម្ងាត់បច្ចុប្បន្ន';
+
+  @override
+  String get changePasswordWrongCurrent =>
+      'ពាក្យសម្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ';
+
+  @override
+  String get changePasswordSuccess => 'បានធ្វើបច្ចុប្បន្នភាពពាក្យសម្ងាត់';
+
+  @override
+  String get changePasswordFailed =>
+      'មិនអាចធ្វើបច្ចុប្បន្នភាពពាក្យសម្ងាត់បានទេ។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
   String get securityChangePassword => 'ប្តូរពាក្យសម្ងាត់';
 
   @override
@@ -1067,6 +1089,9 @@ class AppLocalizationsKm extends AppLocalizations {
   String get notifEmptyBody => 'ការជូនដំណឹងថ្មីនឹងបង្ហាញនៅទីនេះ។';
 
   @override
+  String get notifJustNow => 'ទើបតែឥឡូវនេះ';
+
+  @override
   String notifMinutesAgo(int count) {
     return '$count នាទីមុន';
   }
@@ -1244,6 +1269,12 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get deleteAccountSuccess => 'គណនីរបស់អ្នកត្រូវបានលុប។';
+
+  @override
+  String get dashboardGreetingAfternoon => 'ទិវាសួស្តី!';
+
+  @override
+  String get dashboardGreetingEvening => 'សាយណ្ហសួស្តី!';
 
   @override
   String get dashboardGreeting => 'អរុណសួស្តី!';
