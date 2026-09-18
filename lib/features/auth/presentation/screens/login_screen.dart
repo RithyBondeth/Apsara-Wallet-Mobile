@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
@@ -245,32 +246,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         onPressed: submitting ? null : _login,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.xxl),
+                    if (AppConstants.enableSocialLogin) ...[
+                      const SizedBox(height: AppSpacing.xxl),
 
-                    // --- Divider -------------------------------------------
-                    _enter(0.50, 0.82, const OrDivider()),
-                    const SizedBox(height: AppSpacing.xl),
+                      // --- Divider -----------------------------------------
+                      _enter(0.50, 0.82, const OrDivider()),
+                      const SizedBox(height: AppSpacing.xl),
 
-                    // --- Social --------------------------------------------
-                    _enter(
-                      0.58,
-                      0.88,
-                      SocialButton(
-                        svg: BrandSvg.google,
-                        label: context.l10n.authContinueWithGoogle,
-                        onPressed: _socialUnavailable,
+                      // --- Social ------------------------------------------
+                      _enter(
+                        0.58,
+                        0.88,
+                        SocialButton(
+                          svg: BrandSvg.google,
+                          label: context.l10n.authContinueWithGoogle,
+                          onPressed: _socialUnavailable,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    _enter(
-                      0.64,
-                      0.93,
-                      SocialButton(
-                        svg: BrandSvg.facebook,
-                        label: context.l10n.authContinueWithFacebook,
-                        onPressed: _socialUnavailable,
+                      const SizedBox(height: AppSpacing.lg),
+                      _enter(
+                        0.64,
+                        0.93,
+                        SocialButton(
+                          svg: BrandSvg.facebook,
+                          label: context.l10n.authContinueWithFacebook,
+                          onPressed: _socialUnavailable,
+                        ),
                       ),
-                    ),
+                    ],
                     const SizedBox(height: AppSpacing.xxxl),
 
                     // --- Sign up -------------------------------------------

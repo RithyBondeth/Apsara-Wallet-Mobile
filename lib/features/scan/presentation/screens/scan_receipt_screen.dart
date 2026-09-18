@@ -1,3 +1,4 @@
+import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -196,13 +197,11 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
     }
   }
 
-  /// Open the review sheet with a blank receipt for hand entry.
+  /// Hand entry belongs on the regular Add Transaction form, not a blank
+  /// receipt (merchant / line items / USD-first is a scanner concept). Swap
+  /// this screen for it so Back doesn't land the user in the camera again.
   void _manualEntry() {
-    setState(() {
-      _receipt = ScannedReceipt.empty();
-      _phase = _ScanPhase.review;
-    });
-    _reveal.forward(from: 0);
+    context.router.replace(AddTransactionRoute());
   }
 
   void _failScan(String message) {

@@ -14,7 +14,6 @@ import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
-import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
@@ -154,7 +153,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       l10n: context.l10n,
       localeTag: Localizations.localeOf(context).toLanguageTag(),
       now: ref.watch(nowProvider),
-      budgetKhr: ref.watch(monthlyBudgetTotalProvider),
+      // Deliberately no budgetKhr: the overview measures spend against this
+      // month's income so it agrees with AI Insights' savings figure. The
+      // per-category budgets (which rarely cover every category) are judged
+      // on the Budget screen, where each has its own bar.
       userName: _greetingName(user),
     );
 
@@ -166,7 +168,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
         // Body flows under the floating nav capsule so its blur has content.
         extendBody: true,
         floatingActionButton: AppBottomBarCenterButton(
-          onTap: () => context.router.push(const ScanReceiptRoute()),
+          onTap: () => context.router.push(AddTransactionRoute()),
         ),
         floatingActionButtonLocation: const AppBottomBarCenterLocation(),
         bottomNavigationBar: AppBottomBar(

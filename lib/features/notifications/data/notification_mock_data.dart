@@ -37,6 +37,7 @@ class AppNotification {
   bool get isToday => minutesAgo < 1440;
 
   String relativeLabel(AppLocalizations l10n) {
+    if (minutesAgo < 1) return l10n.notifJustNow;
     if (minutesAgo < 60) return l10n.notifMinutesAgo(minutesAgo);
     if (minutesAgo < 1440) return l10n.notifHoursAgo(minutesAgo ~/ 60);
     if (minutesAgo < 2880) return l10n.notifYesterday;
