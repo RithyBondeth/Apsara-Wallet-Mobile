@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- API traffic. Declared here so release builds don't depend on a plugin
+         (Sentry, Play Services) merging it in. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Receipt scanning: capture from the camera and import from the gallery. -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>

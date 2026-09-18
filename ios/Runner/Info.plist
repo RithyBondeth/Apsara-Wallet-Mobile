@@ -76,5 +76,9 @@
 		<false/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<!-- Only standard HTTPS is used, which is exempt from export compliance;
+		     declaring it skips the question on every App Store Connect upload. -->
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 	</dict>
 </plist>

@@ -28,8 +28,10 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     // When the session ends (logout or an expired/failed refresh), re-run the
     // route guards so any open protected screen is bounced back to login.
-    ref.listen(authControllerProvider.select((s) => s.isAuthenticated),
-        (previous, isAuthenticated) {
+    ref.listen(authControllerProvider.select((s) => s.isAuthenticated), (
+      previous,
+      isAuthenticated,
+    ) {
       if (previous == true && isAuthenticated == false) {
         _appRouter.reevaluateGuards();
       }

@@ -94,7 +94,6 @@ flutter:
     - .env.dev
     - .env.staging
     - .env.prod
-    - assets/animations/
     - assets/backgrounds/
     - assets/backgrounds/onboardings/
     - assets/logos/
