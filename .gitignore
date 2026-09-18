@@ -55,3 +55,7 @@ app.*.map.json
 
 # Golden-test failure diff artifacts (generated)
 test/failures/
+
+# Xcode scratch copies left by Flutter's SPM migration
+*.pbxproj.backup
+*.xcscheme.backup
