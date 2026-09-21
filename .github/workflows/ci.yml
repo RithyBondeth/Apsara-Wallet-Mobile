@@ -24,3 +24,26 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
+
+  # Compiles both native projects. `analyze` and `test` never touch
+  # AndroidManifest.xml, Info.plist, Gradle or the plugin registrants, so a
+  # broken manifest or a plugin that fails to link only showed up on a
+  # developer machine. Runs in parallel with the test job. Debug / no-codesign
+  # builds: fast, and no signing material needed on CI.
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.44.8
+          cache: true
+      - run: flutter pub get
+      - run: flutter gen-l10n
+      - run: flutter build apk --debug --dart-define=ENV=staging
+      - run: flutter build ios --simulator --no-codesign --dart-define=ENV=staging
