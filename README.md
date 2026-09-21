@@ -91,6 +91,17 @@ Each feature has a `data/` layer (API clients, repositories, Riverpod
 providers) and/or `application/` (controllers), plus `presentation/`
 (`screens/`, `widgets/`). State is Riverpod; navigation is auto_route.
 
+### Deep links
+
+The app registers the `apsarawallet://` scheme (Android intent-filter, iOS
+`CFBundleURLTypes`) and handles links in Dart via `app_links`, so Flutter's
+own deep-link routing is switched off in both manifests. Incoming URIs are
+parsed by `core/deep_links/app_deep_link.dart` — anything unrecognised is
+dropped — and opened on top of the current screen, or, at cold start, on top
+of the splash's landing screen. The only link today is the password-reset
+email: `apsarawallet://reset-password?token=…` (the https form on
+`apsarawallet.app` is accepted too, ready for App Links / Universal Links).
+
 ### Receipt OCR
 
 Text recognition runs natively through the `apsara/ocr` method channel —

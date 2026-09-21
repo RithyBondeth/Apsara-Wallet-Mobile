@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:apsara_wallet_mobile/core/configs/config_service.dart';
+import 'package:apsara_wallet_mobile/core/deep_links/app_deep_link.dart';
+import 'package:apsara_wallet_mobile/core/deep_links/deep_link_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
@@ -22,9 +26,41 @@ class _MyAppState extends ConsumerState<MyApp> {
   // needs `ref` to drive its auth guard.
   late final AppRouter _appRouter = AppRouter(ref);
 
+  StreamSubscription<Uri>? _links;
+
+  @override
+  void initState() {
+    super.initState();
+    // Incoming links (the one that cold-started the app is replayed too).
+    // Unknown or malformed links parse to null and are dropped.
+    _links = ref.read(deepLinkSourceProvider).listen((uri) {
+      final link = AppDeepLink.parse(uri);
+      if (link != null) ref.read(deepLinkProvider.notifier).set(link);
+    });
+  }
+
+  @override
+  void dispose() {
+    _links?.cancel();
+    super.dispose();
+  }
+
+  /// Opens a pending link now if the app is already running; while the splash
+  /// is still up, leave it — the splash consumes it when it hands off, so its
+  /// own navigation can't wipe ours.
+  void _openPendingLink(AppDeepLink? link) {
+    if (link == null) return;
+    final top = _appRouter.stack.isEmpty ? null : _appRouter.topRoute.name;
+    if (top == null || top == SplashRoute.name) return;
+    ref.read(deepLinkProvider.notifier).take();
+    _appRouter.push(link.route);
+  }
+
   @override
   Widget build(BuildContext context) {
     final language = ref.watch(localeProvider);
+
+    ref.listen(deepLinkProvider, (_, link) => _openPendingLink(link));
 
     // When the session ends (logout or an expired/failed refresh), re-run the
     // route guards so any open protected screen is bounced back to login.

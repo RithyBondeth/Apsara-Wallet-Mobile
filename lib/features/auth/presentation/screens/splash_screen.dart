@@ -10,6 +10,7 @@ import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
+import 'package:apsara_wallet_mobile/core/deep_links/deep_link_provider.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
@@ -101,9 +102,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       if (!mounted) return;
       appLock.lockIfEnabled();
     }
-    context.router.replace(
+    // A link that cold-started the app (e.g. the password-reset email) opens
+    // on top of the normal landing screen, so "back" still makes sense.
+    final link = ref.read(deepLinkProvider.notifier).take();
+    context.router.replaceAll([
       isAuthenticated ? const DashboardRoute() : const WelcomeRoute(),
-    );
+      if (link != null) link.route,
+    ]);
   }
 
   @override
