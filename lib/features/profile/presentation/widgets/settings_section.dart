@@ -8,11 +8,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 /// A titled group of rows rendered as one rounded surface card, with hairline
 /// dividers between children — the house layout for profile & settings lists.
 class SettingsSection extends StatelessWidget {
-  const SettingsSection({
-    super.key,
-    this.title,
-    required this.children,
-  });
+  const SettingsSection({super.key, this.title, required this.children});
 
   /// Optional uppercase section label shown above the card.
   final String? title;

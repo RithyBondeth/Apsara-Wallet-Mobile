@@ -55,8 +55,9 @@ void main() {
     expect(find.byType(ReceiptReviewSheet), findsNothing);
   });
 
-  testWidgets('Manual entry swaps the scanner for the Add Transaction form',
-      (tester) async {
+  testWidgets('Manual entry swaps the scanner for the Add Transaction form', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     final router = AppRouter();
     await tester.pumpWidget(

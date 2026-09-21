@@ -140,8 +140,9 @@ class TotalBalanceCard extends StatelessWidget {
                             ShimmerSweep(
                               child: Consumer(
                                 builder: (context, ref, _) {
-                                  final money =
-                                      ref.watch(moneyFormatterProvider);
+                                  final money = ref.watch(
+                                    moneyFormatterProvider,
+                                  );
                                   return CountUpText(
                                     value: data.totalBalanceKhr,
                                     formatter: (v) => money.number(v.round()),
@@ -161,13 +162,14 @@ class TotalBalanceCard extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Consumer(
                     builder: (context, ref, _) {
-                      final isUsd = ref.watch(moneyFormatterProvider).currency ==
+                      final isUsd =
+                          ref.watch(moneyFormatterProvider).currency ==
                           ECurrencyType.usd;
                       final text = balanceHidden
                           ? (isUsd ? '≈ KHR ••••••' : '≈ USD ••••••')
                           : (isUsd
-                              ? '≈ KHR ${formatKhr(data.totalBalanceKhr)}'
-                              : '≈ USD ${formatUsd(data.totalBalanceUsd)}');
+                                ? '≈ KHR ${formatKhr(data.totalBalanceKhr)}'
+                                : '≈ USD ${formatUsd(data.totalBalanceUsd)}');
                       return Text(
                         text,
                         style: AppFont.bodyMedium.copyWith(

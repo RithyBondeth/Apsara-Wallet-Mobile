@@ -75,9 +75,9 @@ class RunDueResult {
   bool get postedAny => posted > 0;
 
   factory RunDueResult.fromJson(Map<String, dynamic> json) => RunDueResult(
-        posted: (json['posted'] as num?)?.toInt() ?? 0,
-        rulesRun: (json['rulesRun'] as num?)?.toInt() ?? 0,
-      );
+    posted: (json['posted'] as num?)?.toInt() ?? 0,
+    rulesRun: (json['rulesRun'] as num?)?.toInt() ?? 0,
+  );
 }
 
 class RecurringApi {
@@ -103,16 +103,19 @@ class RecurringApi {
     required DateTime nextDue,
     String? note,
   }) async {
-    final res = await _api.post<Map<String, dynamic>>('/recurring', data: {
-      'title': title,
-      'walletId': walletId,
-      'categoryId': categoryId,
-      'amountKhr': amountKhr,
-      'type': type.name,
-      'frequency': frequency.name,
-      'nextDue': nextDue.toUtc().toIso8601String(),
-      if (note != null && note.isNotEmpty) 'note': note,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/recurring',
+      data: {
+        'title': title,
+        'walletId': walletId,
+        'categoryId': categoryId,
+        'amountKhr': amountKhr,
+        'type': type.name,
+        'frequency': frequency.name,
+        'nextDue': nextDue.toUtc().toIso8601String(),
+        if (note != null && note.isNotEmpty) 'note': note,
+      },
+    );
     return res.success;
   }
 
@@ -127,16 +130,19 @@ class RecurringApi {
     required DateTime nextDue,
     String? note,
   }) async {
-    final res = await _api.patch<Map<String, dynamic>>('/recurring/$id', data: {
-      'title': title,
-      'walletId': walletId,
-      'categoryId': categoryId,
-      'amountKhr': amountKhr,
-      'type': type.name,
-      'frequency': frequency.name,
-      'nextDue': nextDue.toUtc().toIso8601String(),
-      'note': note,
-    });
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/recurring/$id',
+      data: {
+        'title': title,
+        'walletId': walletId,
+        'categoryId': categoryId,
+        'amountKhr': amountKhr,
+        'type': type.name,
+        'frequency': frequency.name,
+        'nextDue': nextDue.toUtc().toIso8601String(),
+        'note': note,
+      },
+    );
     return res.success;
   }
 

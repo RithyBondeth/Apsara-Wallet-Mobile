@@ -103,7 +103,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     _type = record.type;
     _currency = ECurrencyType.khr;
     _dateTime = record.date;
-    _amount.text = NumberFormat.decimalPattern('en_US').format(record.amountKhr);
+    _amount.text = NumberFormat.decimalPattern(
+      'en_US',
+    ).format(record.amountKhr);
     _title.text = record.title;
     _note.text = record.note ?? '';
     if (record.type == ETransactionType.income) {
@@ -223,8 +225,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     final l10n = context.l10n;
     // Resolve the wallet at save time (not from a build-captured value) so a
     // still-loading wallet list at first build can't strand the save.
-    final wallet =
-        _resolveWallet(ref.read(walletsProvider).valueOrNull ?? const []);
+    final wallet = _resolveWallet(
+      ref.read(walletsProvider).valueOrNull ?? const [],
+    );
     if (wallet == null) {
       _toast(l10n.addTxNoWallet);
       return;
@@ -423,9 +426,8 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
                               color: AppColors.textSecondary,
                             ),
                             label: l10n.addTxScanOrUpload,
-                            onTap: () => context.router.push(
-                              const ScanReceiptRoute(),
-                            ),
+                            onTap: () =>
+                                context.router.push(const ScanReceiptRoute()),
                           ),
                         ),
                       ),
@@ -543,7 +545,8 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
     List<Wallet> wallets,
     Wallet? wallet,
   ) {
-    final displayWallet = wallet ??
+    final displayWallet =
+        wallet ??
         Wallet(
           name: l10n.addTxNoWalletShort,
           kind: WalletKind.cash,
@@ -666,7 +669,9 @@ class GroupedAmountFormatter extends TextInputFormatter {
     final raw = newValue.text.replaceAll(',', '');
     if (raw.isEmpty) return const TextEditingValue();
 
-    final valid = decimal ? RegExp(r'^\d{0,12}(\.\d{0,2})?$') : RegExp(r'^\d{1,12}$');
+    final valid = decimal
+        ? RegExp(r'^\d{0,12}(\.\d{0,2})?$')
+        : RegExp(r'^\d{1,12}$');
     if (!valid.hasMatch(raw)) return oldValue;
 
     final dot = raw.indexOf('.');

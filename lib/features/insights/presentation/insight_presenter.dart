@@ -158,9 +158,11 @@ class InsightPresenter {
 
   /// Localized full weekday name (Monday…Sunday). 2024-01-01 is a Monday, so
   /// offsetting by `weekday - 1` lands on the requested day.
-  String _weekday(int weekday) => DateFormat.EEEE(localeTag)
-      .format(DateTime(2024, 1, 1).add(Duration(days: weekday - 1)));
+  String _weekday(int weekday) => DateFormat.EEEE(
+    localeTag,
+  ).format(DateTime(2024, 1, 1).add(Duration(days: weekday - 1)));
 
   /// "KHR 1,234,000" — matches how amounts read elsewhere in the app.
-  String _khr(int value) => 'KHR ${NumberFormat.decimalPattern('en').format(value)}';
+  String _khr(int value) =>
+      'KHR ${NumberFormat.decimalPattern('en').format(value)}';
 }

@@ -18,10 +18,9 @@ class ReceiptScannerService {
 
   /// Recognises text in the image at [imagePath] and parses it into a receipt.
   Future<ScannedReceipt> scanImage(String imagePath) async {
-    final lines = await _channel.invokeListMethod<String>(
-      'scanImage',
-      {'path': imagePath},
-    );
+    final lines = await _channel.invokeListMethod<String>('scanImage', {
+      'path': imagePath,
+    });
     return ReceiptParser.parse(lines ?? const []);
   }
 

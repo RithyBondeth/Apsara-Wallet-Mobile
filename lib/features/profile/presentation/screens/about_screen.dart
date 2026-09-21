@@ -15,7 +15,7 @@ import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/setti
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-/// About Apsara Wallet (Phase 1, UI-only): brand block, mission statement and
+/// About Apsara Wallet: brand block, mission statement and
 /// legal / links list.
 @RoutePage()
 class AboutScreen extends StatelessWidget {

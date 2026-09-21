@@ -74,8 +74,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       _identifierError = email.isEmpty
           ? context.l10n.authErrorEmailRequired
           : (!isValidEmail(email) ? context.l10n.authErrorEmailInvalid : null);
-      _passwordError =
-          password.isEmpty ? context.l10n.authErrorPasswordRequired : null;
+      _passwordError = password.isEmpty
+          ? context.l10n.authErrorPasswordRequired
+          : null;
     });
     if (_identifierError != null || _passwordError != null) return;
 
@@ -102,8 +103,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       showAuthSnackBar(context, context.l10n.authSocialComingSoon);
 
   /// Shorthand: each block enters on its own slice of the cascade.
-  Widget _enter(double start, double end, Widget child,
-      {Offset offset = const Offset(0, 28)}) {
+  Widget _enter(
+    double start,
+    double end,
+    Widget child, {
+    Offset offset = const Offset(0, 28),
+  }) {
     return FadeSlideIn(
       controller: _intro,
       start: start,
@@ -115,8 +120,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final submitting =
-        ref.watch(authControllerProvider.select((s) => s.isSubmitting));
+    final submitting = ref.watch(
+      authControllerProvider.select((s) => s.isSubmitting),
+    );
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -137,8 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               onTap: context.hideKeyboard,
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -160,8 +165,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     _enter(
                       0.0,
                       0.4,
-                      Text(context.l10n.loginTitle,
-                          style: AppFont.headingLarge),
+                      Text(
+                        context.l10n.loginTitle,
+                        style: AppFont.headingLarge,
+                      ),
                       offset: const Offset(-24, 0),
                     ),
                     const SizedBox(height: AppSpacing.sm),

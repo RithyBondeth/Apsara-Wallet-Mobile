@@ -13,7 +13,7 @@ import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 /// a provider override so the first frame already shows the right currency.
 class CurrencyNotifier extends StateNotifier<ECurrencyType> {
   CurrencyNotifier(super.initial, {SharedPrefsService? prefs})
-      : _prefs = prefs ?? SharedPrefsService();
+    : _prefs = prefs ?? SharedPrefsService();
 
   final SharedPrefsService _prefs;
 
@@ -31,7 +31,6 @@ class CurrencyNotifier extends StateNotifier<ECurrencyType> {
   }
 }
 
-final currencyProvider =
-    StateNotifierProvider<CurrencyNotifier, ECurrencyType>(
+final currencyProvider = StateNotifierProvider<CurrencyNotifier, ECurrencyType>(
   (ref) => CurrencyNotifier(ECurrencyType.khr),
 );

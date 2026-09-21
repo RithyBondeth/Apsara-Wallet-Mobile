@@ -86,10 +86,10 @@ class AuthRepository {
 
   /// Updates the user's name/phone via `PATCH /auth/me` and caches the result.
   Future<AuthUser> updateProfile({String? fullName, String? phone}) async {
-    final res = await _api.patch<Map<String, dynamic>>('/auth/me', data: {
-      'fullName': ?fullName,
-      'phone': ?phone,
-    });
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/auth/me',
+      data: {'fullName': ?fullName, 'phone': ?phone},
+    );
     if (!res.success || res.data == null) {
       throw AuthException(res.message);
     }
@@ -203,12 +203,16 @@ class AuthRepository {
     return tokens;
   }
 
-  Future<AuthUser> _persistSession(AuthTokens tokens, {String? fullName}) async {
+  Future<AuthUser> _persistSession(
+    AuthTokens tokens, {
+    String? fullName,
+  }) async {
     await _storage.saveTokens(
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
     );
-    var user = AuthUser.fromAccessToken(tokens.accessToken) ??
+    var user =
+        AuthUser.fromAccessToken(tokens.accessToken) ??
         AuthUser(id: '', email: '', fullName: fullName);
     if (fullName != null) {
       user = user.copyWith(fullName: fullName);

@@ -29,18 +29,20 @@ void main() {
   Future<double> rateOf(ProviderContainer c) async =>
       (await c.read(fxRateProvider.future)).khrPerUsd;
 
-  test('per-wallet balance matches the wallet record, USD derived from riel',
-      () async {
-    final container = await booted();
-    final rate = await rateOf(container);
-    final balances = container.read(walletBalancesProvider);
-    for (final w in sample) {
-      expect(balances[w.name]!.khr, w.balanceKhr);
-      expect(balances[w.name]!.usd, closeTo(w.balanceKhr / rate, 1e-9));
-      // Never the stored column — the ledger doesn't maintain it.
-      expect(balances[w.name]!.usd, isNot(equals(w.balanceUsd)));
-    }
-  });
+  test(
+    'per-wallet balance matches the wallet record, USD derived from riel',
+    () async {
+      final container = await booted();
+      final rate = await rateOf(container);
+      final balances = container.read(walletBalancesProvider);
+      for (final w in sample) {
+        expect(balances[w.name]!.khr, w.balanceKhr);
+        expect(balances[w.name]!.usd, closeTo(w.balanceKhr / rate, 1e-9));
+        // Never the stored column — the ledger doesn't maintain it.
+        expect(balances[w.name]!.usd, isNot(equals(w.balanceUsd)));
+      }
+    },
+  );
 
   test('total balance sums every wallet', () async {
     final container = await booted();

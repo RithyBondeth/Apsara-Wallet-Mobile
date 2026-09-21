@@ -51,19 +51,15 @@ class _PrimaryButtonState extends State<PrimaryButton>
   Widget build(BuildContext context) {
     final child = AnimatedBuilder(
       animation: _press,
-      builder: (context, inner) => Transform.scale(
-        scale: 1 - _press.value,
-        child: inner,
-      ),
+      builder: (context, inner) =>
+          Transform.scale(scale: 1 - _press.value, child: inner),
       child: AnimatedOpacity(
         duration: AppDurations.fast,
         opacity: _enabled ? 1 : 0.5,
         child: Container(
           height: 56,
           width: widget.expanded ? double.infinity : null,
-          padding: EdgeInsets.symmetric(
-            horizontal: widget.expanded ? 24 : 32,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: widget.expanded ? 24 : 32),
           decoration: BoxDecoration(
             color: AppColors.primary,
             borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -100,7 +96,11 @@ class _PrimaryButtonState extends State<PrimaryButton>
                       ),
                       if (widget.trailingIcon != null) ...[
                         const SizedBox(width: 8),
-                        Icon(widget.trailingIcon, color: Colors.white, size: 20),
+                        Icon(
+                          widget.trailingIcon,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ],
                     ],
                   ),

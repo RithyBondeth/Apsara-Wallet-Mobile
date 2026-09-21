@@ -281,31 +281,6 @@ class AppLocalizationsKm extends AppLocalizations {
   String get resetPasswordSaveCta => 'រក្សាទុកពាក្យសម្ងាត់ថ្មី';
 
   @override
-  String get otpTitle => 'លេខកូដផ្ទៀងផ្ទាត់';
-
-  @override
-  String get otpSubtitle =>
-      'យើងបានផ្ញើលេខកូដ ៦ ខ្ទង់ ទៅកាន់អ៊ីមែល ឬទូរស័ព្ទរបស់អ្នក។ សូមបញ្ចូលវាខាងក្រោមដើម្បីបន្ត។';
-
-  @override
-  String get otpResendPrompt => 'មិនបានទទួលលេខកូដ? ';
-
-  @override
-  String get otpResendCta => 'ផ្ញើម្តងទៀត';
-
-  @override
-  String get otpVerifyCta => 'ផ្ទៀងផ្ទាត់';
-
-  @override
-  String get pinLoginTitle => 'បញ្ចូលលេខ PIN របស់អ្នក';
-
-  @override
-  String get pinLoginSubtitle => 'សូមស្វាគមន៍ត្រឡប់មកវិញ — ដោះសោកាបូបរបស់អ្នក។';
-
-  @override
-  String get pinLoginUsePasswordCta => 'ប្រើពាក្យសម្ងាត់ជំនួសវិញ';
-
-  @override
   String get pinSetupTitle => 'កំណត់លេខ PIN របស់អ្នក';
 
   @override

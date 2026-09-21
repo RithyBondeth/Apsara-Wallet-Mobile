@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 /// Wallet models for the Wallets screen. Latin-grouped KHR formatting to
 /// match the design ("KHR 1,250,000"), not the ៛ symbol.
 

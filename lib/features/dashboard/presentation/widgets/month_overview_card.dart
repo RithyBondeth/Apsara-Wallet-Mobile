@@ -103,9 +103,13 @@ class MonthOverviewCard extends StatelessWidget {
                     // is left after this month's spend (floored at zero).
                     Consumer(
                       builder: (context, ref, _) => Text(
-                        ref.watch(moneyFormatterProvider).format(
-                              (data.budgetKhr - data.monthExpenseKhr)
-                                  .clamp(0, data.budgetKhr),
+                        ref
+                            .watch(moneyFormatterProvider)
+                            .format(
+                              (data.budgetKhr - data.monthExpenseKhr).clamp(
+                                0,
+                                data.budgetKhr,
+                              ),
                             ),
                         style: AppFont.titleSmall.copyWith(
                           color: AppColors.textPrimary,

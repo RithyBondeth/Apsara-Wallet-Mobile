@@ -31,30 +31,30 @@ class ApiCategory {
   bool get isExpense => type == 'expense';
 
   factory ApiCategory.fromJson(Map<String, dynamic> json) => ApiCategory(
-        id: json['id'] as String,
-        slug: json['slug'] as String,
-        type: json['type'] as String,
-        name: (json['name'] as String?) ?? (json['slug'] as String),
-        isSystem: json['isSystem'] as bool? ?? (json['userId'] == null),
-        icon: json['icon'] as String?,
-        color: json['color'] as String?,
-      );
+    id: json['id'] as String,
+    slug: json['slug'] as String,
+    type: json['type'] as String,
+    name: (json['name'] as String?) ?? (json['slug'] as String),
+    isSystem: json['isSystem'] as bool? ?? (json['userId'] == null),
+    icon: json['icon'] as String?,
+    color: json['color'] as String?,
+  );
 
   /// Maps a user category to a [TxCategory] whose label is its plain name and
   /// whose icon/color come from the stored tokens.
   TxCategory toTxCategory() => TxCategory(
-        id: slug,
-        icon: iconFromToken(icon),
-        color: parseHexColor(color) ?? categoryColorChoices.first,
-        labelOf: (_) => name,
-      );
+    id: slug,
+    icon: iconFromToken(icon),
+    color: parseHexColor(color) ?? categoryColorChoices.first,
+    labelOf: (_) => name,
+  );
 }
 
 /// Two-way lookup between backend category UUIDs and app slugs.
 class CategoryIndex {
   CategoryIndex(List<ApiCategory> categories)
-      : _slugByUuid = {for (final c in categories) c.id: c.slug},
-        _uuidBySlug = {for (final c in categories) c.slug: c.id};
+    : _slugByUuid = {for (final c in categories) c.id: c.slug},
+      _uuidBySlug = {for (final c in categories) c.slug: c.id};
 
   final Map<String, String> _slugByUuid;
   final Map<String, String> _uuidBySlug;
@@ -92,13 +92,16 @@ class CategoryApi {
     required String icon,
     required String color,
   }) async {
-    final res = await _api.post<Map<String, dynamic>>('/categories', data: {
-      'slug': slug,
-      'name': name,
-      'type': type.name,
-      'icon': icon,
-      'color': color,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/categories',
+      data: {
+        'slug': slug,
+        'name': name,
+        'type': type.name,
+        'icon': icon,
+        'color': color,
+      },
+    );
     return res.success;
   }
 
@@ -108,11 +111,10 @@ class CategoryApi {
     required String icon,
     required String color,
   }) async {
-    final res = await _api.patch<Map<String, dynamic>>('/categories/$id', data: {
-      'name': name,
-      'icon': icon,
-      'color': color,
-    });
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/categories/$id',
+      data: {'name': name, 'icon': icon, 'color': color},
+    );
     return res.success;
   }
 
@@ -156,12 +158,17 @@ final categoryIndexProvider = FutureProvider<CategoryIndex>((ref) async {
 /// The user's own categories mapped to [TxCategory], split by type. Empty when
 /// the user hasn't created any (or offline / in tests).
 final userCategoriesProvider =
-    FutureProvider<({List<TxCategory> expense, List<TxCategory> income})>(
-        (ref) async {
-  final categories = await ref.watch(categoriesListProvider.future);
-  final user = categories.where((c) => !c.isSystem).toList();
-  return (
-    expense: [for (final c in user.where((c) => c.isExpense)) c.toTxCategory()],
-    income: [for (final c in user.where((c) => !c.isExpense)) c.toTxCategory()],
-  );
-});
+    FutureProvider<({List<TxCategory> expense, List<TxCategory> income})>((
+      ref,
+    ) async {
+      final categories = await ref.watch(categoriesListProvider.future);
+      final user = categories.where((c) => !c.isSystem).toList();
+      return (
+        expense: [
+          for (final c in user.where((c) => c.isExpense)) c.toTxCategory(),
+        ],
+        income: [
+          for (final c in user.where((c) => !c.isExpense)) c.toTxCategory(),
+        ],
+      );
+    });

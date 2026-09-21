@@ -180,10 +180,7 @@ class _Header extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    AppGradients.emeraldGlow,
-                    AppGradients.emeraldDeep,
-                  ],
+                  colors: [AppGradients.emeraldGlow, AppGradients.emeraldDeep],
                 ),
               ),
               alignment: Alignment.center,

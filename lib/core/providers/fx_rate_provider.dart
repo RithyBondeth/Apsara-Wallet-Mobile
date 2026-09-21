@@ -35,7 +35,9 @@ class FxApi {
   }
 }
 
-final fxApiProvider = Provider<FxApi>((ref) => FxApi(ref.watch(apiClientProvider)));
+final fxApiProvider = Provider<FxApi>(
+  (ref) => FxApi(ref.watch(apiClientProvider)),
+);
 
 /// Resolves the current rate: live from the backend when reachable (persisted
 /// as last-good), else the persisted cache, else the pegged constant. Never

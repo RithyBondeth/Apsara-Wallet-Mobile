@@ -14,7 +14,6 @@ import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-
 /// Pin "now" to the seeded sample's base day so relative grouping
 /// (Today / Yesterday) stays deterministic regardless of the real date.
 final _fixedNow = DateTime(2024, 5, 20, 12);

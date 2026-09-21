@@ -58,8 +58,9 @@ class AppLockState {
       isLocked: isLocked ?? this.isLocked,
       backgroundTimeout: backgroundTimeout ?? this.backgroundTimeout,
       failedAttempts: failedAttempts ?? this.failedAttempts,
-      lockedOutUntil:
-          clearLockout ? null : (lockedOutUntil ?? this.lockedOutUntil),
+      lockedOutUntil: clearLockout
+          ? null
+          : (lockedOutUntil ?? this.lockedOutUntil),
     );
   }
 }
@@ -69,7 +70,7 @@ class AppLockState {
 /// is driven from the splash screen and the [AppLockGate] lifecycle observer.
 class AppLockController extends StateNotifier<AppLockState> {
   AppLockController(this._storage, this._biometric)
-      : super(const AppLockState());
+    : super(const AppLockState());
 
   final AppLockStorage _storage;
   final BiometricService _biometric;
@@ -263,8 +264,8 @@ class AppLockController extends StateNotifier<AppLockState> {
 
 final appLockControllerProvider =
     StateNotifierProvider<AppLockController, AppLockState>((ref) {
-  return AppLockController(
-    ref.watch(appLockStorageProvider),
-    ref.watch(biometricServiceProvider),
-  );
-});
+      return AppLockController(
+        ref.watch(appLockStorageProvider),
+        ref.watch(biometricServiceProvider),
+      );
+    });

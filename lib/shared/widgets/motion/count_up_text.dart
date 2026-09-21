@@ -39,9 +39,10 @@ class _CountUpTextState extends State<CountUpText>
   late Animation<double> _anim = _tweenTo(from: 0);
 
   Animation<double> _tweenTo({required double from}) {
-    return Tween<double>(begin: from, end: widget.value.toDouble()).animate(
-      CurvedAnimation(parent: _c, curve: widget.curve),
-    );
+    return Tween<double>(
+      begin: from,
+      end: widget.value.toDouble(),
+    ).animate(CurvedAnimation(parent: _c, curve: widget.curve));
   }
 
   @override

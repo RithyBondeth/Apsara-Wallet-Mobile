@@ -71,8 +71,9 @@ class _LockScreenState extends ConsumerState<LockScreen> {
           case PinUnlockResult.wrong:
             _error = context.l10n.lockIncorrectPin;
           case PinUnlockResult.lockedOut:
-            final secs =
-                ref.read(appLockControllerProvider.notifier).lockoutSecondsLeft;
+            final secs = ref
+                .read(appLockControllerProvider.notifier)
+                .lockoutSecondsLeft;
             _error = context.l10n.lockLockedOut(secs);
         }
       });
@@ -123,8 +124,9 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                       : Text(
                           _error!,
                           textAlign: TextAlign.center,
-                          style: AppFont.labelLarge
-                              .copyWith(color: AppColors.error),
+                          style: AppFont.labelLarge.copyWith(
+                            color: AppColors.error,
+                          ),
                         ),
                 ),
                 const SizedBox(height: AppSpacing.md),
@@ -133,12 +135,15 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                 if (lock.canUseBiometric)
                   TextButton.icon(
                     onPressed: _busy ? null : _tryBiometric,
-                    icon: const Icon(LucideIcons.fingerprint,
-                        color: AppColors.primary),
+                    icon: const Icon(
+                      LucideIcons.fingerprint,
+                      color: AppColors.primary,
+                    ),
                     label: Text(
                       context.l10n.lockUseBiometric,
-                      style: AppFont.labelLarge
-                          .copyWith(color: AppColors.primary),
+                      style: AppFont.labelLarge.copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 const Spacer(),

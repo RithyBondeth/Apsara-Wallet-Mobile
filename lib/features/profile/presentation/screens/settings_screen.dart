@@ -127,8 +127,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     final currency = ref.watch(currencyProvider);
     final notif = ref.watch(notificationPrefsProvider);
     final notifCtrl = ref.read(notificationPrefsProvider.notifier);
-    final biometricOn =
-        ref.watch(appLockControllerProvider).isBiometricEnabled;
+    final biometricOn = ref.watch(appLockControllerProvider).isBiometricEnabled;
     final bottomSafe = MediaQuery.of(context).padding.bottom;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -146,9 +145,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                 start: 0.0,
                 end: 0.5,
                 offset: const Offset(0, 12),
-                child: _SettingsHeader(
-                  onBack: () => context.router.maybePop(),
-                ),
+                child: _SettingsHeader(onBack: () => context.router.maybePop()),
               ),
               const SizedBox(height: AppSpacing.xl),
               Padding(
@@ -246,8 +243,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             trailing: _Toggle(
                               value: biometricOn,
                               onChanged: (v) async {
-                                final ctrl = ref
-                                    .read(appLockControllerProvider.notifier);
+                                final ctrl = ref.read(
+                                  appLockControllerProvider.notifier,
+                                );
                                 if (v) {
                                   await ctrl.enableBiometric(
                                     AppConstants.biometricReason,
@@ -290,9 +288,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                             icon: LucideIcons.shield,
                             title: context.l10n.settingsPrivacyPolicy,
                             iconColor: AppColors.info,
-                            onTap: () => context.router.push(
-                              const PrivacyPolicyRoute(),
-                            ),
+                            onTap: () =>
+                                context.router.push(const PrivacyPolicyRoute()),
                           ),
                           SettingsTile(
                             icon: LucideIcons.star,

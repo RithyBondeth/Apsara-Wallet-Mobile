@@ -21,13 +21,13 @@ class ApiTransfer {
   final String? note;
 
   factory ApiTransfer.fromJson(Map<String, dynamic> json) => ApiTransfer(
-        id: json['id'] as String,
-        fromWalletId: json['fromWalletId'] as String,
-        toWalletId: json['toWalletId'] as String,
-        amountKhr: (json['amountKhr'] as num).toInt(),
-        date: DateTime.parse(json['date'] as String).toLocal(),
-        note: json['note'] as String?,
-      );
+    id: json['id'] as String,
+    fromWalletId: json['fromWalletId'] as String,
+    toWalletId: json['toWalletId'] as String,
+    amountKhr: (json['amountKhr'] as num).toInt(),
+    date: DateTime.parse(json['date'] as String).toLocal(),
+    note: json['note'] as String?,
+  );
 }
 
 class TransferApi {
@@ -53,13 +53,16 @@ class TransferApi {
     required DateTime date,
     String? note,
   }) async {
-    final res = await _api.post<Map<String, dynamic>>('/transfers', data: {
-      'fromWalletId': fromWalletId,
-      'toWalletId': toWalletId,
-      'amountKhr': amountKhr,
-      'date': date.toUtc().toIso8601String(),
-      if (note != null && note.isNotEmpty) 'note': note,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/transfers',
+      data: {
+        'fromWalletId': fromWalletId,
+        'toWalletId': toWalletId,
+        'amountKhr': amountKhr,
+        'date': date.toUtc().toIso8601String(),
+        if (note != null && note.isNotEmpty) 'note': note,
+      },
+    );
     return res.success;
   }
 }
@@ -71,5 +74,5 @@ final transferApiProvider = Provider<TransferApi>(
 /// Transfers involving a given wallet (either side), newest first.
 final walletTransfersProvider =
     FutureProvider.family<List<ApiTransfer>, String>((ref, walletId) async {
-  return ref.watch(transferApiProvider).list(walletId: walletId);
-});
+      return ref.watch(transferApiProvider).list(walletId: walletId);
+    });

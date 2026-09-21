@@ -51,8 +51,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
         ref.watch(budgetDataProvider).valueOrNull?.categories.length ?? 0;
 
     final createdAt = user?.createdAt;
-    final membership =
-        createdAt != null ? context.l10n.profileMemberSince(createdAt.year) : '';
+    final membership = createdAt != null
+        ? context.l10n.profileMemberSince(createdAt.year)
+        : '';
 
     return ProfileData(
       fullName: user?.displayName ?? '',
@@ -213,9 +214,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                             icon: LucideIcons.bell,
                             title: context.l10n.profileNotifications,
                             iconColor: AppColors.warning,
-                            onTap: () => context.router.push(
-                              const NotificationsRoute(),
-                            ),
+                            onTap: () =>
+                                context.router.push(const NotificationsRoute()),
                           ),
                         ],
                       ),
@@ -238,27 +238,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                             icon: LucideIcons.shapes,
                             title: context.l10n.profileCategories,
                             subtitle: context.l10n.profileCategoriesSubtitle,
-                            onTap: () => context.router.push(
-                              const CategoriesRoute(),
-                            ),
+                            onTap: () =>
+                                context.router.push(const CategoriesRoute()),
                           ),
                           SettingsTile(
                             icon: LucideIcons.target,
                             title: context.l10n.profileSavingsGoals,
-                            subtitle:
-                                context.l10n.profileSavingsGoalsSubtitle,
+                            subtitle: context.l10n.profileSavingsGoalsSubtitle,
                             iconColor: AppColors.accent,
-                            onTap: () => context.router.push(
-                              const SavingsGoalsRoute(),
-                            ),
+                            onTap: () =>
+                                context.router.push(const SavingsGoalsRoute()),
                           ),
                           SettingsTile(
                             icon: LucideIcons.repeat,
                             title: context.l10n.profileRecurring,
                             subtitle: context.l10n.profileRecurringSubtitle,
-                            onTap: () => context.router.push(
-                              const RecurringRoute(),
-                            ),
+                            onTap: () =>
+                                context.router.push(const RecurringRoute()),
                           ),
                         ],
                       ),
@@ -388,10 +384,7 @@ class _SignOutSheet extends StatelessWidget {
           Text(
             context.l10n.profileSignOutConfirmBody,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
           ),
           const SizedBox(height: AppSpacing.xl),
           Row(

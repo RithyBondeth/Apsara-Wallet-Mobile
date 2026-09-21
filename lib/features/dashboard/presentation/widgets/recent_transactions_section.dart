@@ -124,8 +124,7 @@ class _TransactionTile extends ConsumerWidget {
     final money = ref.watch(moneyFormatterProvider);
     final tx = transaction;
     final sign = tx.isIncome ? '+' : '-';
-    final amountColor =
-        tx.isIncome ? AppColors.income : AppColors.textPrimary;
+    final amountColor = tx.isIncome ? AppColors.income : AppColors.textPrimary;
 
     return PressScale(
       onTap: onTap,

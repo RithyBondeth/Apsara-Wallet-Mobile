@@ -112,14 +112,17 @@ class InsightsEngine {
         .where((t) => _inMonth(t.date, prevMonthStart))
         .where((t) => t.type == ETransactionType.expense);
 
-    final expenses =
-        current.where((t) => t.type == ETransactionType.expense).toList();
+    final expenses = current
+        .where((t) => t.type == ETransactionType.expense)
+        .toList();
     final incomeTotal = current
         .where((t) => t.type == ETransactionType.income)
         .fold<int>(0, (s, t) => s + t.amountKhr);
     final expenseTotal = expenses.fold<int>(0, (s, t) => s + t.amountKhr);
-    final prevExpenseTotal =
-        previousExpenses.fold<int>(0, (s, t) => s + t.amountKhr);
+    final prevExpenseTotal = previousExpenses.fold<int>(
+      0,
+      (s, t) => s + t.amountKhr,
+    );
 
     final net = incomeTotal - expenseTotal;
     final savingsRate = incomeTotal > 0
@@ -154,20 +157,24 @@ class InsightsEngine {
     if (net < 0) {
       findings.add(Insight(kind: InsightKind.overspend, amountKhr: -net));
     } else if (incomeTotal > 0 && net > 0) {
-      findings.add(Insight(
-        kind: InsightKind.savingsPositive,
-        amountKhr: net,
-        percent: savingsRatePercent,
-      ));
+      findings.add(
+        Insight(
+          kind: InsightKind.savingsPositive,
+          amountKhr: net,
+          percent: savingsRatePercent,
+        ),
+      );
     }
 
     // Top expense category this month.
     final byCategory = <String, int>{};
     for (final e in expenses) {
-      byCategory[e.category.id] = (byCategory[e.category.id] ?? 0) + e.amountKhr;
+      byCategory[e.category.id] =
+          (byCategory[e.category.id] ?? 0) + e.amountKhr;
     }
-    final topEntry = byCategory.entries
-        .reduce((a, b) => a.value >= b.value ? a : b);
+    final topEntry = byCategory.entries.reduce(
+      (a, b) => a.value >= b.value ? a : b,
+    );
     final topShare = ((topEntry.value / expenseTotal) * 100).round();
 
     // Month-over-month change for that top category.
@@ -179,27 +186,33 @@ class InsightsEngine {
         final change = (((topEntry.value - prevForTop) / prevForTop) * 100)
             .round();
         if (change >= 5) {
-          findings.add(Insight(
-            kind: InsightKind.categoryUp,
-            categoryId: topEntry.key,
-            percent: change,
-          ));
+          findings.add(
+            Insight(
+              kind: InsightKind.categoryUp,
+              categoryId: topEntry.key,
+              percent: change,
+            ),
+          );
         } else if (change <= -5) {
-          findings.add(Insight(
-            kind: InsightKind.categoryDown,
-            categoryId: topEntry.key,
-            percent: change.abs(),
-          ));
+          findings.add(
+            Insight(
+              kind: InsightKind.categoryDown,
+              categoryId: topEntry.key,
+              percent: change.abs(),
+            ),
+          );
         }
       }
     }
 
-    findings.add(Insight(
-      kind: InsightKind.topCategory,
-      categoryId: topEntry.key,
-      amountKhr: topEntry.value,
-      percent: topShare,
-    ));
+    findings.add(
+      Insight(
+        kind: InsightKind.topCategory,
+        categoryId: topEntry.key,
+        amountKhr: topEntry.value,
+        percent: topShare,
+      ),
+    );
 
     // Busiest spending weekday.
     final byWeekday = <int, int>{};
@@ -207,12 +220,16 @@ class InsightsEngine {
       byWeekday[e.date.weekday] =
           (byWeekday[e.date.weekday] ?? 0) + e.amountKhr;
     }
-    final busiest = byWeekday.entries.reduce((a, b) => a.value >= b.value ? a : b);
-    findings.add(Insight(
-      kind: InsightKind.busiestDay,
-      weekday: busiest.key,
-      amountKhr: busiest.value,
-    ));
+    final busiest = byWeekday.entries.reduce(
+      (a, b) => a.value >= b.value ? a : b,
+    );
+    findings.add(
+      Insight(
+        kind: InsightKind.busiestDay,
+        weekday: busiest.key,
+        amountKhr: busiest.value,
+      ),
+    );
 
     return InsightsReport(
       healthScore: score,

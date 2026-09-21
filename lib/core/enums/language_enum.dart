@@ -26,7 +26,7 @@ enum ELanguage {
   /// Resolves a stored/system code back to a language, defaulting to English
   /// for anything unrecognised.
   static ELanguage fromCode(String? code) => values.firstWhere(
-        (language) => language.code == code,
-        orElse: () => ELanguage.english,
-      );
+    (language) => language.code == code,
+    orElse: () => ELanguage.english,
+  );
 }

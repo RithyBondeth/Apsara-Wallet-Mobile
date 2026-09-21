@@ -54,20 +54,20 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
     final apiTxns = raw
         .map((e) => ApiTransaction.fromJson(e as Map<String, dynamic>))
         .toList();
-    final records = apiTxns
-        .map((t) {
-          final slug = index.slugForUuid(t.categoryId);
-          final category = (slug != null ? bySlug[slug] : null) ??
-              categoryById(slug ?? '');
-          return t.toRecord(
-            walletName: nameById[t.walletId] ?? '',
-            category: category,
-          );
-        })
-        .toList()
-      // Newest first — every surface (dashboard, history, wallet detail)
-      // expects this ordering.
-      ..sort((a, b) => b.date.compareTo(a.date));
+    final records =
+        apiTxns.map((t) {
+            final slug = index.slugForUuid(t.categoryId);
+            final category =
+                (slug != null ? bySlug[slug] : null) ??
+                categoryById(slug ?? '');
+            return t.toRecord(
+              walletName: nameById[t.walletId] ?? '',
+              category: category,
+            );
+          }).toList()
+          // Newest first — every surface (dashboard, history, wallet detail)
+          // expects this ordering.
+          ..sort((a, b) => b.date.compareTo(a.date));
     return records;
   }
 
@@ -94,7 +94,8 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
       (w) => w.name == record.walletName,
       orElse: () => wallets.first,
     );
-    final categoryId = index.uuidForSlug(record.category.id) ??
+    final categoryId =
+        index.uuidForSlug(record.category.id) ??
         index.uuidForSlug(
           record.type == ETransactionType.income
               ? 'othersIncome'
@@ -132,7 +133,8 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
       (w) => w.name == record.walletName,
       orElse: () => wallets.first,
     );
-    final categoryId = index.uuidForSlug(record.category.id) ??
+    final categoryId =
+        index.uuidForSlug(record.category.id) ??
         index.uuidForSlug(
           record.type == ETransactionType.income
               ? 'othersIncome'
@@ -171,5 +173,5 @@ class TransactionsNotifier extends AsyncNotifier<List<TransactionRecord>> {
 
 final transactionsProvider =
     AsyncNotifierProvider<TransactionsNotifier, List<TransactionRecord>>(
-  TransactionsNotifier.new,
-);
+      TransactionsNotifier.new,
+    );

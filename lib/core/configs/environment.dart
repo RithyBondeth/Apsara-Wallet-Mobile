@@ -9,16 +9,18 @@ class AppEnvironmentConfig {
   ///
   /// Defaults to `dev` so a plain `flutter run` still points at the local
   /// backend. Release builds MUST pass `--dart-define` — see RELEASE.md.
-  static const String _envFromBuild =
-      String.fromEnvironment('ENV', defaultValue: 'dev');
+  static const String _envFromBuild = String.fromEnvironment(
+    'ENV',
+    defaultValue: 'dev',
+  );
 
   /// Parses the `ENV` dart-define, falling back to [EEnvironmentType.dev] for
   /// an unrecognised value rather than throwing at startup.
   static EEnvironmentType get buildEnvironment => switch (_envFromBuild) {
-        'prod' || 'production' => EEnvironmentType.prod,
-        'staging' || 'stg' => EEnvironmentType.staging,
-        _ => EEnvironmentType.dev,
-      };
+    'prod' || 'production' => EEnvironmentType.prod,
+    'staging' || 'stg' => EEnvironmentType.staging,
+    _ => EEnvironmentType.dev,
+  };
 
   static EEnvironmentType _environment = EEnvironmentType.dev;
   static EEnvironmentType get environment => _environment;

@@ -95,23 +95,26 @@ class WalletsNotifier extends AsyncNotifier<List<Wallet>> {
   }
 }
 
-final walletsProvider =
-    AsyncNotifierProvider<WalletsNotifier, List<Wallet>>(WalletsNotifier.new);
+final walletsProvider = AsyncNotifierProvider<WalletsNotifier, List<Wallet>>(
+  WalletsNotifier.new,
+);
 
 /// The USD figure shown next to a riel balance. The ledger only ever moves
 /// `balanceKhr` (the backend's `balanceUsd` column is never updated by
 /// transactions or transfers), so USD is always *derived* from riel at the
 /// current rate — never read from the wallet record.
 double _khrToUsd(Ref ref, int khr) {
-  final rate = ref.watch(fxRateProvider).valueOrNull?.khrPerUsd ??
+  final rate =
+      ref.watch(fxRateProvider).valueOrNull?.khrPerUsd ??
       AppConstants.defaultKhrPerUsd;
   return khr / rate;
 }
 
 /// Per-wallet balance keyed by name — riel straight from the backend wallet
 /// record (the server owns that figure), USD derived at the live FX rate.
-final walletBalancesProvider =
-    Provider<Map<String, ({int khr, double usd})>>((ref) {
+final walletBalancesProvider = Provider<Map<String, ({int khr, double usd})>>((
+  ref,
+) {
   final wallets = ref.watch(walletsProvider).valueOrNull ?? const [];
   return {
     for (final w in wallets)

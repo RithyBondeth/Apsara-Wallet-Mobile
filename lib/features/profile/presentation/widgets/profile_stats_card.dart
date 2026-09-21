@@ -78,9 +78,7 @@ class _Stat extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           label,
-          style: AppFont.bodySmall.copyWith(
-            color: AppColors.textSecondary,
-          ),
+          style: AppFont.bodySmall.copyWith(color: AppColors.textSecondary),
         ),
       ],
     );
@@ -92,10 +90,6 @@ class _Separator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      height: 32,
-      color: AppColors.surfaceVariant,
-    );
+    return Container(width: 1, height: 32, color: AppColors.surfaceVariant);
   }
 }

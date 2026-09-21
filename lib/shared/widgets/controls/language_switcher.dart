@@ -49,8 +49,11 @@ class LanguageSwitcher extends ConsumerWidget {
                 if (language == current)
                   const Padding(
                     padding: EdgeInsets.only(right: 8),
-                    child: Icon(LucideIcons.check,
-                        size: 16, color: AppColors.primary),
+                    child: Icon(
+                      LucideIcons.check,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
                   ),
                 Text(language.nativeName),
               ],

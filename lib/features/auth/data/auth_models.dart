@@ -9,9 +9,9 @@ class AuthTokens {
   final String refreshToken;
 
   factory AuthTokens.fromJson(Map<String, dynamic> json) => AuthTokens(
-        accessToken: json['accessToken'] as String,
-        refreshToken: json['refreshToken'] as String,
-      );
+    accessToken: json['accessToken'] as String,
+    refreshToken: json['refreshToken'] as String,
+  );
 }
 
 /// The signed-in identity. The backend has no `/me` endpoint yet, so `id` and
@@ -47,30 +47,30 @@ class AuthUser {
   String get firstName => displayName.split(' ').first;
 
   AuthUser copyWith({String? fullName, String? phone}) => AuthUser(
-        id: id,
-        email: email,
-        fullName: fullName ?? this.fullName,
-        phone: phone ?? this.phone,
-        createdAt: createdAt,
-      );
+    id: id,
+    email: email,
+    fullName: fullName ?? this.fullName,
+    phone: phone ?? this.phone,
+    createdAt: createdAt,
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
-        if (fullName != null) 'fullName': fullName,
-        if (phone != null) 'phone': phone,
-        if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
-      };
+    'id': id,
+    'email': email,
+    if (fullName != null) 'fullName': fullName,
+    if (phone != null) 'phone': phone,
+    if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
+  };
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
-        id: json['id'] as String,
-        email: json['email'] as String,
-        fullName: json['fullName'] as String?,
-        phone: json['phone'] as String?,
-        createdAt: json['createdAt'] != null
-            ? DateTime.tryParse(json['createdAt'] as String)
-            : null,
-      );
+    id: json['id'] as String,
+    email: json['email'] as String,
+    fullName: json['fullName'] as String?,
+    phone: json['phone'] as String?,
+    createdAt: json['createdAt'] != null
+        ? DateTime.tryParse(json['createdAt'] as String)
+        : null,
+  );
 
   /// Rebuilds a user from an access-token payload (`{ sub, email, ... }`).
   /// Returns null if the token is malformed or missing the expected claims.
@@ -103,7 +103,10 @@ Map<String, dynamic>? decodeJwtPayload(String token) {
 
 /// Whether a JWT is already past (or within [leeway] of) its `exp` claim.
 /// A token with no `exp` is treated as non-expiring.
-bool isJwtExpired(String token, {Duration leeway = const Duration(seconds: 15)}) {
+bool isJwtExpired(
+  String token, {
+  Duration leeway = const Duration(seconds: 15),
+}) {
   final exp = decodeJwtPayload(token)?['exp'];
   if (exp is! int) return false;
   final expiry = DateTime.fromMillisecondsSinceEpoch(exp * 1000);

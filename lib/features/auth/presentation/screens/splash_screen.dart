@@ -41,15 +41,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   void initState() {
     super.initState();
 
-    _intro = AnimationController(vsync: this, duration: AppDurations.splashIntro);
+    _intro = AnimationController(
+      vsync: this,
+      duration: AppDurations.splashIntro,
+    );
     _ambient = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 8000),
     )..repeat();
 
-    _bgScale = Tween<double>(begin: 1.08, end: 1.0).animate(
-      CurvedAnimation(parent: _intro, curve: Curves.easeOutSine),
-    );
+    _bgScale = Tween<double>(
+      begin: 1.08,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _intro, curve: Curves.easeOutSine));
     _emblemOpacity = _fade(0.00, 0.42);
     _emblemScale = Tween<double>(begin: 0.62, end: 1.0).animate(
       CurvedAnimation(
@@ -84,14 +88,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // gates the hand-off.
     await Future.wait([
       ref.read(authControllerProvider.notifier).restore(),
-      Future<void>.delayed(
-        AppDurations.splashIntro + AppDurations.splashHold,
-      ),
+      Future<void>.delayed(AppDurations.splashIntro + AppDurations.splashHold),
     ]);
     if (!mounted) return;
 
-    final isAuthenticated =
-        ref.read(authControllerProvider).isAuthenticated;
+    final isAuthenticated = ref.read(authControllerProvider).isAuthenticated;
     if (isAuthenticated) {
       // Cold start with a live session: engage app-lock (if the user set one)
       // before the dashboard is shown, so the gate covers it immediately.
@@ -280,8 +281,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppGradients.goldLight
-                      .withValues(alpha: 0.35 + 0.55 * wave),
+                  color: AppGradients.goldLight.withValues(
+                    alpha: 0.35 + 0.55 * wave,
+                  ),
                 ),
               );
             }),

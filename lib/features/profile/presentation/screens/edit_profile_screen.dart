@@ -18,7 +18,8 @@ import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Edit the signed-in user's avatar, name, email and phone (Phase 1, UI-only).
+/// Edit the signed-in user's avatar, name, email and phone, saved through
+/// PATCH /auth/me.
 ///
 /// The avatar is chosen Netflix-style from a curated preset set
 /// ([presetAvatars]) rather than uploaded; the selection updates the emerald
@@ -75,8 +76,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     final phone = _phone.text.trim();
     final phoneDigits = phone.replaceAll(RegExp(r'[^0-9]'), '');
     setState(() {
-      _nameError =
-          _name.text.trim().isEmpty ? l10n.editProfileNameRequired : null;
+      _nameError = _name.text.trim().isEmpty
+          ? l10n.editProfileNameRequired
+          : null;
       _emailError = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)
           ? null
           : l10n.editProfileEmailInvalid;
@@ -93,7 +95,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     if (!_validate() || _saving) return;
     setState(() => _saving = true);
     final phone = _phone.text.trim();
-    final ok = await ref.read(authControllerProvider.notifier).updateProfile(
+    final ok = await ref
+        .read(authControllerProvider.notifier)
+        .updateProfile(
           fullName: _name.text.trim(),
           phone: phone.isEmpty ? '' : phone,
         );
@@ -388,8 +392,7 @@ class _AvatarPicker extends StatelessWidget {
                     padding: const EdgeInsets.all(2.5),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient:
-                          isSelected ? AppGradients.goldFoil : null,
+                      gradient: isSelected ? AppGradients.goldFoil : null,
                       color: isSelected ? null : Colors.transparent,
                     ),
                     child: Stack(

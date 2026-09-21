@@ -55,7 +55,9 @@ class _RateAppSheetState extends ConsumerState<RateAppSheet> {
 
   Future<void> _record(String? comment) async {
     try {
-      await ref.read(feedbackApiProvider).submit(
+      await ref
+          .read(feedbackApiProvider)
+          .submit(
             rating: _rating,
             comment: comment,
             appVersion: AppConstants.appVersion,
@@ -155,7 +157,10 @@ class _RateAppSheetState extends ConsumerState<RateAppSheet> {
               ),
             ),
             const SizedBox(height: AppSpacing.xl),
-            if (_step == _Step.rate) _buildRate(context) else _buildComment(context),
+            if (_step == _Step.rate)
+              _buildRate(context)
+            else
+              _buildComment(context),
           ],
         ),
       ),
@@ -176,7 +181,11 @@ class _RateAppSheetState extends ConsumerState<RateAppSheet> {
               color: AppColors.accent.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(AppRadius.xl),
             ),
-            child: const Icon(LucideIcons.star, color: AppColors.accent, size: 30),
+            child: const Icon(
+              LucideIcons.star,
+              color: AppColors.accent,
+              size: 30,
+            ),
           ),
         ),
         const SizedBox(height: AppSpacing.lg),

@@ -59,7 +59,10 @@ void main() {
     final api = _ScriptedWalletApi(false);
     final c = makeContainer(api);
 
-    await expectLater(c.read(walletsProvider.future), throwsA(isA<Exception>()));
+    await expectLater(
+      c.read(walletsProvider.future),
+      throwsA(isA<Exception>()),
+    );
   });
 
   group('categories cache (supporting data — degrades to empty)', () {

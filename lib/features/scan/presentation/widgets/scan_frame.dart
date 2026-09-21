@@ -7,8 +7,8 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 /// Paints a darkened surround with a rounded cut-out "window", gold corner
 /// brackets around it and a scan line that sweeps across the window — driven
 /// by the screen's looping [ambient] controller. A faint ghost receipt sits
-/// inside the frame to hint at how to align the paper. Phase 1 UI only: there
-/// is no live camera feed behind it.
+/// inside the frame to hint at how to align the paper. The screen layers it
+/// over the live camera preview.
 class ScanFrame extends StatelessWidget {
   const ScanFrame({super.key, required this.ambient, this.scanning = false});
 

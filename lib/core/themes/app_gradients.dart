@@ -50,11 +50,7 @@ class AppGradients {
   static const LinearGradient scrim = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [
-      Color(0x66042318),
-      Color(0x00063D28),
-      Color(0x99042318),
-    ],
+    colors: [Color(0x66042318), Color(0x00063D28), Color(0x99042318)],
     stops: [0.0, 0.45, 1.0],
   );
 
@@ -72,11 +68,7 @@ class AppGradients {
     return LinearGradient(
       begin: Alignment(-1.0 - 2.0 * (1 - t), 0),
       end: Alignment(1.0 - 2.0 * (1 - t), 0),
-      colors: const [
-        Color(0x00FFFFFF),
-        Color(0xB3FFFFFF),
-        Color(0x00FFFFFF),
-      ],
+      colors: const [Color(0x00FFFFFF), Color(0xB3FFFFFF), Color(0x00FFFFFF)],
       stops: const [0.35, 0.5, 0.65],
     );
   }

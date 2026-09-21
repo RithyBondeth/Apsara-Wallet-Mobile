@@ -56,7 +56,9 @@ class CategoryBreakdownList extends StatelessWidget {
               ),
               Consumer(
                 builder: (context, ref, _) => Text(
-                  ref.watch(moneyFormatterProvider).format(data.totalExpenseKhr),
+                  ref
+                      .watch(moneyFormatterProvider)
+                      .format(data.totalExpenseKhr),
                   style: AppFont.labelLarge.copyWith(
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
@@ -143,7 +145,8 @@ class _CategoryRow extends StatelessWidget {
                 ),
                 Container(
                   height: 8,
-                  width: constraints.maxWidth *
+                  width:
+                      constraints.maxWidth *
                       (c.fraction * progress).clamp(0.0, 1.0),
                   decoration: BoxDecoration(
                     color: c.color,

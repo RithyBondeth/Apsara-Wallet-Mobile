@@ -43,13 +43,13 @@ class AppNotification {
   }
 
   AppNotification copyWith({bool? read}) => AppNotification(
-        id: id,
-        icon: icon,
-        color: color,
-        minutesAgo: minutesAgo,
-        titleOf: titleOf,
-        bodyOf: bodyOf,
-        read: read ?? this.read,
-        category: category,
-      );
+    id: id,
+    icon: icon,
+    color: color,
+    minutesAgo: minutesAgo,
+    titleOf: titleOf,
+    bodyOf: bodyOf,
+    read: read ?? this.read,
+    category: category,
+  );
 }

@@ -53,20 +53,23 @@ class RecurringRule {
     ERecurrenceFrequency? frequency,
     DateTime? nextDue,
     String? note,
-  }) =>
-      RecurringRule(
-        id: id,
-        title: title ?? this.title,
-        category: category ?? this.category,
-        walletName: walletName ?? this.walletName,
-        amountKhr: amountKhr ?? this.amountKhr,
-        type: type ?? this.type,
-        frequency: frequency ?? this.frequency,
-        nextDue: nextDue ?? this.nextDue,
-        note: note ?? this.note,
-      );
+  }) => RecurringRule(
+    id: id,
+    title: title ?? this.title,
+    category: category ?? this.category,
+    walletName: walletName ?? this.walletName,
+    amountKhr: amountKhr ?? this.amountKhr,
+    type: type ?? this.type,
+    frequency: frequency ?? this.frequency,
+    nextDue: nextDue ?? this.nextDue,
+    note: note ?? this.note,
+  );
 }
 
 /// Localized label for a frequency.
-String recurrenceFrequencyLabel(AppLocalizations l10n, ERecurrenceFrequency f) =>
-    f == ERecurrenceFrequency.weekly ? l10n.recurringWeekly : l10n.recurringMonthly;
+String recurrenceFrequencyLabel(
+  AppLocalizations l10n,
+  ERecurrenceFrequency f,
+) => f == ERecurrenceFrequency.weekly
+    ? l10n.recurringWeekly
+    : l10n.recurringMonthly;

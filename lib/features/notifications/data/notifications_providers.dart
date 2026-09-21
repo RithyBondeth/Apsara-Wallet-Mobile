@@ -42,8 +42,8 @@ class NotificationsNotifier extends AsyncNotifier<List<AppNotification>> {
 
 final notificationsProvider =
     AsyncNotifierProvider<NotificationsNotifier, List<AppNotification>>(
-  NotificationsNotifier.new,
-);
+      NotificationsNotifier.new,
+    );
 
 /// Whether a notification's category is currently allowed by the user's
 /// preferences. Security alerts are never suppressible.
@@ -65,12 +65,14 @@ bool _allowedByPrefs(ENotifCategory c, NotificationPrefs p) {
 /// promotions) hide their notifications; security always shows.
 final visibleNotificationsProvider =
     Provider<AsyncValue<List<AppNotification>>>((ref) {
-  final prefs = ref.watch(notificationPrefsProvider);
-  return ref.watch(notificationsProvider).whenData(
-        (items) =>
-            items.where((n) => _allowedByPrefs(n.category, prefs)).toList(),
-      );
-});
+      final prefs = ref.watch(notificationPrefsProvider);
+      return ref
+          .watch(notificationsProvider)
+          .whenData(
+            (items) =>
+                items.where((n) => _allowedByPrefs(n.category, prefs)).toList(),
+          );
+    });
 
 /// Count of unread (visible) notifications, for the dashboard bell dot. Returns
 /// 0 when the master push toggle is off (no nudge) or while loading.
@@ -89,8 +91,7 @@ final unreadNotificationsProvider = Provider<int>((ref) {
 final insightAutoPostProvider = FutureProvider<void>((ref) async {
   final now = ref.watch(nowProvider);
   final ledger = await ref.watch(transactionsProvider.future);
-  final month =
-      '${now.year}-${now.month.toString().padLeft(2, '0')}';
+  final month = '${now.year}-${now.month.toString().padLeft(2, '0')}';
   final monthExpenses = ledger.where(
     (t) =>
         t.type == ETransactionType.expense &&

@@ -116,10 +116,13 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
         icon: isCash ? LucideIcons.banknote : null,
         shortCode: isCash
             ? null
-            : name.replaceAll(RegExp(r'\s+'), '').substring(
-                  0,
-                  name.replaceAll(RegExp(r'\s+'), '').length.clamp(0, 3),
-                ).toUpperCase(),
+            : name
+                  .replaceAll(RegExp(r'\s+'), '')
+                  .substring(
+                    0,
+                    name.replaceAll(RegExp(r'\s+'), '').length.clamp(0, 3),
+                  )
+                  .toUpperCase(),
       ),
     );
   }
@@ -221,9 +224,11 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
               ],
             ),
             const SizedBox(height: AppSpacing.xl),
-            _label(_isEditing
-                ? l10n.walletBalanceEditLabel
-                : l10n.walletInitialBalance),
+            _label(
+              _isEditing
+                  ? l10n.walletBalanceEditLabel
+                  : l10n.walletInitialBalance,
+            ),
             const SizedBox(height: AppSpacing.sm),
             _filledField(
               child: Row(
@@ -272,8 +277,11 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
                             : null,
                       ),
                       child: color == _color
-                          ? const Icon(LucideIcons.check,
-                              size: 16, color: Colors.white)
+                          ? const Icon(
+                              LucideIcons.check,
+                              size: 16,
+                              color: Colors.white,
+                            )
                           : null,
                     ),
                   ),
@@ -294,30 +302,27 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
   }
 
   Widget _label(String text) => Text(
-        text,
-        style: AppFont.labelLarge.copyWith(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w600,
-        ),
-      );
+    text,
+    style: AppFont.labelLarge.copyWith(
+      color: AppColors.textSecondary,
+      fontWeight: FontWeight.w600,
+    ),
+  );
 
   Widget _filledField({required Widget child}) => Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: 4,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceVariant,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-        ),
-        child: child,
-      );
+    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 4),
+    decoration: BoxDecoration(
+      color: AppColors.surfaceVariant,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+    ),
+    child: child,
+  );
 
   InputDecoration _inputDecoration(String hint) => InputDecoration(
-        isDense: true,
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
-        hintText: hint,
-        hintStyle: AppFont.bodyLarge.copyWith(color: AppColors.textMuted),
-      );
+    isDense: true,
+    border: InputBorder.none,
+    contentPadding: const EdgeInsets.symmetric(vertical: 14),
+    hintText: hint,
+    hintStyle: AppFont.bodyLarge.copyWith(color: AppColors.textMuted),
+  );
 }

@@ -602,54 +602,6 @@ abstract class AppLocalizations {
   /// **'Save New Password'**
   String get resetPasswordSaveCta;
 
-  /// No description provided for @otpTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Verification Code'**
-  String get otpTitle;
-
-  /// No description provided for @otpSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'We\'ve sent a 6-digit code to your email or phone. Enter it below to continue.'**
-  String get otpSubtitle;
-
-  /// No description provided for @otpResendPrompt.
-  ///
-  /// In en, this message translates to:
-  /// **'Didn\'t receive the code? '**
-  String get otpResendPrompt;
-
-  /// No description provided for @otpResendCta.
-  ///
-  /// In en, this message translates to:
-  /// **'Resend'**
-  String get otpResendCta;
-
-  /// No description provided for @otpVerifyCta.
-  ///
-  /// In en, this message translates to:
-  /// **'Verify'**
-  String get otpVerifyCta;
-
-  /// No description provided for @pinLoginTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter Your PIN'**
-  String get pinLoginTitle;
-
-  /// No description provided for @pinLoginSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome back — unlock your wallet.'**
-  String get pinLoginSubtitle;
-
-  /// No description provided for @pinLoginUsePasswordCta.
-  ///
-  /// In en, this message translates to:
-  /// **'Use password instead'**
-  String get pinLoginUsePasswordCta;
-
   /// No description provided for @pinSetupTitle.
   ///
   /// In en, this message translates to:

@@ -37,11 +37,13 @@ class NotificationPrefs {
 /// [main] from storage via a provider override.
 class NotificationPrefsNotifier extends StateNotifier<NotificationPrefs> {
   NotificationPrefsNotifier(super.initial, {SharedPrefsService? prefs})
-      : _prefs = prefs ?? SharedPrefsService();
+    : _prefs = prefs ?? SharedPrefsService();
 
   final SharedPrefsService _prefs;
 
-  static Future<NotificationPrefs> loadSaved([SharedPrefsService? prefs]) async {
+  static Future<NotificationPrefs> loadSaved([
+    SharedPrefsService? prefs,
+  ]) async {
     final service = prefs ?? SharedPrefsService();
     Future<bool> read(String key, bool fallback) async {
       return service.getBoolOr(key, fallback);
@@ -78,5 +80,5 @@ class NotificationPrefsNotifier extends StateNotifier<NotificationPrefs> {
 
 final notificationPrefsProvider =
     StateNotifierProvider<NotificationPrefsNotifier, NotificationPrefs>(
-  (ref) => NotificationPrefsNotifier(const NotificationPrefs()),
-);
+      (ref) => NotificationPrefsNotifier(const NotificationPrefs()),
+    );

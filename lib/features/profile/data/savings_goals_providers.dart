@@ -65,5 +65,5 @@ class SavingsGoalsNotifier extends AsyncNotifier<List<SavingsGoal>> {
 
 final savingsGoalsProvider =
     AsyncNotifierProvider<SavingsGoalsNotifier, List<SavingsGoal>>(
-  SavingsGoalsNotifier.new,
-);
+      SavingsGoalsNotifier.new,
+    );

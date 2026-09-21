@@ -58,7 +58,6 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
     );
   }
 
-
   /// Confirms + performs permanent account deletion. Requires re-entering the
   /// password (verified server-side), then lands on Welcome once the session
   /// is cleared.
@@ -93,7 +92,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               } else {
                 setLocal(() {
                   submitting = false;
-                  error = ref.read(authControllerProvider).errorMessage ??
+                  error =
+                      ref.read(authControllerProvider).errorMessage ??
                       l10n.deleteAccountFailed;
                 });
               }
@@ -103,30 +103,30 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               title: Text(l10n.deleteAccountDialogTitle),
               content: SingleChildScrollView(
                 child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.deleteAccountDialogBody),
-                  const SizedBox(height: AppSpacing.lg),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: obscure,
-                    autofocus: true,
-                    enabled: !submitting,
-                    onSubmitted: (_) => submit(),
-                    decoration: InputDecoration(
-                      hintText: l10n.deleteAccountPasswordHint,
-                      errorText: error,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          obscure ? LucideIcons.eye : LucideIcons.eyeOff,
-                          size: 18,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.deleteAccountDialogBody),
+                    const SizedBox(height: AppSpacing.lg),
+                    TextField(
+                      controller: passwordController,
+                      obscureText: obscure,
+                      autofocus: true,
+                      enabled: !submitting,
+                      onSubmitted: (_) => submit(),
+                      decoration: InputDecoration(
+                        hintText: l10n.deleteAccountPasswordHint,
+                        errorText: error,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscure ? LucideIcons.eye : LucideIcons.eyeOff,
+                            size: 18,
+                          ),
+                          onPressed: () => setLocal(() => obscure = !obscure),
                         ),
-                        onPressed: () => setLocal(() => obscure = !obscure),
                       ),
                     ),
-                  ),
-                ],
+                  ],
                 ),
               ),
               actions: [
@@ -189,8 +189,9 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
         _toast(context.l10n.securityBiometricUnavailable);
         return;
       }
-      final ok = await notifier
-          .enableBiometric(context.l10n.securityEnableBiometricReason);
+      final ok = await notifier.enableBiometric(
+        context.l10n.securityEnableBiometricReason,
+      );
       if (!ok && mounted) _toast(context.l10n.securityBiometricUnavailable);
     } else {
       await notifier.disableBiometric();

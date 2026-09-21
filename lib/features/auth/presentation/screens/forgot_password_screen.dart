@@ -47,8 +47,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     setState(() => _busy = true);
     String? token;
     try {
-      token =
-          await ref.read(authRepositoryProvider).requestPasswordReset(email);
+      token = await ref
+          .read(authRepositoryProvider)
+          .requestPasswordReset(email);
     } catch (_) {
       if (!mounted) return;
       setState(() => _busy = false);

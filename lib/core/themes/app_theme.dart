@@ -107,9 +107,8 @@ class AppTheme {
             : Colors.transparent,
       ),
       dayPeriodTextColor: WidgetStateColor.resolveWith(
-        (states) => states.contains(WidgetState.selected)
-            ? Colors.white
-            : onSurface,
+        (states) =>
+            states.contains(WidgetState.selected) ? Colors.white : onSurface,
       ),
       cancelButtonStyle: TextButton.styleFrom(
         foregroundColor: AppColors.textMuted,

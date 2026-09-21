@@ -50,8 +50,7 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tint = destructive ? AppColors.expense : iconColor;
-    final titleColor =
-        destructive ? AppColors.expense : AppColors.textPrimary;
+    final titleColor = destructive ? AppColors.expense : AppColors.textPrimary;
 
     Widget? trailingWidget = trailing;
     trailingWidget ??= value != null
@@ -76,12 +75,12 @@ class SettingsTile extends StatelessWidget {
             ],
           )
         : (showChevron
-            ? const Icon(
-                LucideIcons.chevronRight,
-                size: 18,
-                color: AppColors.textMuted,
-              )
-            : null);
+              ? const Icon(
+                  LucideIcons.chevronRight,
+                  size: 18,
+                  color: AppColors.textMuted,
+                )
+              : null);
 
     return PressScale(
       onTap: onTap,

@@ -58,7 +58,10 @@ class AuthController extends StateNotifier<AuthState> {
       );
       if (user != null) await _refreshProfile();
     } catch (_) {
-      state = state.copyWith(status: AuthStatus.unauthenticated, clearUser: true);
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        clearUser: true,
+      );
     }
   }
 
@@ -155,13 +158,17 @@ class AuthController extends StateNotifier<AuthState> {
   /// no longer valid). Flips state so the router guard bounces to login.
   void onSessionExpired([String? message]) {
     if (state.status == AuthStatus.unauthenticated) return;
-    state = AuthState(status: AuthStatus.unauthenticated, errorMessage: message);
+    state = AuthState(
+      status: AuthStatus.unauthenticated,
+      errorMessage: message,
+    );
   }
 
   void clearError() => state = state.copyWith(clearError: true);
 }
 
-final authControllerProvider =
-    StateNotifierProvider<AuthController, AuthState>((ref) {
-  return AuthController(ref.watch(authRepositoryProvider));
-});
+final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
+  (ref) {
+    return AuthController(ref.watch(authRepositoryProvider));
+  },
+);

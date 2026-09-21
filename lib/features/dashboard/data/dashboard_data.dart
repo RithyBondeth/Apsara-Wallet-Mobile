@@ -110,8 +110,9 @@ class DashboardData {
       );
     }
 
-    final anchor =
-        ledger.map((t) => t.date).reduce((a, b) => a.isAfter(b) ? a : b);
+    final anchor = ledger
+        .map((t) => t.date)
+        .reduce((a, b) => a.isAfter(b) ? a : b);
     final monthStart = DateTime(anchor.year, anchor.month);
     bool inMonth(DateTime d) =>
         d.year == monthStart.year && d.month == monthStart.month;
@@ -137,7 +138,8 @@ class DashboardData {
           (t) => DashboardTransaction(
             id: t.id,
             title: t.title,
-            time: '${transactionGroupLabel(l10n, localeTag, t.date, now)}'
+            time:
+                '${transactionGroupLabel(l10n, localeTag, t.date, now)}'
                 ', ${t.timeLabel(localeTag)}',
             amountKhr: t.amountKhr,
             type: t.type,

@@ -20,8 +20,8 @@ class OfflineSourcesNotifier extends StateNotifier<Set<String>> {
 
 final offlineSourcesProvider =
     StateNotifierProvider<OfflineSourcesNotifier, Set<String>>(
-  (ref) => OfflineSourcesNotifier(),
-);
+      (ref) => OfflineSourcesNotifier(),
+    );
 
 /// True when any data source is showing cached-but-stale data (drives the
 /// offline banner).

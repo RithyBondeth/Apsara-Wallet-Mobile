@@ -30,29 +30,29 @@ class ApiWallet {
   final bool isPrimary;
 
   factory ApiWallet.fromJson(Map<String, dynamic> json) => ApiWallet(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        kind: json['kind'] as String,
-        balanceKhr: (json['balanceKhr'] as num).toInt(),
-        balanceUsd: (json['balanceUsd'] as num?)?.toDouble() ?? 0,
-        brandColor: json['brandColor'] as String?,
-        accountLast4: json['accountLast4'] as String?,
-        shortCode: json['shortCode'] as String?,
-        isPrimary: json['isPrimary'] as bool? ?? false,
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    kind: json['kind'] as String,
+    balanceKhr: (json['balanceKhr'] as num).toInt(),
+    balanceUsd: (json['balanceUsd'] as num?)?.toDouble() ?? 0,
+    brandColor: json['brandColor'] as String?,
+    accountLast4: json['accountLast4'] as String?,
+    shortCode: json['shortCode'] as String?,
+    isPrimary: json['isPrimary'] as bool? ?? false,
+  );
 
   /// Maps to the app's UI [Wallet] model.
   Wallet toWallet() => Wallet(
-        id: id,
-        name: name,
-        kind: _kindFromString(kind),
-        balanceKhr: balanceKhr,
-        balanceUsd: balanceUsd,
-        brandColor: parseHexColor(brandColor) ?? AppColors.primary,
-        accountLast4: accountLast4,
-        shortCode: shortCode,
-        isPrimary: isPrimary,
-      );
+    id: id,
+    name: name,
+    kind: _kindFromString(kind),
+    balanceKhr: balanceKhr,
+    balanceUsd: balanceUsd,
+    brandColor: parseHexColor(brandColor) ?? AppColors.primary,
+    accountLast4: accountLast4,
+    shortCode: shortCode,
+    isPrimary: isPrimary,
+  );
 }
 
 WalletKind _kindFromString(String kind) {
@@ -101,30 +101,36 @@ class WalletApi {
   }
 
   Future<bool> create(Wallet wallet) async {
-    final res = await _api.post<Map<String, dynamic>>('/wallets', data: {
-      'name': wallet.name,
-      'kind': wallet.kind.name,
-      'balanceKhr': wallet.balanceKhr,
-      'balanceUsd': wallet.balanceUsd,
-      'brandColor': colorToHex(wallet.brandColor),
-      if (wallet.accountLast4 != null) 'accountLast4': wallet.accountLast4,
-      if (wallet.shortCode != null) 'shortCode': wallet.shortCode,
-      'isPrimary': wallet.isPrimary,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/wallets',
+      data: {
+        'name': wallet.name,
+        'kind': wallet.kind.name,
+        'balanceKhr': wallet.balanceKhr,
+        'balanceUsd': wallet.balanceUsd,
+        'brandColor': colorToHex(wallet.brandColor),
+        if (wallet.accountLast4 != null) 'accountLast4': wallet.accountLast4,
+        if (wallet.shortCode != null) 'shortCode': wallet.shortCode,
+        'isPrimary': wallet.isPrimary,
+      },
+    );
     return res.success;
   }
 
   Future<bool> update(String id, Wallet wallet) async {
-    final res = await _api.patch<Map<String, dynamic>>('/wallets/$id', data: {
-      'name': wallet.name,
-      'kind': wallet.kind.name,
-      'balanceKhr': wallet.balanceKhr,
-      'balanceUsd': wallet.balanceUsd,
-      'brandColor': colorToHex(wallet.brandColor),
-      'accountLast4': wallet.accountLast4,
-      'shortCode': wallet.shortCode,
-      'isPrimary': wallet.isPrimary,
-    });
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/wallets/$id',
+      data: {
+        'name': wallet.name,
+        'kind': wallet.kind.name,
+        'balanceKhr': wallet.balanceKhr,
+        'balanceUsd': wallet.balanceUsd,
+        'brandColor': colorToHex(wallet.brandColor),
+        'accountLast4': wallet.accountLast4,
+        'shortCode': wallet.shortCode,
+        'isPrimary': wallet.isPrimary,
+      },
+    );
     return res.success;
   }
 

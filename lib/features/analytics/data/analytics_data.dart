@@ -80,10 +80,12 @@ class AnalyticsData {
         ? DateTime(start.year + 1, 1, 1)
         : startDay.add(Duration(days: buckets));
 
-    final expenses = ledger.where((t) =>
-        t.type == ETransactionType.expense &&
-        !t.date.isBefore(start) &&
-        t.date.isBefore(end));
+    final expenses = ledger.where(
+      (t) =>
+          t.type == ETransactionType.expense &&
+          !t.date.isBefore(start) &&
+          t.date.isBefore(end),
+    );
 
     var total = 0;
     final amountBySlug = <String, int>{};
@@ -92,15 +94,20 @@ class AnalyticsData {
 
     for (final t in expenses) {
       total += t.amountKhr;
-      amountBySlug.update(t.category.id, (v) => v + t.amountKhr,
-          ifAbsent: () => t.amountKhr);
+      amountBySlug.update(
+        t.category.id,
+        (v) => v + t.amountKhr,
+        ifAbsent: () => t.amountKhr,
+      );
       catBySlug.putIfAbsent(t.category.id, () => t.category);
 
       final idx = byMonth
           ? t.date.month - 1
-          : DateTime(t.date.year, t.date.month, t.date.day)
-              .difference(startDay)
-              .inDays;
+          : DateTime(
+              t.date.year,
+              t.date.month,
+              t.date.day,
+            ).difference(startDay).inDays;
       if (idx >= 0 && idx < buckets) trend[idx] += t.amountKhr.toDouble();
     }
 
@@ -110,25 +117,28 @@ class AnalyticsData {
     final categories = <ExpenseCategory>[];
     for (var i = 0; i < ranked.length && i < topN; i++) {
       final cat = catBySlug[ranked[i].key]!;
-      categories.add(ExpenseCategory(
-        name: cat.labelOf(l10n),
-        amountKhr: ranked[i].value,
-        fraction: total > 0 ? ranked[i].value / total : 0,
-        color: cat.color,
-        icon: cat.icon,
-      ));
+      categories.add(
+        ExpenseCategory(
+          name: cat.labelOf(l10n),
+          amountKhr: ranked[i].value,
+          fraction: total > 0 ? ranked[i].value / total : 0,
+          color: cat.color,
+          icon: cat.icon,
+        ),
+      );
     }
     if (ranked.length > topN) {
-      final restAmt =
-          ranked.skip(topN).fold<int>(0, (s, e) => s + e.value);
+      final restAmt = ranked.skip(topN).fold<int>(0, (s, e) => s + e.value);
       final others = categoryById('othersExpense');
-      categories.add(ExpenseCategory(
-        name: others.labelOf(l10n),
-        amountKhr: restAmt,
-        fraction: total > 0 ? restAmt / total : 0,
-        color: others.color,
-        icon: others.icon,
-      ));
+      categories.add(
+        ExpenseCategory(
+          name: others.labelOf(l10n),
+          amountKhr: restAmt,
+          fraction: total > 0 ? restAmt / total : 0,
+          color: others.color,
+          icon: others.icon,
+        ),
+      );
     }
 
     final maxVal = trend.fold<double>(0, (m, v) => v > m ? v : m);
@@ -147,14 +157,19 @@ class AnalyticsData {
   switch (range) {
     case AnalyticsRange.week:
       // Monday of the anchor's week (weekday: Mon=1 … Sun=7).
-      final monday = DateTime(anchor.year, anchor.month, anchor.day)
-          .subtract(Duration(days: anchor.weekday - 1));
+      final monday = DateTime(
+        anchor.year,
+        anchor.month,
+        anchor.day,
+      ).subtract(Duration(days: anchor.weekday - 1));
       return (monday, 7, false);
     case AnalyticsRange.month:
       final start = DateTime(anchor.year, anchor.month, 1);
-      final days = DateTime(anchor.year, anchor.month + 1, 1)
-          .difference(start)
-          .inDays;
+      final days = DateTime(
+        anchor.year,
+        anchor.month + 1,
+        1,
+      ).difference(start).inDays;
       return (start, days, false);
     case AnalyticsRange.year:
       return (DateTime(anchor.year, 1, 1), 12, true);
@@ -181,15 +196,17 @@ List<String> _axisLabels(
 ) {
   if (range == AnalyticsRange.week) {
     final fmt = DateFormat.E(locale);
-    return [for (var i = 0; i < 7; i++) fmt.format(start.add(Duration(days: i)))];
+    return [
+      for (var i = 0; i < 7; i++) fmt.format(start.add(Duration(days: i))),
+    ];
   }
-  final fmt =
-      range == AnalyticsRange.year ? DateFormat.MMM(locale) : DateFormat('d MMM', locale);
+  final fmt = range == AnalyticsRange.year
+      ? DateFormat.MMM(locale)
+      : DateFormat('d MMM', locale);
   const count = 5;
   final indices = <int>{
     for (var k = 0; k < count; k++) ((buckets - 1) * k / (count - 1)).round(),
-  }.toList()
-    ..sort();
+  }.toList()..sort();
   return [
     for (final i in indices)
       fmt.format(

@@ -102,9 +102,7 @@ _NotifCopy _copyFor(
       return _NotifCopy(
         LucideIcons.piggyBank,
         AppColors.income,
-        (l) => done
-            ? l.notifTypeSavingsDoneTitle
-            : l.notifTypeSavingsHalfTitle,
+        (l) => done ? l.notifTypeSavingsDoneTitle : l.notifTypeSavingsHalfTitle,
         (l) => done
             ? l.notifTypeSavingsDoneBody(name)
             : l.notifTypeSavingsHalfBody(name),
@@ -171,12 +169,16 @@ class NotificationApi {
   }
 
   Future<bool> markRead(String id) async {
-    final res = await _api.patch<Map<String, dynamic>>('/notifications/$id/read');
+    final res = await _api.patch<Map<String, dynamic>>(
+      '/notifications/$id/read',
+    );
     return res.success;
   }
 
   Future<bool> markAllRead() async {
-    final res = await _api.post<Map<String, dynamic>>('/notifications/read-all');
+    final res = await _api.post<Map<String, dynamic>>(
+      '/notifications/read-all',
+    );
     return res.success;
   }
 

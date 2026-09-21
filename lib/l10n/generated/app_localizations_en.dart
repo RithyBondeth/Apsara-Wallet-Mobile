@@ -278,31 +278,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetPasswordSaveCta => 'Save New Password';
 
   @override
-  String get otpTitle => 'Verification Code';
-
-  @override
-  String get otpSubtitle =>
-      'We\'ve sent a 6-digit code to your email or phone. Enter it below to continue.';
-
-  @override
-  String get otpResendPrompt => 'Didn\'t receive the code? ';
-
-  @override
-  String get otpResendCta => 'Resend';
-
-  @override
-  String get otpVerifyCta => 'Verify';
-
-  @override
-  String get pinLoginTitle => 'Enter Your PIN';
-
-  @override
-  String get pinLoginSubtitle => 'Welcome back — unlock your wallet.';
-
-  @override
-  String get pinLoginUsePasswordCta => 'Use password instead';
-
-  @override
   String get pinSetupTitle => 'Set Your PIN';
 
   @override

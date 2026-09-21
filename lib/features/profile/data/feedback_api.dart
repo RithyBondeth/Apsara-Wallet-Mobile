@@ -17,12 +17,15 @@ class FeedbackApi {
     String? appVersion,
     String? platform,
   }) async {
-    final res = await _api.post<Map<String, dynamic>>('/feedback', data: {
-      'rating': rating,
-      'comment': ?comment,
-      'appVersion': ?appVersion,
-      'platform': ?platform,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/feedback',
+      data: {
+        'rating': rating,
+        'comment': ?comment,
+        'appVersion': ?appVersion,
+        'platform': ?platform,
+      },
+    );
     return res.success;
   }
 }

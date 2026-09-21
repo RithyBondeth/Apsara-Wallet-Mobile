@@ -60,10 +60,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       _passwordError = password.isEmpty
           ? context.l10n.authErrorPasswordRequired
           : (password.length < 8
-              ? context.l10n.authErrorPasswordTooShort
-              : null);
-      _confirmError =
-          confirm != password ? context.l10n.authErrorPasswordMismatch : null;
+                ? context.l10n.authErrorPasswordTooShort
+                : null);
+      _confirmError = confirm != password
+          ? context.l10n.authErrorPasswordMismatch
+          : null;
     });
     if (_nameError != null ||
         _identifierError != null ||
@@ -73,11 +74,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     }
 
     context.hideKeyboard();
-    final ok = await ref.read(authControllerProvider.notifier).register(
-          email: email,
-          fullName: name,
-          password: password,
-        );
+    final ok = await ref
+        .read(authControllerProvider.notifier)
+        .register(email: email, fullName: name, password: password);
     if (!mounted) return;
 
     if (ok) {
@@ -99,8 +98,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final submitting =
-        ref.watch(authControllerProvider.select((s) => s.isSubmitting));
+    final submitting = ref.watch(
+      authControllerProvider.select((s) => s.isSubmitting),
+    );
     return AuthFlowScaffold(
       title: context.l10n.registerTitle,
       subtitle: context.l10n.registerSubtitle,
