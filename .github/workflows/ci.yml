@@ -49,11 +49,6 @@ jobs:
           channel: stable
           flutter-version: 3.44.8
           cache: true
-      # CocoaPods specs + built pods for the iOS build.
-      - uses: actions/cache@v4
-        with:
-          path: ios/Pods
-          key: pods-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
       - run: flutter pub get
       - run: flutter gen-l10n
       - run: flutter build apk --debug --dart-define=ENV=staging
