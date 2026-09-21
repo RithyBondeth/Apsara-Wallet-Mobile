@@ -2642,12 +2642,6 @@ abstract class AppLocalizations {
   /// **'USD — US Dollar'**
   String get settingsCurrencyUsd;
 
-  /// No description provided for @settingsDarkMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Dark Mode'**
-  String get settingsDarkMode;
-
   /// No description provided for @settingsSectionNotifications.
   ///
   /// In en, this message translates to:

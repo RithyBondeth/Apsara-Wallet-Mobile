@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-//Used for: themeMode, language, theme mode, app settings
+// Used for: language and other plain app settings.
 
 class SharedPrefsService {
   Future<SharedPreferences> get _prefs async =>

@@ -1409,9 +1409,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCurrencyUsd => 'USD — US Dollar';
 
   @override
-  String get settingsDarkMode => 'Dark Mode';
-
-  @override
   String get settingsSectionNotifications => 'Notifications';
 
   @override

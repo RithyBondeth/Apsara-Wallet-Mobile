@@ -79,6 +79,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: AppTheme.lightTheme,
       // Light-only by design: the app's premium emerald/ivory look is a
       // single appearance; no dark mode (and no following the OS setting).
+      // Widgets read AppColors directly, so a dark theme would need a
+      // palette and a migration of every screen, not just a switch here.
       themeMode: ThemeMode.light,
 
       // Localization — changing `locale` rebuilds the whole tree (incl. every
