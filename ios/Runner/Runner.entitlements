@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Universal Links + password autofill for the marketing domain. The
+	     matching apple-app-site-association is served by Apsara-Wallet-Web.
+	     Requires the Associated Domains capability on the App ID. -->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:apsarawallet.com</string>
+		<string>webcredentials:apsarawallet.com</string>
+	</array>
+</dict>
+</plist>

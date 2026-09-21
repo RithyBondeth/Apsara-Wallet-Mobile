@@ -111,9 +111,15 @@ answer to "can users request data deletion?" is yes.
 - **`AppConstants.iosAppId`** is still `000000000`. The rate sheet now detects
   this and skips the store link rather than opening a dead page, so it is safe
   to ship; replace the constant once App Store Connect assigns the real ID.
-- **Support domain is inconsistent** — the app uses `support@apsarawallet.app`
-  (`AppConstants.supportEmail`) while the website's `.env.example` defaults to
-  `apsarawallet.com`. Pick one before the listing goes live; whichever you
-  choose has to be a mailbox you actually read.
+- **Domain is `apsarawallet.com`** everywhere now (support mailbox, deep
+  links, the website). It has to be a mailbox you actually read, and the
+  domain has to resolve before Universal Links / App Links can verify.
+- **Universal Links / App Links** are wired on the app side
+  (`ios/Runner/Runner.entitlements`, the `autoVerify` intent-filter) but only
+  verify once the website serves the association files with your Apple Team
+  ID and Android signing SHA-256 — see the web repo's `.env.example`. Until
+  then the https reset link opens the website, which offers the
+  `apsarawallet://` fallback. Enable the *Associated Domains* capability on
+  the App ID in the Apple Developer portal or the archive will fail to sign.
 - **Khmer font** (Koh Santepheap) is fetched at runtime by `google_fonts`, so a
   first launch in Khmer with no network falls back to the default font.

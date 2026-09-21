@@ -99,8 +99,12 @@ own deep-link routing is switched off in both manifests. Incoming URIs are
 parsed by `core/deep_links/app_deep_link.dart` — anything unrecognised is
 dropped — and opened on top of the current screen, or, at cold start, on top
 of the splash's landing screen. The only link today is the password-reset
-email: `apsarawallet://reset-password?token=…` (the https form on
-`apsarawallet.app` is accepted too, ready for App Links / Universal Links).
+email: `apsarawallet://reset-password?token=…`, and its https twin
+`https://apsarawallet.com/reset-password?token=…`. The https form opens in the
+app directly once Universal Links / App Links verify against the association
+files that `Apsara-Wallet-Web` serves from `/.well-known` — that needs the
+Associated Domains capability on the App ID (`ios/Runner/Runner.entitlements`)
+and the signing fingerprint published on the web side.
 
 ### Receipt OCR
 
