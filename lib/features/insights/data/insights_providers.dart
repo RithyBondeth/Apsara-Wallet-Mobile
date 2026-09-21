@@ -7,7 +7,5 @@ import 'package:apsara_wallet_mobile/features/transactions/data/transaction_prov
 /// ledger. Recomputes automatically whenever a transaction is added or
 /// removed, so the Insights screen always reflects the current data.
 final insightsReportProvider = Provider<AsyncValue<InsightsReport>>((ref) {
-  return ref
-      .watch(transactionsProvider)
-      .whenData(InsightsEngine.analyse);
+  return ref.watch(transactionsProvider).whenData(InsightsEngine.analyse);
 });

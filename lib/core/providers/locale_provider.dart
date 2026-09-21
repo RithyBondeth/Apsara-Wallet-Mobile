@@ -12,7 +12,7 @@ import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 /// language — no English flash before Khmer loads.
 class LocaleNotifier extends StateNotifier<ELanguage> {
   LocaleNotifier(super.initial, {SharedPrefsService? prefs})
-      : _prefs = prefs ?? SharedPrefsService();
+    : _prefs = prefs ?? SharedPrefsService();
 
   final SharedPrefsService _prefs;
 
@@ -30,9 +30,8 @@ class LocaleNotifier extends StateNotifier<ELanguage> {
   }
 
   /// Flips between the two supported languages.
-  Future<void> toggle() => setLanguage(
-        state.isKhmer ? ELanguage.english : ELanguage.khmer,
-      );
+  Future<void> toggle() =>
+      setLanguage(state.isKhmer ? ELanguage.english : ELanguage.khmer);
 }
 
 final localeProvider = StateNotifierProvider<LocaleNotifier, ELanguage>(

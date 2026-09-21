@@ -64,8 +64,10 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen>
   @override
   void initState() {
     super.initState();
-    _intro = AnimationController(vsync: this, duration: AppDurations.splashIntro)
-      ..forward();
+    _intro = AnimationController(
+      vsync: this,
+      duration: AppDurations.splashIntro,
+    )..forward();
     _ambient = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 10000),

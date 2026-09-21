@@ -14,7 +14,6 @@ import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
-
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 

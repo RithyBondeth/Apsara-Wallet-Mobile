@@ -18,7 +18,6 @@ import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/walle
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-
 /// Records transfer creates so the flow can be asserted without the network.
 class _FakeTransferApi implements TransferApi {
   bool created = false;

@@ -37,7 +37,11 @@ class AuroraBackground extends StatelessWidget {
 }
 
 class _AuroraPainter extends CustomPainter {
-  _AuroraPainter({required this.t, required this.dark, required this.moteCount});
+  _AuroraPainter({
+    required this.t,
+    required this.dark,
+    required this.moteCount,
+  });
 
   final double t;
   final bool dark;
@@ -64,7 +68,10 @@ class _AuroraPainter extends CustomPainter {
         r,
         Paint()
           ..shader = RadialGradient(
-            colors: [color.withValues(alpha: washAlpha), color.withValues(alpha: 0)],
+            colors: [
+              color.withValues(alpha: washAlpha),
+              color.withValues(alpha: 0),
+            ],
           ).createShader(Rect.fromCircle(center: Offset(cx, cy), radius: r))
           ..blendMode = dark ? BlendMode.plus : BlendMode.srcOver,
       );
@@ -77,8 +84,8 @@ class _AuroraPainter extends CustomPainter {
       final h = _hash(i);
       final speed = 0.35 + 0.65 * h; // slow layers drift behind fast ones
       final progress = (t * speed + h * 7) % 1.0;
-      final x = size.width *
-          ((h * 13) % 1.0 + 0.04 * math.sin(phase * speed + i));
+      final x =
+          size.width * ((h * 13) % 1.0 + 0.04 * math.sin(phase * speed + i));
       final y = size.height * (1.08 - 1.16 * progress);
       final radius = 1.0 + 2.2 * ((h * 31) % 1.0);
       // Fade in near the bottom, out near the top.

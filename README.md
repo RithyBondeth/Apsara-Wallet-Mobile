@@ -101,6 +101,7 @@ Dart (`features/scan/data/receipt_parser.dart`) so they are unit-testable.
 ## Tests
 
 ```bash
+dart format lib test    # CI fails on unformatted files
 flutter analyze
 flutter test
 ```
@@ -115,8 +116,8 @@ change:
 flutter test --update-goldens
 ```
 
-CI (`.github/workflows/ci.yml`) runs `gen-l10n`, `analyze` and the full test
-suite on every PR.
+CI (`.github/workflows/ci.yml`) runs `gen-l10n`, a `dart format` check,
+`analyze` and the full test suite on every PR.
 
 ## Localisation
 

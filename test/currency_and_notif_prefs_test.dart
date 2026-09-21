@@ -47,22 +47,24 @@ void main() {
       return c;
     }
 
-    test('category toggles hide their notifications; security always shows',
-        () async {
-      final c = containerWith(
-        const NotificationPrefs(
-          transactionAlerts: false,
-          budgetWarnings: false,
-          promotions: false,
-        ),
-      );
-      // Realise the async notifier.
-      await c.read(notificationsProvider.future);
-      final visible = c.read(visibleNotificationsProvider).valueOrNull ?? [];
-      final ids = visible.map((e) => e.id).toSet();
-      // Only the security notification survives with all categories off.
-      expect(ids, {'sec'});
-    });
+    test(
+      'category toggles hide their notifications; security always shows',
+      () async {
+        final c = containerWith(
+          const NotificationPrefs(
+            transactionAlerts: false,
+            budgetWarnings: false,
+            promotions: false,
+          ),
+        );
+        // Realise the async notifier.
+        await c.read(notificationsProvider.future);
+        final visible = c.read(visibleNotificationsProvider).valueOrNull ?? [];
+        final ids = visible.map((e) => e.id).toSet();
+        // Only the security notification survives with all categories off.
+        expect(ids, {'sec'});
+      },
+    );
 
     test('all categories on shows everything', () async {
       final c = containerWith(const NotificationPrefs(promotions: true));
@@ -74,19 +76,20 @@ void main() {
     test('promotions default off hides promo but keeps the rest', () async {
       final c = containerWith(const NotificationPrefs());
       await c.read(notificationsProvider.future);
-      final ids =
-          (c.read(visibleNotificationsProvider).valueOrNull ?? [])
-              .map((e) => e.id)
-              .toSet();
+      final ids = (c.read(visibleNotificationsProvider).valueOrNull ?? [])
+          .map((e) => e.id)
+          .toSet();
       expect(ids, {'act', 'bud', 'sec'});
     });
 
-    test('push off zeroes the unread bell count but inbox still filters',
-        () async {
-      final c = containerWith(const NotificationPrefs(push: false));
-      await c.read(notificationsProvider.future);
-      expect(c.read(unreadNotificationsProvider), 0);
-    });
+    test(
+      'push off zeroes the unread bell count but inbox still filters',
+      () async {
+        final c = containerWith(const NotificationPrefs(push: false));
+        await c.read(notificationsProvider.future);
+        expect(c.read(unreadNotificationsProvider), 0);
+      },
+    );
   });
 }
 
@@ -94,19 +97,19 @@ void main() {
 class _SeedNotifier extends NotificationsNotifier {
   @override
   Future<List<AppNotification>> build() async => [
-        _mk('act', ENotifCategory.activity),
-        _mk('bud', ENotifCategory.budget),
-        _mk('sec', ENotifCategory.security),
-        _mk('promo', ENotifCategory.promotion),
-      ];
+    _mk('act', ENotifCategory.activity),
+    _mk('bud', ENotifCategory.budget),
+    _mk('sec', ENotifCategory.security),
+    _mk('promo', ENotifCategory.promotion),
+  ];
 
   static AppNotification _mk(String id, ENotifCategory c) => AppNotification(
-        id: id,
-        icon: Icons.circle,
-        color: const Color(0xFF000000),
-        minutesAgo: 1,
-        titleOf: (_) => id,
-        bodyOf: (_) => id,
-        category: c,
-      );
+    id: id,
+    icon: Icons.circle,
+    color: const Color(0xFF000000),
+    minutesAgo: 1,
+    titleOf: (_) => id,
+    bodyOf: (_) => id,
+    category: c,
+  );
 }

@@ -76,8 +76,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     final phone = _phone.text.trim();
     final phoneDigits = phone.replaceAll(RegExp(r'[^0-9]'), '');
     setState(() {
-      _nameError =
-          _name.text.trim().isEmpty ? l10n.editProfileNameRequired : null;
+      _nameError = _name.text.trim().isEmpty
+          ? l10n.editProfileNameRequired
+          : null;
       _emailError = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)
           ? null
           : l10n.editProfileEmailInvalid;
@@ -94,7 +95,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen>
     if (!_validate() || _saving) return;
     setState(() => _saving = true);
     final phone = _phone.text.trim();
-    final ok = await ref.read(authControllerProvider.notifier).updateProfile(
+    final ok = await ref
+        .read(authControllerProvider.notifier)
+        .updateProfile(
           fullName: _name.text.trim(),
           phone: phone.isEmpty ? '' : phone,
         );
@@ -389,8 +392,7 @@ class _AvatarPicker extends StatelessWidget {
                     padding: const EdgeInsets.all(2.5),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient:
-                          isSelected ? AppGradients.goldFoil : null,
+                      gradient: isSelected ? AppGradients.goldFoil : null,
                       color: isSelected ? null : Colors.transparent,
                     ),
                     child: Stack(

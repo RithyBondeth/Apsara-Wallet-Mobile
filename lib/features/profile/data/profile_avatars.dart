@@ -68,11 +68,7 @@ const List<ProfileAvatar> presetAvatars = [
 ///
 /// Reused by the Edit Profile hero (large) and the picker tiles (small).
 class ProfileAvatarView extends StatelessWidget {
-  const ProfileAvatarView({
-    super.key,
-    required this.avatar,
-    this.size = 64,
-  });
+  const ProfileAvatarView({super.key, required this.avatar, this.size = 64});
 
   final ProfileAvatar avatar;
   final double size;

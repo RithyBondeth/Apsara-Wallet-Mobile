@@ -78,152 +78,151 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen>
             child: LayoutBuilder(
               builder: (context, constraints) => SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: ConstrainedBox(
-                  constraints:
-                      BoxConstraints(minHeight: constraints.maxHeight),
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
                   child: IntrinsicHeight(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                  const SizedBox(height: AppSpacing.md),
+                        const SizedBox(height: AppSpacing.md),
 
-                  // --- Language chip ------------------------------------
-                  FadeSlideIn(
-                    controller: _intro,
-                    start: 0.6,
-                    end: 0.9,
-                    offset: const Offset(0, -10),
-                    child: const Align(
-                      alignment: Alignment.centerRight,
-                      child: LanguageSwitcher(),
-                    ),
-                  ),
-
-                  const Spacer(flex: 2),
-
-                  // --- Floating apsara hero ------------------------------
-                  FadeSlideIn(
-                    controller: _intro,
-                    start: 0.0,
-                    end: 0.5,
-                    offset: const Offset(0, 24),
-                    scaleFrom: 0.88,
-                    child: AnimatedBuilder(
-                      animation: _ambient,
-                      builder: (context, child) {
-                        final phase = _ambient.value * 2 * math.pi;
-                        return Transform.translate(
-                          offset: Offset(
-                            2.5 * math.sin(phase),
-                            6 * math.sin(phase * 2),
-                          ),
-                          child: child,
-                        );
-                      },
-                      child: _ApsaraHero(ambient: _ambient),
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.xxl),
-
-                  // --- Welcome wordmark ----------------------------------
-                  FadeSlideIn(
-                    controller: _intro,
-                    start: 0.15,
-                    end: 0.55,
-                    child: Column(
-                      children: [
-                        Text(
-                          context.l10n.welcomeGreeting,
-                          textAlign: TextAlign.center,
-                          style: AppFont.headingMedium.copyWith(
-                            color: context.colors.onSurface,
+                        // --- Language chip ------------------------------------
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.6,
+                          end: 0.9,
+                          offset: const Offset(0, -10),
+                          child: const Align(
+                            alignment: Alignment.centerRight,
+                            child: LanguageSwitcher(),
                           ),
                         ),
-                        Text(
-                          AppConstants.appName,
-                          textAlign: TextAlign.center,
-                          style: AppFont.headingLarge.copyWith(
-                            color: AppColors.primary,
+
+                        const Spacer(flex: 2),
+
+                        // --- Floating apsara hero ------------------------------
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.0,
+                          end: 0.5,
+                          offset: const Offset(0, 24),
+                          scaleFrom: 0.88,
+                          child: AnimatedBuilder(
+                            animation: _ambient,
+                            builder: (context, child) {
+                              final phase = _ambient.value * 2 * math.pi;
+                              return Transform.translate(
+                                offset: Offset(
+                                  2.5 * math.sin(phase),
+                                  6 * math.sin(phase * 2),
+                                ),
+                                child: child,
+                              );
+                            },
+                            child: _ApsaraHero(ambient: _ambient),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
+                        const SizedBox(height: AppSpacing.xxl),
 
-                  FadeSlideIn(
-                    controller: _intro,
-                    start: 0.25,
-                    end: 0.62,
-                    child: Text(
-                      context.l10n.welcomeTagline,
-                      textAlign: TextAlign.center,
-                      style: AppFont.bodyLarge.copyWith(
-                        color: context.colors.onSurfaceVariant,
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-
-                  const Spacer(flex: 3),
-
-                  // --- Actions -------------------------------------------
-                  FadeSlideIn(
-                    controller: _intro,
-                    start: 0.4,
-                    end: 0.78,
-                    child: PrimaryButton(
-                      label: context.l10n.commonGetStarted,
-                      onPressed: () =>
-                          context.router.push(const OnBoardingRoute()),
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  FadeSlideIn(
-                    controller: _intro,
-                    start: 0.5,
-                    end: 0.86,
-                    child: SecondaryButton(
-                      label: context.l10n.commonLogin,
-                      onPressed: () =>
-                          context.router.push(const LoginRoute()),
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.xl),
-
-                  // --- Register footer -----------------------------------
-                  FadeSlideIn(
-                    controller: _intro,
-                    start: 0.6,
-                    end: 0.95,
-                    child: Center(
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Text(
-                            context.l10n.welcomeNewHerePrompt,
-                            style: AppFont.bodyMedium.copyWith(
-                              color: context.colors.onSurfaceVariant,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () =>
-                                context.router.push(const RegisterRoute()),
-                            child: Text(
-                              context.l10n.welcomeCreateAccountCta,
-                              style: AppFont.labelLarge.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w700,
+                        // --- Welcome wordmark ----------------------------------
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.15,
+                          end: 0.55,
+                          child: Column(
+                            children: [
+                              Text(
+                                context.l10n.welcomeGreeting,
+                                textAlign: TextAlign.center,
+                                style: AppFont.headingMedium.copyWith(
+                                  color: context.colors.onSurface,
+                                ),
                               ),
+                              Text(
+                                AppConstants.appName,
+                                textAlign: TextAlign.center,
+                                style: AppFont.headingLarge.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.25,
+                          end: 0.62,
+                          child: Text(
+                            context.l10n.welcomeTagline,
+                            textAlign: TextAlign.center,
+                            style: AppFont.bodyLarge.copyWith(
+                              color: context.colors.onSurfaceVariant,
+                              height: 1.5,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.xxl),
+                        ),
+
+                        const Spacer(flex: 3),
+
+                        // --- Actions -------------------------------------------
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.4,
+                          end: 0.78,
+                          child: PrimaryButton(
+                            label: context.l10n.commonGetStarted,
+                            onPressed: () =>
+                                context.router.push(const OnBoardingRoute()),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.5,
+                          end: 0.86,
+                          child: SecondaryButton(
+                            label: context.l10n.commonLogin,
+                            onPressed: () =>
+                                context.router.push(const LoginRoute()),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+
+                        // --- Register footer -----------------------------------
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.6,
+                          end: 0.95,
+                          child: Center(
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  context.l10n.welcomeNewHerePrompt,
+                                  style: AppFont.bodyMedium.copyWith(
+                                    color: context.colors.onSurfaceVariant,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => context.router.push(
+                                    const RegisterRoute(),
+                                  ),
+                                  child: Text(
+                                    context.l10n.welcomeCreateAccountCta,
+                                    style: AppFont.labelLarge.copyWith(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xxl),
                       ],
                     ),
                   ),
@@ -270,11 +269,7 @@ class _ApsaraHero extends StatelessWidget {
               );
             },
           ),
-          Image.asset(
-            AssetPathConstant.logo,
-            height: 230,
-            fit: BoxFit.contain,
-          ),
+          Image.asset(AssetPathConstant.logo, height: 230, fit: BoxFit.contain),
         ],
       ),
     );

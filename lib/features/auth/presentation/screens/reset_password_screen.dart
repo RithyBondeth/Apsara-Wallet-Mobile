@@ -45,17 +45,17 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       _passwordError = password.length < 8
           ? context.l10n.authErrorPasswordTooShort
           : null;
-      _confirmError =
-          confirm != password ? context.l10n.authErrorPasswordMismatch : null;
+      _confirmError = confirm != password
+          ? context.l10n.authErrorPasswordMismatch
+          : null;
     });
     if (_passwordError != null || _confirmError != null) return;
 
     context.hideKeyboard();
     setState(() => _busy = true);
-    final ok = await ref.read(authRepositoryProvider).resetPassword(
-          token: widget.token,
-          newPassword: password,
-        );
+    final ok = await ref
+        .read(authRepositoryProvider)
+        .resetPassword(token: widget.token, newPassword: password);
     if (!mounted) return;
     setState(() => _busy = false);
 

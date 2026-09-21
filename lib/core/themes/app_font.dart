@@ -19,55 +19,82 @@ class AppFont {
   /// so google_fonts loads it from assets — no runtime fetch, works offline.
   /// The `allowRuntimeFetching` gate stays only for golden tests: they turn it
   /// off, and skipping the fallback there keeps goldens Latin-only and stable.
-  static final List<String> _khmerFallback = GoogleFonts.config
-          .allowRuntimeFetching
+  static final List<String> _khmerFallback =
+      GoogleFonts.config.allowRuntimeFetching
       ? <String>[GoogleFonts.kohSantepheap().fontFamily!]
       : <String>[];
 
   static TextStyle _base({
     required double fontSize,
     required FontWeight fontWeight,
-  }) =>
-      GoogleFonts.ubuntu(
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-      ).copyWith(fontFamilyFallback: _khmerFallback);
+  }) => GoogleFonts.ubuntu(
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+  ).copyWith(fontFamilyFallback: _khmerFallback);
 
   // ==================================================
   // HEADINGS
   // ==================================================
-  static TextStyle headingLarge = _base(fontSize: 32, fontWeight: FontWeight.w700);
+  static TextStyle headingLarge = _base(
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+  );
 
-  static TextStyle headingMedium =
-      _base(fontSize: 28, fontWeight: FontWeight.w600);
+  static TextStyle headingMedium = _base(
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+  );
 
-  static TextStyle headingSmall =
-      _base(fontSize: 24, fontWeight: FontWeight.w600);
+  static TextStyle headingSmall = _base(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  );
 
   // ==================================================
   // TITLES
   // ==================================================
-  static TextStyle titleLarge = _base(fontSize: 22, fontWeight: FontWeight.w500);
+  static TextStyle titleLarge = _base(
+    fontSize: 22,
+    fontWeight: FontWeight.w500,
+  );
 
-  static TextStyle titleMedium = _base(fontSize: 16, fontWeight: FontWeight.w500);
+  static TextStyle titleMedium = _base(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 
-  static TextStyle titleSmall = _base(fontSize: 14, fontWeight: FontWeight.w500);
+  static TextStyle titleSmall = _base(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
 
   // ==================================================
   // BODY
   // ==================================================
   static TextStyle bodyLarge = _base(fontSize: 16, fontWeight: FontWeight.w400);
 
-  static TextStyle bodyMedium = _base(fontSize: 14, fontWeight: FontWeight.w400);
+  static TextStyle bodyMedium = _base(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
 
   static TextStyle bodySmall = _base(fontSize: 12, fontWeight: FontWeight.w400);
 
   // ==================================================
   // LABELS
   // ==================================================
-  static TextStyle labelLarge = _base(fontSize: 14, fontWeight: FontWeight.w500);
+  static TextStyle labelLarge = _base(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
 
-  static TextStyle labelMedium = _base(fontSize: 12, fontWeight: FontWeight.w500);
+  static TextStyle labelMedium = _base(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
 
-  static TextStyle labelSmall = _base(fontSize: 11, fontWeight: FontWeight.w500);
+  static TextStyle labelSmall = _base(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+  );
 }

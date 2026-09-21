@@ -8,11 +8,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 /// bezel and a soft halo — used to frame feature icons (onboarding,
 /// empty states, feature headers).
 class GoldMedallion extends StatelessWidget {
-  const GoldMedallion({
-    super.key,
-    required this.icon,
-    this.size = 168,
-  });
+  const GoldMedallion({super.key, required this.icon, this.size = 168});
 
   final IconData icon;
   final double size;

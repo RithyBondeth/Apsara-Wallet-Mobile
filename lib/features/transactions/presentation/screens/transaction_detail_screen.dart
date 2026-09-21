@@ -49,13 +49,12 @@ class _TransactionDetailScreenState
   Color _amountColor(TransactionRecord r) =>
       r.isIncome ? AppColors.income : AppColors.expense;
 
-  String _typeLabel(BuildContext context, TransactionRecord r) => r.isIncome
-      ? context.l10n.dashboardIncome
-      : context.l10n.dashboardExpense;
+  String _typeLabel(BuildContext context, TransactionRecord r) =>
+      r.isIncome ? context.l10n.dashboardIncome : context.l10n.dashboardExpense;
 
   void _edit(TransactionRecord r) => context.router.push(
-        AddTransactionRoute(initialType: r.type, initialRecord: r),
-      );
+    AddTransactionRoute(initialType: r.type, initialRecord: r),
+  );
 
   Future<void> _confirmDelete() async {
     final l10n = context.l10n;
@@ -63,7 +62,9 @@ class _TransactionDetailScreenState
       context: context,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.xxl),
+        ),
       ),
       builder: (sheetContext) => _DeleteSheet(
         title: l10n.txDeleteTitle,
@@ -116,9 +117,7 @@ class _TransactionDetailScreenState
           child: Column(
             children: [
               _AppBar(title: l10n.txDetailTitle, onEdit: () {}),
-              const Expanded(
-                child: Center(child: CircularProgressIndicator()),
-              ),
+              const Expanded(child: Center(child: CircularProgressIndicator())),
             ],
           ),
         ),
@@ -337,8 +336,11 @@ class _AmountHero extends StatelessWidget {
             color: record.category.color.withValues(alpha: 0.14),
             shape: BoxShape.circle,
           ),
-          child: Icon(record.category.icon, size: 32,
-              color: record.category.color),
+          child: Icon(
+            record.category.icon,
+            size: 32,
+            color: record.category.color,
+          ),
         ),
         const SizedBox(height: AppSpacing.md),
         Text(

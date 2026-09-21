@@ -60,8 +60,9 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen>
       backgroundColor: AppColors.surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.xxl),
+        ),
       ),
       builder: (context) => _AddBudgetSheet(
         initial: initial,
@@ -150,8 +151,9 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen>
                   error: (_, _) => Center(
                     child: Text(
                       context.l10n.addTxSaveFailed,
-                      style: AppFont.bodyMedium
-                          .copyWith(color: AppColors.textSecondary),
+                      style: AppFont.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ),
                   data: (data) => _body(context, data, bottomSafe),
@@ -274,8 +276,11 @@ class _AppBar extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(LucideIcons.plus,
-                    size: 16, color: AppColors.primary),
+                const Icon(
+                  LucideIcons.plus,
+                  size: 16,
+                  color: AppColors.primary,
+                ),
                 const SizedBox(width: 2),
                 Text(
                   l10n.budgetAdd,
@@ -389,8 +394,9 @@ class _MoneyReadout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: alignEnd
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         Text(
           label,
@@ -431,87 +437,87 @@ class _CategoryBudgetRow extends StatelessWidget {
       onTap: onTap,
       pressedScale: 0.99,
       child: Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: AppColors.surfaceVariant),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: c.color.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+          border: Border.all(color: AppColors.surfaceVariant),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                color: c.color.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(c.icon, size: 20, color: c.color),
             ),
-            child: Icon(c.icon, size: 20, color: c.color),
-          ),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        c.labelOf(l10n),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppFont.bodyMedium.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w700,
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          c.labelOf(l10n),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppFont.bodyMedium.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
-                    ),
-                    Text(
-                      '${(budget.fraction * 100).round()}%',
-                      style: AppFont.labelMedium.copyWith(
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 2),
-                Consumer(
-                  builder: (context, ref, _) {
-                    final money = ref.watch(moneyFormatterProvider);
-                    return Text.rich(
-                      TextSpan(
-                        text: '${money.code} ',
+                      Text(
+                        '${(budget.fraction * 100).round()}%',
                         style: AppFont.labelMedium.copyWith(
-                          color: AppColors.textMuted,
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w600,
                         ),
-                        children: [
-                          TextSpan(
-                            text: money.number(budget.spentKhr),
-                            style: AppFont.labelMedium.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' / ${money.number(budget.limitKhr)}',
-                          ),
-                        ],
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                _GradientBar(
-                  fraction: budget.fraction,
-                  fill: fill,
-                  height: 8,
-                ),
-              ],
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final money = ref.watch(moneyFormatterProvider);
+                      return Text.rich(
+                        TextSpan(
+                          text: '${money.code} ',
+                          style: AppFont.labelMedium.copyWith(
+                            color: AppColors.textMuted,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: money.number(budget.spentKhr),
+                              style: AppFont.labelMedium.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' / ${money.number(budget.limitKhr)}',
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  _GradientBar(
+                    fraction: budget.fraction,
+                    fill: fill,
+                    height: 8,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
@@ -545,7 +551,8 @@ class _GradientBar extends StatelessWidget {
               ),
               Container(
                 height: height,
-                width: constraints.maxWidth *
+                width:
+                    constraints.maxWidth *
                     (fraction * fill.value).clamp(0.0, 1.0),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -564,9 +571,7 @@ class _GradientBar extends StatelessWidget {
 /// Result of the budget add/edit sheet: a budget to save, or a delete request.
 class _BudgetSheetResult {
   const _BudgetSheetResult.save(this.budget) : delete = false;
-  const _BudgetSheetResult.remove()
-      : budget = null,
-        delete = true;
+  const _BudgetSheetResult.remove() : budget = null, delete = true;
 
   final CategoryBudget? budget;
   final bool delete;
@@ -589,7 +594,8 @@ class _AddBudgetSheet extends StatefulWidget {
 
 class _AddBudgetSheetState extends State<_AddBudgetSheet> {
   final TextEditingController _amount = TextEditingController();
-  late TxCategory _category = widget.initial?.category ??
+  late TxCategory _category =
+      widget.initial?.category ??
       (widget.categories.isNotEmpty
           ? widget.categories.first
           : expenseCategories.first);
@@ -601,8 +607,9 @@ class _AddBudgetSheetState extends State<_AddBudgetSheet> {
     super.initState();
     final initial = widget.initial;
     if (initial != null) {
-      _amount.text =
-          NumberFormat.decimalPattern('en_US').format(initial.limitKhr);
+      _amount.text = NumberFormat.decimalPattern(
+        'en_US',
+      ).format(initial.limitKhr);
     }
   }
 
@@ -740,21 +747,22 @@ class _AddBudgetSheetState extends State<_AddBudgetSheet> {
                 onPressed: _limit <= 0
                     ? null
                     : () => Navigator.of(context).pop(
-                          _BudgetSheetResult.save(
-                            CategoryBudget(
-                              category: _category,
-                              limitKhr: _limit,
-                              spentKhr: widget.initial?.spentKhr ?? 0,
-                            ),
+                        _BudgetSheetResult.save(
+                          CategoryBudget(
+                            category: _category,
+                            limitKhr: _limit,
+                            spentKhr: widget.initial?.spentKhr ?? 0,
                           ),
                         ),
+                      ),
               ),
             ),
             if (_isEditing) ...[
               const SizedBox(height: AppSpacing.sm),
               TextButton(
-                onPressed: () => Navigator.of(context)
-                    .pop(const _BudgetSheetResult.remove()),
+                onPressed: () => Navigator.of(
+                  context,
+                ).pop(const _BudgetSheetResult.remove()),
                 child: Text(
                   l10n.budgetDelete,
                   style: AppFont.labelLarge.copyWith(

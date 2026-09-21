@@ -54,7 +54,8 @@ class AuthInterceptor extends Interceptor {
   ) async {
     final response = err.response;
     final options = err.requestOptions;
-    final canRetry = response?.statusCode == 401 &&
+    final canRetry =
+        response?.statusCode == 401 &&
         !_isAuthPath(options.path) &&
         options.extra[_retriedFlag] != true;
 

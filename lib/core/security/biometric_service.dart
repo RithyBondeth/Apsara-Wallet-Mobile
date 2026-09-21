@@ -6,7 +6,7 @@ import 'package:local_auth/local_auth.dart';
 /// "unavailable" / "not authenticated" rather than throwing into the UI.
 class BiometricService {
   BiometricService([LocalAuthentication? auth])
-      : _auth = auth ?? LocalAuthentication();
+    : _auth = auth ?? LocalAuthentication();
 
   final LocalAuthentication _auth;
 

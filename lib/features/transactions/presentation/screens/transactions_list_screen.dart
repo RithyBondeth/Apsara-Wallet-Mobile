@@ -43,8 +43,7 @@ class TransactionsListScreen extends ConsumerStatefulWidget {
       _TransactionsListScreenState();
 }
 
-class _TransactionsListScreenState
-    extends ConsumerState<TransactionsListScreen>
+class _TransactionsListScreenState extends ConsumerState<TransactionsListScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _intro = AnimationController(
     vsync: this,
@@ -94,13 +93,11 @@ class _TransactionsListScreenState
       isScrollControlled: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.xxl),
+        ),
       ),
-      builder: (_) => _FiltersSheet(
-        category: _category,
-        from: _from,
-        to: _to,
-      ),
+      builder: (_) => _FiltersSheet(category: _category, from: _from, to: _to),
     );
     if (result == null || !mounted) return;
     setState(() {
@@ -114,7 +111,9 @@ class _TransactionsListScreenState
   Future<void> _export() async {
     final l10n = context.l10n;
     final localeTag = Localizations.localeOf(context).toString();
-    final items = _filtered(ref.read(transactionsProvider).valueOrNull ?? const []);
+    final items = _filtered(
+      ref.read(transactionsProvider).valueOrNull ?? const [],
+    );
     if (items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -127,18 +126,18 @@ class _TransactionsListScreenState
     final csv = buildTransactionsCsv(
       txns: items,
       categoryLabel: (c) => c.labelOf(l10n),
-      typeLabel: (t) =>
-          t == ETransactionType.income ? l10n.dashboardIncome : l10n.dashboardExpense,
+      typeLabel: (t) => t == ETransactionType.income
+          ? l10n.dashboardIncome
+          : l10n.dashboardExpense,
       localeTag: localeTag,
     );
     try {
       final dir = await getTemporaryDirectory();
       final file = File('${dir.path}/apsara_transactions.csv');
       await file.writeAsString(csv);
-      await Share.shareXFiles(
-        [XFile(file.path, mimeType: 'text/csv', name: 'apsara_transactions.csv')],
-        subject: l10n.txExport,
-      );
+      await Share.shareXFiles([
+        XFile(file.path, mimeType: 'text/csv', name: 'apsara_transactions.csv'),
+      ], subject: l10n.txExport);
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -183,9 +182,7 @@ class _TransactionsListScreenState
           child: _TxTile(
             record: t,
             localeTag: localeTag,
-            onTap: () => context.router.push(
-              TransactionDetailRoute(id: t.id),
-            ),
+            onTap: () => context.router.push(TransactionDetailRoute(id: t.id)),
           ),
         ),
       );
@@ -213,9 +210,7 @@ class _TransactionsListScreenState
               ),
               const OfflineBanner(),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.xxl,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: Column(
                   children: [
                     FadeSlideIn(
@@ -501,8 +496,7 @@ class _TxTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final t = record;
-    final amountColor =
-        t.isIncome ? AppColors.income : AppColors.textPrimary;
+    final amountColor = t.isIncome ? AppColors.income : AppColors.textPrimary;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
@@ -662,7 +656,9 @@ class _FiltersSheetState extends ConsumerState<_FiltersSheet> {
                 Expanded(
                   child: _DateField(
                     label: l10n.txFilterFrom,
-                    value: _from == null ? l10n.txFilterAny : dateFmt.format(_from!),
+                    value: _from == null
+                        ? l10n.txFilterAny
+                        : dateFmt.format(_from!),
                     onTap: () => _pickDate(isFrom: true),
                   ),
                 ),
@@ -670,7 +666,9 @@ class _FiltersSheetState extends ConsumerState<_FiltersSheet> {
                 Expanded(
                   child: _DateField(
                     label: l10n.txFilterTo,
-                    value: _to == null ? l10n.txFilterAny : dateFmt.format(_to!),
+                    value: _to == null
+                        ? l10n.txFilterAny
+                        : dateFmt.format(_to!),
                     onTap: () => _pickDate(isFrom: false),
                   ),
                 ),
@@ -731,12 +729,12 @@ class _FiltersSheetState extends ConsumerState<_FiltersSheet> {
   }
 
   Widget _label(String text) => Text(
-        text,
-        style: AppFont.labelLarge.copyWith(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w600,
-        ),
-      );
+    text,
+    style: AppFont.labelLarge.copyWith(
+      color: AppColors.textSecondary,
+      fontWeight: FontWeight.w600,
+    ),
+  );
 }
 
 class _DateField extends StatelessWidget {

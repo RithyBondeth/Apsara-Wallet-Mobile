@@ -140,10 +140,10 @@ class DashboardHeader extends StatelessWidget {
   }
 
   TextStyle get _khrStyle => AppFont.headingLarge.copyWith(
-        color: Colors.white,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.5,
-      );
+    color: Colors.white,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  );
 
   TextStyle get _usdStyle =>
       AppFont.bodyMedium.copyWith(color: _ivory.withValues(alpha: 0.75));
@@ -242,8 +242,8 @@ class DashboardHeader extends StatelessWidget {
         const SizedBox(height: AppSpacing.xs),
         Consumer(
           builder: (context, ref, _) {
-            final isUsd = ref.watch(moneyFormatterProvider).currency ==
-                ECurrencyType.usd;
+            final isUsd =
+                ref.watch(moneyFormatterProvider).currency == ECurrencyType.usd;
             return _revealSwitcher(
               hidden: balanceHidden,
               hiddenChild: Text(

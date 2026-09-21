@@ -35,12 +35,12 @@ class SavingsGoal {
       customName ?? nameKey?.call(l10n) ?? '';
 
   SavingsGoal copyWith({int? savedKhr}) => SavingsGoal(
-        id: id,
-        icon: icon,
-        color: color,
-        savedKhr: savedKhr ?? this.savedKhr,
-        targetKhr: targetKhr,
-        nameKey: nameKey,
-        customName: customName,
-      );
+    id: id,
+    icon: icon,
+    color: color,
+    savedKhr: savedKhr ?? this.savedKhr,
+    targetKhr: targetKhr,
+    nameKey: nameKey,
+    customName: customName,
+  );
 }

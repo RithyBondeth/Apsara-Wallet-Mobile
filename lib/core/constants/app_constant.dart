@@ -28,8 +28,7 @@ class AppConstants {
 
   static const String playStoreUrl =
       'https://play.google.com/store/apps/details?id=$androidPackageId';
-  static const String appStoreUrl =
-      'https://apps.apple.com/app/id$iosAppId';
+  static const String appStoreUrl = 'https://apps.apple.com/app/id$iosAppId';
 
   /// Whether the app has a published App Store record to link to.
   static bool get hasAppStoreListing => iosAppId != _unassignedIosAppId;

@@ -27,24 +27,24 @@ class ApiSavingsGoal {
   final String? color; // '#RRGGBB'
 
   factory ApiSavingsGoal.fromJson(Map<String, dynamic> json) => ApiSavingsGoal(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        savedKhr: (json['savedKhr'] as num?)?.toInt() ?? 0,
-        targetKhr: (json['targetKhr'] as num).toInt(),
-        icon: json['icon'] as String?,
-        color: json['color'] as String?,
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    savedKhr: (json['savedKhr'] as num?)?.toInt() ?? 0,
+    targetKhr: (json['targetKhr'] as num).toInt(),
+    icon: json['icon'] as String?,
+    color: json['color'] as String?,
+  );
 
   /// Maps to the app's [SavingsGoal] — always a `customName` (API goals carry
   /// their own name, not an l10n key), icon/color resolved from the tokens.
   SavingsGoal toGoal() => SavingsGoal(
-        id: id,
-        icon: savingsIconFromToken(icon),
-        color: parseHexColor(color) ?? AppColors.primary,
-        savedKhr: savedKhr,
-        targetKhr: targetKhr,
-        customName: name,
-      );
+    id: id,
+    icon: savingsIconFromToken(icon),
+    color: parseHexColor(color) ?? AppColors.primary,
+    savedKhr: savedKhr,
+    targetKhr: targetKhr,
+    customName: name,
+  );
 }
 
 class SavingsGoalApi {
@@ -67,13 +67,16 @@ class SavingsGoalApi {
     String? icon,
     String? color,
   }) async {
-    final res = await _api.post<Map<String, dynamic>>('/savings-goals', data: {
-      'name': name,
-      'targetKhr': targetKhr,
-      'savedKhr': savedKhr,
-      'icon': ?icon,
-      'color': ?color,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/savings-goals',
+      data: {
+        'name': name,
+        'targetKhr': targetKhr,
+        'savedKhr': savedKhr,
+        'icon': ?icon,
+        'color': ?color,
+      },
+    );
     return res.success;
   }
 

@@ -21,7 +21,8 @@ class OfflineBanner extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (!ref.watch(isOfflineProvider)) return const SizedBox.shrink();
     return Container(
-      margin: margin ??
+      margin:
+          margin ??
           const EdgeInsets.fromLTRB(
             AppSpacing.xxl,
             AppSpacing.sm,

@@ -66,8 +66,12 @@ class _AuthFlowScaffoldState extends State<AuthFlowScaffold>
     super.dispose();
   }
 
-  Widget _enter(double start, double end, Widget child,
-      {Offset offset = const Offset(0, 28)}) {
+  Widget _enter(
+    double start,
+    double end,
+    Widget child, {
+    Offset offset = const Offset(0, 28),
+  }) {
     return FadeSlideIn(
       controller: _intro,
       start: start,

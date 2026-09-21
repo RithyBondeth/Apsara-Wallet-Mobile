@@ -28,15 +28,15 @@ class ApiTransaction {
   final String? note;
 
   factory ApiTransaction.fromJson(Map<String, dynamic> json) => ApiTransaction(
-        id: json['id'] as String,
-        walletId: json['walletId'] as String,
-        categoryId: json['categoryId'] as String,
-        title: json['title'] as String,
-        amountKhr: (json['amountKhr'] as num).toInt(),
-        type: json['type'] as String,
-        date: json['date'] as String,
-        note: json['note'] as String?,
-      );
+    id: json['id'] as String,
+    walletId: json['walletId'] as String,
+    categoryId: json['categoryId'] as String,
+    title: json['title'] as String,
+    amountKhr: (json['amountKhr'] as num).toInt(),
+    type: json['type'] as String,
+    date: json['date'] as String,
+    note: json['note'] as String?,
+  );
 
   /// Maps to the app's [TransactionRecord]. [walletName] is resolved from the
   /// wallet list and [categorySlug] from the [CategoryIndex]; both fall back
@@ -100,15 +100,18 @@ class TransactionApi {
     required DateTime date,
     String? note,
   }) async {
-    final res = await _api.post<Map<String, dynamic>>('/transactions', data: {
-      'title': title,
-      'walletId': walletId,
-      'categoryId': categoryId,
-      'amountKhr': amountKhr,
-      'type': type.name,
-      'date': date.toUtc().toIso8601String(),
-      if (note != null && note.isNotEmpty) 'note': note,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/transactions',
+      data: {
+        'title': title,
+        'walletId': walletId,
+        'categoryId': categoryId,
+        'amountKhr': amountKhr,
+        'type': type.name,
+        'date': date.toUtc().toIso8601String(),
+        if (note != null && note.isNotEmpty) 'note': note,
+      },
+    );
     return res.success;
   }
 

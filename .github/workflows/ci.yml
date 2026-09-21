@@ -20,5 +20,7 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter gen-l10n
+      # Formatting is enforced so PR diffs never carry rewrap noise.
+      - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test

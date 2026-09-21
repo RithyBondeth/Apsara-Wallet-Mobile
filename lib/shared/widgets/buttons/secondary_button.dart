@@ -44,8 +44,9 @@ class _SecondaryButtonState extends State<SecondaryButton>
 
   @override
   Widget build(BuildContext context) {
-    final accent =
-        context.isDarkMode ? context.colors.primary : AppColors.primary;
+    final accent = context.isDarkMode
+        ? context.colors.primary
+        : AppColors.primary;
 
     return GestureDetector(
       onTapDown: _enabled ? (_) => _press.forward() : null,

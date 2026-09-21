@@ -10,7 +10,6 @@ import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
-
 /// A fixed "now" so the recent list's day labels (Today/Yesterday) are stable;
 /// anchored to the seeded sample's most recent day.
 final _fixedNow = DateTime(2024, 5, 20, 9, 0);
@@ -47,7 +46,6 @@ void main() {
   });
 
   setUp(() async {
-
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       if (details.exception.toString().contains('google_fonts') ||

@@ -28,10 +28,12 @@ void main() async {
       ProviderScope(
         overrides: [
           localeProvider.overrideWith((ref) => LocaleNotifier(savedLanguage)),
-          currencyProvider
-              .overrideWith((ref) => CurrencyNotifier(savedCurrency)),
-          notificationPrefsProvider
-              .overrideWith((ref) => NotificationPrefsNotifier(savedNotifPrefs)),
+          currencyProvider.overrideWith(
+            (ref) => CurrencyNotifier(savedCurrency),
+          ),
+          notificationPrefsProvider.overrideWith(
+            (ref) => NotificationPrefsNotifier(savedNotifPrefs),
+          ),
         ],
         child: const MyApp(),
       ),

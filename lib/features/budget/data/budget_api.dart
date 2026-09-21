@@ -20,12 +20,12 @@ class ApiBudget {
   final int spentKhr;
 
   factory ApiBudget.fromJson(Map<String, dynamic> json) => ApiBudget(
-        id: json['id'] as String,
-        categoryId: json['categoryId'] as String,
-        month: json['month'] as String,
-        limitKhr: (json['limitKhr'] as num).toInt(),
-        spentKhr: (json['spentKhr'] as num?)?.toInt() ?? 0,
-      );
+    id: json['id'] as String,
+    categoryId: json['categoryId'] as String,
+    month: json['month'] as String,
+    limitKhr: (json['limitKhr'] as num).toInt(),
+    spentKhr: (json['spentKhr'] as num?)?.toInt() ?? 0,
+  );
 }
 
 class BudgetApi {
@@ -63,11 +63,10 @@ class BudgetApi {
     required String month,
     required int limitKhr,
   }) async {
-    final res = await _api.post<Map<String, dynamic>>('/budgets', data: {
-      'categoryId': categoryId,
-      'month': month,
-      'limitKhr': limitKhr,
-    });
+    final res = await _api.post<Map<String, dynamic>>(
+      '/budgets',
+      data: {'categoryId': categoryId, 'month': month, 'limitKhr': limitKhr},
+    );
     return res.success;
   }
 

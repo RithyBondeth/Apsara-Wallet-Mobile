@@ -110,7 +110,8 @@ class RecurringNotifier extends AsyncNotifier<List<RecurringRule>> {
       (w) => w.name == rule.walletName,
       orElse: () => wallets.first,
     );
-    final categoryId = index.uuidForSlug(rule.category.id) ??
+    final categoryId =
+        index.uuidForSlug(rule.category.id) ??
         index.uuidForSlug(
           rule.type == ETransactionType.income
               ? 'othersIncome'
@@ -130,8 +131,8 @@ class RecurringNotifier extends AsyncNotifier<List<RecurringRule>> {
 
 final recurringProvider =
     AsyncNotifierProvider<RecurringNotifier, List<RecurringRule>>(
-  RecurringNotifier.new,
-);
+      RecurringNotifier.new,
+    );
 
 /// Estimated total monthly expense commitment across all recurring expenses.
 /// 0 while the list is loading or empty.

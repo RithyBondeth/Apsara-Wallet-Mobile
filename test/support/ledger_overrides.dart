@@ -321,8 +321,6 @@ List<Override> sampleLedgerOverrides({
     ),
     // Money widgets watch the FX rate; serve a fixed rate so nothing hits the
     // network (KHR display doesn't use it, so goldens are unaffected).
-    fxRateProvider.overrideWith(
-      (ref) async => const FxRate(khrPerUsd: 4100),
-    ),
+    fxRateProvider.overrideWith((ref) async => const FxRate(khrPerUsd: 4100)),
   ];
 }

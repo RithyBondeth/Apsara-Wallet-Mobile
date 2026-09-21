@@ -50,8 +50,9 @@ class BudgetNotifier extends AsyncNotifier<BudgetData> {
         _markOffline(stale: true);
       }
     }
-    final apiBudgets =
-        raw.map((e) => ApiBudget.fromJson(e as Map<String, dynamic>)).toList();
+    final apiBudgets = raw
+        .map((e) => ApiBudget.fromJson(e as Map<String, dynamic>))
+        .toList();
     _raw = apiBudgets;
 
     final categories = apiBudgets
@@ -110,8 +111,9 @@ class BudgetNotifier extends AsyncNotifier<BudgetData> {
   }
 }
 
-final budgetDataProvider =
-    AsyncNotifierProvider<BudgetNotifier, BudgetData>(BudgetNotifier.new);
+final budgetDataProvider = AsyncNotifierProvider<BudgetNotifier, BudgetData>(
+  BudgetNotifier.new,
+);
 
 /// This month's total budget (sum of category limits), for the dashboard bar.
 /// 0 when the user hasn't set any budget yet.

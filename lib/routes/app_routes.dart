@@ -53,6 +53,7 @@ class AppRouter extends RootStackRouter {
 
   /// One guard instance, attached to every post-login route below.
   late final AuthGuard _authGuard = AuthGuard(ref);
+
   /// House transitions — three moves, matched to what the navigation means:
   ///
   /// * **Shared-axis slide** (default): the new page slides in from the right
@@ -64,10 +65,10 @@ class AppRouter extends RootStackRouter {
   /// * **Modal slide-up** (scan): the camera rises over the app like a sheet.
   @override
   RouteType get defaultRouteType => RouteType.custom(
-        transitionsBuilder: _sharedAxisSlide,
-        duration: const Duration(milliseconds: 400),
-        reverseDuration: const Duration(milliseconds: 340),
-      );
+    transitionsBuilder: _sharedAxisSlide,
+    duration: const Duration(milliseconds: 400),
+    reverseDuration: const Duration(milliseconds: 340),
+  );
 
   static final RouteType _tabTransition = RouteType.custom(
     transitionsBuilder: _fadeThroughLift,

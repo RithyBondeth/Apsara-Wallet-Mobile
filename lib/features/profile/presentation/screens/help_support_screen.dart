@@ -35,8 +35,7 @@ void _snack(BuildContext context, String message) {
 /// Opens [uri] in the appropriate external app (mail client, dialer). Falls
 /// back to a snackbar if no handler is available.
 Future<void> _launch(BuildContext context, Uri uri) async {
-  final launched =
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!launched && context.mounted) {
     _snack(context, context.l10n.commonComingSoon);
   }
@@ -74,10 +73,8 @@ class HelpSupportScreen extends StatelessWidget {
               title: l10n.helpEmail,
               subtitle: _supportEmail,
               iconColor: AppColors.info,
-              onTap: () => _launch(
-                context,
-                Uri(scheme: 'mailto', path: _supportEmail),
-              ),
+              onTap: () =>
+                  _launch(context, Uri(scheme: 'mailto', path: _supportEmail)),
             ),
             SettingsTile(
               icon: LucideIcons.phone,

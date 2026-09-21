@@ -71,7 +71,9 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
 
     if (widget.isOnboarding) {
       // Continue enrolment: offer biometrics if the device supports them.
-      final canBiometric = await ref.read(biometricServiceProvider).isAvailable();
+      final canBiometric = await ref
+          .read(biometricServiceProvider)
+          .isAvailable();
       if (!mounted) return;
       context.router.replaceAll([
         if (canBiometric)

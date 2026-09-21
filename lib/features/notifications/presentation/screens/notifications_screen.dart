@@ -133,11 +133,11 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen>
                         ),
                       )
                     : items.isEmpty
-                        ? _EmptyState(
-                            title: l10n.notifEmptyTitle,
-                            body: l10n.notifEmptyBody,
-                          )
-                        : ListView(
+                    ? _EmptyState(
+                        title: l10n.notifEmptyTitle,
+                        body: l10n.notifEmptyBody,
+                      )
+                    : ListView(
                         physics: const BouncingScrollPhysics(),
                         padding: EdgeInsets.fromLTRB(
                           AppSpacing.xxl,
@@ -328,8 +328,9 @@ class _NotificationTile extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: AppFont.titleSmall.copyWith(
                               color: AppColors.textPrimary,
-                              fontWeight:
-                                  unread ? FontWeight.w700 : FontWeight.w600,
+                              fontWeight: unread
+                                  ? FontWeight.w700
+                                  : FontWeight.w600,
                             ),
                           ),
                         ),

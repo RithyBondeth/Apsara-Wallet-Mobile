@@ -50,8 +50,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       _passwordError = password.length < 8
           ? l10n.authErrorPasswordTooShort
           : (password == current ? l10n.changePasswordSameAsCurrent : null);
-      _confirmError =
-          confirm != password ? l10n.authErrorPasswordMismatch : null;
+      _confirmError = confirm != password
+          ? l10n.authErrorPasswordMismatch
+          : null;
     });
     if (_currentError != null ||
         _passwordError != null ||
@@ -62,10 +63,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     context.hideKeyboard();
     setState(() => _busy = true);
     try {
-      await ref.read(authRepositoryProvider).changePassword(
-            currentPassword: current,
-            newPassword: password,
-          );
+      await ref
+          .read(authRepositoryProvider)
+          .changePassword(currentPassword: current, newPassword: password);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

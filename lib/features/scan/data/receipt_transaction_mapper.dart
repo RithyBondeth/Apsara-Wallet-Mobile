@@ -37,7 +37,9 @@ class ReceiptTransactionMapper {
     final merchant = receipt.merchant.trim();
     final title = merchant.isNotEmpty
         ? merchant
-        : (receipt.categoryLabel.isNotEmpty ? receipt.categoryLabel : 'Receipt');
+        : (receipt.categoryLabel.isNotEmpty
+              ? receipt.categoryLabel
+              : 'Receipt');
     return TransactionRecord(
       id: id,
       title: title,

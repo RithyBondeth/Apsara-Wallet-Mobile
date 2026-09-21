@@ -27,7 +27,8 @@ import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart'
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-String _khr(num value) => 'KHR ${NumberFormat.decimalPattern('en_US').format(value)}';
+String _khr(num value) =>
+    'KHR ${NumberFormat.decimalPattern('en_US').format(value)}';
 
 /// Recurring entries — the repeating income/expense the user tracks (salary,
 /// rent, subscriptions). Lists them with an estimated monthly-expense summary
@@ -67,7 +68,9 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
       isScrollControlled: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadius.xxl),
+        ),
       ),
       builder: (_) => _AddRecurringSheet(initial: initial, wallets: wallets),
     );
@@ -190,8 +193,9 @@ class _RecurringScreenState extends ConsumerState<RecurringScreen>
                             start: (0.2 + i * 0.08).clamp(0.0, 0.8),
                             end: (0.55 + i * 0.08).clamp(0.0, 1.0),
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: AppSpacing.md),
+                              padding: const EdgeInsets.only(
+                                bottom: AppSpacing.md,
+                              ),
                               child: _RuleCard(
                                 rule: rule,
                                 onTap: () => _openSheet(rule),
@@ -272,7 +276,11 @@ class _AppBar extends StatelessWidget {
                 gradient: AppGradients.emerald,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(LucideIcons.plus, size: 20, color: Colors.white),
+              child: const Icon(
+                LucideIcons.plus,
+                size: 20,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -313,7 +321,11 @@ class _SummaryCard extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.18),
               shape: BoxShape.circle,
             ),
-            child: const Icon(LucideIcons.repeat, color: Colors.white, size: 24),
+            child: const Icon(
+              LucideIcons.repeat,
+              color: Colors.white,
+              size: 24,
+            ),
           ),
           const SizedBox(width: AppSpacing.lg),
           Expanded(
@@ -359,47 +371,52 @@ class _RuleCard extends StatelessWidget {
       onTap: onTap,
       pressedScale: 0.99,
       child: Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.surfaceVariant),
-      ),
-      child: Row(
-        children: [
-          PickerRowIconTile(icon: rule.category.icon, color: rule.category.color),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  rule.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppFont.bodyLarge.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600,
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: AppColors.surfaceVariant),
+        ),
+        child: Row(
+          children: [
+            PickerRowIconTile(
+              icon: rule.category.icon,
+              color: rule.category.color,
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    rule.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppFont.bodyLarge.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  '${recurrenceFrequencyLabel(l10n, rule.frequency)}  ·  ${l10n.recurringDue(dueLabel)}',
-                  style: AppFont.labelMedium.copyWith(color: AppColors.textMuted),
-                ),
-              ],
+                  const SizedBox(height: 3),
+                  Text(
+                    '${recurrenceFrequencyLabel(l10n, rule.frequency)}  ·  ${l10n.recurringDue(dueLabel)}',
+                    style: AppFont.labelMedium.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Text(
-            '${rule.sign} ${_khr(rule.amountKhr)}',
-            style: AppFont.bodyLarge.copyWith(
-              color: amountColor,
-              fontWeight: FontWeight.w700,
+            const SizedBox(width: AppSpacing.sm),
+            Text(
+              '${rule.sign} ${_khr(rule.amountKhr)}',
+              style: AppFont.bodyLarge.copyWith(
+                color: amountColor,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
@@ -408,9 +425,7 @@ class _RuleCard extends StatelessWidget {
 /// Result of the add/edit sheet: a rule to save/add, or a delete request.
 class _SheetResult {
   const _SheetResult.save(this.rule) : delete = false;
-  const _SheetResult.remove()
-      : rule = null,
-        delete = true;
+  const _SheetResult.remove() : rule = null, delete = true;
 
   final RecurringRule? rule;
   final bool delete;
@@ -786,29 +801,31 @@ class _AddRecurringSheetState extends State<_AddRecurringSheet> {
           isDense: true,
           border: InputBorder.none,
           hintText: hint,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
         ),
       ),
     );
   }
 
   Widget _label(String text) => Text(
-        text,
-        style: AppFont.labelLarge.copyWith(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w600,
-        ),
-      );
+    text,
+    style: AppFont.labelLarge.copyWith(
+      color: AppColors.textSecondary,
+      fontWeight: FontWeight.w600,
+    ),
+  );
 
   Widget _grabber() => Container(
-        width: 40,
-        height: 4,
-        decoration: BoxDecoration(
-          color: AppColors.surfaceVariant,
-          borderRadius: BorderRadius.circular(2),
-        ),
-      );
+    width: 40,
+    height: 4,
+    decoration: BoxDecoration(
+      color: AppColors.surfaceVariant,
+      borderRadius: BorderRadius.circular(2),
+    ),
+  );
 }
 
 /// Weekly / Monthly selector, styled like [TxTypeToggle].

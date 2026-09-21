@@ -56,8 +56,9 @@ class _AppLockGateState extends ConsumerState<AppLockGate>
 
   @override
   Widget build(BuildContext context) {
-    final isAuthenticated =
-        ref.watch(authControllerProvider.select((s) => s.isAuthenticated));
+    final isAuthenticated = ref.watch(
+      authControllerProvider.select((s) => s.isAuthenticated),
+    );
     final lock = ref.watch(appLockControllerProvider);
     final showLock = isAuthenticated && lock.isPinSet && lock.isLocked;
 

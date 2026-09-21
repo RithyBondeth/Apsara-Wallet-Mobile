@@ -17,9 +17,9 @@ class TxTypeToggle extends StatelessWidget {
   final ValueChanged<ETransactionType> onChanged;
 
   static Color colorOf(ETransactionType type) => switch (type) {
-        ETransactionType.expense => AppColors.expense,
-        ETransactionType.income => AppColors.income,
-      };
+    ETransactionType.expense => AppColors.expense,
+    ETransactionType.income => AppColors.income,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +49,7 @@ class TxTypeToggle extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected
-              ? color.withValues(alpha: 0.08)
-              : AppColors.surface,
+          color: selected ? color.withValues(alpha: 0.08) : AppColors.surface,
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(
             color: selected ? color : AppColors.surfaceVariant,

@@ -63,8 +63,7 @@ class PinPad extends StatelessWidget {
                   child: InkWell(
                     onTap: onTap,
                     splashColor: AppColors.primary.withValues(alpha: 0.12),
-                    highlightColor:
-                        AppColors.primary.withValues(alpha: 0.06),
+                    highlightColor: AppColors.primary.withValues(alpha: 0.06),
                     child: Center(child: child),
                   ),
                 ),
@@ -73,15 +72,15 @@ class PinPad extends StatelessWidget {
     }
 
     Widget digit(String d) => key(
-          Text(
-            d,
-            style: AppFont.headingMedium.copyWith(
-              color: context.colors.onSurface,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          () => onDigit(d),
-        );
+      Text(
+        d,
+        style: AppFont.headingMedium.copyWith(
+          color: context.colors.onSurface,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      () => onDigit(d),
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -89,18 +88,20 @@ class PinPad extends StatelessWidget {
         Row(children: [digit('1'), digit('2'), digit('3')]),
         Row(children: [digit('4'), digit('5'), digit('6')]),
         Row(children: [digit('7'), digit('8'), digit('9')]),
-        Row(children: [
-          key(const SizedBox(), null),
-          digit('0'),
-          key(
-            Icon(
-              LucideIcons.delete,
-              size: 26,
-              color: context.colors.onSurfaceVariant,
+        Row(
+          children: [
+            key(const SizedBox(), null),
+            digit('0'),
+            key(
+              Icon(
+                LucideIcons.delete,
+                size: 26,
+                color: context.colors.onSurfaceVariant,
+              ),
+              onBackspace,
             ),
-            onBackspace,
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }

@@ -82,8 +82,8 @@ class _LinePainter extends CustomPainter {
     final pts = <Offset>[];
     for (var i = 0; i < values.length; i++) {
       final x = chart.left + chart.width * (i / (values.length - 1));
-      final y = chart.bottom -
-          chart.height * (values[i] / maxValue).clamp(0.0, 1.0);
+      final y =
+          chart.bottom - chart.height * (values[i] / maxValue).clamp(0.0, 1.0);
       pts.add(Offset(x, y));
     }
 
@@ -91,12 +91,14 @@ class _LinePainter extends CustomPainter {
 
     // Reveal left-to-right by clipping the drawable width.
     canvas.save();
-    canvas.clipRect(Rect.fromLTRB(
-      0,
-      0,
-      chart.left + chart.width * progress.clamp(0.0, 1.0),
-      size.height,
-    ));
+    canvas.clipRect(
+      Rect.fromLTRB(
+        0,
+        0,
+        chart.left + chart.width * progress.clamp(0.0, 1.0),
+        size.height,
+      ),
+    );
 
     // Area fill under the curve.
     final areaPath = Path.from(linePath)
@@ -183,8 +185,14 @@ class _LinePainter extends CustomPainter {
       final p1 = pts[i];
       final p2 = pts[i + 1];
       final p3 = pts[i + 2 >= pts.length ? pts.length - 1 : i + 2];
-      final c1 = Offset(p1.dx + (p2.dx - p0.dx) / 6, p1.dy + (p2.dy - p0.dy) / 6);
-      final c2 = Offset(p2.dx - (p3.dx - p1.dx) / 6, p2.dy - (p3.dy - p1.dy) / 6);
+      final c1 = Offset(
+        p1.dx + (p2.dx - p0.dx) / 6,
+        p1.dy + (p2.dy - p0.dy) / 6,
+      );
+      final c2 = Offset(
+        p2.dx - (p3.dx - p1.dx) / 6,
+        p2.dy - (p3.dy - p1.dy) / 6,
+      );
       path.cubicTo(c1.dx, c1.dy, c2.dx, c2.dy, p2.dx, p2.dy);
     }
     return path;

@@ -27,11 +27,11 @@ class EditableCategory {
   });
 
   EditableCategory.fromBase(TxCategory this.base)
-      : customName = null,
-        icon = base.icon,
-        color = base.color,
-        id = null,
-        isSystem = true;
+    : customName = null,
+      icon = base.icon,
+      color = base.color,
+      id = null,
+      isSystem = true;
 
   final TxCategory? base;
   final String? customName;
@@ -52,9 +52,7 @@ class EditableCategory {
 /// Result of the editor: a category to save/add, or a request to delete it.
 class CategoryEditorResult {
   const CategoryEditorResult.save(this.category) : delete = false;
-  const CategoryEditorResult.delete()
-      : category = null,
-        delete = true;
+  const CategoryEditorResult.delete() : category = null, delete = true;
 
   final EditableCategory? category;
   final bool delete;
@@ -209,9 +207,7 @@ class _CategoryEditorSheetState extends State<_CategoryEditorSheet> {
                       child: Icon(
                         icon,
                         size: 19,
-                        color: icon == _icon
-                            ? _color
-                            : AppColors.textSecondary,
+                        color: icon == _icon ? _color : AppColors.textSecondary,
                       ),
                     ),
                   ),
@@ -259,8 +255,9 @@ class _CategoryEditorSheetState extends State<_CategoryEditorSheet> {
             if (!isNew) ...[
               const SizedBox(height: AppSpacing.sm),
               TextButton(
-                onPressed: () => Navigator.of(context)
-                    .pop(const CategoryEditorResult.delete()),
+                onPressed: () => Navigator.of(
+                  context,
+                ).pop(const CategoryEditorResult.delete()),
                 child: Text(
                   l10n.categoriesDelete,
                   style: AppFont.labelLarge.copyWith(

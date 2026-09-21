@@ -52,7 +52,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen>
     ];
     final api = ref.watch(categoriesListProvider).valueOrNull ?? const [];
     final user = [
-      for (final c in api.where((c) => !c.isSystem && c.isExpense != _showIncome))
+      for (final c in api.where(
+        (c) => !c.isSystem && c.isExpense != _showIncome,
+      ))
         EditableCategory(
           customName: c.name,
           icon: iconFromToken(c.icon),
@@ -98,8 +100,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen>
     if (result == null || !mounted) return;
     final l10n = context.l10n;
     final api = ref.read(categoryApiProvider);
-    final type =
-        _showIncome ? ETransactionType.income : ETransactionType.expense;
+    final type = _showIncome
+        ? ETransactionType.income
+        : ETransactionType.expense;
 
     try {
       if (result.delete && category?.id != null) {
@@ -183,9 +186,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen>
                 child: _AppBar(onAdd: () => _edit(null)),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.xxl,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: Column(
                   children: [
                     FadeSlideIn(
@@ -406,8 +407,9 @@ class _ExpenseIncomeToggle extends StatelessWidget {
           AnimatedAlign(
             duration: AppDurations.medium,
             curve: AppCurves.emphasized,
-            alignment:
-                showIncome ? Alignment.centerRight : Alignment.centerLeft,
+            alignment: showIncome
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
             child: FractionallySizedBox(
               widthFactor: 0.5,
               heightFactor: 1,
