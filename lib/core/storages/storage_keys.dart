@@ -25,7 +25,6 @@ class StorageKeys {
   // ==================================================
   // APP SETTINGS
   // ==================================================
-  static const String themeMode = 'theme_mode';
   static const String language = 'language';
 
   // ==================================================

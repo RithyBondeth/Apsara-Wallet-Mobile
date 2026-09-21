@@ -1411,9 +1411,6 @@ class AppLocalizationsKm extends AppLocalizations {
   String get settingsCurrencyUsd => 'USD — ដុល្លារអាមេរិក';
 
   @override
-  String get settingsDarkMode => 'របៀបងងឹត';
-
-  @override
   String get settingsSectionNotifications => 'ការជូនដំណឹង';
 
   @override
