@@ -620,6 +620,51 @@ class AppLocalizationsKm extends AppLocalizations {
       'មានបញ្ហាក្នុងការភ្ជាប់ទៅម៉ាស៊ីនមេ។ សូមពិនិត្យការតភ្ជាប់របស់អ្នក ហើយព្យាយាមម្ដងទៀត។';
 
   @override
+  String get apiErrorGeneric => 'មានបញ្ហាកើតឡើង។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get apiErrorServer =>
+      'ម៉ាស៊ីនមេមានបញ្ហា។ សូមព្យាយាមម្តងទៀតក្នុងពេលបន្តិចទៀត។';
+
+  @override
+  String get apiErrorOffline => 'គ្មានការតភ្ជាប់អ៊ីនធឺណិត។';
+
+  @override
+  String get apiErrorTimeout => 'ការតភ្ជាប់អស់ពេល។ សូមព្យាយាមម្តងទៀត។';
+
+  @override
+  String get apiErrorNotFound => 'រកមិនឃើញធាតុនោះទេ។';
+
+  @override
+  String get apiErrorInvalidCredentials => 'អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។';
+
+  @override
+  String get apiErrorEmailTaken => 'អ៊ីមែលនេះត្រូវបានចុះឈ្មោះរួចហើយ។';
+
+  @override
+  String get apiErrorIncorrectPassword => 'ពាក្យសម្ងាត់មិនត្រឹមត្រូវ។';
+
+  @override
+  String get apiErrorInvalidResetToken =>
+      'តំណកំណត់ឡើងវិញនេះមិនត្រឹមត្រូវ ឬផុតកំណត់ហើយ។ សូមស្នើសុំតំណថ្មី។';
+
+  @override
+  String get apiErrorInsufficientBalance =>
+      'សមតុល្យក្នុងកាបូបប្រភពមិនគ្រប់គ្រាន់ទេ។';
+
+  @override
+  String get apiErrorSameWallet =>
+      'សូមជ្រើសរើសកាបូបពីរផ្សេងគ្នាសម្រាប់ការផ្ទេរ។';
+
+  @override
+  String get apiErrorNotYourWallet =>
+      'កាបូបមួយក្នុងចំណោមនោះមិនមែនជារបស់អ្នកទេ។';
+
+  @override
+  String get apiErrorSystemCategory =>
+      'ប្រភេទដែលភ្ជាប់មកជាមួយមិនអាចផ្លាស់ប្តូរបានទេ។';
+
+  @override
   String get offlineBannerMessage =>
       'អ្នកនៅក្រៅបណ្ដាញ — កំពុងបង្ហាញទិន្នន័យដែលបានរក្សាទុកចុងក្រោយ។';
 
@@ -1657,6 +1702,33 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get analyticsTotal => 'សរុប';
+
+  @override
+  String get receiptCategoryGroceries => 'គ្រឿងទេស';
+
+  @override
+  String get receiptCategoryDining => 'អាហារ';
+
+  @override
+  String get receiptCategoryShopping => 'ទិញទំនិញ';
+
+  @override
+  String get receiptCategoryTransport => 'ដឹកជញ្ជូន';
+
+  @override
+  String get receiptCategoryFuel => 'សាំង';
+
+  @override
+  String get receiptCategoryHealth => 'សុខភាព';
+
+  @override
+  String get receiptCategoryBills => 'វិក្កយបត្រ';
+
+  @override
+  String get receiptCategoryUncategorised => 'មិនបានចាត់ថ្នាក់';
+
+  @override
+  String get receiptFallbackTitle => 'វិក្កយបត្រ';
 
   @override
   String get scanReceiptTitle => 'ស្កេនវិក្កយបត្រ';

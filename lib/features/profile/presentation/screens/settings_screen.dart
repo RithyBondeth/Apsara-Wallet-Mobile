@@ -248,7 +248,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                                 );
                                 if (v) {
                                   await ctrl.enableBiometric(
-                                    AppConstants.biometricReason,
+                                    context.l10n.lockBiometricReason,
                                   );
                                 } else {
                                   await ctrl.disableBiometric();

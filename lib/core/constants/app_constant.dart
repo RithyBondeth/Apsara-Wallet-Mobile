@@ -47,13 +47,6 @@ class AppConstants {
   static const double defaultKhrPerUsd = 4100;
 
   // =========================
-  // BIOMETRIC
-  // =========================
-  /// Prompt shown by the OS biometric sheet.
-  static const String biometricReason =
-      'Authenticate to access Apsara Wallet securely';
-
-  // =========================
   // FEATURE FLAGS (no backend yet — keep hidden so the UI never shows a
   // control that only says "coming soon"; store reviewers flag those, and
   // Apple requires Sign in with Apple the moment Google sign-in is offered)

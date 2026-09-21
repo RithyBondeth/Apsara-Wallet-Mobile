@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/receipt_parser.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_category.dart';
 
 void main() {
   group('ReceiptParser', () {
@@ -31,7 +32,7 @@ void main() {
       expect(receipt.tax, 2.83);
       expect(receipt.taxLabel, 'VAT');
       expect(receipt.currency, ECurrencyType.usd);
-      expect(receipt.categoryLabel, 'Groceries');
+      expect(receipt.category, ReceiptCategory.groceries);
 
       // Summary lines (subtotal/vat/total/cash/change) are excluded as items.
       final names = receipt.items.map((i) => i.name).toList();
@@ -82,7 +83,7 @@ void main() {
       expect(receipt.merchant, '');
       expect(receipt.total, 0);
       expect(receipt.items, isEmpty);
-      expect(receipt.categoryLabel, 'Uncategorised');
+      expect(receipt.category, ReceiptCategory.uncategorised);
     });
 
     test('infers Dining category from keywords', () {
@@ -91,7 +92,7 @@ void main() {
         'Latte    3.50',
         'Total    3.50',
       ]);
-      expect(receipt.categoryLabel, 'Dining');
+      expect(receipt.category, ReceiptCategory.dining);
     });
   });
 }

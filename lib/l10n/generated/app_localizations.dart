@@ -1220,6 +1220,84 @@ abstract class AppLocalizations {
   /// **'Something went wrong reaching the server. Check your connection and try again.'**
   String get errorLoadMessage;
 
+  /// No description provided for @apiErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get apiErrorGeneric;
+
+  /// No description provided for @apiErrorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'The server had a problem. Please try again in a moment.'**
+  String get apiErrorServer;
+
+  /// No description provided for @apiErrorOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection.'**
+  String get apiErrorOffline;
+
+  /// No description provided for @apiErrorTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection timed out. Please try again.'**
+  String get apiErrorTimeout;
+
+  /// No description provided for @apiErrorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'That item could not be found.'**
+  String get apiErrorNotFound;
+
+  /// No description provided for @apiErrorInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password.'**
+  String get apiErrorInvalidCredentials;
+
+  /// No description provided for @apiErrorEmailTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'That email is already registered.'**
+  String get apiErrorEmailTaken;
+
+  /// No description provided for @apiErrorIncorrectPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password.'**
+  String get apiErrorIncorrectPassword;
+
+  /// No description provided for @apiErrorInvalidResetToken.
+  ///
+  /// In en, this message translates to:
+  /// **'This reset link is invalid or has expired. Please request a new one.'**
+  String get apiErrorInvalidResetToken;
+
+  /// No description provided for @apiErrorInsufficientBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance in the source wallet.'**
+  String get apiErrorInsufficientBalance;
+
+  /// No description provided for @apiErrorSameWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose two different wallets for a transfer.'**
+  String get apiErrorSameWallet;
+
+  /// No description provided for @apiErrorNotYourWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'One of those wallets isn\'t yours.'**
+  String get apiErrorNotYourWallet;
+
+  /// No description provided for @apiErrorSystemCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in categories can\'t be changed.'**
+  String get apiErrorSystemCategory;
+
   /// No description provided for @offlineBannerMessage.
   ///
   /// In en, this message translates to:
@@ -3097,6 +3175,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get analyticsTotal;
+
+  /// No description provided for @receiptCategoryGroceries.
+  ///
+  /// In en, this message translates to:
+  /// **'Groceries'**
+  String get receiptCategoryGroceries;
+
+  /// No description provided for @receiptCategoryDining.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining'**
+  String get receiptCategoryDining;
+
+  /// No description provided for @receiptCategoryShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get receiptCategoryShopping;
+
+  /// No description provided for @receiptCategoryTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get receiptCategoryTransport;
+
+  /// No description provided for @receiptCategoryFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel'**
+  String get receiptCategoryFuel;
+
+  /// No description provided for @receiptCategoryHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get receiptCategoryHealth;
+
+  /// No description provided for @receiptCategoryBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Bills'**
+  String get receiptCategoryBills;
+
+  /// No description provided for @receiptCategoryUncategorised.
+  ///
+  /// In en, this message translates to:
+  /// **'Uncategorised'**
+  String get receiptCategoryUncategorised;
+
+  /// No description provided for @receiptFallbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt'**
+  String get receiptFallbackTitle;
 
   /// No description provided for @scanReceiptTitle.
   ///

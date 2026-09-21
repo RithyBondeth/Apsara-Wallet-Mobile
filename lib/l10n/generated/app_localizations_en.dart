@@ -619,6 +619,49 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong reaching the server. Check your connection and try again.';
 
   @override
+  String get apiErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get apiErrorServer =>
+      'The server had a problem. Please try again in a moment.';
+
+  @override
+  String get apiErrorOffline => 'No internet connection.';
+
+  @override
+  String get apiErrorTimeout => 'The connection timed out. Please try again.';
+
+  @override
+  String get apiErrorNotFound => 'That item could not be found.';
+
+  @override
+  String get apiErrorInvalidCredentials => 'Invalid email or password.';
+
+  @override
+  String get apiErrorEmailTaken => 'That email is already registered.';
+
+  @override
+  String get apiErrorIncorrectPassword => 'Incorrect password.';
+
+  @override
+  String get apiErrorInvalidResetToken =>
+      'This reset link is invalid or has expired. Please request a new one.';
+
+  @override
+  String get apiErrorInsufficientBalance =>
+      'Not enough balance in the source wallet.';
+
+  @override
+  String get apiErrorSameWallet =>
+      'Choose two different wallets for a transfer.';
+
+  @override
+  String get apiErrorNotYourWallet => 'One of those wallets isn\'t yours.';
+
+  @override
+  String get apiErrorSystemCategory => 'Built-in categories can\'t be changed.';
+
+  @override
   String get offlineBannerMessage =>
       'You\'re offline — showing the latest saved data.';
 
@@ -1657,6 +1700,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get analyticsTotal => 'Total';
+
+  @override
+  String get receiptCategoryGroceries => 'Groceries';
+
+  @override
+  String get receiptCategoryDining => 'Dining';
+
+  @override
+  String get receiptCategoryShopping => 'Shopping';
+
+  @override
+  String get receiptCategoryTransport => 'Transport';
+
+  @override
+  String get receiptCategoryFuel => 'Fuel';
+
+  @override
+  String get receiptCategoryHealth => 'Health';
+
+  @override
+  String get receiptCategoryBills => 'Bills';
+
+  @override
+  String get receiptCategoryUncategorised => 'Uncategorised';
+
+  @override
+  String get receiptFallbackTitle => 'Receipt';
 
   @override
   String get scanReceiptTitle => 'Scan Receipt';

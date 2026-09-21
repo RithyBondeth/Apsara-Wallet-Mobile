@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_category.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/receipt_transaction_mapper.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/scanned_receipt.dart';
 
@@ -15,8 +16,7 @@ void main() {
       merchant: 'Lucky Supermarket',
       location: 'Phnom Penh',
       dateLabel: '20 Jul 2026',
-      categoryLabel: 'Groceries',
-      categoryIcon: ScannedReceipt.empty().categoryIcon,
+      category: ReceiptCategory.groceries,
       items: [],
       total: 31.08,
       currency: ECurrencyType.usd,
@@ -27,6 +27,7 @@ void main() {
       id: 'r1',
       walletName: 'Cash Wallet',
       date: date,
+      fallbackTitle: 'Receipt',
     );
 
     expect(record.type, ETransactionType.expense);
@@ -43,8 +44,7 @@ void main() {
       final receipt = ScannedReceipt(
         merchant: '',
         dateLabel: '',
-        categoryLabel: 'Uncategorised',
-        categoryIcon: ScannedReceipt.empty().categoryIcon,
+        category: ReceiptCategory.uncategorised,
         items: [],
         total: 12000,
         currency: ECurrencyType.khr,
@@ -55,12 +55,13 @@ void main() {
         id: 'r2',
         walletName: 'Wing',
         date: date,
+        fallbackTitle: 'វិក្កយបត្រ', // the caller passes the localized label
       );
 
       expect(record.amountKhr, 12000);
       expect(record.category.id, 'othersExpense');
-      // Empty merchant falls back to the category label.
-      expect(record.title, 'Uncategorised');
+      // Empty merchant falls back to whatever the caller localized.
+      expect(record.title, 'វិក្កយបត្រ');
     },
   );
 }
