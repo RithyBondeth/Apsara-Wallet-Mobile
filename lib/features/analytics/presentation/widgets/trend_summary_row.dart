@@ -9,7 +9,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/analytics/data/analytics_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/analytics/data/analytics_data.dart';
 
 /// Three quick stats under the Trends tab — average, peak and total spend
 /// derived from the daily series.

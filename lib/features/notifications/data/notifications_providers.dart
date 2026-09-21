@@ -4,7 +4,7 @@ import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/providers/notification_prefs_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notification_api.dart';
-import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notification_models.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 
 /// The user's notifications, backed by the API. Tapping a row marks it read;

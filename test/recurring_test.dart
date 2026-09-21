@@ -6,12 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/screens/profile_screen.dart';
-import 'package:apsara_wallet_mobile/features/recurring/data/recurring_rule.dart';
 import 'package:apsara_wallet_mobile/features/recurring/presentation/screens/recurring_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
 import 'support/ledger_overrides.dart';
+import 'support/sample_data.dart';
 
 /// Covers the new Recurring feature: it renders the seeded sample with a
 /// correct monthly-expense estimate, is reachable from Profile, and its add

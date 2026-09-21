@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
@@ -7,7 +8,8 @@ import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/profile_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/profile_data.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
@@ -15,15 +17,16 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 /// ([AssetPathConstant.sideMenuBackground]) with a user summary, shortcuts to
 /// every major area, and sign-out. Opened from the dashboard header's menu
 /// button. Each item closes the drawer and pushes its route.
-class AppSideMenu extends StatelessWidget {
+class AppSideMenu extends ConsumerWidget {
   const AppSideMenu({super.key});
 
   static const Color _ivory = Color(0xFFF3F1E7);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final data = ProfileData.sample;
+    final user = ref.watch(authControllerProvider).user;
+    final createdAt = user?.createdAt;
 
     void go(PageRouteInfo route) {
       Navigator.of(context).pop(); // close the drawer
@@ -66,7 +69,12 @@ class AppSideMenu extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: AppSpacing.lg),
-                _Header(data: data),
+                _Header(
+                  name: user?.displayName ?? '',
+                  membership: createdAt != null
+                      ? l10n.profileMemberSince(createdAt.year)
+                      : '',
+                ),
                 const SizedBox(height: AppSpacing.lg),
                 Divider(
                   color: Colors.white.withValues(alpha: 0.12),
@@ -147,9 +155,10 @@ class AppSideMenu extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.data});
+  const _Header({required this.name, required this.membership});
 
-  final ProfileData data;
+  final String name;
+  final String membership;
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +188,7 @@ class _Header extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                data.initials,
+                initialsOf(name),
                 style: AppFont.titleSmall.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
@@ -193,7 +202,7 @@ class _Header extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  data.fullName,
+                  name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppFont.titleSmall.copyWith(
@@ -202,7 +211,7 @@ class _Header extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  data.membership,
+                  membership,
                   style: AppFont.labelSmall.copyWith(
                     color: AppSideMenu._ivory.withValues(alpha: 0.8),
                   ),

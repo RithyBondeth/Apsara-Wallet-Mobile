@@ -7,13 +7,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/core/utils/currency_converter.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
 import 'support/ledger_overrides.dart';
+import 'support/sample_data.dart';
 
 /// Covers the two Add-Transaction fixes: USD amounts no longer save as 0 (B1),
 /// and editing replaces the existing row instead of creating a duplicate (B2).

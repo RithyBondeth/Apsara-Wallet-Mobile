@@ -6,7 +6,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/profile_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/profile_data.dart';
 
 /// The emerald hero at the top of the profile screen: a top bar (back +
 /// settings), a gold-ringed avatar, the user's name, email and a membership

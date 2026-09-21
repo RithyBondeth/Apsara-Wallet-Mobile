@@ -4,9 +4,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/networks/api_client.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart'
+import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_data.dart'
     show formatKhr;
-import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notification_models.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
 /// A notification as returned by `GET /notifications`. `type` + `data` drive

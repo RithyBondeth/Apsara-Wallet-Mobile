@@ -13,10 +13,9 @@ import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
-import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_data.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/add_wallet_sheet.dart';
@@ -33,7 +32,8 @@ import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.da
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_side_menu.dart';
 
 /// The home dashboard: emerald hero balance, quick actions, this-month
-/// overview and recent activity — all mock data for the Phase 1 UI build.
+/// overview and recent activity, all derived from the live wallets and
+/// ledger providers.
 @RoutePage()
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -121,14 +121,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
 
   /// Greeting name for the header: the signed-in user's first name, falling
   /// back to the email handle, then empty (header shows just the wave).
-  String _greetingName(AuthUser? user) {
-    final full = user?.fullName?.trim();
-    if (full != null && full.isNotEmpty) return full.split(' ').first;
-    final email = user?.email;
-    if (email != null && email.contains('@')) return email.split('@').first;
-    return '';
-  }
-
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.of(context).padding.bottom;
@@ -157,7 +149,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       // month's income so it agrees with AI Insights' savings figure. The
       // per-category budgets (which rarely cover every category) are judged
       // on the Budget screen, where each has its own bar.
-      userName: _greetingName(user),
+      userName: user?.firstName ?? '',
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(

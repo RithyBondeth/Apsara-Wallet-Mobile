@@ -13,7 +13,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
@@ -27,9 +27,9 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/count_up_text.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Monthly budget overview (Phase 1, UI-only): the month's total progress and
-/// per-category budgets, per the design board's Budget mockup. "+ Add Budget"
-/// opens a sheet that appends a category budget to the local list only.
+/// Monthly budget overview: the month's total progress and per-category
+/// budgets, per the design board's Budget mockup. "+ Add Budget" opens a
+/// sheet that creates a category budget through the budget provider.
 @RoutePage()
 class BudgetScreen extends ConsumerStatefulWidget {
   const BudgetScreen({super.key});

@@ -6,7 +6,7 @@ import 'package:apsara_wallet_mobile/core/providers/offline_status_provider.dart
 import 'package:apsara_wallet_mobile/core/storages/json_cache.dart';
 import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_api.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 
 /// The user's wallets, loaded from the backend. Adding a wallet POSTs to the
 /// API then refreshes so every surface (Wallets screen, dashboard totals)

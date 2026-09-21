@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
-/// UI-only mock data for the dashboard. No backend — Phase 1 is presentation
-/// only, so these fixtures drive every widget on the screen.
+/// View models for the dashboard, built from the live wallets and ledger by
+/// [DashboardData.fromLedger], plus the KHR/USD formatters the widgets share.
 
 final NumberFormat _khrFormat = NumberFormat.decimalPattern('en_US');
 final NumberFormat _usdFormat = NumberFormat('#,##0.00', 'en_US');
@@ -160,53 +159,4 @@ class DashboardData {
       transactions: recent,
     );
   }
-
-  static const DashboardData sample = DashboardData(
-    userName: 'Sokunthea',
-    balanceKhr: 2584300,
-    balanceUsd: 645.20,
-    monthLabel: 'May 2024',
-    monthIncomeKhr: 3850000,
-    monthExpenseKhr: 1265700,
-    budgetKhr: 2000000,
-    budgetUsedFraction: 0.63,
-    transactions: [
-      DashboardTransaction(
-        id: 'grab-food',
-        title: 'Grab Food',
-        time: 'Today, 8:30 AM',
-        amountKhr: 18000,
-        type: ETransactionType.expense,
-        icon: LucideIcons.utensils,
-        tint: Color(0xFF00B14F),
-      ),
-      DashboardTransaction(
-        id: 'aba-salary',
-        title: 'ABA Salary',
-        time: 'Today, 8:00 AM',
-        amountKhr: 3500000,
-        type: ETransactionType.income,
-        icon: LucideIcons.banknote,
-        tint: Color(0xFF1E4FA3),
-      ),
-      DashboardTransaction(
-        id: 'aeon-mall',
-        title: 'AEON Mall',
-        time: 'Yesterday, 6:20 PM',
-        amountKhr: 45000,
-        type: ETransactionType.expense,
-        icon: LucideIcons.shoppingBag,
-        tint: Color(0xFF7C3AED),
-      ),
-      DashboardTransaction(
-        id: 'coffee-shop',
-        title: 'Coffee Shop',
-        time: 'Yesterday, 9:15 AM',
-        amountKhr: 12000,
-        type: ETransactionType.expense,
-        icon: LucideIcons.coffee,
-        tint: Color(0xFF9A6B4F),
-      ),
-    ],
-  );
 }

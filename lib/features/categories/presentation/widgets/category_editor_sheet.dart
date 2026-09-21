@@ -15,7 +15,7 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
 /// A category as edited on the Categories screen: starts from a [TxCategory]
 /// (or blank for new ones) and can carry a custom name, icon and color.
-/// Session-only — nothing is persisted in Phase 1.
+/// The sheet returns the edit; the Categories screen persists it.
 class EditableCategory {
   EditableCategory({
     this.base,

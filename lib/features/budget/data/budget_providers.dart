@@ -6,7 +6,7 @@ import 'package:apsara_wallet_mobile/core/providers/offline_status_provider.dart
 import 'package:apsara_wallet_mobile/core/storages/json_cache.dart';
 import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_api.dart';
-import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_data.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 

@@ -14,7 +14,6 @@ import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-import 'support/test_database.dart';
 
 /// Pin "now" to the seeded sample's base day so relative grouping
 /// (Today / Yesterday) stays deterministic regardless of the real date.
@@ -58,7 +57,6 @@ void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
   setUp(() async {
-    await initTestDatabase(); // fresh, seeded in-memory db per test
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       final msg = details.exception.toString();

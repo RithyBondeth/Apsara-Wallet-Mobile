@@ -1,5 +1,5 @@
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 
 /// The kinds of insight the engine can surface. The presentation layer maps
 /// each to an icon, colour and a localized sentence built from the numeric

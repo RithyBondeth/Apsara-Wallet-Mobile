@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/features/insights/data/insights_engine.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
+import 'support/sample_data.dart';
 
 /// Pure-Dart tests for the on-device insights engine — no DB, no widgets.
 void main() {

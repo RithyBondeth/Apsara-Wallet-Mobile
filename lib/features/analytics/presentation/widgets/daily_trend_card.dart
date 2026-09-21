@@ -5,7 +5,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/analytics/data/analytics_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/analytics/data/analytics_data.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/line_chart.dart';
 
 /// "Daily Expense Trend" card wrapping the line chart.
