@@ -68,7 +68,7 @@ lib/
 │   ├── storage(s)/      # secure storage, shared prefs, JSON snapshot cache
 │   ├── monitoring/      # Sentry setup (no PII, tracing off)
 │   ├── themes/          # design tokens (AppSpacing, colours, typography)
-│   └── providers/, utils/, validators/, extensions/, enums/
+│   └── providers/, utils/, extensions/, enums/
 ├── shared/widgets/      # cross-feature UI: bottom bar, side menu, cards
 └── features/            # one folder per screen group
     ├── auth/            # login, register, forgot/reset password

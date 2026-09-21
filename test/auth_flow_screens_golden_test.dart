@@ -7,8 +7,6 @@ import 'package:apsara_wallet_mobile/core/constants/asset_path_constant.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/biometric_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/forgot_password_screen.dart';
-import 'package:apsara_wallet_mobile/features/auth/presentation/screens/otp_screen.dart';
-import 'package:apsara_wallet_mobile/features/auth/presentation/screens/pin_login_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/pin_setup_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/register_screen.dart';
 import 'package:apsara_wallet_mobile/features/auth/presentation/screens/reset_password_screen.dart';
@@ -32,10 +30,8 @@ void main() {
   final screens = <String, Widget>{
     'register': const RegisterScreen(),
     'forgot_password': const ForgotPasswordScreen(),
-    'otp': const OtpScreen(),
     'reset_password': const ResetPasswordScreen(token: 'test-token'),
     'pin_setup': const PinSetupScreen(),
-    'pin_login': const PinLoginScreen(),
     'biometric': const BiometricScreen(),
   };
 

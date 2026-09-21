@@ -345,38 +345,6 @@ class OnBoardingRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [OtpScreen]
-class OtpRoute extends PageRouteInfo<void> {
-  const OtpRoute({List<PageRouteInfo>? children})
-    : super(OtpRoute.name, initialChildren: children);
-
-  static const String name = 'OtpRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const OtpScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [PinLoginScreen]
-class PinLoginRoute extends PageRouteInfo<void> {
-  const PinLoginRoute({List<PageRouteInfo>? children})
-    : super(PinLoginRoute.name, initialChildren: children);
-
-  static const String name = 'PinLoginRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const PinLoginScreen();
-    },
-  );
-}
-
-/// generated route for
 /// [PinSetupScreen]
 class PinSetupRoute extends PageRouteInfo<PinSetupRouteArgs> {
   PinSetupRoute({

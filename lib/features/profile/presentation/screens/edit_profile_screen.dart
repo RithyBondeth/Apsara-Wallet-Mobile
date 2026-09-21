@@ -18,7 +18,8 @@ import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Edit the signed-in user's avatar, name, email and phone (Phase 1, UI-only).
+/// Edit the signed-in user's avatar, name, email and phone, saved through
+/// PATCH /auth/me.
 ///
 /// The avatar is chosen Netflix-style from a curated preset set
 /// ([presetAvatars]) rather than uploaded; the selection updates the emerald

@@ -4,7 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 
 /// A preset avatar the user can pick, Netflix-style — a gradient disc with a
-/// friendly glyph. Phase 1 has no photo upload, so the account is represented
+/// friendly glyph. There is no photo upload, so the account is represented
 /// by one of these curated marks instead.
 class ProfileAvatar {
   const ProfileAvatar({

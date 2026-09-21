@@ -7,7 +7,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 
 /// Range dropdown ("This Month") on the left, period stepper ("May 2024 >")
-/// on the right. UI-only — taps are wired to no-ops by the screen.
+/// on the right. The screen wires the taps to its range / period pickers.
 class PeriodSelectorRow extends StatelessWidget {
   const PeriodSelectorRow({
     super.key,

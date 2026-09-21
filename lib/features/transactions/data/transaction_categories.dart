@@ -5,7 +5,8 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
-/// A pickable transaction category (Phase 1: static catalog, no backend).
+/// A pickable transaction category. The system catalog below is static; the
+/// user's own categories come from the categories API and use the same type.
 ///
 /// Labels are l10n keys resolved at render time via [labelOf], so the picker
 /// follows the app language without this catalog holding BuildContexts.

@@ -14,7 +14,7 @@ import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
 /// Bottom-sheet pickers for the Add Transaction form (category grid, wallet
-/// list). All UI-only: they resolve to the chosen value via [Navigator.pop].
+/// list). Each resolves to the chosen value via [Navigator.pop].
 
 Future<T?> _showSheet<T>(BuildContext context, Widget child) {
   return showModalBottomSheet<T>(

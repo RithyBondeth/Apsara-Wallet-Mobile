@@ -42,7 +42,8 @@ Future<void> _launch(BuildContext context, Uri uri) async {
   }
 }
 
-/// Help & Support (Phase 1, UI-only): contact channels and an expandable FAQ.
+/// Help & Support: contact channels (mail / phone via url_launcher) and an
+/// expandable FAQ.
 @RoutePage()
 class HelpSupportScreen extends StatelessWidget {
   const HelpSupportScreen({super.key});

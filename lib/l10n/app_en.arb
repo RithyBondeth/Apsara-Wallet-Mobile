@@ -99,16 +99,6 @@
   "resetPasswordConfirmHint": "Re-enter new password",
   "resetPasswordSaveCta": "Save New Password",
 
-  "otpTitle": "Verification Code",
-  "otpSubtitle": "We've sent a 6-digit code to your email or phone. Enter it below to continue.",
-  "otpResendPrompt": "Didn't receive the code? ",
-  "otpResendCta": "Resend",
-  "otpVerifyCta": "Verify",
-
-  "pinLoginTitle": "Enter Your PIN",
-  "pinLoginSubtitle": "Welcome back — unlock your wallet.",
-  "pinLoginUsePasswordCta": "Use password instead",
-
   "pinSetupTitle": "Set Your PIN",
   "pinSetupSubtitle": "A 4-digit PIN keeps your wallet extra safe.",
 
