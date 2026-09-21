@@ -9,7 +9,7 @@ class AppConstants {
   static const String appTagline = 'Smart Digital Expense Tracker';
 
   /// Support / legal contact address (shown at the foot of legal pages).
-  static const String supportEmail = 'support@apsarawallet.app';
+  static const String supportEmail = 'support@apsarawallet.com';
 
   // =========================
   // STORE LISTINGS (Rate the app)

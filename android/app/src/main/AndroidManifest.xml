@@ -41,6 +41,18 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="apsarawallet"/>
             </intent-filter>
+            <!-- App Links: https://apsarawallet.com/reset-password opens here
+                 directly once Android verifies /.well-known/assetlinks.json
+                 (served by Apsara-Wallet-Web with the signing fingerprint).
+                 Unverified installs fall back to that page in the browser. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"
+                      android:host="apsarawallet.com"
+                      android:pathPrefix="/reset-password"/>
+            </intent-filter>
             <meta-data
                 android:name="flutter_deeplinking_enabled"
                 android:value="false" />

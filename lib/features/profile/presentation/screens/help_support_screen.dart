@@ -12,8 +12,8 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_section.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_sub_scaffold.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_tile.dart';
+import 'package:apsara_wallet_mobile/core/constants/app_constant.dart';
 
-const String _supportEmail = 'support@apsarawallet.com';
 const String _supportPhone = '+855 23 999 888';
 
 void _snack(BuildContext context, String message) {
@@ -71,10 +71,12 @@ class HelpSupportScreen extends StatelessWidget {
             SettingsTile(
               icon: LucideIcons.mail,
               title: l10n.helpEmail,
-              subtitle: _supportEmail,
+              subtitle: AppConstants.supportEmail,
               iconColor: AppColors.info,
-              onTap: () =>
-                  _launch(context, Uri(scheme: 'mailto', path: _supportEmail)),
+              onTap: () => _launch(
+                context,
+                Uri(scheme: 'mailto', path: AppConstants.supportEmail),
+              ),
             ),
             SettingsTile(
               icon: LucideIcons.phone,
