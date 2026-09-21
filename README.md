@@ -127,8 +127,10 @@ change:
 flutter test --update-goldens
 ```
 
-CI (`.github/workflows/ci.yml`) runs `gen-l10n`, a `dart format` check,
-`analyze` and the full test suite on every PR.
+CI (`.github/workflows/ci.yml`) runs two jobs on every PR: `test`
+(`gen-l10n`, a `dart format` check, `analyze`, the full suite) and `build`
+(a debug Android APK and an unsigned iOS Simulator build), so manifest,
+plist, Gradle and plugin-linking breakage is caught before merge.
 
 ## Localisation
 
