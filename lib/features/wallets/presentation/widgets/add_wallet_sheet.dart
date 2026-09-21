@@ -137,8 +137,13 @@ class _AddWalletSheetState extends State<_AddWalletSheet> {
       (WalletKind.ewallet, l10n.walletTypeEwallet),
     ];
 
+    // The sheet grows with the keyboard; on a tall text keyboard (with its
+    // autocomplete bar) the form no longer fits, so it scrolls instead of
+    // overflowing, and the top inset keeps the title clear of the notch.
     return SafeArea(
-      child: Padding(
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: EdgeInsets.fromLTRB(
           AppSpacing.xxl,
           AppSpacing.lg,

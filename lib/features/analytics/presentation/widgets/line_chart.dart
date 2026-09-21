@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
@@ -177,23 +179,59 @@ class _LinePainter extends CustomPainter {
     }
   }
 
-  /// Catmull-Rom spline through [pts], emitted as cubic Béziers.
+  /// Monotone cubic (Fritsch–Carlson) through [pts], emitted as Béziers.
+  ///
+  /// A plain Catmull-Rom spline overshoots: one spike between two flat days
+  /// makes the curve dip *below* zero on either side, which reads as a
+  /// negative spend. Clamping each tangent to the neighbouring slopes keeps
+  /// the curve inside the data — flat stays flat, and it never crosses the
+  /// axis on its own.
   Path _smoothPath(List<Offset> pts) {
     final path = Path()..moveTo(pts.first.dx, pts.first.dy);
-    for (var i = 0; i < pts.length - 1; i++) {
-      final p0 = pts[i == 0 ? 0 : i - 1];
+    final n = pts.length;
+    if (n < 2) return path;
+
+    // Secant slopes between consecutive points.
+    final d = List<double>.generate(n - 1, (i) {
+      final dx = pts[i + 1].dx - pts[i].dx;
+      return dx == 0 ? 0.0 : (pts[i + 1].dy - pts[i].dy) / dx;
+    });
+    // Tangents: average of neighbouring secants, zeroed at local extrema so
+    // the curve cannot overshoot them.
+    final m = List<double>.filled(n, 0);
+    m[0] = d[0];
+    m[n - 1] = d[n - 2];
+    for (var i = 1; i < n - 1; i++) {
+      m[i] = d[i - 1] * d[i] <= 0 ? 0.0 : (d[i - 1] + d[i]) / 2;
+    }
+    for (var i = 0; i < n - 1; i++) {
+      if (d[i] == 0) {
+        m[i] = 0;
+        m[i + 1] = 0;
+        continue;
+      }
+      final a = m[i] / d[i];
+      final b = m[i + 1] / d[i];
+      final h = a * a + b * b;
+      if (h > 9) {
+        final t = 3 / math.sqrt(h);
+        m[i] = t * a * d[i];
+        m[i + 1] = t * b * d[i];
+      }
+    }
+
+    for (var i = 0; i < n - 1; i++) {
       final p1 = pts[i];
       final p2 = pts[i + 1];
-      final p3 = pts[i + 2 >= pts.length ? pts.length - 1 : i + 2];
-      final c1 = Offset(
-        p1.dx + (p2.dx - p0.dx) / 6,
-        p1.dy + (p2.dy - p0.dy) / 6,
+      final dx = (p2.dx - p1.dx) / 3;
+      path.cubicTo(
+        p1.dx + dx,
+        p1.dy + m[i] * dx,
+        p2.dx - dx,
+        p2.dy - m[i + 1] * dx,
+        p2.dx,
+        p2.dy,
       );
-      final c2 = Offset(
-        p2.dx - (p3.dx - p1.dx) / 6,
-        p2.dy - (p3.dy - p1.dy) / 6,
-      );
-      path.cubicTo(c1.dx, c1.dy, c2.dx, c2.dy, p2.dx, p2.dy);
     }
     return path;
   }
