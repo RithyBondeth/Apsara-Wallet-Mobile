@@ -7,7 +7,7 @@ import 'package:apsara_wallet_mobile/core/storages/storage_keys.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_api.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 
 /// The live list of transactions, newest first, backed by the API.

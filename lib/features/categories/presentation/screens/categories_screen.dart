@@ -20,10 +20,10 @@ import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
-/// Category management (Phase 1, UI-only): search, an Expense/Income sliding
-/// toggle and the icon grid from the design board. Tapping a category opens
-/// an editor sheet (name, icon, color); "+" adds a new one. Edits live in
-/// this screen's state only — no persistence yet.
+/// Category management: search, an Expense/Income sliding toggle and the
+/// icon grid from the design board. Tapping a category opens an editor sheet
+/// (name, icon, color); "+" adds a new one. User categories are persisted
+/// through the categories API; the system catalog stays static.
 @RoutePage()
 class CategoriesScreen extends ConsumerStatefulWidget {
   const CategoriesScreen({super.key});

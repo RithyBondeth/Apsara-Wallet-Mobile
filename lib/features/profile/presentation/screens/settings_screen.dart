@@ -24,8 +24,8 @@ import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 
 /// App preferences: language, currency, appearance, notifications, security and
-/// about. Toggles hold local UI state only — Phase 1 is presentation-only —
-/// except the language control, which drives the real [localeProvider].
+/// about. Every control drives a real provider (locale, currency,
+/// notification prefs, app lock).
 @RoutePage()
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});

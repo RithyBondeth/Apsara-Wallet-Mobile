@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 
 /// English CSV column headers, in output order. Kept English (not localized)
 /// because CSV headers are for spreadsheet interchange; the row *values*

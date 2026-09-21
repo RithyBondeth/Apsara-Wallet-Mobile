@@ -7,9 +7,9 @@ enum ERecurrenceFrequency { weekly, monthly }
 
 /// A repeating income/expense the user tracks (salary, rent, subscriptions…).
 ///
-/// Phase-1, UI-only: these describe *intended* repeats and drive the Recurring
-/// screen. Nothing auto-posts to the ledger yet — that's left behind the same
-/// data seam as the rest of the app.
+/// Rules come from the API and drive the Recurring screen; due ones are
+/// materialised into the ledger by the recurring auto-post provider (and the
+/// API's own hourly scheduler).
 class RecurringRule {
   const RecurringRule({
     required this.id,
@@ -70,58 +70,3 @@ class RecurringRule {
 /// Localized label for a frequency.
 String recurrenceFrequencyLabel(AppLocalizations l10n, ERecurrenceFrequency f) =>
     f == ERecurrenceFrequency.weekly ? l10n.recurringWeekly : l10n.recurringMonthly;
-
-/// Phase-1 sample so the screen opens with content. Dates are fixed (not the
-/// real clock) so the UI is deterministic under test.
-List<RecurringRule> sampleRecurringRules() => [
-      RecurringRule(
-        id: 'rec-salary',
-        title: 'Monthly Salary',
-        category: categoryById('salary'),
-        walletName: 'ABA Bank',
-        amountKhr: 3500000,
-        type: ETransactionType.income,
-        frequency: ERecurrenceFrequency.monthly,
-        nextDue: DateTime(2024, 6, 1),
-      ),
-      RecurringRule(
-        id: 'rec-rent',
-        title: 'House Rent',
-        category: categoryById('bills'),
-        walletName: 'ABA Bank',
-        amountKhr: 400000,
-        type: ETransactionType.expense,
-        frequency: ERecurrenceFrequency.monthly,
-        nextDue: DateTime(2024, 6, 5),
-      ),
-      RecurringRule(
-        id: 'rec-phone',
-        title: 'Phone Top-up',
-        category: categoryById('bills'),
-        walletName: 'Wing',
-        amountKhr: 20000,
-        type: ETransactionType.expense,
-        frequency: ERecurrenceFrequency.weekly,
-        nextDue: DateTime(2024, 6, 2),
-      ),
-      RecurringRule(
-        id: 'rec-streaming',
-        title: 'Streaming Plan',
-        category: categoryById('entertainment'),
-        walletName: 'ABA Bank',
-        amountKhr: 40000,
-        type: ETransactionType.expense,
-        frequency: ERecurrenceFrequency.monthly,
-        nextDue: DateTime(2024, 6, 10),
-      ),
-      RecurringRule(
-        id: 'rec-gym',
-        title: 'Gym Membership',
-        category: categoryById('health'),
-        walletName: 'Cash Wallet',
-        amountKhr: 40000,
-        type: ETransactionType.expense,
-        frequency: ERecurrenceFrequency.monthly,
-        nextDue: DateTime(2024, 6, 3),
-      ),
-    ];

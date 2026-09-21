@@ -10,7 +10,6 @@ import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
-import 'support/test_database.dart';
 
 /// A fixed "now" so the recent list's day labels (Today/Yesterday) are stable;
 /// anchored to the seeded sample's most recent day.
@@ -48,7 +47,6 @@ void main() {
   });
 
   setUp(() async {
-    await initTestDatabase();
 
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {

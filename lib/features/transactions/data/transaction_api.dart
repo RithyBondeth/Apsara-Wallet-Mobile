@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/networks/api_client.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 
 /// Transaction as returned by `GET /transactions` (ids are backend UUIDs).
 class ApiTransaction {

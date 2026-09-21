@@ -3,20 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:apsara_wallet_mobile/core/providers/fx_rate_provider.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/auth/data/auth_models.dart';
-import 'package:apsara_wallet_mobile/features/budget/data/budget_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/budget/data/budget_data.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
-import 'package:apsara_wallet_mobile/features/notifications/data/notification_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/notifications/data/notification_models.dart';
 import 'package:apsara_wallet_mobile/features/notifications/data/notifications_providers.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_goal.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_api.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_providers.dart';
 import 'package:apsara_wallet_mobile/features/recurring/data/recurring_rule.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/transfer_api.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
+import 'sample_data.dart';
 
 /// In-memory replacements for the now API-backed [transactionsProvider] and
 /// [walletsProvider], so widget tests keep running against the Phase-1 sample
@@ -254,7 +255,7 @@ List<Override> sampleNotificationsOverride([List<AppNotification>? items]) {
 
 /// Override the Budget screen's provider with sample (or given) budget data.
 List<Override> sampleBudgetOverride([BudgetData? data]) {
-  final d = data ?? BudgetData.sample();
+  final d = data ?? sampleBudgetData();
   return [
     budgetDataProvider.overrideWith(() => _FakeBudgetNotifier(d)),
     ...fxTestOverrides(),
@@ -273,7 +274,7 @@ List<Override> sampleLedgerOverrides({
   List<AppNotification>? notifications,
 }) {
   final txs = transactions ?? sampleTransactions();
-  final ws = wallets ?? WalletsData.sample.wallets;
+  final ws = wallets ?? sampleWalletsData.wallets;
   final u =
       user ??
       AuthUser(

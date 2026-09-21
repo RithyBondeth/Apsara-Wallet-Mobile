@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goal_api.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_goal.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_icon_choices.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_api.dart'
     show colorToHex;

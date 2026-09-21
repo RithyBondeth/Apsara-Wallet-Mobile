@@ -4,10 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:apsara_wallet_mobile/core/providers/fx_rate_provider.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/total_balance_card.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/wallet_card.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
+import 'support/sample_data.dart';
 
 /// Component-level render tests for the wallets building blocks. These import
 /// only the widgets + data (not the screen, which pulls in the full router),
@@ -53,7 +54,7 @@ void main() {
     await tester.pumpWidget(
       wrap(
         TotalBalanceCard(
-          data: WalletsData.sample,
+          data: sampleWalletsData,
           balanceHidden: false,
           onToggleBalance: () {},
         ),
@@ -73,7 +74,7 @@ void main() {
     await tester.pumpWidget(
       wrap(
         TotalBalanceCard(
-          data: WalletsData.sample,
+          data: sampleWalletsData,
           balanceHidden: true,
           onToggleBalance: () {},
         ),
@@ -88,7 +89,7 @@ void main() {
   testWidgets('WalletCard renders name, type/account and balances', (
     tester,
   ) async {
-    final wallet = WalletsData.sample.wallets.first; // ABA Bank (primary)
+    final wallet = sampleWalletsData.wallets.first; // ABA Bank (primary)
     await tester.pumpWidget(
       wrap(WalletCard(wallet: wallet, balanceHidden: false)),
     );
@@ -104,7 +105,7 @@ void main() {
   testWidgets('Cash wallet falls back to an icon and hides masking', (
     tester,
   ) async {
-    final cash = WalletsData.sample.wallets.firstWhere(
+    final cash = sampleWalletsData.wallets.firstWhere(
       (w) => w.kind == WalletKind.cash,
     );
     expect(cash.maskedAccount, isNull);
@@ -119,10 +120,10 @@ void main() {
   });
 
   test('Sample wallet balances sum to the stated total', () {
-    final sum = WalletsData.sample.wallets.fold<int>(
+    final sum = sampleWalletsData.wallets.fold<int>(
       0,
       (acc, w) => acc + w.balanceKhr,
     );
-    expect(sum, WalletsData.sample.totalBalanceKhr);
+    expect(sum, sampleWalletsData.totalBalanceKhr);
   });
 }

@@ -35,6 +35,17 @@ class AuthUser {
   /// only rebuilt from a token payload, which doesn't carry it.
   final DateTime? createdAt;
 
+  /// What to call the user in the UI: their full name, or the local part of
+  /// their email when no name was given at registration.
+  String get displayName {
+    final full = fullName?.trim();
+    if (full != null && full.isNotEmpty) return full;
+    return email.contains('@') ? email.split('@').first : email;
+  }
+
+  /// First word of [displayName] — for greetings.
+  String get firstName => displayName.split(' ').first;
+
   AuthUser copyWith({String? fullName, String? phone}) => AuthUser(
         id: id,
         email: email,

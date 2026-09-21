@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:apsara_wallet_mobile/core/networks/api_client.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 
 /// Wallet as returned by `GET /wallets`.
 class ApiWallet {

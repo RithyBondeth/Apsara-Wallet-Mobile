@@ -3,10 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:apsara_wallet_mobile/core/providers/fx_rate_provider.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 
 import 'support/ledger_overrides.dart';
+import 'support/sample_data.dart';
 
 /// Riel balances come straight from the (API-backed) wallet records — the
 /// server owns the figure. The USD figure is *derived* from riel at the FX
@@ -14,7 +15,7 @@ import 'support/ledger_overrides.dart';
 /// must not be displayed). [walletBalancesProvider] exposes them per name and
 /// [walletsTotalProvider] sums across every wallet.
 void main() {
-  final sample = WalletsData.sample.wallets;
+  final sample = sampleWalletsData.wallets;
 
   Future<ProviderContainer> booted() async {
     final container = ProviderContainer(overrides: sampleLedgerOverrides());

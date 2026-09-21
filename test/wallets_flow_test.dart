@@ -10,7 +10,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_theme.dart';
 import 'package:apsara_wallet_mobile/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/transfer_api.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/wallet_detail_screen.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_side_menu.dart';
@@ -18,7 +18,6 @@ import 'package:apsara_wallet_mobile/features/wallets/presentation/screens/walle
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 
-import 'support/test_database.dart';
 
 /// Records transfer creates so the flow can be asserted without the network.
 class _FakeTransferApi implements TransferApi {
@@ -51,7 +50,6 @@ void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
   setUp(() async {
-    await initTestDatabase();
     final oldOnError = FlutterError.onError!;
     FlutterError.onError = (details) {
       final msg = details.exception.toString();
@@ -264,6 +262,11 @@ void main() {
     await tester.tap(find.byIcon(LucideIcons.menu));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
+
+    // The header is the signed-in user, not a placeholder persona.
+    expect(find.text('Sokunthea'), findsOneWidget);
+    expect(find.text('Member since 2024'), findsOneWidget);
+    expect(find.text('Gold Member'), findsNothing);
 
     await expectLater(
       find.byType(AppSideMenu),

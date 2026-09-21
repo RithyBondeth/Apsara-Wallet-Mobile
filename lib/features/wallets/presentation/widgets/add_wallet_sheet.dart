@@ -10,7 +10,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart'
     show GroupedAmountFormatter;
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 

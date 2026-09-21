@@ -12,7 +12,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/savings_goal.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_goals_providers.dart';
 import 'package:apsara_wallet_mobile/features/profile/data/savings_icon_choices.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/add_transaction_screen.dart'

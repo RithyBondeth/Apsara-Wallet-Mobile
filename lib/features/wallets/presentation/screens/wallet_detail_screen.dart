@@ -13,7 +13,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/core/providers/now_provider.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/add_tx_pickers.dart'
     show WalletBrandTile, showWalletPicker;
@@ -24,7 +24,7 @@ import 'package:apsara_wallet_mobile/features/wallets/data/wallet_api.dart'
     show WalletDeleteOutcome;
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/add_wallet_sheet.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';

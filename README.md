@@ -65,8 +65,7 @@ lib/
 │   ├── constants/       # AppConstants, route paths, feature flags
 │   ├── networks/        # Dio client, interceptors, ApiException
 │   ├── security/        # PIN codec, biometric unlock, app-lock storage
-│   ├── storage(s)/      # secure storage + shared prefs wrappers
-│   ├── database/        # sqflite store used as the offline cache
+│   ├── storage(s)/      # secure storage, shared prefs, JSON snapshot cache
 │   ├── monitoring/      # Sentry setup (no PII, tracing off)
 │   ├── themes/          # design tokens (AppSpacing, colours, typography)
 │   └── providers/, utils/, validators/, extensions/, enums/

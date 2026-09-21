@@ -21,7 +21,7 @@ import 'package:apsara_wallet_mobile/features/transactions/presentation/screens/
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/add_tx_pickers.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/picker_row.dart';
 import 'package:apsara_wallet_mobile/features/transactions/presentation/widgets/tx_type_toggle.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';

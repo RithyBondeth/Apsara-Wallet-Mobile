@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'package:apsara_wallet_mobile/features/analytics/data/analytics_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/analytics/data/analytics_data.dart';
 
 /// A ring chart of expense categories with a centered summary. [progress]
 /// (0..1) sweeps the arcs in on entrance.

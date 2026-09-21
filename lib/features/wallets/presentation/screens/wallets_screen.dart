@@ -11,7 +11,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/add_wallet_sheet.dart';
 import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/total_balance_card.dart';
@@ -22,7 +22,7 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 /// Wallets — the combined-balance hero plus a card list of every funding
-/// source (bank, cash, e-wallet). Phase 1 UI with mock data.
+/// source (bank, cash, e-wallet), backed by the wallets providers.
 @RoutePage()
 class WalletsScreen extends ConsumerStatefulWidget {
   const WalletsScreen({super.key});

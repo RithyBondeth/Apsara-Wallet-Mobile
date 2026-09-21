@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations_en.dart';
 
 /// B4: day grouping is now relative to an injected "now", not a pinned 2024

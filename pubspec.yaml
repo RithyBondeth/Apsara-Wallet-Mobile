@@ -52,8 +52,6 @@ dependencies:
   camera: ^0.12.0+2
   image_picker: ^1.2.3
   permission_handler: ^12.0.3
-  sqflite: ^2.4.2+1
-  path: ^1.9.1
   url_launcher: ^6.3.1
   share_plus: ^10.1.4
   path_provider: ^2.1.5
@@ -72,7 +70,6 @@ dev_dependencies:
   auto_route_generator: ^10.0.0
   build_runner: ^2.4.13
   flutter_launcher_icons: ^0.14.3
-  sqflite_common_ffi: ^2.4.0+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -10,7 +10,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
-import 'package:apsara_wallet_mobile/features/wallets/data/wallet_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/wallets/data/wallet_models.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
 
 /// Bottom-sheet pickers for the Add Transaction form (category grid, wallet
@@ -122,7 +122,7 @@ Future<TxCategory?> showCategoryPicker(
   );
 }
 
-/// List of wallets from the Phase-1 sample data.
+/// Wallet list picker; [wallets] comes from the wallets provider.
 Future<Wallet?> showWalletPicker(
   BuildContext context, {
   required List<Wallet> wallets,

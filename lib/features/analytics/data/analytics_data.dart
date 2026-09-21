@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
 /// Latin-grouped KHR formatting to match the design ("KHR 1,265,700"), not the

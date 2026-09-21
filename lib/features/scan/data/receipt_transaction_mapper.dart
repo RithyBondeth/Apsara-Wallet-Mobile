@@ -2,7 +2,7 @@ import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/core/utils/currency_converter.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/scanned_receipt.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
-import 'package:apsara_wallet_mobile/features/transactions/data/transaction_history_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/transactions/data/transaction_record.dart';
 
 /// Translates a reviewed [ScannedReceipt] into a ledger [TransactionRecord].
 ///

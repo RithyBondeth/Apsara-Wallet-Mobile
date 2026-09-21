@@ -8,7 +8,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_gradients.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/dashboard/data/dashboard_data.dart';
 
 /// "This Month Overview" summary card — income vs expense totals and an
 /// animated budget-usage bar.

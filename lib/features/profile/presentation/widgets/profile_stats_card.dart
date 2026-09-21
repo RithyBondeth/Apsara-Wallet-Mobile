@@ -5,7 +5,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_radius.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/profile_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/profile_data.dart';
 
 /// The white stats strip that straddles the profile header's lower edge —
 /// Wallets · Transactions · Budgets, each a big number over a small label,

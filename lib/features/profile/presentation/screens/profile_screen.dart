@@ -11,7 +11,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_providers.dart';
-import 'package:apsara_wallet_mobile/features/profile/data/profile_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/profile/data/profile_data.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/profile_header.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
@@ -22,8 +22,7 @@ import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 
 /// The account hub: emerald hero with avatar & membership, a stats strip, and
-/// grouped account / preference / support menus — all mock data for the
-/// Phase 1 UI build.
+/// grouped account / preference / support menus.
 @RoutePage()
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -43,11 +42,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   /// from the account's real creation date. Falls back gracefully while data
   /// is still loading (0 counts, empty badge → badge hidden).
   ProfileData get _data {
-    const sample = ProfileData.sample;
     final user = ref.watch(authControllerProvider).user;
-    final name = (user?.fullName?.trim().isNotEmpty ?? false)
-        ? user!.fullName!.trim()
-        : (user?.email.split('@').first ?? sample.fullName);
 
     final walletCount = ref.watch(walletsProvider).valueOrNull?.length ?? 0;
     final transactionCount =
@@ -60,9 +55,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
         createdAt != null ? context.l10n.profileMemberSince(createdAt.year) : '';
 
     return ProfileData(
-      fullName: name,
-      email: user?.email ?? sample.email,
-      phone: (user?.phone?.isNotEmpty ?? false) ? user!.phone! : sample.phone,
+      fullName: user?.displayName ?? '',
+      email: user?.email ?? '',
+      phone: user?.phone ?? '',
       membership: membership,
       memberSince: membership,
       walletCount: walletCount,

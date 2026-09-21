@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 
-/// UI-only mock data for the Wallets screen (Phase 1). Latin-grouped KHR
-/// formatting to match the design ("KHR 1,250,000"), not the ៛ symbol.
+/// Wallet models for the Wallets screen. Latin-grouped KHR formatting to
+/// match the design ("KHR 1,250,000"), not the ៛ symbol.
 
 final NumberFormat _khr = NumberFormat.decimalPattern('en_US');
 final NumberFormat _usd = NumberFormat('#,##0.00', 'en_US');
@@ -42,8 +40,9 @@ class Wallet {
     this.isPrimary = false,
   });
 
-  /// Backend wallet id (UUID). Null for the Phase-1 sample wallets that were
-  /// never persisted; set for wallets loaded from the API.
+  /// Backend wallet id (UUID). Null only for a wallet that has not been
+  /// persisted yet (test fixtures, an add-sheet draft); set once loaded from
+  /// the API.
   final String? id;
 
   final String name;
@@ -85,47 +84,4 @@ class WalletsData {
   final List<Wallet> wallets;
 
   int get walletCount => wallets.length;
-
-  static const WalletsData sample = WalletsData(
-    totalBalanceKhr: 2584300,
-    totalBalanceUsd: 645.20,
-    wallets: [
-      Wallet(
-        name: 'ABA Bank',
-        kind: WalletKind.bank,
-        balanceKhr: 1250000,
-        balanceUsd: 312.08,
-        brandColor: Color(0xFF1E4FA3),
-        accountLast4: '1234',
-        shortCode: 'ABA',
-        isPrimary: true,
-      ),
-      Wallet(
-        name: 'ACLEDA Bank',
-        kind: WalletKind.bank,
-        balanceKhr: 850000,
-        balanceUsd: 212.22,
-        brandColor: Color(0xFFC79A2E),
-        accountLast4: '5678',
-        shortCode: 'ACL',
-      ),
-      Wallet(
-        name: 'Cash Wallet',
-        kind: WalletKind.cash,
-        balanceKhr: 320000,
-        balanceUsd: 79.89,
-        brandColor: AppColors.income,
-        icon: LucideIcons.banknote,
-      ),
-      Wallet(
-        name: 'Wing',
-        kind: WalletKind.ewallet,
-        balanceKhr: 164300,
-        balanceUsd: 41.01,
-        brandColor: Color(0xFF00A9E0),
-        accountLast4: '9012',
-        shortCode: 'Wing',
-      ),
-    ],
-  );
 }

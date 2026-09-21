@@ -11,7 +11,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_colors.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_durations.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_font.dart';
 import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
-import 'package:apsara_wallet_mobile/features/analytics/data/analytics_mock_data.dart';
+import 'package:apsara_wallet_mobile/features/analytics/data/analytics_data.dart';
 import 'package:apsara_wallet_mobile/features/analytics/presentation/widgets/analytics_segmented_tabs.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_providers.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/feedback/empty_state.dart';
@@ -26,7 +26,7 @@ import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/navigation/app_bottom_bar.dart';
 
 /// Analytics — expense breakdown, category ranking and spend trends across
-/// three tabs. Phase 1 UI with mock data and hand-painted charts.
+/// three tabs, aggregated from the live ledger with hand-painted charts.
 @RoutePage()
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
