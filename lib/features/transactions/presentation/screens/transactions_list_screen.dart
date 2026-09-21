@@ -249,7 +249,9 @@ class _TransactionsListScreenState extends ConsumerState<TransactionsListScreen>
                         title: l10n.txEmptyTitle,
                         body: l10n.txEmptyBody,
                       )
-                    : ListView(
+                    // Built lazily: the ledger is the user's full history
+                    // now, not a 200-row page.
+                    : ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         padding: EdgeInsets.fromLTRB(
                           AppSpacing.xxl,
@@ -257,7 +259,8 @@ class _TransactionsListScreenState extends ConsumerState<TransactionsListScreen>
                           AppSpacing.xxl,
                           bottomSafe + AppSpacing.xxxl,
                         ),
-                        children: rows,
+                        itemCount: rows.length,
+                        itemBuilder: (_, i) => rows[i],
                       ),
               ),
             ],

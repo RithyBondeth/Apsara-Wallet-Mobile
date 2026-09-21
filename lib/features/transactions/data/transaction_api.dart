@@ -63,32 +63,44 @@ class TransactionApi {
 
   final ApiClient _api;
 
-  /// Newest-first list. Pulls a generous page (the dashboard/list don't
-  /// paginate yet); [limit] caps it.
-  Future<List<ApiTransaction>> list({int limit = 200}) async {
-    final res = await _api.get<Map<String, dynamic>>(
-      '/transactions',
-      query: {'limit': limit},
-    );
-    if (!res.success || res.data == null) return const [];
-    final data = res.data!['data'];
-    if (data is! List) return const [];
-    return data
-        .map((e) => ApiTransaction.fromJson(e as Map<String, dynamic>))
-        .toList();
-  }
+  /// Rows per request. The API caps `limit` at 200.
+  static const int pageSize = 200;
 
-  /// Raw transaction JSON, throwing when the request fails so callers can fall
-  /// back to a cached copy instead of silently rendering an empty ledger.
-  Future<List<dynamic>> fetchRaw({int limit = 200}) async {
-    final res = await _api.get<Map<String, dynamic>>(
-      '/transactions',
-      query: {'limit': limit},
-    );
-    if (!res.success || res.data == null) throw Exception(res.message);
-    final data = res.data!['data'];
-    if (data is! List) throw Exception('unexpected transactions response');
-    return data;
+  /// Safety valve: never chase more pages than this in one load (50 × 200 =
+  /// 10k rows, far beyond any personal ledger). Stops a bad `totalPages`
+  /// from looping forever.
+  static const int maxPages = 50;
+
+  /// The user's whole ledger as raw transaction JSON, newest first.
+  ///
+  /// The API pages at 200 rows and every client-side surface (history,
+  /// search, analytics, insights, CSV) derives from this one list, so it
+  /// pages through `meta.totalPages` until the ledger is complete. Throws
+  /// when any page fails: the caller then falls back to its cached snapshot,
+  /// which is a better outcome than rendering a silently truncated ledger.
+  Future<List<dynamic>> fetchRaw() async {
+    final all = <dynamic>[];
+    var page = 1;
+    while (page <= maxPages) {
+      final res = await _api.get<Map<String, dynamic>>(
+        '/transactions',
+        query: {'page': page, 'limit': pageSize},
+      );
+      if (!res.success || res.data == null) throw Exception(res.message);
+      final data = res.data!['data'];
+      if (data is! List) throw Exception('unexpected transactions response');
+      all.addAll(data);
+
+      final meta = res.data!['meta'];
+      final totalPages = meta is Map ? (meta['totalPages'] as num?) : null;
+      final last = totalPages == null
+          ? data.length <
+                pageSize // no meta: stop on a short page
+          : page >= totalPages;
+      if (last || data.isEmpty) break;
+      page++;
+    }
+    return all;
   }
 
   Future<bool> create({
