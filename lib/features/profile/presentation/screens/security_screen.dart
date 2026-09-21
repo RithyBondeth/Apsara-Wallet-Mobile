@@ -16,6 +16,7 @@ import 'package:apsara_wallet_mobile/features/auth/application/auth_controller.d
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_toggle.dart';
 import 'package:apsara_wallet_mobile/features/security/application/app_lock_controller.dart';
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
+import 'package:apsara_wallet_mobile/core/networks/api_error_l10n.dart';
 
 /// Security & Privacy. The authentication rows are now live: the app-lock
 /// PIN and biometric unlock are backed by [AppLockController]; the remaining
@@ -92,9 +93,12 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               } else {
                 setLocal(() {
                   submitting = false;
-                  error =
-                      ref.read(authControllerProvider).errorMessage ??
-                      l10n.deleteAccountFailed;
+                  // A wrong password is the one server reply worth relaying;
+                  // anything else reads better as the generic failure line.
+                  final raw = ref.read(authControllerProvider).errorMessage;
+                  error = raw == null
+                      ? l10n.deleteAccountFailed
+                      : localizedApiError(l10n, raw);
                 });
               }
             }

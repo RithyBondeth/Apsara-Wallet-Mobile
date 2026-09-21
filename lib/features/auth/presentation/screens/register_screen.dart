@@ -17,6 +17,7 @@ import 'package:apsara_wallet_mobile/shared/widgets/buttons/social_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/layout/auth_flow_scaffold.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/layout/or_divider.dart';
+import 'package:apsara_wallet_mobile/core/networks/api_error_l10n.dart';
 
 @RoutePage()
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -87,8 +88,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     } else {
       showAuthSnackBar(
         context,
-        ref.read(authControllerProvider).errorMessage ??
-            context.l10n.authSessionExpired,
+        localizedApiError(
+          context.l10n,
+          ref.read(authControllerProvider).errorMessage,
+        ),
       );
     }
   }

@@ -1,8 +1,7 @@
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_category.dart';
 
 /// A single line item read off a receipt. [amount] is the printed line total;
 /// [quantity] is informational (shown as a badge when > 1).
@@ -26,8 +25,7 @@ class ScannedReceipt {
     required this.merchant,
     this.location,
     required this.dateLabel,
-    required this.categoryLabel,
-    required this.categoryIcon,
+    required this.category,
     required this.items,
     required this.total,
     this.subtotal,
@@ -40,8 +38,7 @@ class ScannedReceipt {
   String? location;
   String dateLabel;
 
-  String categoryLabel;
-  IconData categoryIcon;
+  ReceiptCategory category;
 
   List<ReceiptLineItem> items;
 
@@ -71,8 +68,7 @@ class ScannedReceipt {
   factory ScannedReceipt.empty() => ScannedReceipt(
     merchant: '',
     dateLabel: '',
-    categoryLabel: 'Uncategorised',
-    categoryIcon: LucideIcons.receipt,
+    category: ReceiptCategory.uncategorised,
     items: [],
     total: 0,
   );
@@ -83,8 +79,7 @@ class ScannedReceipt {
     merchant: 'Lucky Supermarket',
     location: 'Sihanouk Blvd, Phnom Penh',
     dateLabel: '19 Jul 2026 · 14:32',
-    categoryLabel: 'Groceries',
-    categoryIcon: LucideIcons.shoppingCart,
+    category: ReceiptCategory.groceries,
     items: [
       ReceiptLineItem(name: 'Jasmine Rice 5kg', amount: 8.50),
       ReceiptLineItem(name: 'Fresh Milk 1L', amount: 3.60, quantity: 2),

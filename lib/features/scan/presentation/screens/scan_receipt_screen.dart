@@ -24,6 +24,7 @@ import 'package:apsara_wallet_mobile/features/transactions/data/transaction_prov
 import 'package:apsara_wallet_mobile/features/wallets/data/wallet_providers.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/receipt_review_sheet.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_capture_controls.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_category.dart';
 import 'package:apsara_wallet_mobile/features/scan/presentation/widgets/scan_frame.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
@@ -239,6 +240,9 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
       id: UuidGenerator.generate(),
       walletName: wallets.isNotEmpty ? wallets.first.name : '',
       date: DateTime.now(),
+      fallbackTitle: receipt.category == ReceiptCategory.uncategorised
+          ? context.l10n.receiptFallbackTitle
+          : receipt.category.labelOf(context.l10n),
     );
     try {
       await ref.read(transactionsProvider.notifier).add(record);

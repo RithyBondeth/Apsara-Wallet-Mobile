@@ -9,6 +9,7 @@ import 'package:apsara_wallet_mobile/features/auth/data/auth_repository.dart';
 import 'package:apsara_wallet_mobile/features/profile/presentation/widgets/settings_sub_scaffold.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
+import 'package:apsara_wallet_mobile/core/networks/api_error_l10n.dart';
 
 /// Change Password — reached from Security & Privacy. Verifies the current
 /// password server-side, so a stolen unlocked phone can't silently rotate the
@@ -83,7 +84,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         _currentError = l10n.changePasswordWrongCurrent;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(behavior: SnackBarBehavior.floating, content: Text(e.message)),
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(localizedApiError(l10n, e.message)),
+        ),
       );
     } catch (_) {
       if (!mounted) return;

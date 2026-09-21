@@ -11,6 +11,7 @@ import 'package:apsara_wallet_mobile/core/themes/app_spacing.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/scanned_receipt.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_category.dart';
 
 /// Editable review of an OCR-scanned receipt. OCR is imperfect, so every
 /// field — merchant, date, category, each line item and the total — can be
@@ -38,31 +39,13 @@ class _ItemFields {
   int quantity;
 }
 
-class _Category {
-  const _Category(this.label, this.icon);
-  final String label;
-  final IconData icon;
-}
-
-const List<_Category> _categories = [
-  _Category('Groceries', LucideIcons.shoppingCart),
-  _Category('Dining', LucideIcons.utensils),
-  _Category('Shopping', LucideIcons.shoppingBag),
-  _Category('Transport', LucideIcons.car),
-  _Category('Fuel', LucideIcons.fuel),
-  _Category('Health', LucideIcons.pill),
-  _Category('Bills', LucideIcons.receiptText),
-  _Category('Uncategorised', LucideIcons.receipt),
-];
-
 class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
   late final TextEditingController _merchant;
   late final TextEditingController _date;
   late final TextEditingController _total;
   late final List<_ItemFields> _items;
 
-  late String _categoryLabel;
-  late IconData _categoryIcon;
+  late ReceiptCategory _category;
   late ECurrencyType _currency;
 
   @override
@@ -81,8 +64,7 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
           ),
         )
         .toList();
-    _categoryLabel = r.categoryLabel;
-    _categoryIcon = r.categoryIcon;
+    _category = r.category;
     _currency = r.currency;
   }
 
@@ -135,8 +117,7 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
     final r = widget.receipt
       ..merchant = _merchant.text.trim()
       ..dateLabel = _date.text.trim()
-      ..categoryLabel = _categoryLabel
-      ..categoryIcon = _categoryIcon
+      ..category = _category
       ..currency = _currency
       ..total = _parse(_total.text)
       ..items = [
@@ -205,11 +186,8 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
                   const SizedBox(height: AppSpacing.lg),
                   _fieldLabel(context.l10n.scanFieldCategory),
                   _CategoryPicker(
-                    selected: _categoryLabel,
-                    onSelect: (c) => setState(() {
-                      _categoryLabel = c.label;
-                      _categoryIcon = c.icon;
-                    }),
+                    selected: _category,
+                    onSelect: (c) => setState(() => _category = c),
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   _ItemsEditor(
@@ -402,8 +380,8 @@ class _CurrencyToggle extends StatelessWidget {
 class _CategoryPicker extends StatelessWidget {
   const _CategoryPicker({required this.selected, required this.onSelect});
 
-  final String selected;
-  final ValueChanged<_Category> onSelect;
+  final ReceiptCategory selected;
+  final ValueChanged<ReceiptCategory> onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -412,11 +390,11 @@ class _CategoryPicker extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: _categories.length,
+        itemCount: ReceiptCategory.values.length,
         separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
         itemBuilder: (context, i) {
-          final c = _categories[i];
-          final isSelected = c.label == selected;
+          final c = ReceiptCategory.values[i];
+          final isSelected = c == selected;
           return PressScale(
             onTap: () => onSelect(c),
             pressedScale: 0.94,
@@ -444,7 +422,7 @@ class _CategoryPicker extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    c.label,
+                    c.labelOf(context.l10n),
                     style: AppFont.labelMedium.copyWith(
                       color: isSelected
                           ? Colors.white

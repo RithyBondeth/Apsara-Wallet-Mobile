@@ -20,6 +20,7 @@ import 'package:apsara_wallet_mobile/shared/widgets/controls/language_switcher.d
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/layout/or_divider.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
+import 'package:apsara_wallet_mobile/core/networks/api_error_l10n.dart';
 
 @RoutePage()
 class LoginScreen extends ConsumerStatefulWidget {
@@ -93,8 +94,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     } else {
       showAuthSnackBar(
         context,
-        ref.read(authControllerProvider).errorMessage ??
-            context.l10n.authSessionExpired,
+        localizedApiError(
+          context.l10n,
+          ref.read(authControllerProvider).errorMessage,
+        ),
       );
     }
   }

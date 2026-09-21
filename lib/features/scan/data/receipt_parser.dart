@@ -1,7 +1,5 @@
-import 'package:flutter/widgets.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
-
 import 'package:apsara_wallet_mobile/core/enums/currency_enum.dart';
+import 'package:apsara_wallet_mobile/features/scan/data/receipt_category.dart';
 import 'package:apsara_wallet_mobile/features/scan/data/scanned_receipt.dart';
 
 /// Turns the raw, top-to-bottom text lines of a receipt (as produced by OCR)
@@ -69,23 +67,23 @@ class ReceiptParser {
     'qty',
   ];
 
-  static const Map<String, ({String label, IconData icon})> _categoryRules = {
-    'supermarket': (label: 'Groceries', icon: LucideIcons.shoppingCart),
-    'market': (label: 'Groceries', icon: LucideIcons.shoppingCart),
-    'grocery': (label: 'Groceries', icon: LucideIcons.shoppingCart),
-    'mart': (label: 'Groceries', icon: LucideIcons.shoppingCart),
-    'restaurant': (label: 'Dining', icon: LucideIcons.utensils),
-    'cafe': (label: 'Dining', icon: LucideIcons.coffee),
-    'coffee': (label: 'Dining', icon: LucideIcons.coffee),
-    'kitchen': (label: 'Dining', icon: LucideIcons.utensils),
-    'pharmacy': (label: 'Health', icon: LucideIcons.pill),
-    'clinic': (label: 'Health', icon: LucideIcons.stethoscope),
-    'petrol': (label: 'Fuel', icon: LucideIcons.fuel),
-    'station': (label: 'Fuel', icon: LucideIcons.fuel),
-    'fuel': (label: 'Fuel', icon: LucideIcons.fuel),
-    'mall': (label: 'Shopping', icon: LucideIcons.shoppingBag),
-    'store': (label: 'Shopping', icon: LucideIcons.shoppingBag),
-    'shop': (label: 'Shopping', icon: LucideIcons.shoppingBag),
+  static const Map<String, ReceiptCategory> _categoryRules = {
+    'supermarket': ReceiptCategory.groceries,
+    'market': ReceiptCategory.groceries,
+    'grocery': ReceiptCategory.groceries,
+    'mart': ReceiptCategory.groceries,
+    'restaurant': ReceiptCategory.dining,
+    'cafe': ReceiptCategory.dining,
+    'coffee': ReceiptCategory.dining,
+    'kitchen': ReceiptCategory.dining,
+    'pharmacy': ReceiptCategory.health,
+    'clinic': ReceiptCategory.health,
+    'petrol': ReceiptCategory.fuel,
+    'station': ReceiptCategory.fuel,
+    'fuel': ReceiptCategory.fuel,
+    'mall': ReceiptCategory.shopping,
+    'store': ReceiptCategory.shopping,
+    'shop': ReceiptCategory.shopping,
   };
 
   /// Parse ordered [rawLines] (top-to-bottom) into a receipt. Returns an
@@ -113,8 +111,7 @@ class ReceiptParser {
     return ScannedReceipt(
       merchant: merchant ?? '',
       dateLabel: dateLabel ?? '',
-      categoryLabel: category.label,
-      categoryIcon: category.icon,
+      category: category,
       items: items,
       total: total ?? 0,
       subtotal: subtotal,
@@ -255,17 +252,12 @@ class ReceiptParser {
       RegExp(r'\d[\d\s.\-]{6,}\d').hasMatch(line) &&
       !RegExp(r'\d[.,]\d{2}\b').hasMatch(line);
 
-  static ({String label, IconData icon}) _inferCategory(
-    String? merchant,
-    String fullText,
-  ) {
+  static ReceiptCategory _inferCategory(String? merchant, String fullText) {
     final haystack = '${merchant ?? ''}\n$fullText'.toLowerCase();
     for (final entry in _categoryRules.entries) {
-      if (haystack.contains(entry.key)) {
-        return (label: entry.value.label, icon: entry.value.icon);
-      }
+      if (haystack.contains(entry.key)) return entry.value;
     }
-    return (label: 'Uncategorised', icon: LucideIcons.receipt);
+    return ReceiptCategory.uncategorised;
   }
 
   static double? _largestAmount(List<String> lines) {
