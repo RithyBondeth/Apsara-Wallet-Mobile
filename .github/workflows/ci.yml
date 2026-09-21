@@ -38,11 +38,22 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      # Caches the Gradle wrapper distribution and dependency jars — the cold
+      # download was ~10 of the APK step's 11 minutes. Pushes to develop/main
+      # write the cache; PR runs read it (a PR can't poison the shared cache).
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/main' }}
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.44.8
           cache: true
+      # CocoaPods specs + built pods for the iOS build.
+      - uses: actions/cache@v4
+        with:
+          path: ios/Pods
+          key: pods-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
       - run: flutter pub get
       - run: flutter gen-l10n
       - run: flutter build apk --debug --dart-define=ENV=staging
