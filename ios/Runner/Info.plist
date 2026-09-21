@@ -28,7 +28,20 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
-		<key>CFBundleVersion</key>
+		<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.apsarawallet.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>apsarawallet</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
@@ -53,7 +66,9 @@
 				</array>
 			</dict>
 		</dict>
-		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<key>FlutterDeepLinkingEnabled</key>
+	<false/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>

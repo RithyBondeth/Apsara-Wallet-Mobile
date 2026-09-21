@@ -10,7 +10,10 @@ class RoutePathConstant {
   static const String loginPath = '/login';
   static const String registerPath = '/register';
   static const String forgotPasswordPath = '/forgotPassword';
-  static const String resetPasswordPath = '/resetPassword';
+
+  /// Kebab-case on purpose: it must match the path in the reset email
+  /// (`apsarawallet://reset-password?token=…`, see [AppDeepLink]).
+  static const String resetPasswordPath = '/reset-password';
   static const String pinSetupPath = '/pinSetup';
   static const String biometricPath = '/biometric';
 
