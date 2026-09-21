@@ -29,6 +29,7 @@ import 'package:apsara_wallet_mobile/shared/widgets/buttons/primary_button.dart'
 import 'package:apsara_wallet_mobile/shared/widgets/inputs/app_text_field.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
+import 'package:apsara_wallet_mobile/core/utils/date_formatter.dart';
 
 /// Manual transaction entry: Expense / Income with amount, category, wallet,
 /// date & time, note and a hook into the receipt scanner. "Save" writes the
@@ -304,153 +305,161 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final dateLabel = DateFormat.yMMMd(
-      Localizations.localeOf(context).toString(),
-    ).format(_dateTime);
-    final timeLabel = TimeOfDay.fromDateTime(_dateTime).format(context);
+    final localeTag = Localizations.localeOf(context).toString();
+    final dateLabel = DateFormat.yMMMd(localeTag).format(_dateTime);
+    final timeLabel = timeOfDayFormat(localeTag).format(_dateTime);
 
     final wallets = ref.watch(walletsProvider).valueOrNull ?? const <Wallet>[];
     final wallet = _resolveWallet(wallets);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              FadeSlideIn(
-                controller: _intro,
-                start: 0.0,
-                end: 0.35,
-                offset: const Offset(0, 10),
-                child: _Header(
-                  title: _isEditing ? l10n.addTxEditTitle : l10n.addTxTitle,
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(
-                    AppSpacing.xxl,
-                    AppSpacing.sm,
-                    AppSpacing.xxl,
-                    bottomSafe + AppSpacing.xxl,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.06,
-                        end: 0.45,
-                        child: TxTypeToggle(
-                          value: _type,
-                          onChanged: (t) => setState(() => _type = t),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.14,
-                        end: 0.55,
-                        child: _amountCard(),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.18,
-                        end: 0.6,
-                        child: _section(
-                          l10n.addTxTitleLabel,
-                          AppTextField(
-                            label: '',
-                            hint: l10n.addTxTitleHint,
-                            controller: _title,
-                            prefixIcon: LucideIcons.tag,
-                            textInputAction: TextInputAction.next,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.24,
-                        end: 0.68,
-                        child: _categoryAndWalletRows(l10n, wallets, wallet),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.30,
-                        end: 0.75,
-                        child: _section(
-                          l10n.addTxDateTime,
-                          PickerRow(
-                            leading: const PickerRowIconTile(
-                              icon: LucideIcons.calendar,
-                              color: AppColors.primary,
-                            ),
-                            label: '$dateLabel  ·  $timeLabel',
-                            onTap: _pickDateTime,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.38,
-                        end: 0.85,
-                        child: _section(
-                          l10n.addTxNote,
-                          AppTextField(
-                            label: '',
-                            hint: l10n.addTxNoteHint,
-                            controller: _note,
-                            prefixIcon: LucideIcons.pencilLine,
-                            textInputAction: TextInputAction.done,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.44,
-                        end: 0.9,
-                        child: _section(
-                          l10n.addTxReceipt,
-                          PickerRow(
-                            leading: const PickerRowIconTile(
-                              icon: LucideIcons.camera,
-                              color: AppColors.textSecondary,
-                            ),
-                            label: l10n.addTxScanOrUpload,
-                            onTap: () =>
-                                context.router.push(const ScanReceiptRoute()),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.xxxl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.5,
-                        end: 1.0,
-                        offset: const Offset(0, 18),
-                        child: ListenableBuilder(
-                          listenable: _amount,
-                          builder: (context, _) => PrimaryButton(
-                            label: l10n.addTxSave,
-                            loading: _saving,
-                            onPressed: _canSave ? _save : null,
-                          ),
-                        ),
-                      ),
-                    ],
+      child: GestureDetector(
+        // Tap anywhere that isn't a field to put the keyboard away.
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          backgroundColor: AppColors.background,
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                FadeSlideIn(
+                  controller: _intro,
+                  start: 0.0,
+                  end: 0.35,
+                  offset: const Offset(0, 10),
+                  child: _Header(
+                    title: _isEditing ? l10n.addTxEditTitle : l10n.addTxTitle,
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    // Dragging the form puts the keyboard away; tapping any
+                    // non-field area does too (see the GestureDetector below).
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    padding: EdgeInsets.fromLTRB(
+                      AppSpacing.xxl,
+                      AppSpacing.sm,
+                      AppSpacing.xxl,
+                      bottomSafe + AppSpacing.xxl,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.06,
+                          end: 0.45,
+                          child: TxTypeToggle(
+                            value: _type,
+                            onChanged: (t) => setState(() => _type = t),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.14,
+                          end: 0.55,
+                          child: _amountCard(),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.18,
+                          end: 0.6,
+                          child: _section(
+                            l10n.addTxTitleLabel,
+                            AppTextField(
+                              label: '',
+                              hint: l10n.addTxTitleHint,
+                              controller: _title,
+                              prefixIcon: LucideIcons.tag,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.24,
+                          end: 0.68,
+                          child: _categoryAndWalletRows(l10n, wallets, wallet),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.30,
+                          end: 0.75,
+                          child: _section(
+                            l10n.addTxDateTime,
+                            PickerRow(
+                              leading: const PickerRowIconTile(
+                                icon: LucideIcons.calendar,
+                                color: AppColors.primary,
+                              ),
+                              label: '$dateLabel  ·  $timeLabel',
+                              onTap: _pickDateTime,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.38,
+                          end: 0.85,
+                          child: _section(
+                            l10n.addTxNote,
+                            AppTextField(
+                              label: '',
+                              hint: l10n.addTxNoteHint,
+                              controller: _note,
+                              prefixIcon: LucideIcons.pencilLine,
+                              textInputAction: TextInputAction.done,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.44,
+                          end: 0.9,
+                          child: _section(
+                            l10n.addTxReceipt,
+                            PickerRow(
+                              leading: const PickerRowIconTile(
+                                icon: LucideIcons.camera,
+                                color: AppColors.textSecondary,
+                              ),
+                              label: l10n.addTxScanOrUpload,
+                              onTap: () =>
+                                  context.router.push(const ScanReceiptRoute()),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xxxl),
+                        FadeSlideIn(
+                          controller: _intro,
+                          start: 0.5,
+                          end: 1.0,
+                          offset: const Offset(0, 18),
+                          child: ListenableBuilder(
+                            listenable: _amount,
+                            builder: (context, _) => PrimaryButton(
+                              label: l10n.addTxSave,
+                              loading: _saving,
+                              onPressed: _canSave ? _save : null,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

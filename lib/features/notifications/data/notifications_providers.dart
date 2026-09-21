@@ -83,15 +83,22 @@ final unreadNotificationsProvider = Provider<int>((ref) {
   return items.where((n) => !n.read).length;
 });
 
-/// One-shot: posts this calendar month's insight digest (total expense + count)
-/// on app open. The backend dedupes per month, so this is a no-op after the
-/// first post; when it does create one, the inbox is refreshed. Awaits the
-/// ledger, so it runs once transactions are loaded. FutureProvider caches for
-/// the session (fires once).
+/// Posts this calendar month's insight digest (total expense + count) once
+/// the ledger has loaded. The backend dedupes per month; when it does create
+/// one, the inbox is refreshed. Note the provider re-runs whenever the ledger
+/// changes — [_insightPeriodsPosted] is what makes it fire once per month.
+/// Periods this session has already sent an insight for. The provider
+/// re-runs on every ledger change (it watches the ledger), and two rebuilds in
+/// quick succession used to fire two concurrent posts that both passed the
+/// server's dedupe check — one digest a month is the whole point, so the
+/// second attempt is dropped here before it leaves the device.
+final _insightPeriodsPosted = <String>{};
+
 final insightAutoPostProvider = FutureProvider<void>((ref) async {
   final now = ref.watch(nowProvider);
   final ledger = await ref.watch(transactionsProvider.future);
   final month = '${now.year}-${now.month.toString().padLeft(2, '0')}';
+  if (_insightPeriodsPosted.contains(month)) return;
   final monthExpenses = ledger.where(
     (t) =>
         t.type == ETransactionType.expense &&
@@ -102,6 +109,7 @@ final insightAutoPostProvider = FutureProvider<void>((ref) async {
   if (count == 0) return;
   final spentKhr = monthExpenses.fold<int>(0, (s, t) => s + t.amountKhr);
 
+  _insightPeriodsPosted.add(month);
   final created = await ref
       .read(notificationApiProvider)
       .emitInsight(periodKey: month, spentKhr: spentKhr, count: count);

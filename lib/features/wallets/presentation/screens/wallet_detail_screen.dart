@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:apsara_wallet_mobile/core/extensions/buildcontext_extension.dart';
@@ -30,6 +29,7 @@ import 'package:apsara_wallet_mobile/features/wallets/presentation/widgets/add_w
 import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/fade_slide_in.dart';
 import 'package:apsara_wallet_mobile/shared/widgets/motion/press_scale.dart';
+import 'package:apsara_wallet_mobile/core/utils/date_formatter.dart';
 
 /// A single wallet/account: an emerald balance hero and the transactions
 /// recorded against it (live from [transactionsProvider], matched by name).
@@ -796,7 +796,7 @@ class _TransferTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   '${transactionGroupLabel(context.l10n, localeTag, transfer.date, now)}, '
-                  '${DateFormat.jm(localeTag).format(transfer.date)}',
+                  '${timeOfDayFormat(localeTag).format(transfer.date)}',
                   style: AppFont.bodySmall.copyWith(color: AppColors.textMuted),
                 ),
               ],

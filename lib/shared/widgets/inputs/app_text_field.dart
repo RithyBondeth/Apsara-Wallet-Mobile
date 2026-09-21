@@ -134,14 +134,19 @@ class _AppTextFieldState extends State<AppTextField> {
                           ? AppColors.primary
                           : context.colors.onSurfaceVariant,
                     ),
+              // Kept out of focus traversal: otherwise the keyboard's "next"
+              // lands on this button and dismisses the keyboard instead of
+              // moving to the following field.
               suffixIcon: widget.obscure
-                  ? IconButton(
-                      icon: Icon(
-                        _obscured ? LucideIcons.eyeOff : LucideIcons.eye,
-                        size: 20,
-                        color: context.colors.onSurfaceVariant,
+                  ? ExcludeFocus(
+                      child: IconButton(
+                        icon: Icon(
+                          _obscured ? LucideIcons.eyeOff : LucideIcons.eye,
+                          size: 20,
+                          color: context.colors.onSurfaceVariant,
+                        ),
+                        onPressed: () => setState(() => _obscured = !_obscured),
                       ),
-                      onPressed: () => setState(() => _obscured = !_obscured),
                     )
                   : null,
             ),

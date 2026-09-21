@@ -1,0 +1,4 @@
+/* System permission prompts, shown by iOS when the device language is Khmer. */
+"NSCameraUsageDescription" = "Apsara Wallet ប្រើកាមេរ៉ាដើម្បីស្កេនវិក្កយបត្រ និងកត់ត្រាចំណាយ។";
+"NSPhotoLibraryUsageDescription" = "Apsara Wallet ត្រូវការចូលប្រើរូបថតរបស់អ្នក ដើម្បីនាំចូលរូបភាពវិក្កយបត្រ។";
+"NSFaceIDUsageDescription" = "Apsara Wallet ប្រើ Face ID ដើម្បីដោះសោកម្មវិធី និងការពារទិន្នន័យហិរញ្ញវត្ថុរបស់អ្នក។";

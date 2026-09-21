@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:apsara_wallet_mobile/core/enums/transaction_enum.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
 import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
+import 'package:apsara_wallet_mobile/core/utils/date_formatter.dart';
 
 /// A full transaction record for the history list + detail, mapped from the
 /// API's transaction shape by the transactions provider.
@@ -36,7 +37,7 @@ class TransactionRecord {
   /// `+` / `-` prefix for the amount.
   String get sign => isIncome ? '+' : '-';
 
-  String timeLabel(String localeTag) => DateFormat.jm(localeTag).format(date);
+  String timeLabel(String localeTag) => timeOfDayFormat(localeTag).format(date);
 }
 
 /// Group header for a record's day: Today / Yesterday / "17 May", relative to

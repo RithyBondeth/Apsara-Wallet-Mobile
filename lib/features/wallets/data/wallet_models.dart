@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:apsara_wallet_mobile/l10n/generated/app_localizations.dart';
 
 /// Wallet models for the Wallets screen. Latin-grouped KHR formatting to
 /// match the design ("KHR 1,250,000"), not the ៛ symbol.
@@ -15,13 +16,15 @@ String formatUsd(num value) => _usd.format(value);
 
 /// The kind of account a wallet represents — drives the small type label.
 enum WalletKind {
-  bank('Bank Account'),
-  cash('Cash'),
-  ewallet('E-Wallet');
+  bank,
+  cash,
+  ewallet;
 
-  const WalletKind(this.label);
-
-  final String label;
+  String labelOf(AppLocalizations l10n) => switch (this) {
+    WalletKind.bank => l10n.walletTypeBank,
+    WalletKind.cash => l10n.walletTypeCash,
+    WalletKind.ewallet => l10n.walletTypeEwallet,
+  };
 }
 
 /// A single funding source shown in the wallets list.

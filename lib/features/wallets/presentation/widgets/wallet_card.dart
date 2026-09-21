@@ -45,8 +45,8 @@ class WalletCard extends ConsumerWidget {
         ? '≈ KHR ${formatKhr(khr)}'
         : '≈ \$${formatUsd(usd)}';
     final subtitle = wallet.maskedAccount == null
-        ? wallet.kind.label
-        : '${wallet.kind.label} · ${wallet.maskedAccount}';
+        ? wallet.kind.labelOf(context.l10n)
+        : '${wallet.kind.labelOf(context.l10n)} · ${wallet.maskedAccount}';
 
     return PressScale(
       onTap: onTap,

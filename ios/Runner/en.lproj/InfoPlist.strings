@@ -1,0 +1,4 @@
+/* System permission prompts. Keep in step with km.lproj/InfoPlist.strings. */
+"NSCameraUsageDescription" = "Apsara Wallet uses the camera to scan receipts and capture expenses.";
+"NSPhotoLibraryUsageDescription" = "Apsara Wallet needs access to your photos to import receipt images.";
+"NSFaceIDUsageDescription" = "Apsara Wallet uses Face ID to unlock the app and protect your financial data.";
