@@ -142,86 +142,90 @@ class _WalletsScreenState extends ConsumerState<WalletsScreen>
                         onRetry: () => ref.invalidate(walletsProvider),
                       )
                     : SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(
-                    AppSpacing.xxl,
-                    AppSpacing.sm,
-                    AppSpacing.xxl,
-                    bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.0,
-                        end: 0.5,
-                        offset: const Offset(0, 14),
-                        child: TotalBalanceCard(
-                          data: data,
-                          balanceHidden: _balanceHidden,
-                          onToggleBalance: () =>
-                              setState(() => _balanceHidden = !_balanceHidden),
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(
+                          AppSpacing.xxl,
+                          AppSpacing.sm,
+                          AppSpacing.xxl,
+                          bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
                         ),
-                      ),
-                      const SizedBox(height: AppSpacing.xxl),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.16,
-                        end: 0.62,
-                        child: _SectionHeader(count: wallets.length),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      // Long-press a card to drag-reorder; tap still opens it.
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.24,
-                        end: 0.8,
-                        offset: const Offset(0, 20),
-                        child: ReorderableListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: wallets.length,
-                          onReorderStart: (_) => HapticFeedback.mediumImpact(),
-                          // onReorderItem already accounts for the removed
-                          // slot, so newIndex is the final insertion index.
-                          onReorderItem: (oldIndex, newIndex) {
-                            final reordered = [...wallets];
-                            final moved = reordered.removeAt(oldIndex);
-                            reordered.insert(newIndex, moved);
-                            ref
-                                .read(walletsProvider.notifier)
-                                .reorder(reordered);
-                          },
-                          itemBuilder: (context, i) => Padding(
-                            key: ValueKey(wallets[i].id ?? wallets[i].name),
-                            padding: EdgeInsets.only(
-                              bottom: i == wallets.length - 1
-                                  ? 0
-                                  : AppSpacing.md,
-                            ),
-                            child: WalletCard(
-                              wallet: wallets[i],
-                              balanceHidden: _balanceHidden,
-                              balanceKhr: balances[wallets[i].name]?.khr,
-                              balanceUsd: balances[wallets[i].name]?.usd,
-                              onTap: () => context.router.push(
-                                WalletDetailRoute(index: i),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            FadeSlideIn(
+                              controller: _intro,
+                              start: 0.0,
+                              end: 0.5,
+                              offset: const Offset(0, 14),
+                              child: TotalBalanceCard(
+                                data: data,
+                                balanceHidden: _balanceHidden,
+                                onToggleBalance: () => setState(
+                                  () => _balanceHidden = !_balanceHidden,
+                                ),
                               ),
                             ),
-                          ),
+                            const SizedBox(height: AppSpacing.xxl),
+                            FadeSlideIn(
+                              controller: _intro,
+                              start: 0.16,
+                              end: 0.62,
+                              child: _SectionHeader(count: wallets.length),
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            // Long-press a card to drag-reorder; tap still opens it.
+                            FadeSlideIn(
+                              controller: _intro,
+                              start: 0.24,
+                              end: 0.8,
+                              offset: const Offset(0, 20),
+                              child: ReorderableListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: wallets.length,
+                                onReorderStart: (_) =>
+                                    HapticFeedback.mediumImpact(),
+                                // onReorderItem already accounts for the removed
+                                // slot, so newIndex is the final insertion index.
+                                onReorderItem: (oldIndex, newIndex) {
+                                  final reordered = [...wallets];
+                                  final moved = reordered.removeAt(oldIndex);
+                                  reordered.insert(newIndex, moved);
+                                  ref
+                                      .read(walletsProvider.notifier)
+                                      .reorder(reordered);
+                                },
+                                itemBuilder: (context, i) => Padding(
+                                  key: ValueKey(
+                                    wallets[i].id ?? wallets[i].name,
+                                  ),
+                                  padding: EdgeInsets.only(
+                                    bottom: i == wallets.length - 1
+                                        ? 0
+                                        : AppSpacing.md,
+                                  ),
+                                  child: WalletCard(
+                                    wallet: wallets[i],
+                                    balanceHidden: _balanceHidden,
+                                    balanceKhr: balances[wallets[i].name]?.khr,
+                                    balanceUsd: balances[wallets[i].name]?.usd,
+                                    onTap: () => context.router.push(
+                                      WalletDetailRoute(index: i),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                            FadeSlideIn(
+                              controller: _intro,
+                              start: 0.7,
+                              end: 1.0,
+                              child: _AddWalletCard(onTap: _addWallet),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.lg),
-                      FadeSlideIn(
-                        controller: _intro,
-                        start: 0.7,
-                        end: 1.0,
-                        child: _AddWalletCard(onTap: _addWallet),
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),
