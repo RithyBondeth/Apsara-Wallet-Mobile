@@ -73,31 +73,41 @@ class AuthInterceptor extends Interceptor {
     // through this interceptor.
     final bare = Dio(BaseOptions(baseUrl: resolveApiBaseUrl()));
     try {
-      final refreshRes = await bare.post<Map<String, dynamic>>(
-        '/auth/refresh',
-        data: {'refreshToken': refreshToken},
-      );
-      final data = refreshRes.data;
-      final newAccess = data?['accessToken'] as String?;
-      final newRefresh = data?['refreshToken'] as String?;
-      if (newAccess == null || newRefresh == null) {
-        _signOut();
+      final String newAccess;
+      try {
+        final refreshRes = await bare.post<Map<String, dynamic>>(
+          '/auth/refresh',
+          data: {'refreshToken': refreshToken},
+        );
+        final data = refreshRes.data;
+        final access = data?['accessToken'] as String?;
+        final refresh = data?['refreshToken'] as String?;
+        if (access == null || refresh == null) {
+          _signOut();
+          return handler.next(err);
+        }
+        await _storage.saveTokens(accessToken: access, refreshToken: refresh);
+        newAccess = access;
+      } on DioException catch (e) {
+        // Only a server verdict ends the session. No response (offline,
+        // timeout) or a 5xx leaves the tokens in place — the refresh token
+        // is probably still good and the next request will try again.
+        final status = e.response?.statusCode;
+        if (status != null && status >= 400 && status < 500) _signOut();
         return handler.next(err);
       }
-
-      await _storage.saveTokens(
-        accessToken: newAccess,
-        refreshToken: newRefresh,
-      );
 
       options
         ..headers['Authorization'] = 'Bearer $newAccess'
         ..extra[_retriedFlag] = true;
-      final retried = await bare.fetch<dynamic>(options);
-      return handler.resolve(retried);
-    } on DioException {
-      _signOut();
-      return handler.next(err);
+      try {
+        final retried = await bare.fetch<dynamic>(options);
+        return handler.resolve(retried);
+      } on DioException catch (e) {
+        // The refresh worked and is saved; the retried call failing on its
+        // own is an ordinary error for the caller, not a lost session.
+        return handler.next(e);
+      }
     } finally {
       bare.close(force: true);
     }

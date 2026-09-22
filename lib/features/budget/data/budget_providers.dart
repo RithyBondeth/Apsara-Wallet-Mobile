@@ -9,6 +9,7 @@ import 'package:apsara_wallet_mobile/features/budget/data/budget_api.dart';
 import 'package:apsara_wallet_mobile/features/budget/data/budget_data.dart';
 import 'package:apsara_wallet_mobile/features/categories/data/category_api.dart';
 import 'package:apsara_wallet_mobile/features/transactions/data/transaction_categories.dart';
+import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
 
 /// The budget month ("YYYY-MM"), derived from the app clock (overridable in
 /// tests via [nowProvider]).
@@ -66,7 +67,9 @@ class BudgetNotifier extends AsyncNotifier<BudgetData> {
         .toList();
 
     return BudgetData(
-      monthLabel: DateFormat.yMMMM().format(DateTime.parse('$month-01')),
+      monthLabel: DateFormat.yMMMM(
+        ref.watch(localeProvider).locale.toString(),
+      ).format(DateTime.parse('$month-01')),
       totalBudgetKhr: categories.fold<int>(0, (s, c) => s + c.limitKhr),
       spentKhr: categories.fold<int>(0, (s, c) => s + c.spentKhr),
       categories: categories,

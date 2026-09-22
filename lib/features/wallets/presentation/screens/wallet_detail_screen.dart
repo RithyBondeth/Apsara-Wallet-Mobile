@@ -677,7 +677,9 @@ class _ActivityTile extends StatelessWidget {
                     '${t.category.labelOf(l10n)} · '
                     '${transactionGroupLabel(l10n, localeTag, t.date, now)}, '
                     '${t.timeLabel(localeTag)}',
-                    maxLines: 1,
+                    // Khmer category names run long; two lines keeps the
+                    // date visible instead of ellipsising it away.
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppFont.bodySmall.copyWith(
                       color: AppColors.textMuted,
@@ -954,6 +956,7 @@ class _TransferSheetState extends State<_TransferSheet> {
                         ),
                         decoration: const InputDecoration(
                           isDense: true,
+                          filled: false,
                           border: InputBorder.none,
                           hintText: '0',
                           contentPadding: EdgeInsets.symmetric(vertical: 16),

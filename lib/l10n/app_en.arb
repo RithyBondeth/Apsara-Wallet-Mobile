@@ -270,7 +270,7 @@
   "securityTitle": "Security & Privacy",
   "securitySectionAuth": "Authentication",
   "securityChangePin": "Change PIN",
-  "securityChangePinSubtitle": "Update your 6-digit PIN",
+  "securityChangePinSubtitle": "Update your 4-digit PIN",
   "securityBiometric": "Biometric Login",
   "securityBiometricSubtitle": "Use fingerprint or face to sign in",
   "securityTwoFactor": "Two-Factor Authentication",

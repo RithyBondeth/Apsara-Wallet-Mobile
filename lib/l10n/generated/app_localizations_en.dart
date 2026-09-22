@@ -753,7 +753,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get securityChangePin => 'Change PIN';
 
   @override
-  String get securityChangePinSubtitle => 'Update your 6-digit PIN';
+  String get securityChangePinSubtitle => 'Update your 4-digit PIN';
 
   @override
   String get securityBiometric => 'Biometric Login';
