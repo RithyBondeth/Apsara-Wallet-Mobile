@@ -1305,6 +1305,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardIncome => 'Income';
 
   @override
+  String get dashboardBackAgainToExit => 'Press back again to exit';
+
+  @override
   String get dashboardExpense => 'Expense';
 
   @override

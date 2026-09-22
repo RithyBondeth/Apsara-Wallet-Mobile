@@ -293,120 +293,131 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
   Widget build(BuildContext context) {
     final analyzing = _phase == _ScanPhase.analyzing;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        backgroundColor: const Color(0xFF041A11),
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            // --- Live camera feed (or a graceful fallback backdrop).
-            _CameraLayer(controller: _camera, status: _camStatus),
+    // The review sheet is a phase of this screen, not a route, so the Android
+    // back button would otherwise fall through it and pop the whole scanner
+    // (losing the scan). Back on the sheet means "retake"; while OCR is
+    // running it does nothing; on the viewfinder it leaves as usual.
+    return PopScope(
+      canPop: _phase == _ScanPhase.capture,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        if (_phase == _ScanPhase.review) _retake();
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: Scaffold(
+          backgroundColor: const Color(0xFF041A11),
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              // --- Live camera feed (or a graceful fallback backdrop).
+              _CameraLayer(controller: _camera, status: _camStatus),
 
-            // --- Viewfinder + chrome, faded and locked out during review.
-            AnimatedBuilder(
-              animation: _reveal,
-              builder: (context, child) => Opacity(
-                opacity: 1 - _reveal.value,
-                child: IgnorePointer(
-                  ignoring: _phase == _ScanPhase.review,
-                  child: child,
-                ),
-              ),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ScanFrame(ambient: _ambient, scanning: analyzing),
-                  if (_camStatus == _CamStatus.denied ||
-                      _camStatus == _CamStatus.unavailable)
-                    _CameraNotice(status: _camStatus),
-                  SafeArea(
-                    child: Column(
-                      children: [
-                        _TopBar(
-                          flashOn: _flashOn,
-                          flashEnabled: _camStatus == _CamStatus.ready,
-                          onToggleFlash: _toggleFlash,
-                        ),
-                        const Spacer(),
-                        FadeSlideIn(
-                          controller: _intro,
-                          start: 0.2,
-                          end: 0.9,
-                          child: _InstructionPill(analyzing: analyzing),
-                        ),
-                        const SizedBox(height: AppSpacing.xxl),
-                        FadeSlideIn(
-                          controller: _intro,
-                          start: 0.35,
-                          end: 1.0,
-                          offset: const Offset(0, 20),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                              AppSpacing.lg,
-                              0,
-                              AppSpacing.lg,
-                              AppSpacing.xl,
-                            ),
-                            child: ScanCaptureControls(
-                              busy: analyzing,
-                              captureEnabled: _camStatus == _CamStatus.ready,
-                              onCapture: _capture,
-                              onGallery: _pickFromGallery,
-                              onManual: _manualEntry,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // --- Dim scrim behind the review sheet.
-            if (_phase == _ScanPhase.review)
+              // --- Viewfinder + chrome, faded and locked out during review.
               AnimatedBuilder(
                 animation: _reveal,
-                builder: (context, _) => Container(
-                  color: Colors.black.withValues(alpha: _reveal.value * 0.55),
-                ),
-              ),
-
-            // --- Persistent back control (sits above the fading viewfinder).
-            SafeArea(
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: _CircleIconButton(
-                  icon: LucideIcons.arrowLeft,
-                  onTap: () => context.router.maybePop(),
-                ),
-              ),
-            ),
-
-            // --- Review sheet, slid up from the bottom.
-            if (_phase == _ScanPhase.review)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: AnimatedBuilder(
-                  animation: _reveal,
-                  builder: (context, child) => FractionalTranslation(
-                    translation: Offset(0, 1 - _reveal.value),
+                builder: (context, child) => Opacity(
+                  opacity: 1 - _reveal.value,
+                  child: IgnorePointer(
+                    ignoring: _phase == _ScanPhase.review,
                     child: child,
                   ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.9,
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ScanFrame(ambient: _ambient, scanning: analyzing),
+                    if (_camStatus == _CamStatus.denied ||
+                        _camStatus == _CamStatus.unavailable)
+                      _CameraNotice(status: _camStatus),
+                    SafeArea(
+                      child: Column(
+                        children: [
+                          _TopBar(
+                            flashOn: _flashOn,
+                            flashEnabled: _camStatus == _CamStatus.ready,
+                            onToggleFlash: _toggleFlash,
+                          ),
+                          const Spacer(),
+                          FadeSlideIn(
+                            controller: _intro,
+                            start: 0.2,
+                            end: 0.9,
+                            child: _InstructionPill(analyzing: analyzing),
+                          ),
+                          const SizedBox(height: AppSpacing.xxl),
+                          FadeSlideIn(
+                            controller: _intro,
+                            start: 0.35,
+                            end: 1.0,
+                            offset: const Offset(0, 20),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                AppSpacing.lg,
+                                0,
+                                AppSpacing.lg,
+                                AppSpacing.xl,
+                              ),
+                              child: ScanCaptureControls(
+                                busy: analyzing,
+                                captureEnabled: _camStatus == _CamStatus.ready,
+                                onCapture: _capture,
+                                onGallery: _pickFromGallery,
+                                onManual: _manualEntry,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: ReceiptReviewSheet(
-                      receipt: _receipt,
-                      onSave: _save,
-                      onRetake: _retake,
-                    ),
+                  ],
+                ),
+              ),
+
+              // --- Dim scrim behind the review sheet.
+              if (_phase == _ScanPhase.review)
+                AnimatedBuilder(
+                  animation: _reveal,
+                  builder: (context, _) => Container(
+                    color: Colors.black.withValues(alpha: _reveal.value * 0.55),
+                  ),
+                ),
+
+              // --- Persistent back control (sits above the fading viewfinder).
+              SafeArea(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: _CircleIconButton(
+                    icon: LucideIcons.arrowLeft,
+                    onTap: () => context.router.maybePop(),
                   ),
                 ),
               ),
-          ],
+
+              // --- Review sheet, slid up from the bottom.
+              if (_phase == _ScanPhase.review)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: AnimatedBuilder(
+                    animation: _reveal,
+                    builder: (context, child) => FractionalTranslation(
+                      translation: Offset(0, 1 - _reveal.value),
+                      child: child,
+                    ),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.9,
+                      ),
+                      child: ReceiptReviewSheet(
+                        receipt: _receipt,
+                        onSave: _save,
+                        onRetake: _retake,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

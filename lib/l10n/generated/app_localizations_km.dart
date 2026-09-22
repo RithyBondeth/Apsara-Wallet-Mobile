@@ -1309,6 +1309,9 @@ class AppLocalizationsKm extends AppLocalizations {
   String get dashboardIncome => 'ចំណូល';
 
   @override
+  String get dashboardBackAgainToExit => 'ចុចត្រឡប់ម្តងទៀតដើម្បីចាកចេញ';
+
+  @override
   String get dashboardExpense => 'ចំណាយ';
 
   @override

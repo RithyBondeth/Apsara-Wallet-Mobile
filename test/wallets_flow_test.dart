@@ -293,6 +293,44 @@ void main() {
     expect(find.text('True Money'), findsOneWidget);
   });
 
+  testWidgets('System back on the dashboard asks for a second press', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    final router = AppRouter();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: sampleLedgerOverrides(),
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router.config(
+            deepLinkBuilder: (_) => DeepLink.single(const DashboardRoute()),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1600));
+
+    // One back press: still on the dashboard, with the hint showing.
+    // Drive it the way the platform does — a maybePop on the page's
+    // navigator, which is what consults PopScope.
+    final navigator = Navigator.of(
+      tester.element(find.byType(DashboardScreen)),
+    );
+    // maybePop reports "handled" when PopScope vetoes, so assert on the
+    // stack rather than its return value.
+    await navigator.maybePop();
+    await tester.pump();
+    expect(router.stack.map((r) => r.name), ['DashboardRoute']);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.text('Press back again to exit'), findsOneWidget);
+  });
+
   testWidgets('Dashboard menu button opens the side drawer', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     final router = AppRouter();

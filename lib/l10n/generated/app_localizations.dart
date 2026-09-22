@@ -2438,6 +2438,12 @@ abstract class AppLocalizations {
   /// **'Income'**
   String get dashboardIncome;
 
+  /// No description provided for @dashboardBackAgainToExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Press back again to exit'**
+  String get dashboardBackAgainToExit;
+
   /// No description provided for @dashboardExpense.
   ///
   /// In en, this message translates to:
