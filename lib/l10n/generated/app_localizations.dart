@@ -1481,7 +1481,7 @@ abstract class AppLocalizations {
   /// No description provided for @securityChangePinSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Update your 6-digit PIN'**
+  /// **'Update your 4-digit PIN'**
   String get securityChangePinSubtitle;
 
   /// No description provided for @securityBiometric.

@@ -756,7 +756,7 @@ class AppLocalizationsKm extends AppLocalizations {
   String get securityChangePin => 'ប្តូរលេខ PIN';
 
   @override
-  String get securityChangePinSubtitle => 'ធ្វើបច្ចុប្បន្នភាពលេខ PIN ៦ ខ្ទង់';
+  String get securityChangePinSubtitle => 'ធ្វើបច្ចុប្បន្នភាពលេខ PIN ៤ ខ្ទង់';
 
   @override
   String get securityBiometric => 'ការចូលដោយជីវមាត្រ';
@@ -1546,7 +1546,7 @@ class AppLocalizationsKm extends AppLocalizations {
       count,
       locale: localeName,
       other: 'កាបូប $count',
-      one: 'កាបូប ១',
+      one: 'កាបូប 1',
     );
     return '$_temp0';
   }

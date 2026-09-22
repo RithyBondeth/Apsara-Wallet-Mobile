@@ -270,7 +270,7 @@
   "securityTitle": "សុវត្ថិភាព និងឯកជនភាព",
   "securitySectionAuth": "ការផ្ទៀងផ្ទាត់",
   "securityChangePin": "ប្តូរលេខ PIN",
-  "securityChangePinSubtitle": "ធ្វើបច្ចុប្បន្នភាពលេខ PIN ៦ ខ្ទង់",
+  "securityChangePinSubtitle": "ធ្វើបច្ចុប្បន្នភាពលេខ PIN ៤ ខ្ទង់",
   "securityBiometric": "ការចូលដោយជីវមាត្រ",
   "securityBiometricSubtitle": "ប្រើស្នាមម្រាមដៃ ឬផ្ទៃមុខដើម្បីចូល",
   "securityTwoFactor": "ការផ្ទៀងផ្ទាត់ពីរជាន់",
@@ -539,7 +539,7 @@
   "@walletsCountTotal": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "walletsWalletCount": "{count, plural, =1{កាបូប ១} other{កាបូប {count}}}",
+  "walletsWalletCount": "{count, plural, =1{កាបូប 1} other{កាបូប {count}}}",
   "@walletsWalletCount": {
     "placeholders": { "count": { "type": "int" } }
   },

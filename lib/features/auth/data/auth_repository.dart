@@ -182,25 +182,42 @@ class AuthRepository {
 
     // Access token is stale — try to rotate it with the refresh token.
     final rotated = await _tryRefresh(refresh);
-    if (rotated == null) {
-      await _storage.clear();
-      return null;
+    switch (rotated) {
+      case _Rotated(:final tokens):
+        return _cachedOrDecodedUser(tokens.accessToken);
+      case _Rejected():
+        // The server refused the refresh token: the session is really over.
+        await _storage.clear();
+        return null;
+      case _Unreachable():
+        // No answer at all (offline, server down). The refresh token may well
+        // still be valid, so keep it and open on the cached user; the next
+        // request that gets a 401 will retry the refresh with a connection.
+        // Clearing here used to sign people out — permanently, since they
+        // could not log back in offline — for opening the app on a plane.
+        return _cachedOrDecodedUser(access);
     }
-    return _cachedOrDecodedUser(rotated.accessToken);
   }
 
-  Future<AuthTokens?> _tryRefresh(String refreshToken) async {
+  Future<_RefreshOutcome> _tryRefresh(String refreshToken) async {
     final res = await _api.post<Map<String, dynamic>>(
       '/auth/refresh',
       data: {'refreshToken': refreshToken},
     );
-    if (!res.success || res.data == null) return null;
-    final tokens = AuthTokens.fromJson(res.data!);
-    await _storage.saveTokens(
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-    );
-    return tokens;
+    if (res.success && res.data != null) {
+      final tokens = AuthTokens.fromJson(res.data!);
+      await _storage.saveTokens(
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      );
+      return _Rotated(tokens);
+    }
+    // Only a 4xx is the server's verdict on the token. No status (offline,
+    // timeout) or a 5xx says nothing about the token, so treat both as
+    // unreachable and try again later.
+    final status = res.statusCode;
+    final rejected = status != null && status >= 400 && status < 500;
+    return rejected ? const _Rejected() : const _Unreachable();
   }
 
   Future<AuthUser> _persistSession(
@@ -258,3 +275,23 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
     ref.watch(tokenStorageProvider),
   );
 });
+
+/// What came back from trying to rotate the refresh token at boot.
+sealed class _RefreshOutcome {
+  const _RefreshOutcome();
+}
+
+final class _Rotated extends _RefreshOutcome {
+  const _Rotated(this.tokens);
+  final AuthTokens tokens;
+}
+
+/// The server answered and refused the token.
+final class _Rejected extends _RefreshOutcome {
+  const _Rejected();
+}
+
+/// No answer at all — offline or the server is down.
+final class _Unreachable extends _RefreshOutcome {
+  const _Unreachable();
+}
