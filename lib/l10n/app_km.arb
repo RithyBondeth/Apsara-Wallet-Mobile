@@ -257,7 +257,7 @@
   "txExportEmpty": "គ្មានប្រតិបត្តិការសម្រាប់នាំចេញ។",
   "txExportFailed": "មិនអាចនាំចេញបានទេ។ សូមព្យាយាមម្តងទៀត។",
   "txDetailTitle": "ព័ត៌មានលម្អិតប្រតិបត្តិការ",
-  "txDetailType": "ប្រភេទ",
+  "txDetailType": "ប្រភេទប្រតិបត្តិការ",
   "txDetailStatus": "ស្ថានភាព",
   "txStatusCompleted": "បានបញ្ចប់",
   "txDetailNote": "កំណត់ចំណាំ",

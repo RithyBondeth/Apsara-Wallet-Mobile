@@ -52,6 +52,9 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
   void initState() {
     super.initState();
     final r = widget.receipt;
+    // Before anything that formats money: _fmt reads _currency.
+    _category = r.category;
+    _currency = r.currency;
     _merchant = TextEditingController(text: r.merchant);
     _date = TextEditingController(text: r.dateLabel);
     _total = TextEditingController(text: r.total == 0 ? '' : _fmt(r.total));
@@ -64,8 +67,6 @@ class _ReceiptReviewSheetState extends State<ReceiptReviewSheet> {
           ),
         )
         .toList();
-    _category = r.category;
-    _currency = r.currency;
   }
 
   @override

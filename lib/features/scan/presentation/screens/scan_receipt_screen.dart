@@ -239,7 +239,9 @@ class _ScanReceiptScreenState extends ConsumerState<ScanReceiptScreen>
       receipt,
       id: UuidGenerator.generate(),
       walletName: wallets.isNotEmpty ? wallets.first.name : '',
-      date: DateTime.now(),
+      // The printed date when OCR recognised one; a receipt scanned days
+      // later should land on the day it was paid, not the day it was scanned.
+      date: receipt.date ?? DateTime.now(),
       fallbackTitle: receipt.category == ReceiptCategory.uncategorised
           ? context.l10n.receiptFallbackTitle
           : receipt.category.labelOf(context.l10n),

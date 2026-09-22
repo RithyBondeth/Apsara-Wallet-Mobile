@@ -25,6 +25,7 @@ class ScannedReceipt {
     required this.merchant,
     this.location,
     required this.dateLabel,
+    this.date,
     required this.category,
     required this.items,
     required this.total,
@@ -37,6 +38,10 @@ class ScannedReceipt {
   String merchant;
   String? location;
   String dateLabel;
+
+  /// The receipt's date as parsed from [dateLabel], when it was recognisable;
+  /// null means the caller should fall back to "now".
+  DateTime? date;
 
   ReceiptCategory category;
 
@@ -79,6 +84,7 @@ class ScannedReceipt {
     merchant: 'Lucky Supermarket',
     location: 'Sihanouk Blvd, Phnom Penh',
     dateLabel: '19 Jul 2026 · 14:32',
+    date: DateTime(2026, 7, 19, 14, 32),
     category: ReceiptCategory.groceries,
     items: [
       ReceiptLineItem(name: 'Jasmine Rice 5kg', amount: 8.50),

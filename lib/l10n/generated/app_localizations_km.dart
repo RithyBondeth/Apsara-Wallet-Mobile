@@ -720,7 +720,7 @@ class AppLocalizationsKm extends AppLocalizations {
   String get txDetailTitle => 'ព័ត៌មានលម្អិតប្រតិបត្តិការ';
 
   @override
-  String get txDetailType => 'ប្រភេទ';
+  String get txDetailType => 'ប្រភេទប្រតិបត្តិការ';
 
   @override
   String get txDetailStatus => 'ស្ថានភាព';
