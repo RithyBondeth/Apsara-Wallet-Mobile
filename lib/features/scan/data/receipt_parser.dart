@@ -102,6 +102,7 @@ class ReceiptParser {
 
     final merchant = _findMerchant(lines);
     final dateLabel = _findDate(joined);
+    final date = dateLabel == null ? null : parseDate(dateLabel, joined);
     final total = _findKeyedAmount(lines, _totalKeys) ?? _largestAmount(lines);
     final subtotal = _findKeyedAmount(lines, const ['subtotal', 'sub total']);
     final taxLine = _findTaxLine(lines);
@@ -111,6 +112,7 @@ class ReceiptParser {
     return ScannedReceipt(
       merchant: merchant ?? '',
       dateLabel: dateLabel ?? '',
+      date: date,
       category: category,
       items: items,
       total: total ?? 0,
@@ -165,6 +167,73 @@ class ReceiptParser {
           .join(' ');
     }
     return s;
+  }
+
+  static const Map<String, int> _months = {
+    'jan': 1,
+    'feb': 2,
+    'mar': 3,
+    'apr': 4,
+    'may': 5,
+    'jun': 6,
+    'jul': 7,
+    'aug': 8,
+    'sep': 9,
+    'oct': 10,
+    'nov': 11,
+    'dec': 12,
+  };
+
+  /// Turns a matched date label into a [DateTime], picking up a `HH:mm`
+  /// printed on the same receipt when there is one. Cambodian receipts are
+  /// day-first (`20/09/2026`); an ISO `2026-09-20` is also accepted. Returns
+  /// null for anything ambiguous or out of range rather than guessing — the
+  /// caller then stamps the transaction with "now", which the user can edit.
+  static DateTime? parseDate(String label, String fullText) {
+    int? y, m, d;
+    final dmy = RegExp(
+      r'^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{2,4})$',
+    ).firstMatch(label);
+    final ymd = RegExp(
+      r'^(\d{4})[/\-.](\d{1,2})[/\-.](\d{1,2})$',
+    ).firstMatch(label);
+    final dMonY = RegExp(
+      r'^(\d{1,2})\s+([A-Za-z]{3})[a-z]*\.?\s+(\d{2,4})$',
+    ).firstMatch(label);
+    final monDY = RegExp(
+      r'^([A-Za-z]{3})[a-z]*\.?\s+(\d{1,2}),?\s+(\d{2,4})$',
+    ).firstMatch(label);
+    if (dmy != null) {
+      d = int.parse(dmy.group(1)!);
+      m = int.parse(dmy.group(2)!);
+      y = int.parse(dmy.group(3)!);
+    } else if (ymd != null) {
+      y = int.parse(ymd.group(1)!);
+      m = int.parse(ymd.group(2)!);
+      d = int.parse(ymd.group(3)!);
+    } else if (dMonY != null) {
+      d = int.parse(dMonY.group(1)!);
+      m = _months[dMonY.group(2)!.toLowerCase()];
+      y = int.parse(dMonY.group(3)!);
+    } else if (monDY != null) {
+      m = _months[monDY.group(1)!.toLowerCase()];
+      d = int.parse(monDY.group(2)!);
+      y = int.parse(monDY.group(3)!);
+    }
+    if (y == null || m == null || d == null) return null;
+    if (y < 100) y += 2000;
+    if (m < 1 || m > 12 || d < 1 || d > 31) return null;
+
+    var hour = 0, minute = 0;
+    final time = RegExp(r'\b([01]?\d|2[0-3]):([0-5]\d)\b').firstMatch(fullText);
+    if (time != null) {
+      hour = int.parse(time.group(1)!);
+      minute = int.parse(time.group(2)!);
+    }
+    final parsed = DateTime(y, m, d, hour, minute);
+    // Reject impossible dates (e.g. 31/02) that DateTime would silently roll.
+    if (parsed.month != m || parsed.day != d) return null;
+    return parsed;
   }
 
   static String? _findDate(String text) {

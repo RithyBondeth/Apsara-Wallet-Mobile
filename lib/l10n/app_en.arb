@@ -453,6 +453,7 @@
   "dashboardTotalBalance": "Total Balance",
   "dashboardMonthOverviewTitle": "This Month Overview",
   "dashboardIncome": "Income",
+  "dashboardBackAgainToExit": "Press back again to exit",
   "dashboardExpense": "Expense",
   "dashboardBudget": "Budget",
   "dashboardRemaining": "Remaining",

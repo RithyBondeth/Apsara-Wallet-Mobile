@@ -44,6 +44,9 @@ class DashboardScreen extends ConsumerStatefulWidget {
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen>
     with TickerProviderStateMixin {
+  /// When the Android back button was last pressed on this root screen.
+  DateTime? _lastBack;
+
   /// One-shot entrance cascade.
   late final AnimationController _intro;
 
@@ -152,158 +155,186 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       userName: user?.firstName ?? '',
     );
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: const AppSideMenu(),
-        // Body flows under the floating nav capsule so its blur has content.
-        extendBody: true,
-        floatingActionButton: AppBottomBarCenterButton(
-          onTap: () => context.router.push(AddTransactionRoute()),
-        ),
-        floatingActionButtonLocation: const AppBottomBarCenterLocation(),
-        bottomNavigationBar: AppBottomBar(
-          currentIndex: _navIndex,
-          onSelect: _onNavSelect,
-        ),
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Soft misty temple backdrop behind the scrolling content.
-            const Image(
-              image: AssetImage(AssetPathConstant.dashboardBackground),
-              fit: BoxFit.cover,
-            ),
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.only(
-                bottom: bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
+    // Root screen: a single Android back press exits the app, which is easy
+    // to hit by accident from the drawer or a dismissed sheet. Ask for a
+    // second press within two seconds, the convention on Android.
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        final now = DateTime.now();
+        if (_lastBack != null &&
+            now.difference(_lastBack!) < const Duration(seconds: 2)) {
+          SystemNavigator.pop();
+          return;
+        }
+        _lastBack = now;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 2),
+            content: Text(context.l10n.dashboardBackAgainToExit),
+          ),
+        );
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: Scaffold(
+          key: _scaffoldKey,
+          drawer: const AppSideMenu(),
+          // Body flows under the floating nav capsule so its blur has content.
+          extendBody: true,
+          floatingActionButton: AppBottomBarCenterButton(
+            onTap: () => context.router.push(AddTransactionRoute()),
+          ),
+          floatingActionButtonLocation: const AppBottomBarCenterLocation(),
+          bottomNavigationBar: AppBottomBar(
+            currentIndex: _navIndex,
+            onSelect: _onNavSelect,
+          ),
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              // Soft misty temple backdrop behind the scrolling content.
+              const Image(
+                image: AssetImage(AssetPathConstant.dashboardBackground),
+                fit: BoxFit.cover,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // --- Header with floating quick actions -----------------
-                  // The action cards straddle the header's lower edge. The
-                  // 46px overhang is reserved INSIDE the stack (bottom
-                  // padding) so the cards stay hit-testable — Positioned
-                  // children outside a Stack's bounds never receive taps.
-                  Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 46),
-                        child: FadeSlideIn(
-                          controller: _intro,
-                          start: 0.0,
-                          end: 0.5,
-                          offset: const Offset(0, 14),
-                          child: DashboardHeader(
-                            data: data,
-                            ambient: _ambient,
-                            balanceHidden: _balanceHidden,
-                            onToggleBalance: () => setState(
-                              () => _balanceHidden = !_balanceHidden,
+              SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.only(
+                  bottom: bottomSafe + AppBottomBar.clearance + AppSpacing.xl,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // --- Header with floating quick actions -----------------
+                    // The action cards straddle the header's lower edge. The
+                    // 46px overhang is reserved INSIDE the stack (bottom
+                    // padding) so the cards stay hit-testable — Positioned
+                    // children outside a Stack's bounds never receive taps.
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 46),
+                          child: FadeSlideIn(
+                            controller: _intro,
+                            start: 0.0,
+                            end: 0.5,
+                            offset: const Offset(0, 14),
+                            child: DashboardHeader(
+                              data: data,
+                              ambient: _ambient,
+                              balanceHidden: _balanceHidden,
+                              onToggleBalance: () => setState(
+                                () => _balanceHidden = !_balanceHidden,
+                              ),
+                              onTapBell: () => context.router.push(
+                                const NotificationsRoute(),
+                              ),
+                              hasUnread:
+                                  ref.watch(unreadNotificationsProvider) > 0,
+                              onOpenMenu: () =>
+                                  _scaffoldKey.currentState?.openDrawer(),
                             ),
-                            onTapBell: () =>
-                                context.router.push(const NotificationsRoute()),
-                            hasUnread:
-                                ref.watch(unreadNotificationsProvider) > 0,
-                            onOpenMenu: () =>
-                                _scaffoldKey.currentState?.openDrawer(),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: AppSpacing.xxl,
-                        right: AppSpacing.xxl,
-                        bottom: 0,
-                        child: FadeSlideIn(
-                          controller: _intro,
-                          start: 0.18,
-                          end: 0.62,
-                          offset: const Offset(0, 24),
-                          scaleFrom: 0.94,
-                          child: QuickActionsRow(
-                            onAddIncome: () => context.router.push(
-                              AddTransactionRoute(
-                                initialType: ETransactionType.income,
+                        Positioned(
+                          left: AppSpacing.xxl,
+                          right: AppSpacing.xxl,
+                          bottom: 0,
+                          child: FadeSlideIn(
+                            controller: _intro,
+                            start: 0.18,
+                            end: 0.62,
+                            offset: const Offset(0, 24),
+                            scaleFrom: 0.94,
+                            child: QuickActionsRow(
+                              onAddIncome: () => context.router.push(
+                                AddTransactionRoute(
+                                  initialType: ETransactionType.income,
+                                ),
                               ),
-                            ),
-                            onAddExpense: () => context.router.push(
-                              AddTransactionRoute(
-                                initialType: ETransactionType.expense,
+                              onAddExpense: () => context.router.push(
+                                AddTransactionRoute(
+                                  initialType: ETransactionType.expense,
+                                ),
                               ),
+                              onScan: () =>
+                                  context.router.push(const ScanReceiptRoute()),
                             ),
-                            onScan: () =>
-                                context.router.push(const ScanReceiptRoute()),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.xxl),
-
-                  const OfflineBanner(),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xxl,
+                      ],
                     ),
-                    child: hasWallet
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              FadeSlideIn(
-                                controller: _intro,
-                                start: 0.30,
-                                end: 0.78,
-                                child: PressScale(
-                                  pressedScale: 0.98,
-                                  onTap: () =>
-                                      context.router.push(const BudgetRoute()),
-                                  child: AnimatedBuilder(
-                                    animation: _budget,
-                                    builder: (context, _) => MonthOverviewCard(
-                                      data: data,
-                                      progress:
-                                          _budget.value *
-                                          data.budgetUsedFraction,
+                    const SizedBox(height: AppSpacing.xxl),
+
+                    const OfflineBanner(),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xxl,
+                      ),
+                      child: hasWallet
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                FadeSlideIn(
+                                  controller: _intro,
+                                  start: 0.30,
+                                  end: 0.78,
+                                  child: PressScale(
+                                    pressedScale: 0.98,
+                                    onTap: () => context.router.push(
+                                      const BudgetRoute(),
+                                    ),
+                                    child: AnimatedBuilder(
+                                      animation: _budget,
+                                      builder: (context, _) =>
+                                          MonthOverviewCard(
+                                            data: data,
+                                            progress:
+                                                _budget.value *
+                                                data.budgetUsedFraction,
+                                          ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: AppSpacing.xxl),
-                              FadeSlideIn(
-                                controller: _intro,
-                                start: 0.42,
-                                end: 0.92,
-                                child: RecentTransactionsSection(
-                                  transactions: data.transactions,
-                                  onSeeAll: () => context.router.push(
-                                    const TransactionsListRoute(),
+                                const SizedBox(height: AppSpacing.xxl),
+                                FadeSlideIn(
+                                  controller: _intro,
+                                  start: 0.42,
+                                  end: 0.92,
+                                  child: RecentTransactionsSection(
+                                    transactions: data.transactions,
+                                    onSeeAll: () => context.router.push(
+                                      const TransactionsListRoute(),
+                                    ),
+                                    onTapTransaction: (tx) {
+                                      if (tx.id != null) {
+                                        context.router.push(
+                                          TransactionDetailRoute(id: tx.id!),
+                                        );
+                                      }
+                                    },
                                   ),
-                                  onTapTransaction: (tx) {
-                                    if (tx.id != null) {
-                                      context.router.push(
-                                        TransactionDetailRoute(id: tx.id!),
-                                      );
-                                    }
-                                  },
                                 ),
+                              ],
+                            )
+                          : FadeSlideIn(
+                              controller: _intro,
+                              start: 0.30,
+                              end: 0.82,
+                              child: _OnboardingCard(
+                                onCreateWallet: _addWallet,
                               ),
-                            ],
-                          )
-                        : FadeSlideIn(
-                            controller: _intro,
-                            start: 0.30,
-                            end: 0.82,
-                            child: _OnboardingCard(onCreateWallet: _addWallet),
-                          ),
-                  ),
-                ],
+                            ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -720,7 +720,7 @@ class AppLocalizationsKm extends AppLocalizations {
   String get txDetailTitle => 'ព័ត៌មានលម្អិតប្រតិបត្តិការ';
 
   @override
-  String get txDetailType => 'ប្រភេទ';
+  String get txDetailType => 'ប្រភេទប្រតិបត្តិការ';
 
   @override
   String get txDetailStatus => 'ស្ថានភាព';
@@ -1307,6 +1307,9 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get dashboardIncome => 'ចំណូល';
+
+  @override
+  String get dashboardBackAgainToExit => 'ចុចត្រឡប់ម្តងទៀតដើម្បីចាកចេញ';
 
   @override
   String get dashboardExpense => 'ចំណាយ';
