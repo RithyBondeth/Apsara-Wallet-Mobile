@@ -111,9 +111,9 @@ answer to "can users request data deletion?" is yes.
 - **`AppConstants.iosAppId`** is still `000000000`. The rate sheet now detects
   this and skips the store link rather than opening a dead page, so it is safe
   to ship; replace the constant once App Store Connect assigns the real ID.
-- **Domain is `apsarawallet.com`** everywhere now (support mailbox, deep
-  links, the website). It has to be a mailbox you actually read, and the
-  domain has to resolve before Universal Links / App Links can verify.
+- **Domains:** the website and deep links are on `wallet.apsara.social`; the
+  support mailbox is `support@apsara.social`. That address needs a forward set
+  up in Namecheap (apsara.social → Redirect Email), or mail to it is lost.
 - **Universal Links / App Links** are wired on the app side
   (`ios/Runner/Runner.entitlements`, the `autoVerify` intent-filter) but only
   verify once the website serves the association files with your Apple Team

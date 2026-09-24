@@ -189,7 +189,7 @@ void main() {
     await tester.pumpWidget(_wrap(const HelpSupportScreen()));
     await settle(tester);
 
-    expect(find.text('support@apsarawallet.com'), findsOneWidget);
+    expect(find.text('support@apsara.social'), findsOneWidget);
 
     await expectLater(
       find.byType(HelpSupportScreen),
