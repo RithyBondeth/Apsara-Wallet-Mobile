@@ -27,7 +27,7 @@ void main() {
     test('accepts the https form on the marketing domain', () {
       expect(
         AppDeepLink.parse(
-          Uri.parse('https://apsarawallet.com/reset-password?token=t'),
+          Uri.parse('https://wallet.apsara.social/reset-password?token=t'),
         ),
         const ResetPasswordDeepLink('t'),
       );
@@ -57,7 +57,7 @@ void main() {
       for (final raw in [
         'apsarawallet://dashboard',
         'apsarawallet://',
-        'https://apsarawallet.com/privacy',
+        'https://wallet.apsara.social/privacy',
         'https://apsarawallet.app/reset-password?token=t', // wrong TLD
         'https://evil.example/reset-password?token=t',
         'http://localhost:3010/reset-password?token=t',

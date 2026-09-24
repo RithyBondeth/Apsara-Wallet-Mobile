@@ -8,7 +8,7 @@ import 'package:apsara_wallet_mobile/routes/app_routes.dart';
 ///
 /// * the custom scheme the API emails today —
 ///   `apsarawallet://reset-password?token=…` (the destination is the host);
-/// * the HTTPS link on the marketing domain — `https://apsarawallet.com/
+/// * the HTTPS link on the marketing domain — `https://wallet.apsara.social/
 ///   reset-password?token=…` (the destination is the path). Opens here
 ///   directly once Universal Links / App Links are verified; otherwise the
 ///   web page offers the custom-scheme link as a fallback.
@@ -19,7 +19,7 @@ sealed class AppDeepLink {
   const AppDeepLink();
 
   static const String scheme = 'apsarawallet';
-  static const String webHost = 'apsarawallet.com';
+  static const String webHost = 'wallet.apsara.social';
 
   /// The route this link opens; pushed on top of wherever the app is.
   PageRouteInfo get route;
@@ -36,7 +36,7 @@ sealed class AppDeepLink {
   }
 
   /// `reset-password` for both `apsarawallet://reset-password` and
-  /// `https://apsarawallet.com/reset-password`; null for anything else.
+  /// `https://wallet.apsara.social/reset-password`; null for anything else.
   static String? _destinationOf(Uri uri) {
     if (uri.scheme == scheme) {
       return uri.host.isNotEmpty
