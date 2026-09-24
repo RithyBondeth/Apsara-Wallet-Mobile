@@ -121,5 +121,5 @@ answer to "can users request data deletion?" is yes.
   then the https reset link opens the website, which offers the
   `apsarawallet://` fallback. Enable the *Associated Domains* capability on
   the App ID in the Apple Developer portal or the archive will fail to sign.
-- **Khmer font** (Koh Santepheap) is fetched at runtime by `google_fonts`, so a
-  first launch in Khmer with no network falls back to the default font.
+- **Khmer font** (Kantumruy Pro, four weights) is bundled in `assets/fonts/`
+  and declared in `pubspec.yaml`, so Khmer renders offline from the first launch.

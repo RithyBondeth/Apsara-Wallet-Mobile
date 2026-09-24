@@ -96,6 +96,7 @@ flutter:
     - assets/backgrounds/onboardings/
     - assets/logos/
     - assets/google_fonts/
+    - assets/fonts/licenses/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -122,6 +123,23 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  # Khmer face, used as AppFont's fallback behind Ubuntu. Declared here rather
+  # than loaded through google_fonts so all four weights share one family and
+  # Flutter matches the weight a style asks for — google_fonts registers each
+  # weight as its own family, which would pin Khmer to a single weight. The
+  # files are Google Fonts' own static cuts (the ones google_fonts 8.2.1
+  # fetches), bundled so Khmer renders offline from the first launch.
+  fonts:
+    - family: Kantumruy Pro
+      fonts:
+        - asset: assets/fonts/KantumruyPro-Regular.ttf
+        - asset: assets/fonts/KantumruyPro-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/KantumruyPro-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/KantumruyPro-Bold.ttf
+          weight: 700
 
 flutter_launcher_icons:
   android: true
