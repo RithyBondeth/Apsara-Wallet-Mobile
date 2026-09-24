@@ -5,11 +5,15 @@ import 'package:apsara_wallet_mobile/core/providers/currency_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/locale_provider.dart';
 import 'package:apsara_wallet_mobile/core/providers/notification_prefs_provider.dart';
 import 'package:apsara_wallet_mobile/core/monitoring/crash_reporting.dart';
+import 'package:apsara_wallet_mobile/core/themes/font_licenses.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Bundled font files are not picked up by the licence page on their own.
+  registerFontLicenses();
 
   // Environment comes from `--dart-define=ENV=...` at build time (dev when
   // omitted), so a release build never silently ships pointing at localhost.

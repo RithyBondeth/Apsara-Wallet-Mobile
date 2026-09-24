@@ -4,25 +4,22 @@ import 'package:google_fonts/google_fonts.dart';
 /// App typography.
 ///
 /// Latin text uses **Ubuntu** (the brand face). Khmer script falls back to
-/// **Koh Santepheap** — a bilingual Khmer typeface by Danh Hong (OFL) — so any
-/// Khmer glyphs render in the proper Khmer face while Latin stays Ubuntu, in
-/// either app language. Instantiating [GoogleFonts.kohSantepheap] once also
-/// registers the family so the fallback resolves at render time (it loads from
-/// assets/google_fonts when bundled, otherwise fetches at runtime).
+/// **Kantumruy Pro** (OFL), so any Khmer glyphs render in a proper Khmer face
+/// while Latin stays Ubuntu, in either app language.
 class AppFont {
   AppFont._();
 
-  /// Khmer fallback family, evaluated lazily on first text style access (after
-  /// the binding is initialised).
+  /// Khmer fallback family, declared in pubspec.yaml with four weights
+  /// (regular, medium, semibold, bold) and bundled in assets/fonts — no
+  /// runtime fetch, works offline. Because it is one family, a style that
+  /// changes weight with `copyWith` gets the matching Khmer weight too.
   ///
-  /// Koh Santepheap is bundled in assets/google_fonts (KohSantepheap-Regular.ttf),
-  /// so google_fonts loads it from assets — no runtime fetch, works offline.
   /// The `allowRuntimeFetching` gate stays only for golden tests: they turn it
   /// off, and skipping the fallback there keeps goldens Latin-only and stable.
   static final List<String> _khmerFallback =
       GoogleFonts.config.allowRuntimeFetching
-      ? <String>[GoogleFonts.kohSantepheap().fontFamily!]
-      : <String>[];
+      ? const <String>['Kantumruy Pro']
+      : const <String>[];
 
   static TextStyle _base({
     required double fontSize,
